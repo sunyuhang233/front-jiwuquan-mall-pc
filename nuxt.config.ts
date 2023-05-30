@@ -9,6 +9,16 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
   ],
+  // 全局变量
+  runtimeConfig: {
+    axios: {
+      baseURL:
+        process.env.NODE_ENV === "production"
+          ? "http://localhost:3000"
+          : "http://localhost:3000",
+    },
+  },
+
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -18,6 +28,22 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
   },
 
+  app: {
+    head: {
+      viewport: 'width=device-width,initial-scale=1',
+      link: [
+        { rel: 'icon', href: '/favicon.svg', sizes: 'any' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: appDescription },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      ],
+    },
+  },
+
+  // 重设css
   css: [
     '@unocss/reset/tailwind.css',
   ],
@@ -39,24 +65,8 @@ export default defineNuxtConfig({
     },
   },
 
-  app: {
-    head: {
-      viewport: 'width=device-width,initial-scale=1',
-      link: [
-        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
-        { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
-        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-      ],
-      meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: appDescription },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-      ],
-    },
-  },
-
   pwa,
-
+  // nuxt开发者工具
   devtools: {
     enabled: true,
   },

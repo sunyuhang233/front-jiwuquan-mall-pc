@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const router = useRouter()
+onMounted(() => {
+})
 </script>
 
 <template>
@@ -7,11 +9,12 @@ const router = useRouter()
     <div text-4xl>
       <div i-carbon-warning inline-block />
     </div>
-    <div>Not found</div>
+    <div text-5xl py-2>404 Not found</div>
+    <div text-4xl >没有找到对应页面!</div>
     <div>
-      <button text-sm btn m="3 t8" @click="router.back()">
-        Back
-      </button>
+      <NuxtLink to="/" p-2 bg-yellow-4 text-white  m="3 t8" >
+        返回主页
+      </NuxtLink>
     </div>
   </main>
 </template>

@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { appName } from '~/constants'
+import { appName } from '@/constants'
+import { toLoginByPwd } from './server/api/user/user';
 
+// html 头部
 useHead({
   title: appName,
 })
+
+onMounted(async () => {
+  const {data}= await toLoginByPwd("kiwi2333", "123456")
+  console.log(data.data);
+})
+
+
+
 </script>
 
 <template>
@@ -14,14 +24,10 @@ useHead({
 </template>
 
 <style>
-html, body , #__nuxt{
-  height: 100vh;
-  margin: 0;
-  padding: 0;
+.dark,.light {
+  transition: 0.3s;
 }
-
 html.dark {
-  background: #222;
-  color: white;
+  background-color: #111111;
 }
 </style>

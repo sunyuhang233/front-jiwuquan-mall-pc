@@ -1,23 +1,17 @@
 <script setup lang="ts">
 const online = useOnline()
+
 </script>
 
 <template>
-  <div>
-    <Logos mb-6 />
-    <Suspense>
-      <ClientOnly>
-        <PageView v-if="online" />
-        <div v-else text-gray:80>
-          You're offline
-        </div>
-      </ClientOnly>
-      <template #fallback>
-        <div italic op50>
-          <span animate-pulse>Loading...</span>
-        </div>
-      </template>
-    </Suspense>
-    <InputEntry />
+  <div v-if="online">
+    <defaul>
+      <NuxtLayout name="top">
+
+      </NuxtLayout>
+    </defaul>
+  </div>
+  <div w-100 h-100 v-else text-gray:80>
+    网络断开，请你开启网络！
   </div>
 </template>
