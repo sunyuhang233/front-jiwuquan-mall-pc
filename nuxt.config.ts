@@ -44,6 +44,7 @@ export default defineNuxtConfig({
 
   // 重设css
   css: [
+    "@/assets/styles/var.scss"
   ],
 
   colorMode: {
