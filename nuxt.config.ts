@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     axios: {
       baseURL:
         process.env.NODE_ENV === "production"
-          ? "http://localhost:3000"
+          ? "http://47.115.226.150:8082"
           : "http://localhost:3000",
     },
   },

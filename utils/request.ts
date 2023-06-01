@@ -4,6 +4,7 @@ import axios, {  AxiosError, type AxiosResponse, type InternalAxiosRequestConfig
 
 // const config = useRuntimeConfig();
 
+import nuxtConfig from "~/nuxt.config";
 export const request = axios.create({
   baseURL: "http://localhost:3000",
   timeout: 20000,

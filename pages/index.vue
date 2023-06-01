@@ -7,7 +7,6 @@ const online = useOnline()
   <div v-if="online">
     <defaul>
       <NuxtLayout name="top">
-
       </NuxtLayout>
     </defaul>
   </div>
