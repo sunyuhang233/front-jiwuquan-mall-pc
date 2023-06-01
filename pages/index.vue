@@ -5,12 +5,11 @@ const online = useOnline()
 
 <template>
   <div v-if="online">
-    <defaul>
-      <NuxtLayout name="top">
-      </NuxtLayout>
-    </defaul>
+    <NuxtLayout>
+      
+    </NuxtLayout>
   </div>
-  <div w-100 h-100 v-else text-gray:80>
+  <div v-else>
     网络断开，请你开启网络！
   </div>
 </template>

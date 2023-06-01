@@ -1,6 +1,6 @@
 <template>
-   <div w-100 h-60px>
-      底部
+   <div>
+
    </div>
 </template>
 <script lang="ts" setup>

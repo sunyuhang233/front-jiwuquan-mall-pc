@@ -1,13 +1,13 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
-    '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
+    '@element-plus/nuxt',
+    "nuxt-swiper",
   ],
   // 全局变量
   runtimeConfig: {
@@ -18,7 +18,6 @@ export default defineNuxtConfig({
           : "http://localhost:3000",
     },
   },
-
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -45,12 +44,16 @@ export default defineNuxtConfig({
 
   // 重设css
   css: [
-    '@unocss/reset/tailwind.css',
   ],
 
   colorMode: {
     classSuffix: '',
   },
+
+  // elementPlus
+  elementPlus: {
+  },
+
 
   nitro: {
     esbuild: {
@@ -61,7 +64,6 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: false,
       routes: ['/'],
-      ignore: ['/hi'],
     },
   },
 
