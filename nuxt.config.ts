@@ -1,14 +1,17 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
+import styleResources from '@nuxtjs/style-resources'
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
+    '@nuxtjs/style-resources',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@element-plus/nuxt',
     "nuxt-swiper",
   ],
+
   // 全局变量
   runtimeConfig: {
     axios: {
@@ -30,10 +33,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
+      // 网站头部信息
       link: [
         { rel: 'icon', href: '/favicon.svg', sizes: 'any' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
+      // 网站meta
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: appDescription },
@@ -42,11 +47,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // 重设css
-  css: [
-    "@/assets/styles/var.scss"
-  ],
-
+  // css
+  // css: [
+  //   "@/assets/styles/var.scss",
+  //   "@/assets/styles/init.scss",
+  // ],
   colorMode: {
     classSuffix: '',
   },
