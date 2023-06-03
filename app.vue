@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { appName } from '@/constants'
-// html 头部
 useHead({
   title: appName,
 })
 </script>
+<!-- html  -->
 <template>
-  <NuxtPage class="page"/>
+  <NuxtPage class="page" />
 </template>
 
-<style scoped lang="scss">
-.dark,.light {
+<style  lang="scss">
+.dark,
+.light {
   transition: 0.3s;
 }
+
 html.dark {
   background-color: #111111;
 }
@@ -22,6 +24,7 @@ html.dark {
 .page-leave-active {
   transition: all 0.4s;
 }
+
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
