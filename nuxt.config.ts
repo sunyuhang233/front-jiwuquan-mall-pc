@@ -1,35 +1,17 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-import styleResources from '@nuxtjs/style-resources'
 export default defineNuxtConfig({
-  modules: [
-    '@vueuse/nuxt',
-    '@nuxtjs/style-resources',
-    '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
-    '@element-plus/nuxt',
-    "nuxt-swiper",
-  ],
+
 
   // 全局变量
   runtimeConfig: {
     axios: {
       baseURL:
-        process.env.NODE_ENV === "production"
-          ? "http://47.115.226.150:8082"
-          : "http://localhost:3000",
+        process.env.NODE_ENV === 'production'
+          ? 'http://47.115.226.150:8082'
+          : 'http://localhost:3000',
     },
   },
-
-  experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
-    payloadExtraction: false,
-    inlineSSRStyles: false,
-    renderJsonPayloads: true,
-  },
-
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -46,21 +28,50 @@ export default defineNuxtConfig({
       ],
     },
   },
+  // 模块
+  modules: [
+    '@vueuse/nuxt',
+    '@pinia/nuxt',
+    '@unocss/nuxt',
+    '@vite-pwa/nuxt',
+    '@nuxtjs/color-mode',
+    'nuxt-swiper',
+    '@element-plus/nuxt',
+  ],
 
-  // css
-  // css: [
-  //   "@/assets/styles/var.scss",
-  //   "@/assets/styles/init.scss",
-  // ],
+
+  experimental: {
+    // when using generate, payload js assets included in sw precache manifest
+    // but missing on offline, disabling extraction it until fixed
+    payloadExtraction: false,
+    inlineSSRStyles: false,
+    renderJsonPayloads: true,
+  },
+
+
+  // 主题
   colorMode: {
     classSuffix: '',
   },
-
-  // elementPlus
-  elementPlus: {
+  // css
+  css: [
+    "~/assets/styles/index.scss",
+  ],
+  // vite css
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+          @use "@/assets/styles/element/index.scss" as element;  
+          @use "@/assets/styles/var.scss" as *;   
+          `,
+        },
+      },
+    },
   },
 
-
+  // nitro
   nitro: {
     esbuild: {
       options: {
@@ -71,6 +82,12 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
     },
+  },
+  // elementPlus
+  elementPlus: {
+    icon: 'ElIcon',
+    themes: ['dark'],
+    importStyle: "scss"
   },
 
   pwa,

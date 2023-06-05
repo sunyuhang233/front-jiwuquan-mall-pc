@@ -1,5 +1,5 @@
 <template>
-  <el-drawer class="drawer-list" size="auto" v-model="isColleapse" :lock-scroll="false" z-index="99" :modal="false" direction="ltr">
+   <el-drawer class="drawer-list" >
     <!-- 菜单 -->
     <el-row class="menu-list" > 
       <el-col class="col">
@@ -38,23 +38,21 @@
             </el-icon>
           </div> -->
         </el-menu>
-
       </el-col>
     </el-row>
   </el-drawer>
 </template>
 
 <script lang="ts" setup>
-import Logo2 from "@/assets/image/logo2.svg"
 import {
   HomeFilled,
   GoodsFilled,
   Setting,
-SwitchFilled
+  SwitchFilled
 } from '@element-plus/icons-vue';
 import { ref, watch, onMounted } from 'vue';
 import { gsap } from "gsap";
-let isColleapse = defineProps(["isColleapse"]);
+let isColleapse = ref<boolean>(false);
  
 watch(isColleapse, (val): void => {
   // 动画logo

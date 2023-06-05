@@ -1,21 +1,6 @@
-<template>
-  <div class="nav">
-    <div class="left">
-      <SvgIcon name="logotxt.svg"></SvgIcon>
-      <span>极物圈</span>
-    </div>
-    
-    <div class="right">
-      <span @click="onLogin(1)">登录</span>
-      <span @click="onLogin(2)">注册</span>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { ref } from 'vue';
-
-let isColleapse = defineProps(["isColleapse"]);
+import { ref } from 'vue'
+import LogoText from '@/assets/images/logotext.svg'
 // 登录表单
 let showForm = ref<boolean>(false)
 const onLogin = (type: number) => {
@@ -27,31 +12,35 @@ const onLogin = (type: number) => {
   showForm.value = !showForm.value
 }
 </script>
+<template>
+    <!-- 左侧 -->
+    <div class="nav" flex-row-bt-c min-w-screen py-4 px-6 text-m bg="white" dark:text="light" dark:bg-black shadow>
+    <div class="left">
+      <OtherSvgIcon :name="'logo.text'"/>
+      <img :src="LogoText" alt="">
+      <span tracking-2 font-700 text-xl>极物圈</span>
+    </div>
+    <!-- 右侧 -->
+    <div class="right" flex flex-items-center>
+      <!-- 切换主题 -->
+      <BtnSwitch/>
+      <span px-2 cursor-pointer @click="onLogin(1)">登 录</span>
+      &nbsp;|&nbsp;
+      <span px-2 cursor-pointer @click="onLogin(2)">注 册</span>
+    </div>
+  </div>
+</template>
 <style lang="scss" scoped>
+
 .nav {
-  width: 100%;
-  height: 100%;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background-image: radial-gradient(transparent 1px, $theme-bg-color2 1px);
+  background-size: 4px 4px;
+  backdrop-filter: saturate(50%) blur(10px);
+}
 
-  >* {
-    color: $theme-text-color2;
-  }
-
-  .left {
-    padding: 0;
-    display: flex;
-    align-items: center;
-    
-    img {
-      height: $top-nav-height;
-
-    }
-  }
-  .right {
-    letter-spacing: 0.4em;
-  }
+.dark .nav {
+  background-image: radial-gradient(transparent 1px, $theme-bg-color 1px);
+  background-size: 4px 4px;
+  backdrop-filter: saturate(50%) blur(10px);
 }
 </style>

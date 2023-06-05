@@ -1,0 +1,7 @@
+// /* 覆盖你需要的变量 */ 
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $bg-color: (
+    'page': #0a0a0a,
+    'overlay': #1d1e1f,
+  )
+);
