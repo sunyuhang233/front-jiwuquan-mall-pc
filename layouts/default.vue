@@ -3,11 +3,12 @@
   <MenuHeaderMenu />
   <div flex>
     <!-- 左侧边导航 -->
-    <!-- <MenuLeftMenu /> -->
-    <div class="content" flex-1>
+    <MenuDrawerMenu />
+    <div class="content animate__slideInLeft"  >
       <slot name="default" />
     </div>
   </div>
+  <el-backtop :right="100" :bottom="100" />
 </template>
 <script lang="ts" setup>
 </script>

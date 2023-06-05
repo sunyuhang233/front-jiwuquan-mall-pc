@@ -1,8 +1,7 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
+
 export default defineNuxtConfig({
-
-
   // 全局变量
   runtimeConfig: {
     axios: {
@@ -56,6 +55,7 @@ export default defineNuxtConfig({
   // css
   css: [
     "~/assets/styles/index.scss",
+    "animate.css"
   ],
   // vite css
   vite: {
@@ -64,6 +64,7 @@ export default defineNuxtConfig({
         scss: {
           additionalData: `
           @use "@/assets/styles/element/index.scss" as element;  
+          @use "@/assets/styles/element/dark.scss" as dark;  
           @use "@/assets/styles/var.scss" as *;   
           `,
         },

@@ -1,9 +1,9 @@
-<template>
-  <i i-solar:sun-2-bold></i>
-  <el-switch v-model="isDark" inline-prompt @change="changeTheme"></el-switch>
+<template> 
+  <el-switch v-model="isDark" inline-prompt @change="changeTheme"> 
+  </el-switch>
+  <OtherMoonSun pl-2/>
 </template>
 <script lang="ts" setup>
-import { Icon } from '@iconify/vue';
 // 获取主题
 const color = useColorMode();
 const isDark = ref<boolean>(color.value === 'dark')
@@ -17,5 +17,4 @@ const changeTheme = (val: any): void => {
 }
 
 </script>
-<style scoped lang="scss"> 
-</style>
+<style scoped lang="scss"></style>

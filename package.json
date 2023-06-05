@@ -15,9 +15,11 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.0",
     "@element-plus/nuxt": "^1.0.5",
+    "@iconify-icons/solar": "^1.2.0",
     "@iconify-json/carbon": "^1.1.16",
     "@iconify-json/solar": "^1.1.1",
     "@iconify-json/twemoji": "^1.1.11",
+    "@iconify/vue": "^4.1.1",
     "@nuxt/devtools": "^0.5.0",
     "@nuxtjs/color-mode": "^3.2.0",
     "@pinia/nuxt": "^0.4.11",
@@ -32,10 +34,11 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "animate.css": "^4.1.1",
     "element-plus": "^2.3.6",
-    "vite-plugin-svg-icons": "^2.0.1",
     "gsap": "^3.11.5",
     "nuxt-swiper": "^1.1.0",
-    "sass": "^1.62.1"
+    "sass": "^1.62.1",
+    "vite-plugin-svg-icons": "^2.0.1"
   }
 }

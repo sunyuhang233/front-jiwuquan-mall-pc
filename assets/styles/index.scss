@@ -4,7 +4,9 @@
   font-family: Helvetica;
   box-sizing: border-box;
 }
-
+:root {
+  --animate-duration: $transition-delay;
+}
 a {
   text-decoration: none;
   color: #000;
@@ -14,6 +16,10 @@ li {
   list-style: none;
 }
 
+span {
+  line-height: 100%;
+}
+
 // 页面
 .page {
   min-height: 100vh;
@@ -21,7 +27,9 @@ li {
 
 .dark,
 .light {
-  transition:$transition-delay;
+  // will-change: transform,color,background-color,height;
+  transition-property: background-clolor, box-shadow, color;
+  transition: $transition-delay;
 }
 
 html.dark {
@@ -31,11 +39,28 @@ html.dark {
 // 动画
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.4s;
+  transition: all $transition-delay;
 }
 
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
   filter: blur(1rem);
+  animation: cubic-bezier(0.1, 0.7, 1.0, 1.0);
+}
+
+// 滑动
+// .slideInOut-enter-active{
+//   animation: $transition-delay animate__fadeInLeft $animate-cubic;
+// }
+
+// .slideInOut-leave-active {
+//   animation: $transition-delay animate__fadeInLeft $animate-cubic;
+// }
+
+.slideInOut-enter-active {
+  animation: fadeInLeft $transition-delay $animate-cubic;
+}
+.slideInOut-leave-active {
+  animation: fadeInLeft $transition-delay $animate-cubic reverse;
 }

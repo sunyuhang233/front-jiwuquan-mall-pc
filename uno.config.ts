@@ -14,7 +14,7 @@ export default defineConfig({
     // 颜色
     ['text-color', 'text-dark dark:text-white'],
     ['bg-color', 'bg-white dark:bg-dark'],
-    ['theme-color', 'var(--theme-color)'],
+    ['theme-color', 'var(--el-color-primary)'],
     // 布局
     ['flex-row-c-c', 'flex flex-justify-center flex-items-center'],
     ['flex-row-bt-c', 'flex flex-justify-between flex-items-center']
