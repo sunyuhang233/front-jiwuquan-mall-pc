@@ -23,8 +23,16 @@
     </el-menu>
 
     <!-- 折叠按钮 -->
-    <div @click="isFold = !isFold" class="collapse" bg-trueGray-2 dark:bg-indigo-5 dark:color-white p-2 border-4
-      rounded-full>
+    <div @click="isFold = !isFold" class="collapse" 
+    bg="hover:indigo-5 
+      dark:indigo-5
+      hover:dark:trueGray-2
+      hover:indigo-5
+      trueGray-2"  
+      color="
+       hover:white
+         dark:hover:var(--el-primary-color)
+      " duration-300  p-2 rounded-full>
       <ElIconArrowLeftBold v-show="!isFold" />
       <ElIconArrowRightBold v-show="isFold" />
     </div>
@@ -34,14 +42,18 @@
 <script lang="ts" setup>
 import gsap from "gsap"
 let isFold = ref<boolean>(false)
-watch(isFold,(v)=>{
+watch(isFold, (v) => {
   if (v) {
-    gsap.to(".menu-list",{
-      translateX:"-100%"
+    gsap.to(".menu-list", {
+      duration: 0.1,
+      translateX: "-100%",
+      ease: "none",
     })
-  }else {
-    gsap.to(".menu-list",{
-      translateX:"0",
+  } else {
+    gsap.to(".menu-list", {
+      duration: 0.1,
+      translateX: "0",
+      ease: "none",
     })
   }
 })
@@ -50,7 +62,7 @@ watch(isFold,(v)=>{
 <style lang="scss" scoped> .menu-list {
    user-select: none;
    position: relative;
-   height: calc(100vh - 1.4*$top-nav-height);
+   height: calc(100vh - 1*$top-nav-height);
    transition: $transition-delay;
 
 
