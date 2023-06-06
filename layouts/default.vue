@@ -1,14 +1,13 @@
 <template>
   <!-- 顶部导航 -->
-  <MenuHeaderMenu />
+    <MenuHeaderMenu />
   <div flex>
     <!-- 左侧边导航 -->
     <MenuDrawerMenu />
-    <div class="content animate__slideInLeft"  >
+    <transition class="content slideInLeft" name="slideInLeft">
       <slot name="default" />
-    </div>
+    </transition>
   </div>
-  <el-backtop :right="100" :bottom="100" />
 </template>
 <script lang="ts" setup>
 </script>

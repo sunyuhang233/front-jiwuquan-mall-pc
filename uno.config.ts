@@ -21,17 +21,17 @@ export default defineConfig({
   theme: {
     // ...
     theme: {
-      'color': 'var(--el-color-primary)', // class="text-very-cool"
+      'theme': {
+        'color':'var(--el-color-primary)',
+        'color2':'var($theme-tip-color)',
+        'color3':'var($theme-tip-color2)',
+      }, // class="text-very-cool"
       'tip': {
+        'main': 'var(--el-color-primary)', //class="--el-color-primary"
         'green': 'hsla(var(--hue, 217), 78%, 51%)', //class="bg-brand-primary"
-        'red': 'var(--el-color-primary)', //class="bg-brand-primary"
       }
     },
   },
-
-  rules: [
-    [/^m-(\d)$/, ([, x]) => ({ margin: `${x / 4}rem` })],
-  ],
   presets: [
     presetUno(),
     presetAttributify(),

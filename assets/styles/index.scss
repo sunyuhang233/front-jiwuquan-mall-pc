@@ -3,13 +3,15 @@
   padding: 0;
   font-family: Helvetica;
   box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 :root {
   --animate-duration: $transition-delay;
 }
 a {
   text-decoration: none;
-  color: #000;
+  color: var(--el-text-color);
 }
 
 li {
@@ -33,7 +35,7 @@ span {
 }
 
 html.dark {
-  background-color: $theme-bg-color-75;
+  background-color:#171717;
 }
 
 // 动画
@@ -49,15 +51,7 @@ html.dark {
   animation: cubic-bezier(0.1, 0.7, 1.0, 1.0);
 }
 
-// 滑动
-// .slideInOut-enter-active{
-//   animation: $transition-delay animate__fadeInLeft $animate-cubic;
-// }
-
-// .slideInOut-leave-active {
-//   animation: $transition-delay animate__fadeInLeft $animate-cubic;
-// }
-
+// 滑动  
 .slideInOut-enter-active {
   animation: fadeInLeft $transition-delay $animate-cubic;
 }

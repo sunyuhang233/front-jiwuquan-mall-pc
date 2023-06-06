@@ -1,116 +1,138 @@
 <template>
   <!-- 菜单 -->
-  <div class="menu-list" w-auto md:w-200px>
-    <el-menu default-active="1">
-      <!-- 首页 -->
-      <el-menu-item index="1">
-        <ElIconHomeFilled />
-        <span class="title">首&emsp;页</span>
-      </el-menu-item>
-      <!-- 社区 -->
-      <el-menu-item index="2">
-        <ElIconSwitchFilled />
-        <span class="title">社&emsp;区</span>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <ElIconGoodsFilled />
-        <span>商品类别</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <ElIconSetting />
-        <span>设置</span>
-      </el-menu-item>
-    </el-menu>
+  <ElAffix :offset="60">
+    <ClientOnly>
+      <div class="menu-list" w-auto md:w-200px>
+        <transition name="slideInOut">
+          <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600" v-show="!isFold">
+            <!-- 首页 -->
+            <el-menu-item index="/">
+              <ElIconHomeFilled />
+              <div class="title" hidden mx-4 sm:inline-block>首&emsp;页</div>
+            </el-menu-item>
+            <!-- 社区 -->
+            <el-menu-item index="/community">
+              <ElIconSwitchFilled />
+              <div class="title" hidden mx-4 sm:inline-block>社&emsp;区</div>
+            </el-menu-item>
+            <!-- 圈子 -->
+            <el-menu-item index="/quanzi">
+              <ElIconGoodsFilled />
+              <div class="title" hidden mx-4 sm:inline-block>极物圈</div>
+            </el-menu-item>
+            <el-menu-item index="/setting">
+              <ElIconSetting />
+              <div class="title" hidden mx-4 sm:inline-block>设&emsp;置</div>
+            </el-menu-item>
+          </el-menu>
+        </transition>
+        <!-- 折叠按钮 -->
+        <div @click="isFold = !isFold" class="collapse" flex-row-c-c duration-300 p-2>
+          <ElIconArrowRightBold skew-y-2 />
+        </div>
+      </div>
+    </ClientOnly>
 
-    <!-- 折叠按钮 -->
-    <div @click="isFold = !isFold" class="collapse" 
-    bg="hover:indigo-5 
-      dark:indigo-5
-      hover:dark:trueGray-2
-      hover:indigo-5
-      trueGray-2"  
-      color="
-       hover:white
-         dark:hover:var(--el-primary-color)
-      " duration-300  p-2 rounded-full>
-      <ElIconArrowLeftBold v-show="!isFold" />
-      <ElIconArrowRightBold v-show="isFold" />
-    </div>
-  </div>
+
+  </ElAffix>
 </template>
 
 <script lang="ts" setup>
-import gsap from "gsap"
-let isFold = ref<boolean>(false)
-watch(isFold, (v) => {
-  if (v) {
-    gsap.to(".menu-list", {
-      duration: 0.1,
-      translateX: "-100%",
-      ease: "none",
-    })
-  } else {
-    gsap.to(".menu-list", {
-      duration: 0.1,
-      translateX: "0",
-      ease: "none",
-    })
-  }
-})
+import { HomeFilled } from "@element-plus/icons-vue";
+// 页面
+useRouter().push({ name: "index", })
+const option = [
+  { id: 1, title: "首&emsp;页", icon: HomeFilled, path: "/" },
+  { id: 2, title: "社&emsp;区", icon: ElIconSwitchFilled, path: "/community" },
+  { id: 3, title: "极物圈", icon: ElIconArrowLeftBold, path: "/social" },
+  { id: 4, title: "设&emsp;置", icon: ElIconSetting, path: "/setting" },
+]
+// 路由
+
+// 是否折叠
+let isFold = ref<boolean>(false) 
+
+
+const route = useRoute()
+onMounted(() => {
+  console.log(route.path);
+  
+}),
 </script>
 
-<style lang="scss" scoped> .menu-list {
-   user-select: none;
-   position: relative;
-   height: calc(100vh - 1*$top-nav-height);
-   transition: $transition-delay;
+<style lang="scss" scoped>
+.menu-list {
+  user-select: none;
+  position: relative;
+  height: calc(100vh - $top-nav-height);
+  transition: $transition-delay;
+  // 菜单和项
 
 
-   // 菜单和项
-   .el-menu {
-     height: 100%;
-     overflow: visible !important;
+  .el-menu {
+    height: 100%;
+    box-shadow: rgba(100, 100, 100, 0.1) 0px 1px 4px;
 
-     .el-menu-item {
-       width: calc(100% + 1px);
-       overflow: hidden !important;
-       border-right: 3px solid transparent;
-       transition: 0.3s;
-       padding: 10px 20px;
+    .el-menu-item {
+      width: calc(100% + 3px);
+      border-right: 3px solid transparent;
+      transition: 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px 20px;
 
-       svg {
-         width: 1.4em;
-         height: 1.4em;
-         margin-right: 1em;
-       }
-     }
+      .title {
+        letter-spacing: 0.3em;
+      }
+
+      svg {
+        width: 1.4em;
+        height: 1.4em;
+      }
+
+      NuxtLink {
+        transition: $transition-delay;
+      }
+    }
 
 
-     .el-menu-item.is-active {
-       transition: 0.3s;
-       border-radius: 0 2px 2px 0px;
-       background-color: var(--el-color-primary-light-9);
-       border-right: 3px solid var(--el-color-primary);
-     }
-   }
+    .el-menu-item.is-active {
+      transition: 0.3s;
+      border-radius: 4px;
+      background-color: var(--el-color-primary-light-9);
+      border-right: 3px solid var(--el-color-primary);
+    }
+  }
 
 
-   // 折叠按钮
-   .collapse {
-     position: absolute;
-     bottom: 0;
-     right: 0;
-     cursor: pointer;
-     width: 2.4em;
-     height: 2.4em;
-     display: flex;
-     justify-content: flex-end;
-     transform: translateX(50%);
-   }
+  // 折叠按钮
+  .collapse {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 2.4em;
+    height: 2.4em;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    transform: translate(60%, -50%);
+    background-color: var(--el-color-primary);
+    color: white;
+    border-radius: 50%;
+    // border-radius: 0% 100% 100% 0% / 50% 50% 50% 50% ;
+    // clip-path: ellipse(70% 50% at 0% 50%);
 
-   .collapse.dark {
-     background-color: var(--el-color-primary);
-   }
+    .icon {
+      object-fit: contain;
+    }
+  }
 
- }
+  .collapse.dark {
+    background-color: var(--el-color-primary);
+  }
+
+}
 </style>

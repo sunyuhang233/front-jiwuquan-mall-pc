@@ -5,16 +5,18 @@
     "round": 20px,
     "circle": 100%,
   ),
-  $colors: (
+  $colors: ( 
     "white": #ffffff,
-    "black": #111111,
-    "main": #5e34f5,
+    "black": #1d1d1d,
+    "main": #1d1d1d,
     "primary": (
-      "base": #5d33f6,
+      "base": #1d1d1d,
     ),
+
     "success": (
       "base": #67c23a,
-    ),
+    ), 
+    
     "warning": (
       "base": #e6a23c,
     ),
@@ -28,7 +30,10 @@
       "base": #0bdb85,
     ),
   ),
-  $bg-color: (),
+  $bg-color: (
+  "black": #111111,
+  "primary": #303133,
+  ),
   $text-color: (
     "primary": #303133,
     "regular": #606266,

@@ -1,46 +1,50 @@
+
+<template>
+  <ElAffix>
+    <!-- 左侧 -->
+    <div class="nav" flex-row-bt-c py-4 px-6 text-m bg="white" dark:text="light" dark:bg-black shadow>
+      <div class="left" flex-row-c-c>
+        <span i-charm:menu-hamburger></span>
+        <NuxtLink ml-2 to="/" flex-row-c-c>
+          <img w-34px object-contain :src="Logo" class="logo"> <span tracking-2 m-4 font-700 text-xl>极物圈</span>
+        </NuxtLink>
+      </div>
+      <!-- 右侧 -->
+      <div class="right" flex flex-items-center>
+        <!-- 搜索框 -->
+        <!-- 切换主题 -->
+        <BtnSwitch />
+        <!-- 登陆注册 -->
+        <span px-2 cursor-pointer @click="onLogin(1)">登 录</span>
+        &nbsp;|&nbsp;
+        <span px-2 cursor-pointer @click="onLogin(2)">注 册</span>
+      </div>
+    </div>
+  </ElAffix>
+</template>
+
 <script lang="ts" setup>
-import { ref } from 'vue'
-import LogoText from '@/assets/images/logotext.svg'
+import Logo from '@/assets/images/logo/logo.svg'
+import { Search } from '@element-plus/icons-vue';
+// 搜索
+let searchWord = ref<string>("")
 // 登录表单
 let showForm = ref<boolean>(false)
 const onLogin = (type: number) => {
-  if (type === 1) {
-    showForm.value = true
-  } else {
-    showForm.value = false
-  }
-  showForm.value = !showForm.value
+
 }
 </script>
-<template>
-    <!-- 左侧 -->
-    <div class="nav" flex-row-bt-c min-w-screen py-4 px-6 text-m bg="white" dark:text="light" dark:bg-black shadow>
-    <div class="left">
-      <OtherSvgIcon :name="'logo.text'"/>
-      <img :src="LogoText" alt="">
-      <span tracking-2 font-700 text-xl>极物圈</span>
-    </div>
-    <!-- 右侧 -->
-    <div class="right" flex flex-items-center>
-      <!-- 切换主题 -->
-      <BtnSwitch/>
-      <span px-2 cursor-pointer @click="onLogin(1)">登 录</span>
-      &nbsp;|&nbsp;
-      <span px-2 cursor-pointer @click="onLogin(2)">注 册</span>
-    </div>
-  </div>
-</template>
-<style lang="scss" scoped>
+<style lang="scss" scoped> .nav {
+   z-index: 999;
+   height: $top-nav-height;
+   background-image: radial-gradient(transparent 1px, $theme-bg-color2 1px);
+   background-size: 4px 4px;
+   backdrop-filter: saturate(50%) blur(1.4rem);
+ }
 
-.nav {
-  background-image: radial-gradient(transparent 1px, $theme-bg-color2 1px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(10px);
-}
-
-.dark .nav {
-  background-image: radial-gradient(transparent 1px, $theme-bg-color 1px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(10px);
-}
+ .dark .nav {
+   background-image: radial-gradient(transparent 1px, $theme-bg-color 1px);
+   background-size: 4px 4px;
+   backdrop-filter: saturate(50%) blur(1.4rem);
+ }
 </style>

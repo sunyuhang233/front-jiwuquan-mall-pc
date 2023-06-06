@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     },
   },
   app: {
+    // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       viewport: 'width=device-width,initial-scale=1',
       // 网站头部信息
@@ -94,6 +95,6 @@ export default defineNuxtConfig({
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: true,
+    enabled: false,
   },
 })
