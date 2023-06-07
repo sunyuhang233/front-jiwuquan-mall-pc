@@ -1,8 +1,8 @@
 <template>
   <!-- 菜单 -->
   <ElAffix :offset="60">
-    <ClientOnly>
-      <div class="menu-list" w-auto md:w-200px>
+    <div class="menu-list" w-auto md:w-200px>
+      <ClientOnly>
         <transition name="slideInOut">
           <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600" v-show="!isFold">
             <!-- 首页 -->
@@ -17,7 +17,7 @@
             </el-menu-item>
             <!-- 圈子 -->
             <el-menu-item index="/quanzi">
-              <ElIconGoodsFilled />
+              <ElIcon />
               <div class="title" hidden mx-4 sm:inline-block>极物圈</div>
             </el-menu-item>
             <el-menu-item index="/setting">
@@ -30,34 +30,25 @@
         <div @click="isFold = !isFold" class="collapse" flex-row-c-c duration-300 p-2>
           <ElIconArrowRightBold skew-y-2 />
         </div>
-      </div>
-    </ClientOnly>
-
-
+      </ClientOnly>
+    </div>
   </ElAffix>
 </template>
 
 <script lang="ts" setup>
-import { HomeFilled } from "@element-plus/icons-vue";
 // 页面
-useRouter().push({ name: "index", })
-const option = [
-  { id: 1, title: "首&emsp;页", icon: HomeFilled, path: "/" },
-  { id: 2, title: "社&emsp;区", icon: ElIconSwitchFilled, path: "/community" },
-  { id: 3, title: "极物圈", icon: ElIconArrowLeftBold, path: "/social" },
-  { id: 4, title: "设&emsp;置", icon: ElIconSetting, path: "/setting" },
-]
+// const option = [
+//   { id: 1, title: "首&emsp;页", icon: HomeFilled, path: "/" },
+//   { id: 2, title: "社&emsp;区", icon: ElIconSwitchFilled, path: "/community" },
+//   { id: 3, title: "极物圈", icon: ElIconArrowLeftBold, path: "/social" },
+//   { id: 4, title: "设&emsp;置", icon: ElIconSetting, path: "/setting" },
+// ]
 // 路由
 
 // 是否折叠
-let isFold = ref<boolean>(false) 
-
-
+let isFold = ref<boolean>(false)
+// route
 const route = useRoute()
-onMounted(() => {
-  console.log(route.path);
-  
-}),
 </script>
 
 <style lang="scss" scoped>
