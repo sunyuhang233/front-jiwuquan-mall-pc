@@ -17,7 +17,6 @@ const changeTheme = (val: any): void => {
 }
 
 function toggle(e: MouseEvent) {
-
 }
 
 </script>

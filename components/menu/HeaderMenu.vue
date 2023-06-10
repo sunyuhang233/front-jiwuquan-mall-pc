@@ -4,9 +4,9 @@
     <!-- 左侧 -->
     <div class="nav" flex-row-bt-c py-4 px-6 text-m bg="white" dark:text="light" dark:bg-black shadow>
       <div class="left" flex-row-c-c>
-        <span i-charm:menu-hamburger></span>
         <NuxtLink ml-2 to="/" flex-row-c-c>
-          <img w-34px object-contain src="@/assets/images/logo/logo.svg" class="logo"> <span tracking-2 m-4 font-700 text-xl>极物圈</span>
+          <img w-34px object-contain src="@/assets/images/logo/logo.svg" class="logo"> <span tracking-2 m-4 font-700
+            text-xl>极物圈</span>
         </NuxtLink>
       </div>
       <!-- 右侧 -->
