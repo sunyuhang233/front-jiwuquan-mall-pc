@@ -2,6 +2,10 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+  alias: {
+    // 配置@使用静态资源
+    assets: '/<rootDir>/assets',
+  },
   // 全局变量
   runtimeConfig: {
     axios: {
@@ -37,8 +41,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-swiper',
     '@element-plus/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
-
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -48,15 +52,14 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
   },
 
-
   // 主题
   colorMode: {
     classSuffix: '',
   },
   // css
   css: [
-    "~/assets/styles/index.scss",
-    "animate.css"
+    '~/assets/styles/index.scss',
+    'animate.css',
   ],
   // vite css
   vite: {
@@ -89,7 +92,7 @@ export default defineNuxtConfig({
   elementPlus: {
     icon: 'ElIcon',
     themes: ['dark'],
-    importStyle: "scss"
+    importStyle: 'scss',
   },
 
   pwa,

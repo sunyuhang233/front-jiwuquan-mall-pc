@@ -1,17 +1,17 @@
 import type { Result } from "@/types/result";
-import axios, {  AxiosError, type AxiosResponse, type InternalAxiosRequestConfig, AxiosHeaderValue } from "axios";
-
-
-// const config = useRuntimeConfig();
-
-import nuxtConfig from "~/nuxt.config";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+export const baseUrl: string = "http://47.115.226.150:9090"
+export const baseUrlVideo: string = "http://47.115.226.150:9090/res/image/"
+export const baseUrlImg: string = "http://47.115.226.150:9090/res/video/"
+import { ElMessage } from "element-plus";
 export const request = axios.create({
-  baseURL: "http://localhost:3000",
+  // baseURL: "http://localhost:9090",
+  baseURL: baseUrl,
   timeout: 20000,
 });
 
 // 1、请求拦截器
-request.interceptors.request.use((coinfig: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> => {
+request.interceptors.request.use((coinfig) => {
   return coinfig;
 });
 // 2、响应拦截器
@@ -56,7 +56,7 @@ request.interceptors.response.use(
     if (msg !== "") {
       // 组件
       // ElMessage({
-      //   message: msg,
+      //   message,
       //   type,
       // });
     }
@@ -78,10 +78,10 @@ request.interceptors.response.use(
         break;
     }
 
-    // ElMessage({
-    //   message: msg,
-    //   type: "error",
-    // });
+    ElMessage({
+      message: msg,
+      type: "error",
+    });
 
     return Promise.reject(error);
   }

@@ -6,7 +6,7 @@
       <div class="left" flex-row-c-c>
         <span i-charm:menu-hamburger></span>
         <NuxtLink ml-2 to="/" flex-row-c-c>
-          <img w-34px object-contain :src="Logo" class="logo"> <span tracking-2 m-4 font-700 text-xl>极物圈</span>
+          <img w-34px object-contain src="@/assets/images/logo/logo.svg" class="logo"> <span tracking-2 m-4 font-700 text-xl>极物圈</span>
         </NuxtLink>
       </div>
       <!-- 右侧 -->
@@ -24,8 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import Logo from '@/assets/images/logo/logo.svg'
-import { Search } from '@element-plus/icons-vue';
 // 搜索
 let searchWord = ref<string>("")
 // 登录表单
