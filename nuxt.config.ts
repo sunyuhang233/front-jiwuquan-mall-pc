@@ -91,8 +91,8 @@ export default defineNuxtConfig({
   // elementPlus
   elementPlus: {
     icon: 'ElIcon',
-    themes: ['dark'],
     importStyle: 'scss',
+    themes: ['dark'],
   },
 
   pwa,
