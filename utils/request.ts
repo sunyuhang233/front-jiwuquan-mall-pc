@@ -54,10 +54,10 @@ request.interceptors.response.use(
         break;
     }
     if (msg !== "") {
-      // 组件
+      // // 组件
       // ElMessage({
-      //   message,
-      //   type,
+      //   message: msg,
+      //   type
       // });
     }
     return response;
@@ -78,10 +78,10 @@ request.interceptors.response.use(
         break;
     }
 
-    ElMessage({
-      message: msg,
-      type: "error",
-    });
+    // ElMessage({
+    //   message: msg,
+    //   type: "error",
+    // });
 
     return Promise.reject(error);
   }

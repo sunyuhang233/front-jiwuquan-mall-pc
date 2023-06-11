@@ -22,14 +22,14 @@ export default defineConfig({
     // ...
     theme: {
       'theme': {
-        'color':'var(--el-color-primary)',
-        'color2':'var($theme-tip-color)',
-        'color3':'var($theme-tip-color2)',
+        'color': 'var(--el-color-primary)',
+        'color2': 'var($theme-tip-color)',
+        'color3': 'var($theme-tip-color2)',
       }, // class="text-very-cool"
       'tip': {
         'main': 'var(--el-color-primary)', //class="--el-color-primary"
         'green': 'hsla(var(--hue, 217), 78%, 51%)', //class="bg-brand-primary"
-      }
+      },
     },
   },
   presets: [

@@ -21,8 +21,8 @@ export default defineNuxtConfig({
       viewport: 'width=device-width,initial-scale=1',
       // 网站头部信息
       link: [
-        { rel: 'icon', href: '/favicon.svg', sizes: 'any' },
-        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'icon', href: '/logo.png', sizes: 'any' },
+        { rel: 'apple-touch-icon', href: '/logo.png' },
       ],
       // 网站meta
       meta: [

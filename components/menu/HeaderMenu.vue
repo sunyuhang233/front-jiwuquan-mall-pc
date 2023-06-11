@@ -5,7 +5,7 @@
     <div class="nav" flex-row-bt-c py-4 px-6 text-m bg="white" dark:text="light" dark:bg-black shadow>
       <div class="left" flex-row-c-c>
         <NuxtLink ml-2 to="/" flex-row-c-c>
-          <img w-34px object-contain src="@/assets/images/logo/logo.svg" class="logo"> <span tracking-2 m-4 font-700
+          <img w-34px object-contain src="@/assets/images/logo/logo.png" class="logo"> <span tracking-2 m-4 font-700
             text-xl>极物圈</span>
         </NuxtLink>
       </div>
@@ -13,6 +13,7 @@
       <div class="right" flex flex-items-center>
         <!-- 搜索框 -->
         <!-- 切换主题 -->
+        {{ searchWord }}
         <BtnSwitch />
         <!-- 登陆注册 -->
         <span px-2 cursor-pointer @click="onLogin(1)">登 录</span>

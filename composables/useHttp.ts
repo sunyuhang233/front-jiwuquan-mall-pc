@@ -2,7 +2,7 @@ import type { NitroFetchRequest } from 'nitropack'
 import type { FetchOptions, FetchResponse } from 'ofetch'
 import type { UseFetchOptions } from 'nuxt/dist/app/composables/fetch'
 
-function transFormResponse({ response }: any) {
+const transFormResponse = ({ response }: any) => {
   // 处理后端携带了错误码响应的数据
   if (response._data && response._data.code)
     return Promise.reject(response._data)
@@ -31,7 +31,7 @@ function transFormResponse({ response }: any) {
  * @param opts
  * @returns
  */
-export function useMyFetch(request: NitroFetchRequest, opts?: UseFetchOptions<any>) {
+export const useFetchs = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
   return useFetch(request, {
     onResponse: transFormResponse,
     ...opts,
@@ -44,8 +44,8 @@ export function useMyFetch(request: NitroFetchRequest, opts?: UseFetchOptions<an
  * @param opts
  * @returns
  */
-useMyFetch.get = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
-  return useMyFetch(request, {
+useFetchs.get = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
+  return useFetchs(request, {
     method: 'get',
     ...opts,
   })
@@ -57,8 +57,8 @@ useMyFetch.get = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
  * @param opts
  * @returns
  */
-useMyFetch.post = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
-  return useMyFetch(request, {
+useFetchs.post = (request: NitroFetchRequest, opts?: UseFetchOptions<any>) => {
+  return useFetchs(request, {
     method: 'post',
     ...opts,
   })
