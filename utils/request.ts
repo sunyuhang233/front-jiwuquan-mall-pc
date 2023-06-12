@@ -7,6 +7,9 @@ import { ElMessage } from "element-plus";
 export const request = axios.create({
   // baseURL: "http://localhost:9090",
   baseURL: baseUrl,
+  headers: {
+    "Content-type": "application/json"
+  },
   timeout: 20000,
 });
 

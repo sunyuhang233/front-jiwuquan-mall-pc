@@ -2,12 +2,12 @@ import { AxiosPromise, AxiosResponse } from "axios";
 import { request } from "@/utils/request";
 import { Result } from "@/types/result";
 
-export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO): AxiosPromise<Result<string>> {
+export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO): AxiosPromise<Result<Object[]>> {
   return request({
-    method: "GET",
+    method: "get",
     url: `/goods/list/${page}/${size}`,
     data: dto
-  }) as AxiosPromise<Result<string>>;
+  }) as AxiosPromise<Result<Object[]>>;
 }
 /**商品分页参数类型 */
 interface GoodsPageDTO {
