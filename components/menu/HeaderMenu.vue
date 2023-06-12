@@ -1,6 +1,6 @@
 
 <template>
-  <ElAffix shadow->
+  <ElAffix shadow-md>
     <div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
       <!-- 左侧 -->
       <div class="left" flex-row-c-c>

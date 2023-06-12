@@ -1,7 +1,7 @@
 <template>
   <!-- 搜索框 -->
   <ElInput type="text" clearable :prefix-icon="ElIconSearch" v-model="word" :onSearch="onSearch" :placeholder="'搜索'"
-    class="mx-1  v-input" @change="props.isChange && $emit('onSearch')" />
+    class="mx-1 v-input" @change="props.isChange && $emit('onSearch')" />
     
 </template>
 

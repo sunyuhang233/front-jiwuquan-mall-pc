@@ -4,9 +4,9 @@ interface EventVO {
   details: string,
   images: string,
   level: number,
-  startTime: Date,
-  endTime: Date,
+  startTime: string,
+  endTime: string,
   status: number,
-  createTime: Date,
-  updateTime: Date
+  createTime: string,
+  updateTime: string
 }

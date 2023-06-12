@@ -1,11 +1,11 @@
 import type { Result } from "@/types/result";
 import axios, { AxiosError, type AxiosResponse } from "axios";
-export const baseUrl: string = "http://47.115.226.150:9090"
+// export const baseUrl: string = "http://47.115.226.150:9090"
+export const baseUrl: string = "http://localhost:9090"
 export const baseUrlImg: string = "http://47.115.226.150:9090/res/image/"
 export const baseUrlVideo: string = "http://47.115.226.150:9090/res/video/"
 import { ElMessage } from "element-plus";
 export const request = axios.create({
-  // baseURL: "http://localhost:9090",
   baseURL: baseUrl,
   headers: {
     "Content-type": "application/json"
@@ -57,11 +57,11 @@ request.interceptors.response.use(
         break;
     }
     if (msg !== "") {
-      // // 组件
-      // ElMessage({
-      //   message: msg,
-      //   type
-      // });
+      // 组件
+      ElMessage.error({
+        type,
+        message: msg,
+      });
     }
     return response;
   },
@@ -80,11 +80,10 @@ request.interceptors.response.use(
         msg = "网络错误，请稍后再试！";
         break;
     }
-
-    // ElMessage({
-    //   message: msg,
-    //   type: "error",
-    // });
+    ElMessage.error({
+      message: msg,
+      type: "error",
+    });
 
     return Promise.reject(error);
   }

@@ -1,6 +1,6 @@
 interface ImportMetaEnv {
-  readonly VITE_NODE_ENV:string; 
-  VITE_API_BASE_URL:string
+  readonly VITE_NODE_ENV: string;
+  VITE_API_BASE_URL: string
 }
 
 enum Sort {
@@ -10,4 +10,18 @@ enum Sort {
 enum isTrue {
   TRUE = 1,
   FALESE = 0,
+}
+
+// 分页
+interface IPage<T> {
+  records?: T[] | undefined,
+  total?: number,
+  pages?: number,
+  size?: number,
+  current?: number,
+  orders?: [],
+  optimizeCountSql?: boolean,
+  searchCount?: boolean,
+  maxLimit?: null,
+  countId?: null,
 }

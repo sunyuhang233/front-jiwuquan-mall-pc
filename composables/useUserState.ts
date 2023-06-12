@@ -13,7 +13,16 @@ export const useUserStore = defineStore('user', () => {
    */
 
   return {
+    token:"",
+    user:{
+      nickName:""
+    },
+    userInfo:{
 
+    },
+    wallet:{
+
+    }
   }
 })
 

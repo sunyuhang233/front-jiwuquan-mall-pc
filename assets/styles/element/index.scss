@@ -1,11 +1,7 @@
 @forward "element-plus/theme-chalk/src/common/var.scss" with (
-  $border-radius: (
-    "base": 6px,
-    "small": 12px,
-    "round": 20px,
-    "circle": 100%,
-  ),
-  $colors: ( 
+  // ../../../element-plus/theme-chalk/src/common/var.scss
+  $border-radius: ("base": 6px, "small": 12px, "round": 20px, "circle": 100%),
+  $colors: (
     "white": #ffffff,
     "black": #1d1d1d,
     "main": #5d33f6,
@@ -15,35 +11,42 @@
 
     "success": (
       "base": #67c23a,
-    ), 
+    ),
     "warning": (
       "base": #e6a23c,
     ),
     "danger": (
-      "base": #f56c6c,
+      "base": #fd4848,
     ),
     "error": (
-      "base": #f56c6c,
+      "base": #fc2929,
     ),
     "info": (
       "base": #0bdb85,
-    ),
+    )
   ),
-  $bg-color: (
-  "black": #111111,
-  "primary": #303133,
-  ),
+  $bg-color: ("black": #111111, "primary": #303133),
   $text-color: (
     "primary": #303133,
     "regular": #606266,
     "secondary": #909399,
     "placeholder": #a8abb2,
-    "disabled": #c0c4cc,
+    "disabled": #c0c4cc
   ),
 
   // $drawer
-  $drawer:(
-    "padding-primary":0px,
-  )
-); 
-
+  $drawer: ("padding-primary": 0px),
+  //
+  $carousel:
+    (
+      "arrow-font-size": 20px,
+      "arrow-size": 36px,
+      "arrow-background": rgba(31, 45, 61, 0.4),
+      "arrow-hover-background": rgba(31, 45, 61, 0.4),
+      "indicator-width": 30px,
+      "indicator-height": 2px,
+      "indicator-padding-horizontal": 4px,
+      "indicator-padding-vertical": 12px,
+      "indicator-out-color": getCssVar("border-color-hover")
+    )
+);

@@ -10,22 +10,24 @@
   $colors: (
     "white": #ffffffe1,
     "black": #111111,
-    "main": #35c126,
+    "main": #7c51fb,
     "primary": (
-      "base": #35c126,
-      "tip": #00fff6,
+      "base": #7c51fb,
+      "tip": #dc284d,
+      "tip2": #ffbc0d,
+      "tip3": #00fff6,
     ),
     "success": (
       "base": #6cf825,
     ),
     "warning": (
-      "base": #d39537,
+      "base": #ffbc0d,
     ),
     "danger": (
       "base": #f06767,
     ),
     "error": (
-      "base": #e94747,
+      "base": #dc284d,
     ),
     "info": (
       "base": #0bce7c,

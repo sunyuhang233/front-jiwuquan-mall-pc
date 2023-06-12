@@ -5,11 +5,12 @@ import { getEventsList } from '~/composables/api/event';
 // 活动事件列表
 const eventList = reactive<EventVO[]>([]);
 const isLoading = ref<boolean>(true);
-
+// 请求
 (async () => {
   let { data } = await getEventsList()
   if (data.code === 20000) {
-    const res = data.data.sort((a, b) => a.level - b.level)
+    // 结束时间排序
+    const res = data.data.sort((a, b) => b.status - a.status)
     res.forEach(p => {
       eventList.push(p);
     })
@@ -19,10 +20,30 @@ const isLoading = ref<boolean>(true);
       }, 500);
     }
   }
-})() 
+})()
+
+// 计算剩余天数
+const getEndDay = computed(() => {
+  return (a: string, b: string): number => {
+    let newDate = new Date().getTime()
+    let start = Date.parse(a)
+    let end = Date.parse(b)
+    if (start > newDate) {// 未开始
+      return 0;
+    }
+    if (end < newDate) {// 结束
+      return -1;
+    }
+    return +((end - newDate) / (1 * 24 * 60 * 60 * 1000)).toFixed(0);
+  }
+})
+
+// 去到详情页
+const toEventDetailView = (eid:string) =>{
+}
 </script>
 <template>
-  <el-carousel :interval="8000" height="420px" arrow="hover" w="670px" class="swpier" trigger="click" shadow="md  ">
+  <el-carousel cursor-pointer :interval="8000" height="400px" arrow="hover" w="640px" class="swpier" trigger="click" >
     <!-- 骨架屏 -->
     <el-skeleton animated :loading="isLoading" class="ske ">
       <template #template>
@@ -35,7 +56,7 @@ const isLoading = ref<boolean>(true);
       <!-- 内容 -->
       <template #default>
         <!-- 轮播图项 -->
-        <el-carousel-item v-for="p in eventList" :key="p.id" class="swiper-item">
+        <el-carousel-item @click="toEventDetailView(p.id)" v-for="p in eventList" :key="p.id" class="swiper-item">
           <!-- 图片 -->
           <el-image :src="baseUrlImg + p.images" :alt="p.details" class="e-img" style="width: 100%;height: 100%;"
             fit="fill">
@@ -46,12 +67,20 @@ const isLoading = ref<boolean>(true);
             </template>
           </el-image>
           <!-- 文本 -->
-          <div class="tip" px-4 py-2>
-            <h3 class="title" py-2>{{ p.title }}</h3>
-            <p opacity-65>时间：{{ p.startTime }} - {{ p.endTime }}
+          <section class="tip" px-6 py-2 tracking-1 > 
+            <h3 class="title" py-1>{{ p.title }}</h3>
+            <!-- 已经结束 -->
+            <p opacity-80 v-if="getEndDay(p.startTime, p.endTime) < 0" style="text-decoration: line-through;">活动已经结束</p>
+            <!-- 即将开始 -->
+            <p opacity-80 v-if="getEndDay(p.startTime, p.endTime) === 0" style="color: var(--el-color-success);">活动即将开始
+            </p>
+            <!-- 正在进行 -->
+            <p opacity-80 v-else-if="getEndDay(p.startTime, p.endTime) > 0">距离结束还有：<strong text-lg
+                style="color: var(--el-color-error);">{{ getEndDay(p.startTime, p.endTime) }}</strong> 天
               <span cursor-pointer float-right opacity-60>更多</span>
             </p>
-          </div>
+
+          </section>
         </el-carousel-item>
       </template>
     </el-skeleton>
@@ -59,19 +88,21 @@ const isLoading = ref<boolean>(true);
 </template>
 <style scoped lang="scss"> .dark .swpier {
    opacity: 0.86;
-   background-color: #0f0f0f;
+   background-color: transparent;
+   border: 1px solid rgba(128, 128, 128, 0.2);
  }
 
  .swpier {
-   background-color: #bebebe34;
-   border-radius: 10px;
+   background-color: #e2e2e234;
+   border-radius: 6px;
    overflow: hidden;
+   border: 1px solid rgba(128, 128, 128, 0.2);
  }
 
  .ske {
    width: 100%;
    height: 100%;
-   border-radius: 10px;
+   border-radius: 6px;
    overflow: hidden;
 
    .sk-imgs {
@@ -115,5 +146,4 @@ const isLoading = ref<boolean>(true);
        background-color: var(--el-color-primary);
      }
    }
- }
-</style>
+ }</style>

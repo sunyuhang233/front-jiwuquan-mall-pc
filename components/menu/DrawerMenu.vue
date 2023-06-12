@@ -1,11 +1,4 @@
 <script lang="ts" setup>
-// 页面
-// const option = [
-//   { id: 1, title: "首&emsp;页", icon: HomeFilled, path: "/" },
-//   { id: 2, title: "社&emsp;区", icon: ElIconSwitchFilled, path: "/community" },
-//   { id: 3, title: "极物圈", icon: ElIconArrowLeftBold, path: "/social" },
-//   { id: 4, title: "设&emsp;置", icon: ElIconSetting, path: "/setting" },
-// ]
 // 是否折叠 
 const isFold = ref<boolean>(Boolean(false))
 // 路由
@@ -14,7 +7,7 @@ const route = useRoute()
 
 <template>
   <!-- 菜单 -->
-  <ElAffix :offset="60">
+  <ElAffix :offset="62">
     <transition name="slideInOut">
       <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
         <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
