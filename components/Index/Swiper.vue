@@ -19,9 +19,7 @@ const isLoading = ref<boolean>(true);
       }, 500);
     }
   }
-})()
-
-
+})() 
 </script>
 <template>
   <el-carousel :interval="8000" height="420px" arrow="hover" w="670px" class="swpier" trigger="click" shadow="md  ">
@@ -50,7 +48,7 @@ const isLoading = ref<boolean>(true);
           <!-- 文本 -->
           <div class="tip" px-4 py-2>
             <h3 class="title" py-2>{{ p.title }}</h3>
-            <p opacity-65>时间：{{ p.createTime }} - {{ p.createTime }}
+            <p opacity-65>时间：{{ p.startTime }} - {{ p.endTime }}
               <span cursor-pointer float-right opacity-60>更多</span>
             </p>
           </div>
