@@ -1,40 +1,51 @@
 <template>
   <!-- 搜索框 -->
-  <ElInput v-model="word" :onSearch="onSearch" :placeholder="'搜索'" @change="props.isChange && $emit('onSearch')" />
-</ElAffix></template>
+  <ElInput type="text" clearable :prefix-icon="ElIconSearch" v-model="word" :onSearch="onSearch" :placeholder="'搜索'"
+    class="mx-1  v-input" @change="props.isChange && $emit('onSearch')" />
+    
+</template>
 
 <script lang="ts" setup>
+
 // 搜索
 let props = defineProps<{
   modelValue: string,
   isChange?: boolean | false,
 }>()
-
+// 实例
+const instance = getCurrentInstance()
 const word = computed({
   get(): string {
     return props.modelValue
   },
   set(v: string) {
-    $emit("update:modelValue", v)
+    instance?.emit("update:modelValue", v)
   }
 })
 
+const onSearch = () => {
 
-function $emit(arg0: string, v: string) {
-  throw new Error('Function not implemented.');
 }
-</script>
-<style lang="scss" scoped> .nav {
-   z-index: 999;
-   height: $top-nav-height;
-   background-image: radial-gradient(transparent 1px, $theme-bg-color2 1px);
-   background-size: 4px 4px;
-   backdrop-filter: saturate(50%) blur(1.4rem);
- }
 
- .dark .nav {
-   background-image: radial-gradient(transparent 1px, $theme-bg-color 1px);
-   background-size: 4px 4px;
-   backdrop-filter: saturate(50%) blur(1.4rem);
- }
+</script>
+<style lang="scss" scoped>
+.v-input {
+  width: 30px;
+  border-radius: 20px;
+  transition: $transition-delay;
+
+  &:hover,
+  input:focus-visible,
+  input:hover,
+  & {
+    min-width: 200px;
+  }
+
+  :deep(.el-input__wrapper) {
+    width: 100%;
+    border-radius: 30px;
+
+  }
+
+}
 </style>

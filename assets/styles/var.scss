@@ -1,5 +1,5 @@
 // 菜单
-$top-nav-height: 60px;
+$top-nav-height: 66px;
 $transition-delay: 0.3s;
 
 $theme-bg-color: #111111;
@@ -11,6 +11,12 @@ $theme-text-color2: #ffffff;
 $theme-tip-color: #5d33f6;
 $theme-tip-color2: #4bf380;
 $theme-tip-color3: #4bf380;
+
+// 加载条颜色
+$loading-color:#5d33f6;
+$loading-color2: linear-gradient(to bottom, #8e2de2, #4a00e0); 
+$loading-color-dark:#7becd9;
+$loading-color-dark2:linear-gradient(to right, #4bf380, #71e9ed, #f64f59);;
 
 // 动画曲线
 $animate-cubic: cubic-bezier(0.61, 0.225, 0.195, 1.19);

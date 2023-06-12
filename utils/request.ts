@@ -1,8 +1,8 @@
 import type { Result } from "@/types/result";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 export const baseUrl: string = "http://47.115.226.150:9090"
-export const baseUrlVideo: string = "http://47.115.226.150:9090/res/image/"
-export const baseUrlImg: string = "http://47.115.226.150:9090/res/video/"
+export const baseUrlImg: string = "http://47.115.226.150:9090/res/image/"
+export const baseUrlVideo: string = "http://47.115.226.150:9090/res/video/"
 import { ElMessage } from "element-plus";
 export const request = axios.create({
   // baseURL: "http://localhost:9090",

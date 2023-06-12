@@ -1,23 +1,78 @@
 <template>
-  <el-switch v-model="isDark" inline-prompt @click="toggle" @change="changeTheme">
-  </el-switch>
-  <OtherMoonSun pl-2 />
+  <!-- <el-switch :active-icon="ElIconAddLocation" :value="isDark" inline-prompt @click="toggle">
+  </el-switch> -->
+  <ElButton @click="toggle"  class="btn" mx-3 round>
+    <ClientOnly><span>{{ isDark ? '切换日间' : '切换夜间' }}</span></ClientOnly>
+    <OtherMoonSun />
+  </ElButton>
 </template>
 <script lang="ts" setup>
-// 获取主题 
-const color = useColorMode();
-const isDark = ref<boolean>(color.value === 'dark')
-// 改变主题
-const changeTheme = (val: any): void => {
-  // if (val) {
-  //   color.preference = 'dark'
-  // } else {
-  //   color.preference = 'light'
-  // }
-}
+// 切换动画
+const mode = useColorMode();
 
-function toggle(e: MouseEvent) {
-}
+const isDark = computed({
+  get(): boolean {
+    return mode.value === 'dark'
+  },
+  set(): void {
+    mode.preference = isDark.value ? 'light' : 'dark'
+  },
+})
 
+
+let toggle = (event: MouseEvent) => {
+  // @ts-expect-error: Transition Api
+  let isAppearanceTransition = document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!isAppearanceTransition || !event) {
+    isDark.value = !isDark.value
+    return null
+  }
+  // 画圆圈
+  const x = event.clientX
+  const y = event.clientY
+  const endRadius = Math.hypot(
+    Math.max(x, innerWidth - x),
+    Math.max(y, innerHeight - y),
+  )
+  // @ts-expect-error: Transition API
+  const transition = document.startViewTransition(() => {
+    isDark.value = !isDark.value
+  })
+  transition.ready.then(() => {
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ]
+    document.documentElement.animate(
+      {
+        clipPath: isDark.value ? clipPath : [...clipPath].reverse(),
+      },
+      {
+        duration: 300,
+        easing: 'ease-in',
+        pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
+      },
+    )
+  })
+
+};
 </script>
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+.btn {
+  padding: 0em 0.5em;
+  transition: $transition-delay;
+
+  span {
+    width: 0;
+    overflow: hidden;
+    transition: $transition-delay;
+    letter-spacing: 0.1em;
+  }
+
+  &:hover span,
+  &:focus span {
+    width: 4.6em;
+    margin: 0 0.4em;
+  }
+}
+</style>

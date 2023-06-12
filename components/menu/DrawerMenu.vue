@@ -6,11 +6,9 @@
 //   { id: 3, title: "极物圈", icon: ElIconArrowLeftBold, path: "/social" },
 //   { id: 4, title: "设&emsp;置", icon: ElIconSetting, path: "/setting" },
 // ]
+// 是否折叠 
+const isFold = ref<boolean>(Boolean(false))
 // 路由
-
-// 是否折叠
-const isFold = ref<boolean>(false)
-
 const route = useRoute()
 </script>
 

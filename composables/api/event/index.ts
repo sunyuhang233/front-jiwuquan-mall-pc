@@ -1,12 +1,9 @@
 import type { AxiosPromise } from 'axios'
-import { request } from '../../../utils/request'
-import type { Result } from '../../../types/result'
+import { request } from '@/utils/request'
+import type { Result } from '@/types/result'
 
 /**
- * 账号密码登录
- * @param username 用户名/手机号/邮箱
- * @param password 密码
- * @returns promise
+ * 获取活动列表
  */
 export function getEventsList(): AxiosPromise<Result<EventVO[]>> {
   return request({

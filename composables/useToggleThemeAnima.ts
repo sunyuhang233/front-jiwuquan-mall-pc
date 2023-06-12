@@ -11,7 +11,6 @@ const isDark = computed({
 // @ts-expect-error: Transition Api
 const isAppearanceTransition = document.starViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-
 export default (event: MouseEvent) => {
   if (!isAppearanceTransition || !event) {
     isDark.value = !isDark.value
@@ -34,12 +33,12 @@ export default (event: MouseEvent) => {
     ]
     document.documentElement.animate(
       {
-        clipPath: isDark ? clipPath : [...clipPath].reverse(),
+        clipPath: isDark.value ? clipPath : [...clipPath].reverse(),
       },
       {
         duration: 300,
         easing: 'ease-in',
-        pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)',
+        pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
       },
     )
   })

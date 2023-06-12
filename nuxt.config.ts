@@ -39,7 +39,6 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
-    'nuxt-swiper',
     '@element-plus/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
   ],
@@ -58,6 +57,7 @@ export default defineNuxtConfig({
   },
   // css
   css: [
+    'nprogress/nprogress.css',
     '~/assets/styles/index.scss',
     'animate.css',
   ],
