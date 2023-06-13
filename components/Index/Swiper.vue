@@ -39,18 +39,18 @@ const getEndDay = computed(() => {
 })
 
 // 去到详情页
-const toEventDetailView = (eid:string) =>{
+const toEventDetailView = (eid: string) => {
 }
 </script>
 <template>
-  <el-carousel cursor-pointer :interval="8000" height="400px" arrow="hover" w="640px" class="swpier" trigger="click" >
+  <el-carousel cursor-pointer :interval="8000" height="400px" arrow="hover" w="640px" class="swpier" trigger="click">
     <!-- 骨架屏 -->
     <el-skeleton animated :loading="isLoading" class="ske ">
       <template #template>
         <el-skeleton-item p-4 variant="image" class="sk-imgs" p-2 />
-        <div p-4 px-8>
-          <el-skeleton-item class="p-1 m-1" variant="p" style="width: 70%" />
-          <el-skeleton-item class="p-1 m-1" variant="p" style="width: 100%" />
+        <div p-4>
+          <el-skeleton-item class="p-1 my-1" variant="p" style="width: 70%" />
+          <el-skeleton-item class="p-1 my-1" variant="p" style="width: 100%" />
         </div>
       </template>
       <!-- 内容 -->
@@ -61,13 +61,13 @@ const toEventDetailView = (eid:string) =>{
           <el-image :src="baseUrlImg + p.images" :alt="p.details" class="e-img" style="width: 100%;height: 100%;"
             fit="fill">
             <template #error>
-              <div class="image-slot">
-                <ElIconPicture />
+              <div class="image-slot" flex-row-c-c>
+                <ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
               </div>
             </template>
           </el-image>
           <!-- 文本 -->
-          <section class="tip" px-6 py-2 tracking-1 > 
+          <section class="tip" px-6 py-2 tracking-1>
             <h3 class="title" py-1>{{ p.title }}</h3>
             <!-- 已经结束 -->
             <p opacity-80 v-if="getEndDay(p.startTime, p.endTime) < 0" style="text-decoration: line-through;">活动已经结束</p>
@@ -93,9 +93,7 @@ const toEventDetailView = (eid:string) =>{
  }
 
  .swpier {
-   background-color: #e2e2e234;
-   border-radius: 6px;
-   overflow: hidden;
+   backdrop-filter: blur(10px);
    border: 1px solid rgba(128, 128, 128, 0.2);
  }
 
@@ -103,12 +101,11 @@ const toEventDetailView = (eid:string) =>{
    width: 100%;
    height: 100%;
    border-radius: 6px;
-   overflow: hidden;
 
    .sk-imgs {
-     transition: $transition-delay;
      width: 100%;
      height: 80%;
+     transition: $transition-delay;
    }
  }
 
@@ -146,4 +143,5 @@ const toEventDetailView = (eid:string) =>{
        background-color: var(--el-color-primary);
      }
    }
- }</style>
+ }
+</style>

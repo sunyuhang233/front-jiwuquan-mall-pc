@@ -1,57 +1,60 @@
 <script lang="ts" setup>
-// 是否折叠 
-const isFold = ref<boolean>(Boolean(false))
+import { useStorage } from '@vueuse/core';
+// 是否折叠  本地状态
+const isFold = useStorage<boolean>("jiwu_isFold", true)
 // 路由
 const route = useRoute()
 </script>
 
 <template>
   <!-- 菜单 -->
-  <ElAffix :offset="62">
-    <transition name="slideInOut">
-      <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
-        <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
-          <!-- 首页 -->
-          <el-menu-item index="/">
-            <ElIconHomeFilled />
-            <div class="title" mx-4 hidden sm:inline-block>
-              首&emsp;页
-            </div>
-          </el-menu-item>
-          <!-- 社区 -->
-          <el-menu-item index="/community">
-            <ElIconSwitchFilled />
-            <div class="title" mx-4 hidden sm:inline-block>
-              社&emsp;区
-            </div>
-          </el-menu-item>
-          <!-- 圈子 -->
-          <el-menu-item index="/quanzi">
-            <ElIconGoodsFilled />
-            <div class="title" mx-4 hidden sm:inline-block>
-              极物圈
-            </div>
-          </el-menu-item>
-          <el-menu-item index="/setting">
-            <ElIconSetting />
-            <div class="title" mx-4 hidden sm:inline-block>
-              设&emsp;置
-            </div>
-          </el-menu-item>
-        </el-menu>
+  <ClientOnly>
+    <ElAffix :offset="62">
+      <transition name="slideInOut">
+        <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
+          <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
+            <!-- 首页 -->
+            <el-menu-item index="/">
+              <ElIconHomeFilled />
+              <div class="title" mx-4 hidden sm:inline-block>
+                首&emsp;页
+              </div>
+            </el-menu-item>
+            <!-- 社区 -->
+            <el-menu-item index="/community">
+              <ElIconSwitchFilled />
+              <div class="title" mx-4 hidden sm:inline-block>
+                社&emsp;区
+              </div>
+            </el-menu-item>
+            <!-- 圈子 -->
+            <el-menu-item index="/quanzi">
+              <ElIconGoodsFilled />
+              <div class="title" mx-4 hidden sm:inline-block>
+                极物圈
+              </div>
+            </el-menu-item>
+            <el-menu-item index="/setting">
+              <ElIconSetting />
+              <div class="title" mx-4 hidden sm:inline-block>
+                设&emsp;置
+              </div>
+            </el-menu-item>
+          </el-menu>
 
-        <!-- 折叠按钮 -->
-        <div class="collapse" flex-row-c-c p-2 duration-300 @click="isFold = !isFold">
-          <ElIconArrowRightBold skew-y-2 />
+          <!-- 折叠按钮 -->
+          <div class="collapse" flex-row-c-c p-2 duration-300 @click="isFold = !isFold">
+            <ElIconArrowRightBold skew-y-2 />
+          </div>
         </div>
+      </transition>
+      <!-- 折叠按钮 -->
+      <div v-show="isFold" class="collapse animate__animated animate__bounceIn collapse2" flex-row-c-c p-l-3 duration-300
+        @click="isFold = !isFold">
+        <ElIconArrowRightBold />
       </div>
-    </transition>
-    <!-- 折叠按钮 -->
-    <div v-show="isFold" class="collapse animate__animated animate__bounceIn collapse2" flex-row-c-c p-l-3 duration-300
-      @click="isFold = !isFold">
-      <ElIconArrowRightBold />
-    </div>
-  </ElAffix>
+    </ElAffix>
+  </ClientOnly>
 </template>
 
 <style lang="scss" scoped>

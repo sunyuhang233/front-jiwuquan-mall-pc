@@ -11,11 +11,13 @@ export default defineNuxtConfig({
     axios: {
       baseURL:
         process.env.NODE_ENV === 'production'
-          ? 'http://47.115.226.150:8082'
-          : 'http://localhost:3000',
+          ? 'http://47.115.226.150:9090'
+          : 'http://localhost:9090',
     },
   },
   app: {
+    // https://nuxt.com.cn/docs/getting-started/transitions
+    // layoutTransition: { name: 'layout', mode: 'out-in' }
     // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -59,6 +61,7 @@ export default defineNuxtConfig({
   css: [
     'nprogress/nprogress.css',
     '~/assets/styles/index.scss',
+    '~/assets/styles/animate.scss',
     'animate.css',
   ],
   // vite css

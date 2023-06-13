@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-
 </script>
-
 <template>
   <NuxtLayout>
-    <div class="index " p="y-6 x-4">
+    <div class="index" p="y-6 x-4">
       <!-- logo -->
       <IndexTop />
       <div class="center" flex-row>
@@ -13,7 +11,6 @@
         <!-- 轮播图 -->
         <IndexSwiper scale-80 origin-tl lg:scale-100 />
       </div>
-
     </div>
   </NuxtLayout>
 </template>

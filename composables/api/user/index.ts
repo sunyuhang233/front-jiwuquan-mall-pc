@@ -1,6 +1,6 @@
 import { AxiosPromise, AxiosResponse } from "axios";
-import { request } from "../../../utils/request";
-import { Result } from "../../../types/result";
+import { request } from "@/utils/request";
+import { Result } from "@/types/result";
 
 /**
  * 账号密码登录
@@ -8,7 +8,7 @@ import { Result } from "../../../types/result";
  * @param password 密码
  * @returns promise
  */
-export function toLoginByPwd(username: string, password: string):AxiosPromise<Result<string>> {
+export function toLoginByPwd(username: string, password: string): AxiosPromise<Result<string>> {
   return request({
     method: "POST",
     url: "/user/login/pwd",
@@ -26,7 +26,7 @@ export function toLoginByPwd(username: string, password: string):AxiosPromise<Re
  * @param code 
  * @returns 
  */
-export function toLoginByEmail(email: string, code: string):AxiosPromise<Result<string>> {
+export function toLoginByEmail(email: string, code: string): AxiosPromise<Result<string>> {
   return request({
     method: "POST",
     url: "/user/login/email",
@@ -37,15 +37,39 @@ export function toLoginByEmail(email: string, code: string):AxiosPromise<Result<
   });
 }
 
+
+
 /**
  * 登录-获取验证码
  * @param key 邮箱/手机号
  * @returns data
  */
-export function getLoginEmailCode(key: string, type: number):AxiosPromise<Result<string>> {
+export function getLoginEmailCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
   return request({
-    method: "POST",
-    url: "/user/login/code",
+    method: "GET",
+    url: `/user/login/code/${type}`,
+    data: {
+      key,
+    }
+  });
+}
+
+enum DeviceType {
+  PHONE = 0,
+  EMAIL = 1
+}
+
+
+
+/**
+ * 注册-获取验证码
+ * @param key 邮箱/手机号
+ * @returns data
+ */
+export function getRegisterEmailCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
+  return request({
+    method: "GET",
+    url: `/user/register/code/${type}`,
     data: {
       key,
     }
@@ -57,7 +81,7 @@ export function getLoginEmailCode(key: string, type: number):AxiosPromise<Result
  * @param token 用户token
  * @returns Resutl
  */
-export function toLogout(token: string):AxiosPromise<Result<string>> {
+export function toLogout(token: string): AxiosPromise<Result<string>> {
   return request({
     method: "DELETE",
     url: "/user/exit",
@@ -73,7 +97,7 @@ export function toLogout(token: string):AxiosPromise<Result<string>> {
  * @param token 用户token
  * @returns Resutl
  */
-export function toLogoutAll(token: string):AxiosPromise<Result<string>> {
+export function toLogoutAll(token: string): AxiosPromise<Result<string>> {
   return request({
     method: "DELETE",
     url: "/user/exit/all",
@@ -82,4 +106,6 @@ export function toLogoutAll(token: string):AxiosPromise<Result<string>> {
     }
   })
 }
+
+
 

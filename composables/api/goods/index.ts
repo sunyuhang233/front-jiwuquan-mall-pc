@@ -19,7 +19,11 @@ interface GoodsPageDTO {
   saleSort?: Sort,
   isNew?: isTrue,
 }
-
+/**
+ * 商品详细信息
+ * @param gid 
+ * @returns 
+ */
 export function getGoodsInfoById(gid:string) {
   return request({
     method: "GET",

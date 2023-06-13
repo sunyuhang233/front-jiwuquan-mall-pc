@@ -23,7 +23,7 @@ span {
 }
 
 // 页面
-.page {
+body {
   min-height: 100vh;
 }
 
@@ -31,7 +31,7 @@ span {
 .light {
   // will-change: transform,color,background-color,height;
   transition-property: background-clolor, box-shadow, color;
-  transition: $transition-delay;
+  transition-duration: $transition-delay;
 }
 
 html {
@@ -41,7 +41,7 @@ html {
 
 html.dark {
   // background-color: #171717;
-  background: radial-gradient(ellipse 80% 50% at 50% -15%, rgba(148, 150, 255, 0.16), #141414) no-repeat;
+  background: radial-gradient(ellipse 80% 50% at 50% -15%, rgba(148, 150, 255, 0.16), #222222) no-repeat;
 }
 
 // 全局滚动条
@@ -65,50 +65,11 @@ html.dark {
   内阴影+圆角*/
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(134, 134, 134, 0.3);
   background-color: #252525;
 }
 .dark ::-webkit-scrollbar-thumb {
   background-color: rgb(85, 85, 85);
-}
-
-// 动画
-.page-enter-active,
-.page-leave-active {
-  transition: all $transition-delay;
-}
-
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
-  animation: cubic-bezier(0.1, 0.7, 1, 1);
-}
-
-// 滑动
-.slideInOut-enter-active {
-  animation: fadeInLeft $transition-delay $animate-cubic;
-}
-.slideInOut-leave-active {
-  animation: fadeInLeft $transition-delay $animate-cubic reverse;
-}
-// 夜间模式切换动画
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-::view-transition-old(root) {
-  z-index: 9999;
-}
-::view-transition-new(root) {
-  z-index: 1;
-}
-.dark::view-transition-old(root) {
-  z-index: 1;
-}
-.dark::view-transition-new(root) {
-  z-index: 9999;
 }
 
 // 自定义类

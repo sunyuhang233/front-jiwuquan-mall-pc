@@ -7,7 +7,7 @@ interface GoodsVO {
   description: string,
   district: null,
   id: string,
-  images: string,
+  images: string | string[],
   isNew: isTrue,
   isShow: isTrue,
   name: string,

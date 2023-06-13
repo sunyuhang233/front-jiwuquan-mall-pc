@@ -2,7 +2,7 @@ import type { FetchResponse, SearchParameters } from 'ofetch'
 import type { Ref } from 'vue'
 import type { UseFetchOptions } from '#app'
 import { Result } from '~/types/result'
-
+// https://juejin.cn/post/7173507227104313352
 type UrlType = string | Request | Ref<string | Request> | (() => string | Request)
 
 

@@ -1,0 +1,55 @@
+/** @动画 **/
+
+// 滑动
+.slideInOut-enter-active {
+  animation: fadeInLeft $transition-delay $animate-cubic;
+}
+.slideInOut-leave-active {
+  animation: fadeInLeft $transition-delay $animate-cubic reverse;
+}
+// popover上下突出
+.popSliceUpDown-enter-active,
+.popSliceUpDown-leave-active {
+  transition: $transition-delay $animate-cubic;
+  transform-origin: center top;
+  transform: scale(1);
+}
+
+.popSliceUpDown-enter-from,
+.popSliceUpDown-leave-to {
+  overflow: hidden;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: $transition-delay $animate-cubic;
+}
+
+
+// fade-in-out
+.fadeInOut-enter-active {
+  animation: $transition-delay animate__fadeIn;
+}
+.fadeInOut-leave-active {
+  animation: $transition-delay animate__fadeOut;
+}
+.animate__animated {
+  animation-duration: $transition-delay;
+}
+
+// 夜间模式切换动画
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 9999;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
