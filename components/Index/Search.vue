@@ -3,7 +3,7 @@
     <!-- 下拉框 -->
     <el-popover width="min(435px,38vw)" popper-class="popover" transition="popSliceUpDown" :placement="'bottom-end'"
       :show-after="200" :hide-after="0" :visible="isShowResult" popper-style="box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                          padding: 1.2em 1.2em;" tabindex="0">
+                                         height:380px; padding: 1.2em 1.2em;" tabindex="0">
       <template #reference>
         <div class="content" relative>
           <!-- 搜索 -->
@@ -38,7 +38,7 @@
             <div class="card" flex cursor-pointer p-1>
               <ElImage :src="baseUrlImg + p.images[0]"
                 style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px" fit="cover" />
-              <div px-4>
+              <div px-4 flex-1>
                 <h3 tracking-2px max-w-12em md:max-w-16em class="overflow-hidden truncate ...">
                   {{ p.name }}
                 </h3>
@@ -199,17 +199,17 @@ $input-width: min(22vw, 260px);
   }
 }
 
-.bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  transition: $transition-delay;
-  filter: blur(20px);
-  background-color: #ffffff1a;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  box-shadow: 4px 4px -20px rgba(202, 202, 202, 0.274) ;
-}
+// .bg {
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   transition: $transition-delay;
+//   filter: blur(20px);
+//   background-color: #ffffff1a;
+//   top: 0;
+//   left: 0;
+//   z-index: -1;
+//   box-shadow: 4px 4px -20px rgba(202, 202, 202, 0.274) ;
+// }
 </style>
