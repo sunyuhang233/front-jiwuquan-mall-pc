@@ -3,7 +3,7 @@
     <!-- 下拉框 -->
     <el-popover width="min(435px,38vw)" popper-class="popover" transition="popSliceUpDown" :placement="'bottom-end'"
       :show-after="200" :hide-after="0" :visible="isShowResult" popper-style="box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                         height:380px; padding: 1.2em 1.2em;" tabindex="0">
+                                           height:380px; padding: 1.2em 1.2em;" tabindex="0">
       <template #reference>
         <div class="content" relative>
           <!-- 搜索 -->
@@ -38,8 +38,8 @@
             <div class="card" flex cursor-pointer p-1>
               <ElImage :src="baseUrlImg + p.images[0]"
                 style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px" fit="cover" />
-              <div px-4 flex-1>
-                <h3 tracking-2px max-w-12em md:max-w-16em class="overflow-hidden truncate ...">
+              <div px-4 style="width: 70%;">
+                  <h3 tracking-1px max-w-12em md:max-w-16em class="overflow-hidden truncate ...">
                   {{ p.name }}
                 </h3>
                 <p color-red py-2>价格：￥{{ p.price }}</p>
@@ -51,7 +51,7 @@
               style="width: 100%;margin: 0.6em auto;margin-bottom: 0.8em; overflow: hidden;" />
           </NuxtLink>
         </ElScrollbar>
-        <p v-if="noMore" opacity-80 text-center tracking-12px>没有更多了</p>
+        <p v-if="noMore" opacity-80 text-center tracking-2px>没有更多了</p>
         <!-- 背景 -->
         <div class="bg">
         </div>

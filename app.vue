@@ -7,7 +7,7 @@ useHead({
 </script>
 <!-- html  -->
 <template>
-  <transition>
+  <transition name="page">
     <div>
       <NuxtLoadingIndicator /> <!-- here -->
       <NuxtPage />
