@@ -8,7 +8,7 @@ const isLoading = ref<boolean>(true);
 // 请求
 (async () => {
   let { data } = await getEventsList()
-  if (data.code === 20000) {
+  if (data.code === StatusCode.SUCCESS) {
     // 结束时间排序
     const res = data.data.sort((a, b) => b.status - a.status)
     res.forEach(p => {
@@ -36,21 +36,18 @@ const getEndDay = computed(() => {
     }
     return +((end - newDate) / (1 * 24 * 60 * 60 * 1000)).toFixed(0);
   }
-})
-
-// 去到详情页
-const toEventDetailView = (eid: string) => {
-}
+})  
 </script>
 <template>
-  <el-carousel cursor-pointer :interval="8000" height="400px" arrow="hover" w="640px" class="swpier" trigger="click">
+  <el-carousel rounded-6px cursor-pointer :interval="8000"  arrow="hover" 
+  md:w="520px" h-280px  md:h="360px" height="100%" class="swpier" trigger="click">
     <!-- 骨架屏 -->
     <el-skeleton animated :loading="isLoading" class="ske ">
       <template #template>
         <el-skeleton-item p-4 variant="image" class="sk-imgs" p-2 />
-        <div p-4>
-          <el-skeleton-item class="p-1 my-1" variant="p" style="width: 70%" />
-          <el-skeleton-item class="p-1 my-1" variant="p" style="width: 100%" />
+        <div p-4 flex-col style="height: 100%;" justify-around >
+          <el-skeleton-item  variant="p" mb-1 style="width: 70%" />
+          <el-skeleton-item  variant="p" mb-1 style="width: 100%" />
         </div>
       </template>
       <!-- 内容 -->
@@ -67,7 +64,7 @@ const toEventDetailView = (eid: string) => {
             </template>
           </el-image>
           <!-- 文本 -->
-          <section class="tip" px-6 py-2 tracking-1>
+          <section class="tip" px-6 py-2 tracking-0.2em text-xs line-height-none md:text-1em md:line-height-normal>
             <h3 class="title" py-1>{{ p.title }}</h3>
             <!-- 已经结束 -->
             <p opacity-80 v-if="getEndDay(p.startTime, p.endTime) < 0" style="text-decoration: line-through;">活动已经结束</p>
@@ -79,7 +76,6 @@ const toEventDetailView = (eid: string) => {
                 style="color: var(--el-color-error);">{{ getEndDay(p.startTime, p.endTime) }}</strong> 天
               <span cursor-pointer float-right opacity-60>更多</span>
             </p>
-
           </section>
         </el-carousel-item>
       </template>
@@ -112,10 +108,8 @@ const toEventDetailView = (eid: string) => {
  .swiper-item {
    width: 100%;
    height: 100%;
-   backdrop-filter: blur(3px);
 
    :deep(img) {
-     border-radius: 6px;
      height: 80%;
    }
 

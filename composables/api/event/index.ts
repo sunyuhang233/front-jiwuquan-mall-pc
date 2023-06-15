@@ -1,6 +1,6 @@
 import type { AxiosPromise } from 'axios'
-import { request } from '@/utils/request'
 import type { Result } from '@/types/result'
+import { request } from '@/utils/request';
 
 /**
  * 获取活动列表

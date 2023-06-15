@@ -1,9 +1,9 @@
 <template>
-  <ClientOnly class="right" flex-col>
+  <ClientOnly class="right">
     <!-- 下拉框 -->
     <el-popover width="min(435px,38vw)" popper-class="popover" transition="popSliceUpDown" :placement="'bottom-end'"
       :show-after="200" :hide-after="0" :visible="isShowResult" popper-style="box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                           height:380px; padding: 1.2em 1.2em;" tabindex="0">
+                                                                     height:380px; padding: 1.2em 1.2em;" tabindex="0">
       <template #reference>
         <div class="content" relative>
           <!-- 搜索 -->
@@ -17,10 +17,11 @@
             </ElButton>
           </div>
           <!-- 搜索历史记录 -->
-          <div class="tags" top-40px absolute top-0 cursor-pointer py-1 flex-row flex-wrap>
+          <div v-show="!isShowResult" class="tags animate__animated animate__headShake" z-0 top-40px absolute top-0
+            cursor-pointer py-1 flex-row flex-wrap>
             <ElTag size="large" v-for="(p, i) in searchHistoryList" :key="p + i" closable @close="handleClose(p)"
               @click="clickTag(p, i)" mr-1 mt-1 hover:opacity-60 transition-300>
-              {{ p }}
+              <span pr-0.3em>{{ p }}</span>
             </ElTag>
           </div>
         </div>
@@ -28,33 +29,22 @@
       <!-- 2、搜索结果（商品goods） -->
       <template #default>
         <!-- 标题 -->
-        <small v-show="isShowResult" p-2 pb-4>{{ searchPageList.length ? ` 搜索到 ${searchPage.total}
-                  条数据` :
-          "搜索为空！" }}</small>
-        <ElScrollbar>
+        <span v-show="searchPageList.length > 0" p-2 pb-8>{{ ` 搜索到 ${searchPage.total} 条数据` }}
+          <ElIconCloseBold width="1.8em" absolute right-1em cursor-pointer style="color: var(--el-color-primary);" shadow
+            shadow-inset rounded-2px active:transform-scale-80 transition-300 @click="isShowResult = false" />
+        </span>
+        <ElScrollbar overflow-hidden pt-2 flex-col v-loading="isLoading" element-loading-background="transparent">
           <!-- 跳转详情页 -->
-          <NuxtLink :to="`/goods/detail?id=${p.id}`" class="mt-2 goods-card animate-fade-in "
-            v-for="(p, i) in searchPageList" :key="p.id">
-            <div class="card" flex cursor-pointer p-1>
-              <ElImage :src="baseUrlImg + p.images[0]"
-                style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px" fit="cover" />
-              <div px-4 style="width: 70%;">
-                  <h3 tracking-1px max-w-12em md:max-w-16em class="overflow-hidden truncate ...">
-                  {{ p.name }}
-                </h3>
-                <p color-red py-2>价格：￥{{ p.price }}</p>
-                <small opacity-80 pr-4>浏览量：{{ p.views }}</small>
-                <small opacity-80 float-right>销量：{{ p.sales }}</small>
-              </div>
-            </div>
+          <NuxtLink :to="`/goods/detail?id=${p.id}`" class="mt-2 animate-fade-in " v-for="(p, i) in searchPageList"
+            :key="p.id">
+            <CardGoodsLine :goods="p" :key="p.id" />
             <ElDivider dark:opacity-50 v-if="i !== (searchPageList.length - 1)"
               style="width: 100%;margin: 0.6em auto;margin-bottom: 0.8em; overflow: hidden;" />
           </NuxtLink>
+          <ElEmpty mt-10 :image-size="80" description="没有找到商品" v-show="searchPageList.length <= 0" />
+          <p v-if="noMore" opacity-80 text-center tracking-2px>没有更多了</p>
         </ElScrollbar>
-        <p v-if="noMore" opacity-80 text-center tracking-2px>没有更多了</p>
-        <!-- 背景 -->
-        <div class="bg">
-        </div>
+
       </template>
     </el-popover>
   </ClientOnly>
@@ -86,6 +76,8 @@ const onSearch = async () => {
       message: "搜索内容不能为空！",
     });
   }
+  isLoading.value = true;
+
   // 1、请求
   isSearch.value = true;
   isShowResult.value = true;
@@ -104,8 +96,9 @@ const onSearch = async () => {
   // 结束
   // searchKeyWords.value = ""
   setTimeout(() => {
+    isLoading.value = false;
     isSearch.value = false;
-  }, 300);
+  }, 500);
   // 展示结果
   searchPage = toReactive(pageData);
   pageData.records?.forEach(p => {
@@ -116,8 +109,9 @@ const onSearch = async () => {
 /**
  * 清除
  */
-const clearSearch = () => {
+const clearSearch = (e: any) => {
   isShowResult.value = false
+  // e.target.focus();
 }
 
 /**
@@ -189,27 +183,13 @@ $input-width: min(22vw, 260px);
   }
 }
 
-.tags {
-  :deep(.el-tag) .el-close {
+.tags .el-tags .el-tag__content {
+  :deep(.el-close) {
     opacity: 0;
   }
 
-  :deep(.el-tag):hover .el-close {
+  :deep(.el-close):hover {
     opacity: 1;
   }
 }
-
-// .bg {
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   position: absolute;
-//   transition: $transition-delay;
-//   filter: blur(20px);
-//   background-color: #ffffff1a;
-//   top: 0;
-//   left: 0;
-//   z-index: -1;
-//   box-shadow: 4px 4px -20px rgba(202, 202, 202, 0.274) ;
-// }
 </style>

@@ -2,22 +2,23 @@
 </script>
 <template>
   <NuxtLayout>
-    <div class="index" p="y-6 x-4">
-      <!-- logo -->
-      <IndexTop />
-      <div class="center" flex-row>
-        <!-- 分类 -->
-        <IndexCategory />
+    <div class="index" transition-300 w-90vw md:w-70vw p="y-6 x-4"> 
+      <!-- logo+search -->
+      <IndexTopMenu />
+      <div class="center" flex lg:items-start>
         <!-- 轮播图 -->
-        <IndexSwiper scale-80 origin-tl lg:scale-100 />
+        <IndexSwiper />
+        <!-- 热门商品 -->
+        
       </div>
+      <!-- 分类 -->
+      <IndexCategory />
     </div>
   </NuxtLayout>
 </template>
 
 <style scoped lang="scss">
 .index {
-  width: 76%;
   margin: 0 auto;
 }
 </style>

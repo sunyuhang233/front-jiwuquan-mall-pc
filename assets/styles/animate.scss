@@ -23,13 +23,12 @@
   transition: $transition-delay $animate-cubic;
 }
 
-
 // fade-in-out
 .fadeInOut-enter-active {
-  animation: $transition-delay animate__fadeIn;
+  animation: 0.2s fadeIn $animate-cubic;
 }
 .fadeInOut-leave-active {
-  animation: $transition-delay animate__fadeOut;
+  animation: 0.2s fadeOut $animate-cubic;
 }
 .animate__animated {
   animation-duration: $transition-delay;

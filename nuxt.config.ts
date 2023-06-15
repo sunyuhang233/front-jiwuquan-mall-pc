@@ -11,14 +11,14 @@ export default defineNuxtConfig({
     axios: {
       baseURL:
         process.env.NODE_ENV === 'production'
-          ? 'http://47.115.226.150:9090'
-          : 'http://localhost:9090',
+          ? import.meta.env.VITE_APP_PROD_BASE_URL
+          : import.meta.env.VITE_APP_DEV_BASE_URL,
     },
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
-    // layoutTransition: { name: 'layout', mode: 'out-in' }
-    // pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
       viewport: 'width=device-width,initial-scale=1',
       // 网站头部信息
@@ -42,7 +42,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    '@pinia-plugin-persistedstate/nuxt'
   ],
 
   experimental: {
@@ -52,6 +52,16 @@ export default defineNuxtConfig({
     inlineSSRStyles: false,
     renderJsonPayloads: true,
   },
+  // 自动导入
+  imports: {
+    dirs: [
+      // Scan top-level modules
+      'composables',
+      'composables/utils/**',
+      'composables/store/**', 
+    ]
+  },
+
 
   // 主题
   colorMode: {
@@ -77,6 +87,16 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  // pinia
+  pinia: {
+    autoImports: [
+      'defineStore', // import { defineStore } from 'pinia'
+    ],
+  },
+  // pinia持久化到会话存储
+  piniaPersistedstate: {
+    storage: 'sessionStorage',
   },
 
   // nitro

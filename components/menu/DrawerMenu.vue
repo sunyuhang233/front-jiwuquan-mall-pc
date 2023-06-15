@@ -9,7 +9,7 @@ const route = useRoute()
 <template>
   <!-- 菜单 -->
   <ClientOnly>
-    <ElAffix :offset="62">
+    <ElAffix :offset="65">
       <transition name="slideInOut">
         <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
           <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">

@@ -1,7 +1,13 @@
 import { AxiosPromise, AxiosResponse } from "axios";
-import { request } from "@/utils/request";
 import { Result } from "@/types/result";
-
+import { request } from '@/utils/request';
+/**
+ * 获取分页商品列表
+ * @param page 页
+ * @param size 个数
+ * @param dto 查询参数
+ * @returns 
+ */
 export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO) {
   return request({
     method: "POST",
@@ -10,7 +16,7 @@ export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO
   }) as AxiosPromise<Result<IPage<GoodsVO>>>;
 }
 /**商品分页参数类型 */
-interface GoodsPageDTO {
+export interface GoodsPageDTO {
   cid?: string,
   name?: string,
   isPostage?: Sort,
@@ -28,9 +34,9 @@ export function getGoodsInfoById(gid:string) {
   return request({
     method: "GET",
     url: `/goods/${gid}`,
-  }) as AxiosPromise<Result<Object>>;
+  }) as AxiosPromise<Result<GoodsInfoVO>>;
 }
-interface GoodsInfoVO {
+export interface GoodsInfoVO {
   
 }
 

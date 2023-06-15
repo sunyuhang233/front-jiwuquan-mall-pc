@@ -1,6 +1,6 @@
-import { AxiosPromise, AxiosResponse } from "axios";
-import { request } from "@/utils/request";
+import { AxiosPromise } from "axios";
 import { Result } from "@/types/result";
+import { isTrue } from "~/types";
 
 /**
  * 账号密码登录
@@ -37,6 +37,23 @@ export function toLoginByEmail(email: string, code: string): AxiosPromise<Result
   });
 }
 
+/**
+ * 手机号登录
+ * @param phone 邮箱
+ * @param code 
+ * @returns 
+ */
+export function toLoginByPhone(phone: string, code: string): AxiosPromise<Result<string>> {
+  return request({
+    method: "POST",
+    url: "/user/login/phone",
+    data: {
+      phone,
+      code
+    }
+  });
+}
+
 
 
 /**
@@ -44,17 +61,17 @@ export function toLoginByEmail(email: string, code: string): AxiosPromise<Result
  * @param key 邮箱/手机号
  * @returns data
  */
-export function getLoginEmailCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
+export function getLoginCodeByType(key: string, type: DeviceType): AxiosPromise<Result<string>> {
   return request({
     method: "GET",
-    url: `/user/login/code/${type}`,
-    data: {
-      key,
+    url: `/user/login/code/${key}`,
+    params: {
+      type,
     }
   });
 }
 
-enum DeviceType {
+export enum DeviceType {
   PHONE = 0,
   EMAIL = 1
 }
@@ -66,7 +83,7 @@ enum DeviceType {
  * @param key 邮箱/手机号
  * @returns data
  */
-export function getRegisterEmailCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
+export function getRegisterCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
   return request({
     method: "GET",
     url: `/user/register/code/${type}`,
@@ -74,6 +91,29 @@ export function getRegisterEmailCode(key: string, type: DeviceType): AxiosPromis
       key,
     }
   });
+}
+
+
+/**
+ * 注册
+ * @param dto 
+ * @returns 
+ */
+export function toRegister(dto: RegisterUser): AxiosPromise<Result<string>> {
+  return request({
+    method: "POST",
+    url: `/user/register`,
+    data: dto
+  }) as AxiosPromise<Result<string>>
+}
+
+
+export interface RegisterUser {
+  username: string;
+  password: string;
+  code: string;
+  email: string;
+  type: isTrue;
 }
 
 /**

@@ -1,5 +1,5 @@
 <template>
-  <div class="top" flex-row-bt-c>
+  <div class="top animate__animated animate-fadeIn" overflow-hidden flex-row-bt-c flex-col md:flex-row>
     <!-- bg -->
     <img absolute bg-color-indigo-6 z-0 flex-2 src="@/assets/images/logo/logo_txt.png" filter-blur-40 w-240px alt="极物圈 logo">
     <!-- 问候语 -->
