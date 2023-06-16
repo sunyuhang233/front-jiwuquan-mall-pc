@@ -2,7 +2,8 @@ import type { Result } from "@/types/result";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 // export const baseUrl: string = import.meta.env.DEV ? import.meta.env.VITE_APP_DEV_BASE_URL :import.meta.env.VITE_APP_PROD_BASE_URL
 // export const baseUrl: string = import.meta.env.VITE_APP_PROD_BASE_URL // 生产
-export const baseUrl: string = import.meta.env.VITE_APP_DEV_BASE_URL// 开发
+export const baseUrl: string = "http://47.115.226.150:9090"// 开发
+export const fullUrl: string = import.meta.env.VITE_APP_DEV_FULL_URL// 全路径
 export const baseUrlImg: string = baseUrl + "/res/image/"
 export const baseUrlVideo: string = baseUrl + "/res/video/"
 import { ElMessage } from "element-plus";
@@ -10,12 +11,13 @@ import { StatusCode } from "@/types/result";
 export const request = axios.create({
   baseURL: baseUrl,
   headers: {
-    "Content-type": "application/json"
+    "Content-type": "application/json",
   },
   timeout: 20000,
 });
 // 1、请求拦截器
 request.interceptors.request.use((coinfig) => {
+  
   return coinfig;
 });
 // 2、响应拦截器
@@ -34,16 +36,13 @@ request.interceptors.response.use(
     * 40002认证失败
     * 40003参数错误
     * 40004阻塞或被占用 繁忙 
-    * 
      */
-
-
 
   (response: AxiosResponse): AxiosResponse => {
     const data = response.data as Result<any>;
     let msg: string = "";
     let type: string = "error";
-    switch (+data.code) { 
+    switch (+data.code) {
       case StatusCode.INSERT_ERR:
         msg = "添加失败！";
         break;
@@ -90,7 +89,7 @@ request.interceptors.response.use(
     let msg: string = "";
     switch (error.response?.status) {
       case 401:
-        msg = "抱歉，无权访问！";
+        msg = "抱歉，身份验证失败！";
         break;
       case 403:
         msg = "抱歉，禁止访问！";

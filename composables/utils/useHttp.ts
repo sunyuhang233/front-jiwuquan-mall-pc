@@ -1,7 +1,6 @@
 import { UseFetchOptions } from "nuxt/app"
 import { _AsyncData } from "nuxt/dist/app/composables/asyncData"
 import { Result } from "~/types/result"
-
 const fetch = <T>(url: string, options?: any): Promise<T> => {
   const reqUrl = baseUrl + url
   return new Promise((resolve, reject) => {

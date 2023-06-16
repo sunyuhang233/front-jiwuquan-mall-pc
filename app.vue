@@ -23,13 +23,4 @@ useHead({
   transform: scale(0.99);
   animation: cubic-bezier(0.1, 0.7, 1, 1);
 }
-/* 
-.layout-enter-active,
-.layout-leave-active {
-  transition: all 0.4s;
-}
-.layout-enter-from,
-.layout-leave-to {
-  filter: grayscale(1);
-} */
 </style>

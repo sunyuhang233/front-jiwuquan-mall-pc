@@ -21,16 +21,11 @@ export const useUserStore = defineStore('user', () => {
    * 用户登录
    * @param token token
    */
-  async function onUserLogin(token: string, saveLocal?: boolean) {
-    setTimeout(async() => {
-      const { data } = await getUserInfo(token)
-      console.log(data);
-      if (data.code === StatusCode.SUCCESS) {
-        userInfo = toReactive<UserInfo>(data.data)
-      }
-    }, 3000);
-
-
+  const onUserLogin = async (token: string, saveLocal?: boolean) => {
+    const { data } = await getUserInfo(token)
+    if (data.code === StatusCode.SUCCESS) {
+      userInfo = reactive<UserInfo>(data.data)
+    }
   }
 
   /**

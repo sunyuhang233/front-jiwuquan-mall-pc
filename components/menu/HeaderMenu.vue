@@ -24,10 +24,15 @@
           <!-- 切换主题 -->
           <BtnSwitch />
           <!-- 登陆注册 -->
-          <span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)">登
+          <div class="box" v-if="!store.isLogin">
+            <span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)">登
             录</span>
           <ElButton style="border-radius: 30px;" px-2 mx-1 cursor-pointer @click="onLogin(FormType.REGISTER)">注 册
           </ElButton>
+          </div>
+          <ClientOnly class="box" v-else>
+            {{ store.userInfo?.nickname }}
+          </ClientOnly>
         </div>
       </div>
     </ElAffix>
@@ -35,8 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { LoginType } from '~/types/user/index.js';
-
+const sotre = useUserStore()
 // 搜索
 let searchWord = ref<string>("")
 // 登录表单

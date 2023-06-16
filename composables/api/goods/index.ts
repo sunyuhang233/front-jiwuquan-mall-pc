@@ -1,6 +1,8 @@
 import { AxiosPromise, AxiosResponse } from "axios";
-import { Result } from "@/types/result";
+import { Result, Sort, isTrue } from "@/types/result";
 import { request } from '@/utils/request';
+import { GoodsVO } from "~/types/goods";
+import { IPage } from "~/types";
 /**
  * 获取分页商品列表
  * @param page 页

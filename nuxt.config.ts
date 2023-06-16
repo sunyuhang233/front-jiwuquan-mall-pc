@@ -38,12 +38,12 @@ export default defineNuxtConfig({
   // 模块
   modules: [
     '@vueuse/nuxt',
-    '@pinia/nuxt',
     '@unocss/nuxt',
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
     'nuxt-lodash',
+    '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt'
   ],
   experimental: {
@@ -89,21 +89,25 @@ export default defineNuxtConfig({
         },
       },
     },
-    // server: {
-    //   proxy: {
-    //     '/api': {
-    //       target: 'http://localhost:9090',
-    //       changeOrigin: true,
-    //     }
-    //   }
-    // },
+    server: {
+      proxy: {
+        // 接口地址代理
+        '/api': {
+          target: 'http://47.115.226.150:9090', // 接口的域名
+          secure: false, // 如果是https接口，需要配置这个参数
+          changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+          rewrite: path => path.replace(/^\/api/, '')
+        },
+      }
+    },
   },
   // pinia
   pinia: {
     autoImports: [
-      'defineStore', // import { defineStore } from 'pinia'
+      'defineStore', // import { defineStore } from 'pinia',
     ],
   },
+
   // pinia持久化到会话存储
   piniaPersistedstate: {
     storage: 'sessionStorage',
@@ -123,6 +127,7 @@ export default defineNuxtConfig({
     devProxy: {
       "/api": {
         target: "http://47.115.226.150:9090",
+        prependPath: true,
         changeOrigin: true,
       }
     }
@@ -133,10 +138,10 @@ export default defineNuxtConfig({
     importStyle: 'scss',
     themes: ['dark'],
   },
-
+  // 断网启动
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: true,
-  },
+    enabled: false,
+  }
 })

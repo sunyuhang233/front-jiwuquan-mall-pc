@@ -3,7 +3,7 @@
   "packageManager": "pnpm@8.5.1",
   "scripts": {
     "build": "nuxi build",
-    "dev": "nuxi dev --mode dev",
+    "dev": "nuxi dev ",
     "prod": "nuxi dev -port 3000 --mode prod",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "start": "node .output/server/index.mjs",
@@ -44,6 +44,7 @@
     "axios": "^1.4.0",
     "currency.js": "^2.0.4",
     "gsap": "^3.11.5",
+    "http-proxy": "^1.18.1",
     "nprogress": "^0.2.0",
     "nuxt-swiper": "^1.1.0",
     "sass": "^1.62.1",

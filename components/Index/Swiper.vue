@@ -6,20 +6,22 @@ import { getEventsList, getEventsLists } from '~/composables/api/event';
 const eventList = reactive<EventVO[]>([]);
 const isLoading = ref<boolean>(true);
 // 请求
-// let { data } = await getEventsList()
-const data = (await getEventsLists()).value
-if (data.code === StatusCode.SUCCESS) {
-  // 结束时间排序
-  const res = data.data.sort((a, b) => b.status - a.status)
-  res.forEach(p => {
-    eventList.push(p);
-  })
-  if (eventList.length === data.data.length) {
-    setTimeout(() => {
-      isLoading.value = false;
-    }, 500);
+(async () => {
+  let { data } = await getEventsList()
+  // const data = (await getEventsLists()).value
+  if (data.code === StatusCode.SUCCESS) {
+    // 结束时间排序
+    const res = data.data.sort((a, b) => b.status - a.status)
+    res.forEach(p => {
+      eventList.push(p);
+    })
+    if (eventList.length === data.data.length) {
+      setTimeout(() => {
+        isLoading.value = false;
+      }, 500);
+    }
   }
-}
+})()
 // 计算剩余天数
 const getEndDay = computed(() => {
   return (a: string, b: string): number => {
@@ -53,14 +55,16 @@ const getEndDay = computed(() => {
         <!-- 轮播图项 -->
         <el-carousel-item @click="toEventDetailView(p.id)" v-for="p in eventList" :key="p.id" class="swiper-item">
           <!-- 图片 -->
-          <el-image :src="baseUrlImg + p.images" :alt="p.details" class="e-img" style="width: 100%;height: 100%;"
-            fit="fill">
-            <template #error>
-              <div class="image-slot" flex-row-c-c>
-                <ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
-              </div>
-            </template>
-          </el-image>
+          <ClientOnly>
+            <el-image :src="baseUrlImg + p.images" :alt="p.details" class="e-img" style="width: 100%;height: 100%;"
+              fit="fill">
+              <template #error>
+                <div class="image-slot" flex-row-c-c>
+                  <ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
+                </div>
+              </template>
+            </el-image>
+          </ClientOnly>
           <!-- 文本 -->
           <section class="tip" px-6 py-2 tracking-0.2em text-xs line-height-none md:text-1em md:line-height-normal>
             <h3 class="title" py-1>{{ p.title }}</h3>
