@@ -1,50 +1,51 @@
 <template>
   <!-- 注册 -->
   <el-form v-loading="isLoading" label-position="top" hide-required-asterisk :rules="rules" :model="formUser"
-    @submit.prevent="onRegister(loginType)" class="animate__animated  animate__fadeInDown form">
-    <h2 mb-5 tracking-0.2em>开启你的专属圈子~</h2>
+    @submit.prevent="onRegister(registerType)" class="form animate__animated ">
+    <h2 mb-5 tracking-0.2em>开启你的专属圈子</h2>
     <p mb-10 tracking-0.1em text-0.8em>
       已有账户？
-      <span color-emerald cursor-pointer hover:font-700 transition-300 @click="toLoginForm">立即登录</span>
+      <span color-emerald cursor-pointer hover:font-700 transition-300 @click="toLoginForm">立即登录
+      </span>
     </p>
     <!-- 切换注册 -->
     <div class="toggle-login" my-1em>
-      <el-button flex-1 :class="{ active: loginType === RegisterType.EMAIL }" @click="loginType = RegisterType.EMAIL"
-        tracking-0.1em>邮箱注册</el-button>
-      <el-button flex-1 :class="{ active: loginType === RegisterType.PHONE }" @click="loginType = RegisterType.PHONE"
-        tracking-0.1em>手机注册</el-button>
+      <el-button flex-1 :class="{ active: registerType === RegisterType.PHONE }"
+        @click="registerType = RegisterType.PHONE" tracking-0.1em>手机注册</el-button>
+      <el-button flex-1 :class="{ active: registerType === RegisterType.EMAIL }"
+        @click="registerType = RegisterType.EMAIL" tracking-0.1em>邮箱注册</el-button>
     </div>
     <!-- 验证码注册(客户端 ) -->
     <ClientOnly>
       <!-- 邮箱注册 -->
-      <el-form-item v-if="loginType === RegisterType.EMAIL" prop="email" class="animated">
+      <el-form-item v-if="registerType === RegisterType.EMAIL" prop="email" class="animated">
         <el-input type="email" prefix-icon="Message" v-model.trim="formUser.email" size="large" placeholder="请输入邮箱">
           <template #append>
-            <el-button type="primary" @click="getLoginCode(loginType)" :disabled="phoneCodeStorage > 0 && isLoading">{{
+            <el-button type="primary" @click="getLoginCode(registerType)" :disabled="phoneCodeStorage > 0 && isLoading">{{
               phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
           </template>
         </el-input>
       </el-form-item>
       <!-- 手机号登录 -->
-      <el-form-item type="tel" v-if="loginType === RegisterType.PHONE" prop="phone" class="animated">
+      <el-form-item type="tel" v-if="registerType === RegisterType.PHONE" prop="phone" class="animated">
         <el-input prefix-icon="Iphone" v-model.trim="formUser.phone" size="large" placeholder="请输入手机号">
           <template #append>
-            <el-button type="primary" @click="getLoginCode(loginType)" :disabled="phoneCodeStorage > 0">{{
+            <el-button type="primary" @click="getLoginCode(registerType)" :disabled="phoneCodeStorage > 0">{{
               phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码'
             }}</el-button>
           </template>
         </el-input>
       </el-form-item>
     </ClientOnly>
-    <el-form-item v-if="loginType === RegisterType.EMAIL || loginType === RegisterType.PHONE" prop="code"
+    <el-form-item v-if="registerType === RegisterType.EMAIL || registerType === RegisterType.PHONE" prop="code"
       class="animated">
       <el-input prefix-icon="ChatDotSquare" v-model.trim="formUser.code" size="large" placeholder="请输入验证码" />
     </el-form-item>
     <!-- 密码登录 -->
-    <el-form-item label="" v-if="loginType === RegisterType.PWD" name="username" class="animated">
+    <el-form-item label="" v-if="registerType === RegisterType.EMAIL" name="username" class="animated">
       <el-input prefix-icon="user" v-model.trim="formUser.username" size="large" placeholder="请输入用户名、手机号或邮箱" />
     </el-form-item>
-    <el-form-item type="password" label="" v-if="loginType === RegisterType.PWD" prop="password" class="animated">
+    <el-form-item type="password" label="" v-if="registerType === RegisterType.EMAIL" prop="password" class="animated">
       <el-input prefix-icon="Lock" v-model.trim="formUser.password" size="large" placeholder="请输入密码" type="password" />
     </el-form-item>
     <el-form-item mt-1em>
@@ -57,12 +58,13 @@
 <script lang="ts" setup>
 import { FormRules } from 'element-plus';
 import { getLoginCodeByType, toRegister, DeviceType } from '~/composables/api/user';
-import { RegisterType } from '~/types/user';
+import { RegisterType } from '~/types/user/index.js';
 import { useStorage } from '@vueuse/core';
-const loginType = ref<number>(RegisterType.EMAIL);
+const registerType = ref<number>(RegisterType.PHONE);
 const isLoading = ref<boolean>(false);
 // 表单
 const formUser = reactive({
+  nickname: '',// 昵称
   username: '',// 用户名
   password: '',// 密码
   phone: "",// 手机号
@@ -92,10 +94,10 @@ const rules = reactive<FormRules>({
   ],
 });
 // 验证码有效期
-const phoneTimer = useStorage<any>("jiwu_login_code_timer", -1)
-const emailTimer = useStorage<any>("phone_login_code_timer", -1)
-const emailCodeStorage = useStorage<number>("jiwu_login_email_code", 0)
-const phoneCodeStorage = useStorage<number>("jiwu_login_email_code", 0)
+const phoneTimer = useStorage<number>("jiwu_register_email_code_timer", -1)
+const emailTimer = useStorage<number>("jiwu_register_phone_code_timer", -1)
+const emailCodeStorage = useStorage<number>("jiwu_register_email_code", 0)
+const phoneCodeStorage = useStorage<number>("jiwu_register_phone_code", 0)
 useNuxtApp().hook("app:mounted", () => {
   useInterval(phoneTimer, phoneCodeStorage)
   useInterval(emailTimer, emailCodeStorage)
@@ -167,15 +169,15 @@ const useInterval = (timer: any, num: Ref<number>, target?: number, step: number
     // 清除定时器
     if (num.value <= 0) {
       num.value = -1
-      clearInterval(timer.value)
       timer.value = -1
+      clearInterval(timer.value)
     }
   }, 1000)
 };
 const store = useUserStore()
 /**
-* 登录
-* @param type 
+* 注册
+* @param type
 */
 // const onRegister = async (type: RegisterType) => {
 //   let res = null;
@@ -218,19 +220,20 @@ const store = useUserStore()
 //     }
 //   }
 // } 
- 
+
 </script>
 <style scoped lang="scss">
 .form {
   width: 400px;
   display: inline-block;
-  padding: 3em 3em 2em 3em;
+  padding: 2.5em 3em 2em 3em;
   background-color: #ffffff;
   border-radius: var(--el-border-radius-base);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(109, 109, 109, 0.2);
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
   overflow: hidden;
+  animation-duration: 1s;
 
   :deep(.el-input__wrapper) {
     padding: 0.3em 1em;
@@ -251,24 +254,8 @@ const store = useUserStore()
   padding: 0.3em 1em;
 }
 
-
 .dark .form {
   background-color: #161616d8;
-}
-
-// fade-in-out
-.fadeInOutShadow-enter-active {
-  filter: blur(4px);
-  animation: 0.2s fadeIn $animate-cubic;
-}
-
-.fadeInOutShadow-leave-active {
-  filter: blur(0px);
-  animation: 0.2s fadeOut $animate-cubic;
-}
-
-.animate__animated {
-  animation-duration: 0.3s;
 }
 
 // label总体
@@ -299,11 +286,6 @@ const store = useUserStore()
     background-color: transparent;
     color: var(--el-text-color);
   }
-
-  .animate__animated {
-    animation: flipInY 0.5s;
-  }
-
 
 }
 

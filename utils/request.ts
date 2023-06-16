@@ -1,15 +1,12 @@
 import type { Result } from "@/types/result";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 // export const baseUrl: string = import.meta.env.DEV ? import.meta.env.VITE_APP_DEV_BASE_URL :import.meta.env.VITE_APP_PROD_BASE_URL
-export const baseUrl: string = import.meta.env.VITE_APP_PROD_BASE_URL // 生产
-// export const baseUrl: string = import.meta.env.VITE_APP_DEV_BASE_URL// 开发
+// export const baseUrl: string = import.meta.env.VITE_APP_PROD_BASE_URL // 生产
+export const baseUrl: string = import.meta.env.VITE_APP_DEV_BASE_URL// 开发
 export const baseUrlImg: string = baseUrl + "/res/image/"
 export const baseUrlVideo: string = baseUrl + "/res/video/"
 import { ElMessage } from "element-plus";
 import { StatusCode } from "@/types/result";
-
-
-
 export const request = axios.create({
   baseURL: baseUrl,
   headers: {
@@ -46,10 +43,7 @@ request.interceptors.response.use(
     const data = response.data as Result<any>;
     let msg: string = "";
     let type: string = "error";
-    switch (+data.code) {
-      case StatusCode.SUCCESS:
-        msg = "错误，添加失败！";
-        break;
+    switch (+data.code) { 
       case StatusCode.INSERT_ERR:
         msg = "添加失败！";
         break;
@@ -83,10 +77,10 @@ request.interceptors.response.use(
     }
     if (msg !== "") {
       // 组件
-      // ElMessage.error({
-      //   type,
-      //   message: data.message,
-      // });
+      ElMessage.error({
+        type,
+        message: data.message,
+      });
     }
     return response;
   },
@@ -108,10 +102,12 @@ request.interceptors.response.use(
         msg = "网络错误，请稍后再试！";
         break;
     }
-    // ElMessage.error({
-    //   message: msg,
-    //   type: "error",
-    // });
+    if (msg) {
+      ElMessage.error({
+        message: msg,
+        type: "error",
+      });
+    }
 
     return Promise.reject(error);
   }

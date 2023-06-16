@@ -1,7 +1,7 @@
 <template>
   <!-- 登录 -->
-  <el-form v-loading="isLoading" label-position="top" hide-required-asterisk :rules="rules" :model="formUser"
-    @submit.prevent="onLogin(loginType)" class="animate__animated  animate__fadeInDown form">
+  <el-form v-loading="isLoading" label-position="top" hide-required-asterisk :rules="rules" :model="userForm"
+    @submit.prevent="onLogin(loginType)" class="form animate__animated ">
     <h2 mb-5 tracking-0.2em>欢迎来到极物圈!</h2>
     <p mb-10 tracking-0.1em text-0.8em>
       没有账户？
@@ -20,7 +20,7 @@
     <ClientOnly>
       <!-- 邮箱登录 -->
       <el-form-item v-if="loginType === LoginType.EMAIL" prop="email" class="animated">
-        <el-input type="email" prefix-icon="Message" v-model.trim="formUser.email" size="large" placeholder="请输入邮箱">
+        <el-input type="email" prefix-icon="Message" v-model.trim="userForm.email" size="large" placeholder="请输入邮箱">
           <template #append>
             <el-button type="primary" @click="getLoginCode(loginType)" :disabled="phoneCodeStorage > 0 && isLoading">{{
               phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
@@ -29,7 +29,7 @@
       </el-form-item>
       <!-- 手机号登录 -->
       <el-form-item type="tel" v-if="loginType === LoginType.PHONE" prop="phone" class="animated">
-        <el-input prefix-icon="Iphone" v-model.trim="formUser.phone" size="large" placeholder="请输入手机号">
+        <el-input prefix-icon="Iphone" v-model.trim="userForm.phone" size="large" type="tel" placeholder="请输入手机号">
           <template #append>
             <el-button type="primary" @click="getLoginCode(loginType)" :disabled="phoneCodeStorage > 0">{{
               phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码'
@@ -39,14 +39,14 @@
       </el-form-item>
     </ClientOnly>
     <el-form-item v-if="loginType === LoginType.EMAIL || loginType === LoginType.PHONE" prop="code" class="animated">
-      <el-input prefix-icon="ChatDotSquare" v-model.trim="formUser.code" size="large" placeholder="请输入验证码" />
+      <el-input prefix-icon="ChatDotSquare" v-model.trim="userForm.code" size="large" placeholder="请输入验证码" />
     </el-form-item>
     <!-- 密码登录 -->
     <el-form-item label="" v-if="loginType === LoginType.PWD" name="username" class="animated">
-      <el-input prefix-icon="user" v-model.trim="formUser.username" size="large" placeholder="请输入用户名、手机号或邮箱" />
+      <el-input prefix-icon="user" v-model.trim="userForm.username" size="large" placeholder="请输入用户名、手机号或邮箱" />
     </el-form-item>
     <el-form-item type="password" label="" v-if="loginType === LoginType.PWD" prop="password" class="animated">
-      <el-input prefix-icon="Lock" v-model.trim="formUser.password" size="large" placeholder="请输入密码" type="password" />
+      <el-input prefix-icon="Lock" v-model.trim="userForm.password" size="large" placeholder="请输入密码" type="password" />
     </el-form-item>
     <el-form-item mt-1em>
       <el-input type="submit" flex-1 size="large" class="submit">
@@ -56,14 +56,15 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { FormRules } from 'element-plus';
+import { FormRules, useFormDisabled } from 'element-plus';
 import { getLoginCodeByType, toLoginByPwd, toLoginByPhone, toLoginByEmail, DeviceType } from '~/composables/api/user';
-import { LoginType } from '~/types/user';
+import { LoginType } from '~/types/user/index.js';
 import { useStorage } from '@vueuse/core';
 const loginType = ref<number>(LoginType.EMAIL);
 const isLoading = ref<boolean>(false);
+const autoLogin = ref<boolean>(false);
 // 表单
-const formUser = reactive({
+const userForm = reactive({
   username: '',// 用户名
   password: '',// 密码
   phone: "",// 手机号
@@ -93,11 +94,11 @@ const rules = reactive<FormRules>({
   ],
 });
 // 验证码有效期
-const phoneTimer = useStorage<any>("jiwu_login_code_timer", -1)
-const emailTimer = useStorage<any>("phone_login_code_timer", -1)
+const phoneTimer = useStorage<any>("jiwu_login_email_code_timer", -1)
+const emailTimer = useStorage<any>("jiwu_login_phone_code_timer", -1)
 const emailCodeStorage = useStorage<number>("jiwu_login_email_code", 0)
-const phoneCodeStorage = useStorage<number>("jiwu_login_email_code", 0)
-useNuxtApp().hook("app:mounted", () => {
+const phoneCodeStorage = useStorage<number>("jiwu_login_phone_code", 0)
+useNuxtApp().hook("app:created", () => {
   useInterval(phoneTimer, phoneCodeStorage)
   useInterval(emailTimer, emailCodeStorage)
 })
@@ -107,18 +108,18 @@ useNuxtApp().hook("app:mounted", () => {
 */
 const getLoginCode = async (type: LoginType) => {
   let res;
-  isLoading.value = true;
   // 获取邮箱验证码
   if (type === LoginType.EMAIL) {
     // 简单校验
-    if (!checkEmail(formUser.email)) return;
-    if (formUser.email.trim() === "") {
+    if (userForm.email.trim() === "") return;
+    if (!checkEmail(userForm.email)) {
       isLoading.value = false;
       return ElMessage.error("邮箱格式不正确！")
     }
 
+    isLoading.value = true;
     // 请求验证码
-    res = await getLoginCodeByType(formUser.email, DeviceType.EMAIL);
+    res = await getLoginCodeByType(userForm.email, DeviceType.EMAIL);
 
     // 成功
     if (res.data.code === 20000) {
@@ -131,10 +132,12 @@ const getLoginCode = async (type: LoginType) => {
   }
   // 获取手机号验证码
   else if (type === LoginType.PHONE) {
-    if (!checkPhone(formUser.phone)) {
+    if (userForm.phone.trim() === "") return;
+    if (!checkPhone(userForm.phone)) {
       return ElMessage.error("手机号格式不正确！")
     }
-    res = await getLoginCodeByType(formUser.phone, DeviceType.PHONE);
+    isLoading.value = true;
+    res = await getLoginCodeByType(userForm.phone, DeviceType.PHONE);
     if (res.data.code === 20000) {
       // 开启定时器
       useInterval(phoneTimer, phoneCodeStorage, 60, -1)
@@ -142,6 +145,7 @@ const getLoginCode = async (type: LoginType) => {
         message: `手机验证码为：${res.data.data}`,
         duration: 5000,
       })
+      userForm.code= res.data.data
     }
   }
   // 关闭加载
@@ -164,9 +168,12 @@ const useInterval = (timer: any, num: Ref<number>, target?: number, step: number
       num.value = -1
       clearInterval(timer.value)
       timer.value = -1
+      console.log(1);
+      
     }
   }, 1000)
-};
+}; 
+
 const store = useUserStore()
 const toRegister = () => {
   store.showLoginForm = false;
@@ -181,21 +188,20 @@ const onLogin = async (type: LoginType) => {
   let res = null;
   switch (type) {
     case LoginType.PWD:
-      res = await toLoginByPwd(formUser.username, formUser.password);
+      res = await toLoginByPwd(userForm.username, userForm.password);
       break;
     case LoginType.PHONE:
-      res = await toLoginByPhone(formUser.phone, formUser.code);
+      res = await toLoginByPhone(userForm.phone, userForm.code);
       break;
     case LoginType.EMAIL:
-      res = await toLoginByEmail(formUser.email, formUser.code);
+      res = await toLoginByEmail(userForm.email, userForm.code);
       break;
   }
-  // 
-
+  //  
   if (res.data.code === 20000) {
     // 登录成功
     if (res.data.data != "") {
-      store.onUserLogin(res.data.data)
+      store.onUserLogin(res.data.data, autoLogin.value)
 
       ElMessage.success({
         message: "登录成功！",
@@ -222,27 +228,19 @@ const onLogin = async (type: LoginType) => {
     }
   }
 }
-const onPwdLogin = async () => {
-
-}
-/**
-* 注册
-*/
-const onRegister = async () => {
-
-}
 </script>
 <style scoped lang="scss">
 .form {
   width: 400px;
   display: inline-block;
-  padding: 3em 3em 2em 3em;
+  padding: 2.5em 3em 2em 3em;
   background-color: #ffffff;
   border-radius: var(--el-border-radius-base);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(109, 109, 109, 0.2);
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
   overflow: hidden;
+  animation-delay: 0.1s;
 
   :deep(.el-input__wrapper) {
     padding: 0.3em 1em;
@@ -261,26 +259,13 @@ const onRegister = async () => {
 
 :deep(.el-button) {
   padding: 0.3em 1em;
-}
-
-
+} 
 .dark .form {
   background-color: #161616d8;
-}
-
-// fade-in-out
-.fadeInOutShadow-enter-active {
-  filter: blur(4px);
-  animation: 0.2s fadeIn $animate-cubic;
-}
-
-.fadeInOutShadow-leave-active {
-  filter: blur(0px);
-  animation: 0.2s fadeOut $animate-cubic;
-}
+} 
 
 .animate__animated {
-  animation-duration: 0.3s;
+  animation-duration: 0.5s;
 }
 
 // label总体
@@ -311,11 +296,6 @@ const onRegister = async () => {
     background-color: transparent;
     color: var(--el-text-color);
   }
-
-  .animate__animated {
-    animation: flipInY 0.5s;
-  }
-
 
 }
 

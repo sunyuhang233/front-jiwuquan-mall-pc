@@ -52,3 +52,26 @@
 .dark::view-transition-new(root) {
   z-index: 9999;
 }
+
+
+
+.fade-enter-active {
+  animation: 0.4s fade-in-out;
+}
+.fade-leave-active {
+  animation: 0.4s fade-in-out reverse;
+}
+@keyframes fade-in-out {
+  0% {
+    position: absolute;
+    transition: $transition-delay;
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    position: absolute;
+    transition: $transition-delay;
+    filter: blur(0px);
+    opacity: 1;
+  }
+} 

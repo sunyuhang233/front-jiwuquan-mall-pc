@@ -1,5 +1,6 @@
 import { AxiosPromise } from "axios";
 import { Result } from "@/types/result";
+import { Gender, UserStatus } from "~/types";
 /**
  * 获取用户个人信息
  * @param token token
@@ -45,7 +46,7 @@ export interface UserInfo {
 export function updateAvatar(file: FormData, token: string): AxiosPromise<Result<string>> {
   return request({
     method: "PUT",
-    url: "/user/info/avatar",
+    url: "/api/user/info/avatar",
     headers: {
       "Authorization": token
     },

@@ -17,11 +17,11 @@ export enum StatusCode {
   BUSY_ERR = 40004,
 }
 
-enum Sort {
+export enum Sort {
   ASC = 0,
   DESC = 1,// 降序
 }
-enum isTrue {
+export enum isTrue {
   TRUE = 1,
   FALESE = 0,
 }

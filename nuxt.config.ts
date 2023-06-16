@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   // 模块
   modules: [
     '@vueuse/nuxt',
@@ -42,12 +43,10 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
+    'nuxt-lodash',
     '@pinia-plugin-persistedstate/nuxt'
   ],
-
   experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
     inlineSSRStyles: false,
     renderJsonPayloads: true,
@@ -58,7 +57,9 @@ export default defineNuxtConfig({
       // Scan top-level modules
       'composables',
       'composables/utils/**',
-      'composables/store/**', 
+      'composables/store/**',
+      'types',
+      'types/*/.ts',
     ]
   },
 
@@ -67,6 +68,7 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
   },
+
   // css
   css: [
     'nprogress/nprogress.css',
@@ -74,7 +76,7 @@ export default defineNuxtConfig({
     '~/assets/styles/animate.scss',
     'animate.css',
   ],
-  // vite css
+  // vite 
   vite: {
     css: {
       preprocessorOptions: {
@@ -87,6 +89,14 @@ export default defineNuxtConfig({
         },
       },
     },
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'http://localhost:9090',
+    //       changeOrigin: true,
+    //     }
+    //   }
+    // },
   },
   // pinia
   pinia: {
@@ -110,6 +120,12 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
     },
+    devProxy: {
+      "/api": {
+        target: "http://47.115.226.150:9090",
+        changeOrigin: true,
+      }
+    }
   },
   // elementPlus
   elementPlus: {
@@ -121,6 +137,6 @@ export default defineNuxtConfig({
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 })

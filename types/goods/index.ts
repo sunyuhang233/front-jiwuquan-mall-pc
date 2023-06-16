@@ -1,5 +1,7 @@
+import { isTrue } from "..";
+
 // 简约商品视图对象
-interface GoodsVO {
+export interface GoodsVO {
   categoryId: string,
   city: string,
   costPrice: number,

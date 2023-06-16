@@ -2,6 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { getUserInfo, type UserInfo, type UserWallet } from '../api/user/info';
 import { toLogout } from "../api/user"
 
+
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useUserStore = defineStore('user', () => {
   // token
@@ -20,11 +21,16 @@ export const useUserStore = defineStore('user', () => {
    * 用户登录
    * @param token token
    */
-  async function onUserLogin(token: string) {
-    const { data } = await getUserInfo(token)
-    if (data.code === StatusCode.SUCCESS) {
-      userInfo = toReactive<UserInfo>(data.data)
-    }
+  async function onUserLogin(token: string, saveLocal?: boolean) {
+    setTimeout(async() => {
+      const { data } = await getUserInfo(token)
+      console.log(data);
+      if (data.code === StatusCode.SUCCESS) {
+        userInfo = toReactive<UserInfo>(data.data)
+      }
+    }, 3000);
+
+
   }
 
   /**

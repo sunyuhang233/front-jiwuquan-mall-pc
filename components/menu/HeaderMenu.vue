@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { LoginType } from '~/types/user';
+import { LoginType } from '~/types/user/index.js';
 
 // 搜索
 let searchWord = ref<string>("")

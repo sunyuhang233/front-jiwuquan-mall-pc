@@ -1,20 +1,20 @@
 
 <template>
-  <div class="category">
+  <ClientOnly class="category">
   <!-- <p v-for="(p) in categoryList" :key="p.id">
       {{ p.name }}
       <p v-for="(k) in p?.children" :key="k.id">
         {{ k.name }}
       </p>
       </p> -->
-  </div>
+  </ClientOnly>
 </template>
 
 <script lang="ts" setup>
-import { getGoodsCategoryList, type Category } from '~/composables/api/goods/category';
+// import { getGoodsCategoryList, type Category } from '~/composables/api/goods/category';
 
-const { data } = await getGoodsCategoryList();
-const categoryList = ref<Category[]>(data.data || []);
+// const { data } = await getGoodsCategoryList();
+// const categoryList = ref<Category[]>(data.data || []);
 
 
 </script>

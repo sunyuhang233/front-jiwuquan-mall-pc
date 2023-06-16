@@ -6,8 +6,9 @@ useHead({
 </script>
 <!-- html  -->
 <template>
-  <FormUserDialog />
-  <NuxtPage />
+  <!-- 处理错误 -->
+    <FormUserDialog />
+    <NuxtPage />
 </template>
 <style >
 .page-enter-active,

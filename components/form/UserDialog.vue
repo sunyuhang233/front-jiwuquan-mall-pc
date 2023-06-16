@@ -1,10 +1,15 @@
 <template>
    <transition name="fadeInOutShadow">
-      <div class="forms" @keyup.esc="exitForm" @click.self="exitForm" v-if="userStore.showLoginForm || userStore.showRegisterForm">
+      <div class="forms" @keyup.esc="exitForm" @click.self="exitForm"
+         v-if="userStore.showLoginForm || userStore.showRegisterForm">
          <!-- 登录 -->
-         <FormLoginForm v-show="userStore.showLoginForm" />
+         <transition name="fade">
+            <FormLoginForm v-show="userStore.showLoginForm" />
+         </transition>
          <!-- 注册 -->
-         <FormRegisterForm v-show="userStore.showRegisterForm" />
+         <transition name="fade">
+            <FormRegisterForm v-show="!userStore.showLoginForm" />
+         </transition>
       </div>
    </transition>
 </template>
@@ -37,16 +42,15 @@ const exitForm = () => {
 
 // fade-in-out
 .fadeInOutShadow-enter-active {
-   filter: blur(4px);
+   backdrop-filter: blur(4px);
    animation: 0.2s fadeIn $animate-cubic;
 }
 
 .fadeInOutShadow-leave-active {
-   filter: blur(0px);
    animation: 0.2s fadeOut $animate-cubic;
 }
 
 .animate__animated {
-   animation-duration: 0.3s;
+   animation-duration: 0.2s;
 }
 </style>

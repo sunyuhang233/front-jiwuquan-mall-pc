@@ -1,27 +1,25 @@
 <script lang="ts" setup>
-import { getEventsList } from '~/composables/api/event';
+import { getEventsList, getEventsLists } from '~/composables/api/event';
 
 
 // 活动事件列表
 const eventList = reactive<EventVO[]>([]);
 const isLoading = ref<boolean>(true);
 // 请求
-(async () => {
-  let { data } = await getEventsList()
-  if (data.code === StatusCode.SUCCESS) {
-    // 结束时间排序
-    const res = data.data.sort((a, b) => b.status - a.status)
-    res.forEach(p => {
-      eventList.push(p);
-    })
-    if (eventList.length === data.data.length) {
-      setTimeout(() => {
-        isLoading.value = false;
-      }, 500);
-    }
+// let { data } = await getEventsList()
+const data = (await getEventsLists()).value
+if (data.code === StatusCode.SUCCESS) {
+  // 结束时间排序
+  const res = data.data.sort((a, b) => b.status - a.status)
+  res.forEach(p => {
+    eventList.push(p);
+  })
+  if (eventList.length === data.data.length) {
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 500);
   }
-})()
-
+}
 // 计算剩余天数
 const getEndDay = computed(() => {
   return (a: string, b: string): number => {
@@ -39,15 +37,15 @@ const getEndDay = computed(() => {
 })  
 </script>
 <template>
-  <el-carousel rounded-6px cursor-pointer :interval="8000"  arrow="hover" 
-  md:w="520px" h-280px  md:h="360px" height="100%" class="swpier" trigger="click">
+  <el-carousel rounded-6px cursor-pointer :interval="8000" arrow="hover" md:w="520px" h-280px md:h="360px" height="100%"
+    class="swpier" trigger="click">
     <!-- 骨架屏 -->
     <el-skeleton animated :loading="isLoading" class="ske ">
       <template #template>
         <el-skeleton-item p-4 variant="image" class="sk-imgs" p-2 />
-        <div p-4 flex-col style="height: 100%;" justify-around >
-          <el-skeleton-item  variant="p" mb-1 style="width: 70%" />
-          <el-skeleton-item  variant="p" mb-1 style="width: 100%" />
+        <div p-4 flex-col style="height: 100%;" justify-around>
+          <el-skeleton-item variant="p" mb-1 style="width: 70%" />
+          <el-skeleton-item variant="p" mb-1 style="width: 100%" />
         </div>
       </template>
       <!-- 内容 -->
