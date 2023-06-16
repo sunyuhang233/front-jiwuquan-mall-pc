@@ -75,3 +75,21 @@
     opacity: 1;
   }
 } 
+
+
+.animate__blurIn {
+  animation: $transition-delay fade-in-out;
+}
+
+@keyframes blur-in {
+  0% { 
+    transition: $transition-delay;
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% { 
+    transition: $transition-delay;
+    filter: blur(0px);
+    opacity: 1;
+  }
+} 

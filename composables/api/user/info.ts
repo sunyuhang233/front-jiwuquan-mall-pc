@@ -1,39 +1,38 @@
 import { AxiosPromise } from "axios";
-import { Result } from "@/types/result";
+import { Result, isTrue } from "@/types/result";
 import { Gender, UserStatus } from "~/types";
+import { DeviceType } from ".";
 /**
  * 获取用户个人信息
  * @param token token
  * @returns UserInfo
  */
-export function getUserInfo(token: string): AxiosPromise<Result<UserInfo>> {
-  return request({
-    method: "GET",
-    url: "/user/info",
+export function getUserInfo(token: string) {
+  return useHttp.get<Result<UserInfo>>(`/user/info`, {}, {
     headers: {
       "Authorization": token
     }
-  }) as AxiosPromise<Result<UserInfo>>;
+  })
 }
 
 export interface UserWallet {
 
 }
 export interface UserInfo {
-  id?: string;
-  username?: string;
-  email?: string;
-  phone?: string;
-  nickname?: string;
-  gender?: Gender;
-  avatar?: string;
-  birthday?: any;
-  createTime?: string;
-  updateTime?: string;
-  lastLoginTime?: string;
-  status?: UserStatus;
-  isEmailVerified?: number;
-  isPhoneVerified?: number;
+  id: string;
+  username: string;
+  email: string;
+  phone: string;
+  nickname: string;
+  gender: Gender;
+  avatar: string;
+  birthday: string;
+  createTime: string;
+  updateTime: string;
+  lastLoginTime: string;
+  status: UserStatus;
+  isEmailVerified: isTrue;
+  isPhoneVerified: isTrue;
 }
 
 
@@ -43,36 +42,32 @@ export interface UserInfo {
  * @param token 
  * @returns 
  */
-export function updateAvatar(file: FormData, token: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "PUT",
-    url: "/api/user/info/avatar",
-    headers: {
-      "Authorization": token
-    },
-
-  }) as AxiosPromise<Result<string>>;
+export function updateAvatar(file: FormData, token: string): Promise<Result<string>> {
+  return useHttp.put<Result<string>>(
+    `/user/info/avatar`, {},
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
 }
 
 /**
- * 修改密码（已登录）
+ * 修改密码
  * @param dto 表单信息
  * @param token 用户身份
  * @returns 
  */
-export function updatePwdByToken(dto: UpdatePwd, token: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "PUT",
-    url: "/user/info/pwd",
-    headers: {
-      "Authorization": token
-    },
-    data: dto
-
-  }) as AxiosPromise<Result<string>>;
+export function updatePwdByToken(dto: UpdatePwd, token: string): Promise<Result<string>> {
+  return useHttp.put<Result<string>>(
+    `/user/info/pwd`,
+    { ...dto },
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
 }
-
-
 interface UpdatePwd {
   oldPassword: string,
   newPassword: string
@@ -80,26 +75,99 @@ interface UpdatePwd {
 
 
 /**
- * 修改密码（已登录）
- * @param dto 表单信息
+ * 修改基本信息 
+ * @param upUserInfo 表单信息
  * @param token 用户身份
  * @returns 
  */
-export function updateInfoByToken(dto: UpdateInfo, token: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "PUT",
-    url: "/user/info",
-    headers: {
-      "Authorization": token
-    },
-    data: dto
-  }) as AxiosPromise<Result<string>>;
+export function updateInfoByToken(upUserInfo: UpdateInfo, token: string): Promise<Result<string>> {
+  return useHttp.put<Result<string>>(
+    `/user/info`,
+    { ...upUserInfo },
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
 }
-
 interface UpdateInfo {
   gender: Gender,
   nickname: string,
   birthday: Date,
 }
+
+/**
+ * 更换手机号
+ * @param dto 手机号、验证码
+ * @param token 
+ * @returns 
+ */
+export function updatePhone(dto: UpdatePhone, token: string): Promise<Result<string>> {
+  return useHttp.put<Result<string>>(
+    `/user/info/phone`,
+    { ...dto },
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
+}
+export interface UpdatePhone {
+  newPhone: string,
+  code: string
+}
+
+/**
+ * 获取更换手机号|邮箱验证码
+ * @param key 手机号|邮箱
+ * @param type 0|1
+ * @param token 
+ * @returns 
+ */
+export function getUpdateNewCode(key: string, type: DeviceType, token: string): Promise<Result<string>> {
+  return useHttp.get<Result<string>>(
+    `/user/code/${key}`,
+    { type },
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
+}
+
+/**
+ * 更换邮箱
+ * @param dto 邮箱参数
+ * @param token 
+ * @returns 
+ */
+export function updateEmail(dto: UpdateEmail, token: string): Promise<Result<string>> {
+  return useHttp.put<Result<string>>(
+    `/user/info`,
+    { ...dto },
+    {
+      headers: {
+        "Authorization": token
+      }
+    }
+  )
+}
+export interface UpdateEmail {
+  newEmail: string,
+  code: string
+}
+/**
+ * 验证-用户名是否存在
+ * @param username 
+ * @returns 
+ */
+export const checkUsernameExists = (username: string) => {
+  return useHttp.get<Result<string>>(
+    `/user/exist`,
+    { username }
+  )
+}
+
+
 
 

@@ -23,7 +23,7 @@
         <el-input type="email" prefix-icon="Message" v-model.trim="userForm.email" size="large" placeholder="请输入邮箱">
           <template #append>
             <el-button type="primary" @click="getLoginCode(loginType)" :disabled="phoneCodeStorage > 0 && isLoading">{{
-              phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
+              emailCodeStorage > 0 ? `${emailCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -42,7 +42,7 @@
       <el-input prefix-icon="ChatDotSquare" v-model.trim="userForm.code" size="large" placeholder="请输入验证码" />
     </el-form-item>
     <!-- 密码登录 -->
-    <el-form-item label="" v-if="loginType === LoginType.PWD" name="username" class="animated">
+    <el-form-item label="" v-if="loginType === LoginType.PWD" prop="username" class="animated">
       <el-input prefix-icon="user" v-model.trim="userForm.username" size="large" placeholder="请输入用户名、手机号或邮箱" />
     </el-form-item>
     <el-form-item type="password" label="" v-if="loginType === LoginType.PWD" prop="password" class="animated">
@@ -56,10 +56,9 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { FormRules, useFormDisabled } from 'element-plus';
+import { FormRules } from 'element-plus';
 import { getLoginCodeByType, toLoginByPwd, toLoginByPhone, toLoginByEmail, DeviceType } from '~/composables/api/user';
 import { LoginType } from '~/types/user/index.js';
-import { useStorage } from '@vueuse/core';
 const loginType = ref<number>(LoginType.EMAIL);
 const isLoading = ref<boolean>(false);
 const autoLogin = ref<boolean>(false);
@@ -94,20 +93,17 @@ const rules = reactive<FormRules>({
   ],
 });
 // 验证码有效期
-const phoneTimer = useStorage<any>("jiwu_login_email_code_timer", -1)
-const emailTimer = useStorage<any>("jiwu_login_phone_code_timer", -1)
-const emailCodeStorage = useStorage<number>("jiwu_login_email_code", 0)
-const phoneCodeStorage = useStorage<number>("jiwu_login_phone_code", 0)
-useNuxtApp().hook("app:created", () => {
-  useInterval(phoneTimer, phoneCodeStorage)
-  useInterval(emailTimer, emailCodeStorage)
-})
+const phoneTimer = ref(-1)
+const emailTimer = ref(-1)
+const emailCodeStorage = ref<number>(0)
+const phoneCodeStorage = ref<number>(0)
+
 /**
 * 获取验证码
 * @param type 
 */
 const getLoginCode = async (type: LoginType) => {
-  let res;
+  let data;
   // 获取邮箱验证码
   if (type === LoginType.EMAIL) {
     // 简单校验
@@ -116,13 +112,12 @@ const getLoginCode = async (type: LoginType) => {
       isLoading.value = false;
       return ElMessage.error("邮箱格式不正确！")
     }
-
+    // 开启
     isLoading.value = true;
     // 请求验证码
-    res = await getLoginCodeByType(userForm.email, DeviceType.EMAIL);
-
+    data = await getLoginCodeByType(userForm.email, DeviceType.EMAIL);
     // 成功
-    if (res.data.code === 20000) {
+    if (data.code === 20000) {
       ElMessage.success({
         message: '验证码已发送至您的邮箱，5分钟有效！',
         duration: 5000,
@@ -137,15 +132,15 @@ const getLoginCode = async (type: LoginType) => {
       return ElMessage.error("手机号格式不正确！")
     }
     isLoading.value = true;
-    res = await getLoginCodeByType(userForm.phone, DeviceType.PHONE);
-    if (res.data.code === 20000) {
+    data = await getLoginCodeByType(userForm.phone, DeviceType.PHONE);
+    if (data.code === 20000) {
       // 开启定时器
       useInterval(phoneTimer, phoneCodeStorage, 60, -1)
       ElMessage.success({
-        message: `手机验证码为：${res.data.data}`,
+        message: `手机验证码为：${data.data}`,
         duration: 5000,
       })
-      userForm.code= res.data.data
+      userForm.code = data.data
     }
   }
   // 关闭加载
@@ -168,11 +163,9 @@ const useInterval = (timer: any, num: Ref<number>, target?: number, step: number
       num.value = -1
       clearInterval(timer.value)
       timer.value = -1
-      console.log(1);
-      
     }
   }, 1000)
-}; 
+};
 
 const store = useUserStore()
 const toRegister = () => {
@@ -188,27 +181,26 @@ const onLogin = async (type: LoginType) => {
   let res = null;
   switch (type) {
     case LoginType.PWD:
-      res = await toLoginByPwd(userForm.username, userForm.password);
+      res = (await toLoginByPwd(userForm.username, userForm.password));
       break;
     case LoginType.PHONE:
-      res = await toLoginByPhone(userForm.phone, userForm.code);
+      res = (await toLoginByPhone(userForm.phone, userForm.code));
       break;
     case LoginType.EMAIL:
-      res = await toLoginByEmail(userForm.email, userForm.code);
+      res = (await toLoginByEmail(userForm.email, userForm.code));
       break;
   }
   //  
-  if (res.data.code === 20000) {
+  if (res.code === 20000) {
     // 登录成功
-    if (res.data.data != "") {
-      store.onUserLogin(res.data.data, autoLogin.value)
-
+    if (res.data != "") {
       ElMessage.success({
         message: "登录成功！",
         duration: 2000,
       })
+      store.onUserLogin(res.data, autoLogin.value)
       store.$patch({
-        token: res.data.data,
+        token: res.data,
         showLoginForm: false,
         showRegisterForm: false,
         isLogin: true,
@@ -217,7 +209,7 @@ const onLogin = async (type: LoginType) => {
     // 登录失败
     else {
       ElMessage.error({
-        message: res.data.message,
+        message: res.message,
         duration: 5000,
       })
       // store
@@ -259,10 +251,11 @@ const onLogin = async (type: LoginType) => {
 
 :deep(.el-button) {
   padding: 0.3em 1em;
-} 
+}
+
 .dark .form {
   background-color: #161616d8;
-} 
+}
 
 .animate__animated {
   animation-duration: 0.5s;

@@ -9,8 +9,10 @@ const p = props.goods
 </script>
 <template>
   <div class="card" flex cursor-pointer p-1>
-    <ElImage :src="baseUrlImg + p.images[0]" style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px"
-      fit="cover" />
+    <ClientOnly>
+      <ElImage :src="baseUrlImg + p.images[0]" style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px"
+        fit="cover" />
+    </ClientOnly>
     <div px-4 style="width: 70%;">
       <h3 tracking-1px max-w-12em md:max-w-16em class="overflow-hidden truncate ...">
         {{ p.name }}

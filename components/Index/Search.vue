@@ -2,8 +2,8 @@
   <ClientOnly class="right">
     <!-- 下拉框 -->
     <el-popover width="min(435px,38vw)" popper-class="popover" transition="popSliceUpDown" :placement="'bottom-end'"
-      :show-after="200" :hide-after="0" :visible="isShowResult" popper-style="box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                                                     height:380px; padding: 1.2em 1.2em;" tabindex="0">
+      :show-after="200" :hide-after="0" :visible="isShowResult" popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
+                    height:380px; padding: 1.2em 1.2em;" tabindex="0">
       <template #reference>
         <div class="content" relative>
           <!-- 搜索 -->
@@ -16,35 +16,38 @@
               搜索
             </ElButton>
           </div>
-          <!-- 搜索历史记录 -->
-          <div v-show="!isShowResult" class="tags animate__animated animate__headShake" z-0 top-40px absolute top-0
-            cursor-pointer py-1 flex-row flex-wrap>
-            <ElTag size="large" v-for="(p, i) in searchHistoryList" :key="p + i" closable @close="handleClose(p)"
-              @click="clickTag(p, i)" mr-1 mt-1 hover:opacity-60 transition-300>
-              <span pr-0.3em>{{ p }}</span>
-            </ElTag>
-          </div>
+          <ClientOnly>
+            <!-- 搜索历史记录 -->
+            <div v-show="!isShowResult" class="tags animate__animated animate__headShake" z-0 top-40px absolute top-0
+              cursor-pointer py-1 flex-row flex-wrap>
+              <ElTag size="large" v-for="(p, i) in searchHistoryList" :key="p + i" closable @close="handleClose(p)"
+                @click="clickTag(p, i)" mr-1 mt-1 hover:opacity-60 transition-300>
+                <span pr-0.3em>{{ p }}</span>
+              </ElTag>
+            </div>
+          </ClientOnly>
         </div>
       </template>
       <!-- 2、搜索结果（商品goods） -->
       <template #default>
         <!-- 标题 -->
-        <span v-show="searchPageList.length > 0" p-2 pb-8>{{ ` 搜索到 ${searchPage.total} 条数据` }}
-          <ElIconCloseBold width="1.8em" absolute right-1em cursor-pointer style="color: var(--el-color-primary);" shadow
-            shadow-inset rounded-2px active:transform-scale-80 transition-300 @click="isShowResult = false" />
+        <span v-show="searchPageList.length > 0" px-2 py-4 pb-8>
+          {{ ` 搜索到 ${searchPage.total} 条数据` }}
         </span>
-        <ElScrollbar overflow-hidden pt-2 flex-col v-loading="isLoading" element-loading-background="transparent">
+        <ElIconCloseBold width="1.6em" absolute right-1em top-1em cursor-pointer style="color: var(--el-color-primary);"
+          shadow shadow-inset rounded-4px active:transform-scale-80 transition-300 @click="isShowResult = false" />
+        <ElScrollbar overflow-hidden pt-3 flex-col v-loading="isLoading" element-loading-background="transparent">
           <!-- 跳转详情页 -->
           <NuxtLink :to="`/goods/detail?id=${p.id}`" class="mt-2 animate-fade-in " v-for="(p, i) in searchPageList"
             :key="p.id">
+            <!-- 商品卡片 -->
             <CardGoodsLine :goods="p" :key="p.id" />
             <ElDivider dark:opacity-50 v-if="i !== (searchPageList.length - 1)"
               style="width: 100%;margin: 0.6em auto;margin-bottom: 0.8em; overflow: hidden;" />
           </NuxtLink>
           <ElEmpty mt-10 :image-size="80" description="没有找到商品" v-show="searchPageList.length <= 0" />
           <p v-if="noMore" opacity-80 text-center tracking-2px>没有更多了</p>
-        </ElScrollbar>
-
+        </ElScrollbar> 
       </template>
     </el-popover>
   </ClientOnly>
@@ -52,6 +55,8 @@
 <script lang="ts" setup>
 import { getGoodsListByPage } from "@/composables/api/goods";
 import { useStorage } from "@vueuse/core";
+import { IPage } from "~/types";
+import { GoodsVO } from "~/types/goods";
 // 搜索相关
 const searchKeyWords = ref<string>("");
 const isSearch = ref<boolean>(false);

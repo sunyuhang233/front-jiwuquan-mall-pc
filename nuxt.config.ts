@@ -1,6 +1,9 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-
+// export const baseUrl: string = "http://47.115.226.150:9090"// 开发
+export const baseUrl: string = "http://localhost:9090"// 开发 
+export const baseUrlImg: string = baseUrl + "/res/image/"
+export const baseUrlVideo: string = baseUrl + "/res/video/"
 export default defineNuxtConfig({
   alias: {
     // 配置@使用静态资源
@@ -8,12 +11,12 @@ export default defineNuxtConfig({
   },
   // 全局变量
   runtimeConfig: {
-    axios: {
-      baseURL:
-        process.env.NODE_ENV === 'production'
-          ? import.meta.env.VITE_APP_PROD_BASE_URL
-          : import.meta.env.VITE_APP_DEV_BASE_URL,
-    },
+    // axios: {
+    //   baseURL:
+    //     process.env.NODE_ENV === 'production'
+    //       ? import.meta.env.VITE_APP_PROD_BASE_URL
+    //       : import.meta.env.VITE_APP_DEV_BASE_URL,
+    // },
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
@@ -50,11 +53,13 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     inlineSSRStyles: false,
     renderJsonPayloads: true,
+    crossOriginPrefetch: true, //使用 Speculation Rules API 启用跨源预取。
   },
   // 自动导入
   imports: {
     dirs: [
       // Scan top-level modules
+      'utils',
       'composables',
       'composables/utils/**',
       'composables/store/**',
@@ -89,17 +94,6 @@ export default defineNuxtConfig({
         },
       },
     },
-    server: {
-      proxy: {
-        // 接口地址代理
-        '/api': {
-          target: 'http://47.115.226.150:9090', // 接口的域名
-          secure: false, // 如果是https接口，需要配置这个参数
-          changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-          rewrite: path => path.replace(/^\/api/, '')
-        },
-      }
-    },
   },
   // pinia
   pinia: {
@@ -108,6 +102,9 @@ export default defineNuxtConfig({
     ],
   },
 
+  devServer: {
+    url: baseUrl
+  },
   // pinia持久化到会话存储
   piniaPersistedstate: {
     storage: 'sessionStorage',
@@ -126,8 +123,8 @@ export default defineNuxtConfig({
     },
     devProxy: {
       "/api": {
-        target: "http://47.115.226.150:9090",
-        prependPath: true,
+        target: baseUrl,
+        // prependPath: false,
         changeOrigin: true,
       }
     }

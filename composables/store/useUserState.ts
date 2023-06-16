@@ -1,8 +1,6 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { getUserInfo, type UserInfo, type UserWallet } from '../api/user/info';
 import { toLogout } from "../api/user"
-
-
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useUserStore = defineStore('user', () => {
   // token
@@ -15,17 +13,43 @@ export const useUserStore = defineStore('user', () => {
   // 钱包信息
   const userWallet = reactive<UserWallet>({})
   // 用户个人信息
-  let userInfo = reactive<UserInfo>({})
+  const userInfo = reactive<UserInfo>({
+    id: "",
+    username: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    gender: Gender.BOY,
+    avatar: "",
+    birthday: "",
+    createTime: "",
+    updateTime: "",
+    lastLoginTime: "",
+    status: UserStatus.FALESE,
+    isEmailVerified: 0,
+    isPhoneVerified: 0,
+  })
 
   /**
    * 用户登录
    * @param token token
    */
   const onUserLogin = async (token: string, saveLocal?: boolean) => {
-    const { data } = await getUserInfo(token)
-    if (data.code === StatusCode.SUCCESS) {
-      userInfo = reactive<UserInfo>(data.data)
-    }
+    await useAsyncData(async () => {
+      const store = useUserStore()
+      let res = await getUserInfo(token)
+      if (res.code === StatusCode.SUCCESS) {
+        store.$patch({
+          userInfo: {
+            ...res.data
+          }
+        })
+      }else {
+        onUserExit(token)
+      }
+      // 钱包
+      // const wallet = await getuseWa(token)
+    })
   }
 
   /**

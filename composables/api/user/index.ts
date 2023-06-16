@@ -1,40 +1,22 @@
 import { AxiosPromise } from "axios";
-import { Result } from "@/types/result";
-import { isTrue } from "~/types";
-
+import { Result, isTrue } from "@/types/result";
 /**
  * 账号密码登录
  * @param username 用户名/手机号/邮箱
  * @param password 密码
  * @returns promise
  */
-export function toLoginByPwd(username: string, password: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "POST",
-    url: "/user/login/pwd",
-    data: {
-      username,
-      password
-    }
-  }) as AxiosPromise<Result<string>>;
+export function toLoginByPwd(username: string, password: string) {
+  return useHttp.post<Result<string>>('/user/login/pwd', { username, password })
 }
-
-
 /**
  * 邮箱登录
  * @param email 邮箱
  * @param code 
  * @returns 
  */
-export function toLoginByEmail(email: string, code: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "POST",
-    url: "/user/login/email",
-    data: {
-      email,
-      code
-    }
-  });
+export function toLoginByEmail(email: string, code: string) {
+  return useHttp.post<Result<string>>("/user/login/email", { email, code })
 }
 
 /**
@@ -43,16 +25,10 @@ export function toLoginByEmail(email: string, code: string): AxiosPromise<Result
  * @param code 
  * @returns 
  */
-export function toLoginByPhone(phone: string, code: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "POST",
-    url: "/user/login/phone",
-    data: {
-      phone,
-      code
-    }
-  });
+export function toLoginByPhone(phone: string, code: string): Promise<Result<string>> {
+  return useHttp.post<Result<string>>("/user/login/phone", { phone, code })
 }
+
 
 
 
@@ -61,36 +37,20 @@ export function toLoginByPhone(phone: string, code: string): AxiosPromise<Result
  * @param key 邮箱/手机号
  * @returns data
  */
-export function getLoginCodeByType(key: string, type: DeviceType): AxiosPromise<Result<string>> {
-  return request({
-    method: "GET",
-    url: `/user/login/code/${key}`,
-    params: {
-      type,
-    }
-  });
+export function getLoginCodeByType(key: string, type: DeviceType): Promise<Result<string>> {
+  return useHttp.get<Result<string>>(`/user/login/code/${key}`, { type })
 }
-
 export enum DeviceType {
   PHONE = 0,
   EMAIL = 1
 }
-
-
-
 /**
  * 注册-获取验证码
  * @param key 邮箱/手机号
  * @returns data
  */
-export function getRegisterCode(key: string, type: DeviceType): AxiosPromise<Result<string>> {
-  return request({
-    method: "GET",
-    url: `/user/register/code/${type}`,
-    data: {
-      key,
-    }
-  });
+export function getRegisterCode(key: string, type: DeviceType): Promise<Result<string>> {
+  return useHttp.get<Result<string>>(`/user/register/code/${key}`, { type })
 }
 
 
@@ -99,12 +59,8 @@ export function getRegisterCode(key: string, type: DeviceType): AxiosPromise<Res
  * @param dto 
  * @returns 
  */
-export function toRegister(dto: RegisterUser): AxiosPromise<Result<string>> {
-  return request({
-    method: "POST",
-    url: `/user/register`,
-    data: dto
-  }) as AxiosPromise<Result<string>>
+export function toRegister(dto: RegisterUser): Promise<Result<string>> {
+  return useHttp.post<Result<string>>(`/user/register`, dto);
 }
 
 
@@ -112,8 +68,9 @@ export interface RegisterUser {
   username: string;
   password: string;
   code: string;
-  email: string;
-  type: isTrue;
+  phone?: string;
+  email?: string;
+  type: number|DeviceType;
 }
 
 /**
@@ -121,10 +78,8 @@ export interface RegisterUser {
  * @param token 用户token
  * @returns Resutl
  */
-export function toLogout(token: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "DELETE",
-    url: "/user/exit",
+export function toLogout(token: string): Promise<Result<string>> {
+  return useHttp.deleted("/user/exit", {}, {
     headers: {
       Authorization: token
     }
@@ -137,10 +92,8 @@ export function toLogout(token: string): AxiosPromise<Result<string>> {
  * @param token 用户token
  * @returns Resutl
  */
-export function toLogoutAll(token: string): AxiosPromise<Result<string>> {
-  return request({
-    method: "DELETE",
-    url: "/user/exit/all",
+export function toLogoutAll(token: string): Promise<Result<string>> {
+  return useHttp.deleted("/user/exit/all", {}, {
     headers: {
       Authorization: token
     }

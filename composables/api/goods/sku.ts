@@ -1,6 +1,6 @@
 import { AxiosPromise } from "axios";
 import { request } from "~/utils/request";
-import { Result } from "@/types/result";
+import { Result, isTrue } from "@/types/result";
 /**
  * 获取分页商品列表
  * @returns 

@@ -1,7 +1,8 @@
 <template>
   <!-- 注册 -->
-  <el-form v-loading="isLoading" label-position="top" hide-required-asterisk :rules="rules" :model="formUser"
-    @submit.prevent="onRegister(registerType)" class="form animate__animated ">
+  <el-form @validate="console.clear()" v-loading="isLoading" :element-loading-text="loadingText" label-position="top"
+    hide-required-asterisk :rules="rules" :model="formUser" @submit.prevent="onRegister(registerType)"
+    class="form animate__animated ">
     <h2 mb-5 tracking-0.2em>开启你的专属圈子</h2>
     <p mb-10 tracking-0.1em text-0.8em>
       已有账户？
@@ -16,69 +17,80 @@
         @click="registerType = RegisterType.EMAIL" tracking-0.1em>邮箱注册</el-button>
     </div>
     <!-- 验证码注册(客户端 ) -->
-    <ClientOnly>
-      <!-- 邮箱注册 -->
-      <el-form-item v-if="registerType === RegisterType.EMAIL" prop="email" class="animated">
-        <el-input type="email" prefix-icon="Message" v-model.trim="formUser.email" size="large" placeholder="请输入邮箱">
-          <template #append>
-            <el-button type="primary" @click="getLoginCode(registerType)" :disabled="phoneCodeStorage > 0 && isLoading">{{
-              phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
-          </template>
-        </el-input>
-      </el-form-item>
-      <!-- 手机号登录 -->
-      <el-form-item type="tel" v-if="registerType === RegisterType.PHONE" prop="phone" class="animated">
-        <el-input prefix-icon="Iphone" v-model.trim="formUser.phone" size="large" placeholder="请输入手机号">
-          <template #append>
-            <el-button type="primary" @click="getLoginCode(registerType)" :disabled="phoneCodeStorage > 0">{{
-              phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码'
-            }}</el-button>
-          </template>
-        </el-input>
-      </el-form-item>
-    </ClientOnly>
-    <el-form-item v-if="registerType === RegisterType.EMAIL || registerType === RegisterType.PHONE" prop="code"
-      class="animated">
+    <!-- 用户名 -->
+    <el-form-item label="" prop="username" class="animated">
+      <el-input prefix-icon="user" v-model.lazy="formUser.username" size="large" placeholder="请输入用户名" />
+    </el-form-item>
+    <!-- 邮箱 -->
+    <el-form-item v-if="registerType === RegisterType.EMAIL" prop="email" class="animated">
+      <el-input type="email" prefix-icon="Message" v-model.trim="formUser.email" size="large" placeholder="请输入邮箱">
+        <template #append>
+          <el-button type="primary" @click="getLoginCode(registerType)" :disabled="emailCodeStorage > 0">{{
+            emailCodeStorage > 0 ? `${emailCodeStorage}s后重新发送` : '获取验证码' }}</el-button>
+        </template>
+      </el-input>
+    </el-form-item>
+    <!-- 手机号 -->
+    <el-form-item v-if="registerType === RegisterType.PHONE" type="tel" prop="phone" class="animated">
+      <el-input prefix-icon="Iphone" v-model.trim="formUser.phone" size="large" placeholder="请输入手机号">
+        <template #append>
+          <el-button type="primary" @click="getLoginCode(registerType)" :disabled="phoneCodeStorage > 0">{{
+            phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : '获取验证码'
+          }}</el-button>
+        </template>
+      </el-input>
+    </el-form-item>
+    <!-- 验证码 -->
+    <el-form-item prop="code" class="animated">
       <el-input prefix-icon="ChatDotSquare" v-model.trim="formUser.code" size="large" placeholder="请输入验证码" />
     </el-form-item>
-    <!-- 密码登录 -->
-    <el-form-item label="" v-if="registerType === RegisterType.EMAIL" name="username" class="animated">
-      <el-input prefix-icon="user" v-model.trim="formUser.username" size="large" placeholder="请输入用户名、手机号或邮箱" />
-    </el-form-item>
-    <el-form-item type="password" label="" v-if="registerType === RegisterType.EMAIL" prop="password" class="animated">
-      <el-input prefix-icon="Lock" v-model.trim="formUser.password" size="large" placeholder="请输入密码" type="password" />
+    <!-- 密 码 -->
+    <el-form-item type="password" label="" prop="password" class="animated">
+      <el-input prefix-icon="Lock" v-model.trim="formUser.password" size="large" placeholder="请输入密码（6-20位）"
+        type="password" />
     </el-form-item>
     <el-form-item mt-1em>
       <el-input type="submit" flex-1 size="large" class="submit">
-        登 录
+        注 册
       </el-input>
     </el-form-item>
   </el-form>
 </template>
 <script lang="ts" setup>
 import { FormRules } from 'element-plus';
-import { getLoginCodeByType, toRegister, DeviceType } from '~/composables/api/user';
+import { toRegister, DeviceType, getRegisterCode, toLoginByPwd } from '~/composables/api/user';
+import { checkUsernameExists } from '~/composables/api/user/info';
+import { Result } from '~/types/result';
 import { RegisterType } from '~/types/user/index.js';
-import { useStorage } from '@vueuse/core';
+
+
+// 注册方式
 const registerType = ref<number>(RegisterType.PHONE);
+// 请求加载
 const isLoading = ref<boolean>(false);
+const loadingText = ref<string>("")
 // 表单
 const formUser = reactive({
-  nickname: '',// 昵称
   username: '',// 用户名
-  password: '',// 密码
-  phone: "",// 手机号
-  email: "", // 邮箱
+  phone: "",// 手机号 0
+  email: "", // 邮箱 1
   code: '',// 验证码
+  password: '',// 密码
 });
 const rules = reactive<FormRules>({
   username: [
-    { required: true, message: '该项不能为空！', trigger: 'blur' },
-    { min: 6, max: 30, message: '长度在6-30个字符！', trigger: 'blur' },
+    { required: true, message: '用户名不能为空！', trigger: 'blur' },
+    { pattern: /^[a-zA-Z][a-zA-Z0-9_]{0,}$/, message: '英文开头、字母数字下划线组成', trigger: 'change' },
+    { min: 6, max: 30, message: '长度在6-30个字符！', trigger: 'change' },
+    {
+      asyncValidator: async (rule, value) => {
+        return await checkUsername();
+      }, message: '该用户名已被使用！', trigger: 'change'
+    },
   ],
   password: [
     { required: true, message: '密码不能为空！', trigger: 'blur' },
-    { min: 6, max: 30, message: '密码长度不正确！', trigger: 'blur' },
+    { min: 6, max: 30, message: '密码长度为6-20！', trigger: 'change' },
   ],
   code: [{
     required: true, message: "验证码6位组成！", trigger: 'change',
@@ -93,42 +105,32 @@ const rules = reactive<FormRules>({
     { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '手机号格式不正确！', trigger: 'change' },
   ],
 });
+
+
 // 验证码有效期
-const phoneTimer = useStorage<number>("jiwu_register_email_code_timer", -1)
-const emailTimer = useStorage<number>("jiwu_register_phone_code_timer", -1)
-const emailCodeStorage = useStorage<number>("jiwu_register_email_code", 0)
-const phoneCodeStorage = useStorage<number>("jiwu_register_phone_code", 0)
-useNuxtApp().hook("app:mounted", () => {
-  useInterval(phoneTimer, phoneCodeStorage)
-  useInterval(emailTimer, emailCodeStorage)
-})
-const toLoginForm = () => {
-  store.showLoginForm = true;
-  store.showRegisterForm = false;
-}
-
-
+const phoneTimer = ref(-1)
+const emailTimer = ref(-1)
+const emailCodeStorage = ref<number>(0)
+const phoneCodeStorage = ref<number>(0)
 /**
 * 获取验证码
 * @param type 
 */
 const getLoginCode = async (type: RegisterType) => {
-  let res;
-  isLoading.value = true;
+  let data;
   // 获取邮箱验证码
   if (type === RegisterType.EMAIL) {
     // 简单校验
-    if (!checkEmail(formUser.email)) return;
-    if (formUser.email.trim() === "") {
-      isLoading.value = false;
+    if (formUser.email.trim() === "") return;
+    if (!checkEmail(formUser.email)) {
       return ElMessage.error("邮箱格式不正确！")
     }
+    isLoading.value = true;
 
     // 请求验证码
-    res = await getLoginCodeByType(formUser.email, DeviceType.EMAIL);
-
+    data = await getRegisterCode(formUser.email, DeviceType.EMAIL);
     // 成功
-    if (res.data.code === 20000) {
+    if (data.code === 20000) {
       ElMessage.success({
         message: '验证码已发送至您的邮箱，5分钟有效！',
         duration: 5000,
@@ -138,15 +140,18 @@ const getLoginCode = async (type: RegisterType) => {
   }
   // 获取手机号验证码
   else if (type === RegisterType.PHONE) {
+    if (formUser.phone.trim() === "") return;
     if (!checkPhone(formUser.phone)) {
       return ElMessage.error("手机号格式不正确！")
     }
-    res = await getLoginCodeByType(formUser.phone, DeviceType.PHONE);
-    if (res.data.code === 20000) {
+    isLoading.value = true;
+    data = await getRegisterCode(formUser.phone, DeviceType.PHONE);
+    if (data.code === 20000) {
       // 开启定时器
+      formUser.code = data.data
       useInterval(phoneTimer, phoneCodeStorage, 60, -1)
       ElMessage.success({
-        message: `手机验证码为：${res.data.data}`,
+        message: `手机验证码为：${data.data}`,
         duration: 5000,
       })
     }
@@ -177,51 +182,101 @@ const useInterval = (timer: any, num: Ref<number>, target?: number, step: number
 const store = useUserStore()
 /**
 * 注册
-* @param type
+* @param type 注册类型
 */
-// const onRegister = async (type: RegisterType) => {
-//   let res = null;
-//   switch (type) {
-//     case RegisterType.PHONE:
-//       res = await toRegister();
-//       break;
-//     case RegisterType.EMAIL:
-//       res = await toRegister();
-//       break;
-//   }
+const onRegister = async (type: RegisterType) => {
+  let data: Result<string>;
+  switch (type) {
+    case RegisterType.PHONE:
+      data = await toRegister({
+        username: formUser.username,
+        phone: formUser.phone,
+        password: formUser.password,
+        code: formUser.code,
+        type: type
+      })
+      break;
+    case RegisterType.EMAIL:
+      data = await toRegister({
+        username: formUser.username,
+        password: formUser.password,
+        code: formUser.code,
+        email: formUser.email,
+        type: type
+      })
+      break;
+  }
 
-//   if (res.data.code === 20000) {
-//     // 登录成功
-//     if (res.data.data != "") {
-//       store.onUserLogin(res.data.data)
+  if (data.code === 20000) {
+    // 注册成功
+    if (data.data != "") {
+      ElMessage.success({
+        message: "恭喜，注册成功 🎉",
+        duration: 3000,
+      })
+      // 登录
+      let count = 3
+      let timers = setInterval(() => {
+        isLoading.value = true
+        loadingText.value = `${count}s后自动登录...`
+        if (count <= 0) {
+          (async () => {
+            const data = await toLoginByPwd(formUser.username, formUser.password)
+            // 自动登录成功
+            store.$patch({
+              token: data.data,
+              showLoginForm: false,
+              showRegisterForm: false,
+              isLogin: true,
+            });
+            ElMessage.success({
+              message: "登录成功！",
+            })
+            store.onUserLogin(data.data)
+            isLoading.value = false
+            // 清除
+            clearInterval(timers)
+          })()
+        }
+        count--
+      }, 1000)
+    }
+    // 注册失败
+    else {
+      ElMessage.error({
+        message: data.message || "抱歉，注册出了点问题！",
+        duration: 4000,
+      })
+      // store
+      store.$patch({
+        token: "",
+        isLogin: false,
+      });
+    }
+  }
+}
+/**
+ * 验证是否存在该用户
+ */
+const checkUsername = async () => {
+  if (formUser.username.trim() === "") return Promise.reject()
+  let data = await checkUsernameExists(formUser.username);
+  if (data.code === 20000) {
+    return Promise.resolve();
+  }
+  return Promise.reject("该用户名已被使用！");
+}
 
-//       ElMessage.success({
-//         message: "登录成功！",
-//         duration: 2000,
-//       })
-//       store.$patch({
-//         token: res.data.data,
-//         showLoginForm: false,
-//         showRegisterForm: false,
-//         isLogin: true,
-//       });
-//     }
-//     // 登录失败
-//     else {
-//       ElMessage.error({
-//         message: res.data.message,
-//         duration: 5000,
-//       })
-//       // store
-//       store.$patch({
-//         token: "",
-//         isLogin: false,
-//       });
-//     }
-//   }
-// } 
-
+const toLoginForm = () => {
+  store.$patch({
+    showRegisterForm: false,
+    showLoginForm: true,
+  })
+}
 </script>
+
+
+
 <style scoped lang="scss">
 .form {
   width: 400px;
@@ -263,7 +318,7 @@ const store = useUserStore()
   margin-bottom: 14px;
 }
 
-// 切换登录
+// 切换注册
 .toggle-login {
   position: relative;
   border-radius: var(--el-border-radius-base);
