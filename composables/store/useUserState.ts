@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', () => {
   // 是否打开登录
   const showLoginForm = ref<boolean>(false);
   const showRegisterForm = ref<boolean>(false);
+  const showUpdatePwd = ref<boolean>(false);
   // 钱包信息
   const userWallet = reactive<UserWallet>({})
   // 用户个人信息
@@ -44,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
             ...res.data
           }
         })
-      }else {
+      } else {
         onUserExit(token)
       }
       // 钱包
@@ -53,45 +54,44 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /**
+   * 用户确认状态
+   * @param token token
+   */
+  const onCheckLogin = () => {
+    if (token.value) {
+      onUserLogin(token.value);
+    }
+  }
+
+  /**
    * 退出登录
    * @param t token
    */
   async function onUserExit(t: string) {
-    const { data } = await toLogout(t)
-    if (data.code === StatusCode.SUCCESS) {
-      isLogin.value = false
-    }
+    const data = await toLogout(t)
+    localStorage.removeItem("user")
+    sessionStorage.removeItem("user")
+    token.value = ""
+    isLogin.value = false
   }
-
-  // 登陆状态动态
-  watch(isLogin, (val: boolean) => {
-    if (val) {
-      onUserLogin(token.value)
-    } else {
-      onUserExit(token.value)
-      useUserStore.caller()
-    }
-  })
-
-
   return {
     // state
     token,
     isLogin,
+    showUpdatePwd,
     showLoginForm,
     showRegisterForm,
     userInfo,
     userWallet,
     // actions
     onUserLogin,
+    onCheckLogin,
     onUserExit
   }
 }, {
-  // https://juejin.cn/post/7216182763250581564 持久化
-  persist: process.client && {
-    storage: localStorage,
-    paths: ['times']
-  }
+  // https://juejin.cn/post/7216182763250581564  持久化
+  // https://juejin.cn/post/7216174863445737528
+  persist: true,
 })
 
 

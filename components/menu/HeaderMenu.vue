@@ -1,6 +1,6 @@
 
 <template>
-  <div shadow-md>
+  <div shadow-md class="header">
     <ElAffix>
       <div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
         <!-- 左侧 -->
@@ -15,23 +15,25 @@
             <span tracking-2 m-4 font-700 text-xl hidden md:inline-block>极物圈</span>
           </NuxtLink>
         </div>
+        <!-- 搜索框 -->
+        <div class="animate__animated input-search">
+          <InputSearch v-model="searchWord" :onSerch="onSerch" />
+        </div>
         <!-- 右侧 -->
         <div class="right" flex-row-c-c hidden md:flex>
-          <!-- 搜索框 -->
-          <div>
-            <InputSearch v-model="searchWord" :onSerch="onSerch" />
-          </div>
           <!-- 切换主题 -->
           <BtnSwitch />
-          <!-- 登陆注册 -->
-          <div class="box" v-if="!store.isLogin">
-            <span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)">登
-            录</span>
-          <ElButton style="border-radius: 30px;" px-2 mx-1 cursor-pointer @click="onLogin(FormType.REGISTER)">注 册
-          </ElButton>
-          </div>
-          <ClientOnly class="box" v-else>
-            {{ store.userInfo?.nickname }}
+          <ClientOnly>
+            <!-- 登陆注册 -->
+            <div class="box" v-if="!store.isLogin">
+              <span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)">登
+                录</span>
+              <ElButton style="border-radius: 30px;" px-2 mx-1 cursor-pointer @click="onLogin(FormType.REGISTER)">注 册
+              </ElButton>
+            </div>
+            <div class="box" v-else>
+              <CardUserLine :user-info="store.userInfo" />
+            </div>
           </ClientOnly>
         </div>
       </div>
@@ -44,7 +46,6 @@ const sotre = useUserStore()
 // 搜索
 let searchWord = ref<string>("")
 // 登录表单
-let showForm = ref<boolean>(false)
 const store = useUserStore()
 enum FormType {
   LOGIN,
@@ -82,5 +83,26 @@ const onSerch = (val: string) => {
    transition: $transition-delay;
    border-color: var(--el-color-primary);
    opacity: 0.8;
+ }
+
+ .input-search {
+   margin: 0 auto;
+   transform: translateY(-130%);
+   transition: all 2 * $transition-delay $animate-cubic-bount;
+ }
+
+ .header:focus,
+ .header:hover {
+   overflow: hidden;
+
+   .input-search {
+     animation-duration: 0.6s;
+     transform: translateY(0%);
+   }
+
+   .input-search:focus {
+     animation-duration: 0.6s;
+     transform: translateY(0%);
+   }
  }
 </style>

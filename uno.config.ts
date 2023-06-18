@@ -16,7 +16,8 @@ export default defineConfig({
     ['bg-color', 'bg-white dark:bg-dark'],
     // 布局
     ['flex-row-c-c', 'flex flex-justify-center flex-items-center'],
-    ['flex-row-bt-c', 'flex flex-justify-between flex-items-center']
+    ['flex-row-bt-c', 'flex flex-justify-between flex-items-center'],
+    ['layout-default','mx-auto w-90vw md:w-70vw p="y-6 x-4"']
   ],
   theme: {
     // ...

@@ -62,8 +62,6 @@ export function getRegisterCode(key: string, type: DeviceType): Promise<Result<s
 export function toRegister(dto: RegisterUser): Promise<Result<string>> {
   return useHttp.post<Result<string>>(`/user/register`, dto);
 }
-
-
 export interface RegisterUser {
   username: string;
   password: string;

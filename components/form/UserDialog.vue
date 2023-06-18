@@ -8,7 +8,11 @@
          </transition>
          <!-- 注册 -->
          <transition name="fade">
-            <FormRegisterForm v-show="!userStore.showLoginForm" />
+            <FormRegisterForm v-if="userStore.showRegisterForm" />
+         </transition>
+         <!-- 找回密码 -->
+         <transition name="fade">
+            <FormRegisterForm v-if="userStore.showUpdatePwd" />
          </transition>
       </div>
    </transition>

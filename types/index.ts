@@ -4,11 +4,11 @@ export interface ImportMetaEnv {
 }
 // 分页
 export interface IPage<T> {
-  records?: T[] | undefined,
-  total?: number,
-  pages?: number,
-  size?: number,
-  current?: number,
+  records: T[] ,
+  total: number ,
+  pages: number,
+  size: number,
+  current: number,
   orders?: [],
   optimizeCountSql?: boolean,
   searchCount?: boolean,

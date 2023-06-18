@@ -10,8 +10,6 @@ export function httpRequest<T = unknown>(
   opts?: FetchOptions,
 ) {
   const store = useUserStore()
-  const router = useRouter()
-  const route = useRoute()
   let msg = ""
   const defaultOpts = {
     method,
@@ -74,6 +72,7 @@ export function httpRequest<T = unknown>(
       if (msg !== "") {
         // 组件
         ElMessage.error({
+          grouping:true,
           type,
           message: data.message,
         });
@@ -91,8 +90,10 @@ export function httpRequest<T = unknown>(
           break
         case 401:
           msg = '没有访问权限';
-          router.back();
-          store.showLoginForm = true
+          store.$patch({
+            showLoginForm: true,
+            showRegisterForm: false,
+          })
           break
         case 403:
           msg = '服务器拒绝访问';
@@ -108,7 +109,7 @@ export function httpRequest<T = unknown>(
           break
       }
       // 客户端报错
-      ElMessage.error(msg)
+      ElMessage.error("服务器错误，请稍后重试！")
     },
   } as FetchOptions
   if (defaultOpts) {
@@ -145,7 +146,7 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>('deleted', request, body, opts)
+    return httpRequest<T>('DELETE', request, body, opts)
   },
 
 

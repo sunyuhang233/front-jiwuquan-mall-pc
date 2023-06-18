@@ -42,13 +42,15 @@ export interface UserInfo {
  * @param token 
  * @returns 
  */
-export function updateAvatar(file: FormData, token: string): Promise<Result<string>> {
+export function updateAvatar(file:any, token: string): Promise<Result<string>> {
   return useHttp.put<Result<string>>(
-    `/user/info/avatar`, {},
+    `/user/info/avatar`, {
+    },
     {
-      headers: {
+      headers: { 
         "Authorization": token
-      }
+      },
+      body:file
     })
 }
 

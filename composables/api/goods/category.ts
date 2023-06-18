@@ -5,11 +5,8 @@ import { request } from '@/utils/request';
  * 获取分页商品列表
  * @returns 
  */
-export function getGoodsCategoryList():AxiosPromise<Result<Category[]>> {
-  return request({
-    method: "GET",
-    url: `/goods/category/list`,
-  }) as AxiosPromise<Result<Category[]>>;
+export function getGoodsCategoryList(): Promise<Result<Category[]>> {
+  return useHttp.get("/goods/category/list")
 }
 export interface Category {
   id: string;

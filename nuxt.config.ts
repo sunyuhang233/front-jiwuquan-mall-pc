@@ -45,7 +45,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
-    'nuxt-lodash',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt'
   ],

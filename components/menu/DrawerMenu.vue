@@ -5,11 +5,10 @@ const isFold = useStorage<boolean>("jiwu_isFold", true)
 // 路由
 const route = useRoute()
 </script>
-
 <template>
   <!-- 菜单 -->
   <ClientOnly>
-    <ElAffix :offset="65">
+    <ElAffix :offset="64" style="padding: 0;transition: 300ms;">
       <transition name="slideInOut">
         <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
           <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">

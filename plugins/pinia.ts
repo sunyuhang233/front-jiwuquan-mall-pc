@@ -3,5 +3,4 @@
 import pinia from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 export default defineNuxtPlugin((nuxtApp) => {
-    
 })
