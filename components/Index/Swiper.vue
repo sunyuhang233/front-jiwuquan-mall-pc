@@ -6,7 +6,6 @@ const eventList = reactive<EventVO[]>([]);
 const isLoading = ref<boolean>(true);
 // 请求
 // let { data } = await getEventsList()
-useAsyncData(async () => {
   const data = await getEventsLists()
   if (data.code === StatusCode.SUCCESS) {
     // 结束时间排序
@@ -20,7 +19,6 @@ useAsyncData(async () => {
       }, 500);
     }
   }
-})
 // 跳转详情页
 const toEventDetailView = (eid: string) => {
   useRouter().push({
@@ -49,8 +47,8 @@ const getEndDay = computed(() => {
 })  
 </script>
 <template>
-  <el-carousel rounded-6px cursor-pointer :interval="8000" arrow="hover" my-4 md:my-0 mx-auto md:mx-none md:w="560px"
-    h-280px md:h="400px" height="100%" class="w-4/5  swpier" trigger="click">
+  <el-carousel rounded-6px cursor-pointer :interval="6000" arrow="hover" my-4 md:my-0 mx-auto md:mx-none w-250px md:w="560px"
+    h-280px md:h="380px" height="100%" class="w-4/5  swpier" trigger="click">
     <!-- 骨架屏 -->
     <el-skeleton animated :loading="isLoading" class="ske ">
       <template #template>

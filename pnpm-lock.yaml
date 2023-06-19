@@ -42,12 +42,6 @@ devDependencies:
   '@element-plus/nuxt':
     specifier: ^1.0.5
     version: 1.0.5(@element-plus/icons-vue@2.1.0)(element-plus@2.3.6)(rollup@2.79.1)
-  '@iconify-icons/charm':
-    specifier: ^1.2.8
-    version: 1.2.8
-  '@iconify-icons/solar':
-    specifier: ^1.2.0
-    version: 1.2.0
   '@iconify-json/carbon':
     specifier: ^1.1.16
     version: 1.1.16
@@ -1758,18 +1752,6 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
-    dev: true
-
-  /@iconify-icons/charm@1.2.8:
-    resolution: {integrity: sha512-T492VA/82kxAb09X9sRLONKGmS2Al9kUcyEkzVGJUI1FFPyj7RYVcX1Bn+4rzK6qLyWaaEO9pGWp9nTaznSZ0Q==}
-    dependencies:
-      '@iconify/types': 2.0.0
-    dev: true
-
-  /@iconify-icons/solar@1.2.0:
-    resolution: {integrity: sha512-ku1gupZMbcbvlEMkYrsV0NtC3XXUFwRScPAKYWnimPOCyzbJwbPgLDzd76Vhk/4S2pbmt4R1poOqTzBMp7sWPA==}
-    dependencies:
-      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify-json/carbon@1.1.16:

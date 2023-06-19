@@ -1,9 +1,9 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-// export const baseUrl: string = "http://47.115.226.150:9090"// 开发
-export const baseUrl: string = "http://localhost:9090"// 开发 
-export const baseUrlImg: string = baseUrl + "/res/image/"
-export const baseUrlVideo: string = baseUrl + "/res/video/"
+export const baseUrl: string = "http://47.115.226.150:9090"// 开发
+// export const baseUrl: string = "http://localhost:9090"// 开发 
+export const baseUrlImg: string = baseUrl + "/api/res/image/"
+export const baseUrlVideo: string = baseUrl + "/api/res/video/"
 export default defineNuxtConfig({
   alias: {
     // 配置@使用静态资源
@@ -11,12 +11,6 @@ export default defineNuxtConfig({
   },
   // 全局变量
   runtimeConfig: {
-    // axios: {
-    //   baseURL:
-    //     process.env.NODE_ENV === 'production'
-    //       ? import.meta.env.VITE_APP_PROD_BASE_URL
-    //       : import.meta.env.VITE_APP_DEV_BASE_URL,
-    // },
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
@@ -123,7 +117,7 @@ export default defineNuxtConfig({
     devProxy: {
       "/api": {
         target: baseUrl,
-        // prependPath: false,
+        prependPath: true,
         changeOrigin: true,
       }
     }

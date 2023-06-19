@@ -17,21 +17,19 @@ export default defineConfig({
     // 布局
     ['flex-row-c-c', 'flex flex-justify-center flex-items-center'],
     ['flex-row-bt-c', 'flex flex-justify-between flex-items-center'],
-    ['layout-default','mx-auto w-90vw md:w-70vw p="y-6 x-4"']
+    ['layout-default', 'mx-auto pt-8 pb-6 w-1400px overflow-hidden transition-300'],
   ],
   theme: {
     // ...
-    theme: {
+    colors: {
       'theme': {
-        'color': 'var(--el-color-primary)',
-        'color2': 'var($theme-tip-color)',
-        'color3': 'var($theme-tip-color2)',
+        'primary': 'var(--el-color-primary)',
       }, // class="text-very-cool"
       'tip': {
         'main': 'var(--el-color-primary)', //class="--el-color-primary"
         'green': 'hsla(var(--hue, 217), 78%, 51%)', //class="bg-brand-primary"
       },
-    },
+    }
   },
   presets: [
     presetUno(),
@@ -39,6 +37,12 @@ export default defineConfig({
     presetIcons({
       scale: 1.2,
       warn: true,
+      collections: {
+        carbon: () =>
+          import('@iconify-json/carbon').then((i) => i.icons as any),
+        solar: () =>
+          import('@iconify-json/solar').then((i) => i.icons as any)
+      }
     }),
     presetTypography(),
     presetWebFonts({

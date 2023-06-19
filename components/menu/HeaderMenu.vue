@@ -86,8 +86,9 @@ const onSerch = (val: string) => {
  }
 
  .input-search {
-   margin: 0 auto;
-   transform: translateY(-130%);
+   position: absolute;
+   left: 50%;
+   transform: translate(-50%, -130%);
    transition: all 2 * $transition-delay $animate-cubic-bount;
  }
 
@@ -97,12 +98,12 @@ const onSerch = (val: string) => {
 
    .input-search {
      animation-duration: 0.6s;
-     transform: translateY(0%);
+     transform: translate(-50%, 0);
    }
 
    .input-search:focus {
      animation-duration: 0.6s;
-     transform: translateY(0%);
+     transform: translate(-50%, 0);
    }
  }
 </style>

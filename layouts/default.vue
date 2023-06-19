@@ -7,9 +7,8 @@
       <MenuDrawerMenu />
       <!-- 内容 -->
       <slot></slot>
-    </div>
   </div>
-</template>
+</div></template>
 <script lang="ts" setup>
 
 </script>

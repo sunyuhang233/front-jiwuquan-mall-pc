@@ -8,10 +8,10 @@
         <div class="content" relative>
           <!-- 搜索 -->
           <div class="v-input" flex-row-c-c pb-2>
-            <ElInput @click="isShowResult=true" ref="searchInpRef" @focus="isShowResult = true" input-style="" class="mr-1 lg:mr-2" type="text"
-              size="large" clearable autocomplete="off" :prefix-icon="ElIconSearch" minlength="2" maxlength="30"
-              v-model.trim="searchKeyWords" :onSearch="onSearch" :placeholder="'搜索商品'" @blur="clearSearch"
-              @keyup.esc="clearSearch" @keyup.enter="onSearch" />
+            <ElInput @click="isShowResult = true" ref="searchInpRef" @focus="isShowResult = true" input-style=""
+              class="mr-1 lg:mr-2" type="text" size="large" clearable autocomplete="off" :prefix-icon="ElIconSearch"
+              minlength="2" maxlength="30" v-model.trim="searchKeyWords" :onSearch="onSearch" :placeholder="'搜索商品'"
+              @blur="clearSearch" @keyup.esc="clearSearch" @keyup.enter="onSearch" />
             <ElButton type="primary" w-66px @click="onSearch" style="transition: 0.2s;" :loading="isLoading">
               搜索
             </ElButton>
@@ -36,17 +36,19 @@
         </span>
         <ElIconCloseBold width="1.6em" absolute right-1em top-1em cursor-pointer style="color: var(--el-color-primary);"
           shadow shadow-inset rounded-4px active:transform-scale-80 transition-300 @click="clearSearch" />
-        <ElScrollbar @scroll="onLoadMore" overflow-hidden pt-3 flex-col v-loading="isLoading" element-loading-background="transparent">
+        <ElScrollbar @scroll="onLoadMore" overflow-hidden pt-3 flex-col v-loading="isLoading"
+          element-loading-background="transparent">
           <!-- 跳转详情页 -->
-            <NuxtLink :to="`/goods/detail?id=${p.id}`" class="mt-2  animate__animated animate__fadeIn" v-for="(p, i) in searchPageList"
-              :key="p.id">
-              <!-- 商品卡片 -->
-              <CardGoodsLine :goods="p" :key="p.id" />
-              <ElDivider dark:opacity-50 v-if="i !== (searchPageList.length - 1)"
-                style="width: 100%;margin: 0.6em auto;margin-bottom: 0.8em; " />
-            </NuxtLink>
+          <NuxtLink :to="`/goods/detail?id=${p.id}`" class="mt-2  animate__animated animate__fadeIn"
+            v-for="(p, i) in searchPageList" :key="p.id">
+            <!-- 商品卡片 -->
+            <CardGoodsLine :goods="p" :key="p.id" />
+            <ElDivider dark:opacity-50 v-if="i !== (searchPageList.length - 1)"
+              style="width: 100%;margin: 0.6em auto;margin-bottom: 0.8em; " />
+          </NuxtLink>
           <ElEmpty mt-10 :image-size="80" description="没有找到商品" v-show="searchPageList.length <= 0" />
-          <p @click="onLoadMore" v-if="searchPageList.length < searchPage.total " py-2 opacity-80 text-center tracking-2px cursor-pointer :v-loading="true">加载更多</p>
+          <p @click="onLoadMore" v-if="searchPageList.length < searchPage.total" py-2 opacity-80 text-center tracking-2px
+            cursor-pointer :v-loading="true">加载更多</p>
           <p v-show="noMore" py-2 opacity-80 text-center tracking-2px>没有更多了</p>
         </ElScrollbar>
       </template>
@@ -104,7 +106,7 @@ const onSearch = async () => {
     current: 0
   });
 
-  const { data } = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
+  const data = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
   const pageData = data.data;
   // 展示结果
   searchPage = toReactive({ ...pageData });
@@ -131,7 +133,7 @@ const onSearch = async () => {
 const onLoadMore = async () => {
   if (page.value < searchPage.pages) {
     page.value += 1;
-    const { data } = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
+    const data = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
     const pageData = data.data;
     // 展示结果
     searchPage = toReactive({ ...pageData });

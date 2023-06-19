@@ -1,4 +1,5 @@
-import { isTrue } from "..";
+import { isTrue } from "../result";
+
 
 // 简约商品视图对象
 export interface GoodsVO {

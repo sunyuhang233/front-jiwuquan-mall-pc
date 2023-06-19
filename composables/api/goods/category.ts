@@ -1,6 +1,4 @@
-import { AxiosPromise, AxiosResponse } from "axios";
-import { Result } from "@/types/result";
-import { request } from '@/utils/request';
+import { Result } from "@/types/result"; 
 /**
  * 获取分页商品列表
  * @returns 

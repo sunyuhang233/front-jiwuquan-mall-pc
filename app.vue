@@ -10,9 +10,7 @@ app.hook("app:mounted", () => {
     store.onCheckLogin()
   }
 })
-
-// useAsyncData(async () => {
-app.hook("page:finish", () =>{  
+useAsyncData(async() => {
   // 当对象进入窗体可视范围 IntersectionObserver
   let observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(item => {
@@ -52,8 +50,7 @@ app.hook("page:finish", () =>{
   <FormUserDialog />
   <NuxtPage />
 </template>
-<style>
-
+<style> 
 .page-enter-active,
 .page-leave-active {
   transition: all 0.2s;

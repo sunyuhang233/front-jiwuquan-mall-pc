@@ -8,7 +8,7 @@ const route = useRoute()
 <template>
   <!-- 菜单 -->
   <ClientOnly>
-    <ElAffix :offset="64" style="padding: 0;transition: 300ms;">
+    <ElAffix :offset="64" style="padding: 0;">
       <transition name="slideInOut">
         <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
           <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
@@ -43,16 +43,16 @@ const route = useRoute()
 
           <!-- 折叠按钮 -->
           <div class="collapse" flex-row-c-c p-2 duration-300 @click="isFold = !isFold">
-            <ElIconArrowRightBold skew-y-2 />
+            <ElIconArrowLeftBold skew-y-2 />
           </div>
         </div>
       </transition>
-      <!-- 折叠按钮 -->
-      <div v-show="isFold" class="collapse animate__animated animate__bounceIn collapse2" flex-row-c-c p-l-3 duration-300
-        @click="isFold = !isFold">
-        <ElIconArrowRightBold />
-      </div>
     </ElAffix>
+    <!-- 折叠按钮 -->
+    <div v-show="isFold" class="collapse  animate__animated animate__bounceIn collapse2" flex-row-c-c p-l-3 duration-300
+      @click="isFold = !isFold">
+      <ElIconArrowRightBold />
+    </div>
   </ClientOnly>
 </template>
 
@@ -60,6 +60,8 @@ const route = useRoute()
 .menu-list {
   user-select: none;
   position: relative;
+  left: 0;
+  z-index: 99;
   height: calc(100vh - $top-nav-height);
   transition: $transition-delay;
 
@@ -105,10 +107,11 @@ const route = useRoute()
 // 折叠按钮
 .collapse {
   position: absolute;
-  bottom: 0;
+  z-index: 129;
+  bottom: 1em;
   right: 0;
-  width: 2.4em;
-  height: 2.4em;
+  width: 3em;
+  height: 3em;
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
@@ -130,9 +133,11 @@ const route = useRoute()
 }
 
 .collapse2 {
+  position: fixed;
   left: -1em;
-  bottom: 1em;
-  height: 2.6em;
+  bottom: 2.5em;
+  width: 2.5em;
+  height: 3.2em;
   border-radius: 0 0.3em 0.3em 0;
   transition: $transition-delay;
   animation-delay: $transition-delay;

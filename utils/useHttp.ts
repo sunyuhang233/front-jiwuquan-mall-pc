@@ -1,8 +1,6 @@
-import { merge } from 'lodash'
 type FetchType = typeof $fetch
 type ReqType = Parameters<FetchType>[0]
 type FetchOptions = Parameters<FetchType>[1]
-
 export function httpRequest<T = unknown>(
   method: any,
   url: ReqType,
@@ -10,10 +8,10 @@ export function httpRequest<T = unknown>(
   opts?: FetchOptions,
 ) {
   const store = useUserStore()
-  let msg = ""
+  let msg:string = "";
   const defaultOpts = {
     method,
-    baseURL: '/api',
+    baseURL: getBaseUrl(),
     headers: { token: store.token } as any,
     // 请求拦截器
     onRequest: (coinfig) => {
@@ -120,7 +118,7 @@ export function httpRequest<T = unknown>(
     else
       defaultOpts.params = bodyOrParams
   }
-  return $fetch<T>(url, merge(defaultOpts, opts))
+  return $fetch<T>(url,{...defaultOpts, ...opts})
 }
 
 export const useHttp = {
