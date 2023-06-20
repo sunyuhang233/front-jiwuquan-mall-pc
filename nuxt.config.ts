@@ -1,9 +1,7 @@
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-export const baseUrl: string = "http://47.115.226.150:9090"// 开发
-// export const baseUrl: string = "http://localhost:9090"// 开发 
-export const baseUrlImg: string = baseUrl + "/api/res/image/"
-export const baseUrlVideo: string = baseUrl + "/api/res/video/"
+import { BaseUrl } from './composables/utils/useFetchUtil'
+
 export default defineNuxtConfig({
   alias: {
     // 配置@使用静态资源
@@ -96,7 +94,7 @@ export default defineNuxtConfig({
   },
 
   devServer: {
-    url: baseUrl
+    url: BaseUrl
   },
   // pinia持久化到会话存储
   piniaPersistedstate: {
@@ -116,7 +114,7 @@ export default defineNuxtConfig({
     },
     devProxy: {
       "/api": {
-        target: baseUrl,
+        target: BaseUrl,
         prependPath: true,
         changeOrigin: true,
       }

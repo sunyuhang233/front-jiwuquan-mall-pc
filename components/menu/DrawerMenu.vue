@@ -1,56 +1,95 @@
 <script lang="ts" setup>
-import { useStorage } from '@vueuse/core';
+import { useStorage } from "@vueuse/core";
 // 是否折叠  本地状态
-const isFold = useStorage<boolean>("jiwu_isFold", true)
+const isFold = useStorage<boolean>("jiwu_isFold", true);
 // 路由
-const route = useRoute()
+const route = useRoute();
 </script>
 <template>
   <!-- 菜单 -->
   <ClientOnly>
-    <ElAffix :offset="64" style="padding: 0;">
-      <transition name="slideInOut">
-        <div v-show="!isFold" class="menu-list" w-auto md:w-200px>
-          <el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
-            <!-- 首页 -->
-            <el-menu-item index="/">
-              <ElIconHomeFilled />
-              <div class="title" mx-4 hidden sm:inline-block>
-                首&emsp;页
-              </div>
-            </el-menu-item>
-            <!-- 社区 -->
-            <el-menu-item index="/community">
-              <ElIconSwitchFilled />
-              <div class="title" mx-4 hidden sm:inline-block>
-                社&emsp;区
-              </div>
-            </el-menu-item>
-            <!-- 圈子 -->
-            <el-menu-item index="/quanzi">
-              <ElIconGoodsFilled />
-              <div class="title" mx-4 hidden sm:inline-block>
-                极物圈
-              </div>
-            </el-menu-item>
-            <el-menu-item index="/setting">
-              <ElIconSetting />
-              <div class="title" mx-4 hidden sm:inline-block>
-                设&emsp;置
-              </div>
-            </el-menu-item>
-          </el-menu>
+    <transition name="slideInOut">
+      <div
+        v-show="!isFold"
+        class="menu-list"
+        w-auto
+        md:w-200px
+      >
+        <el-menu
+          :router="true"
+          :default-active="route.path"
+          bg=" dark:dark-600"
+        >
+          <!-- 首页 -->
+          <el-menu-item index="/">
+            <ElIconHomeFilled />
+            <div
+              class="title"
+              mx-4
+              hidden
+              sm:inline-block
+            >
+              首&emsp;页
+            </div>
+          </el-menu-item>
+          <!-- 社区 -->
+          <el-menu-item index="/community">
+            <ElIconSwitchFilled />
+            <div
+              class="title"
+              mx-4
+              hidden
+              sm:inline-block
+            >
+              社&emsp;区
+            </div>
+          </el-menu-item>
+          <!-- 圈子 -->
+          <el-menu-item index="/quanzi">
+            <ElIconGoodsFilled />
+            <div
+              class="title"
+              mx-4
+              hidden
+              sm:inline-block
+            >
+              极物圈
+            </div>
+          </el-menu-item>
+          <el-menu-item index="/setting">
+            <ElIconSetting />
+            <div
+              class="title"
+              mx-4
+              hidden
+              sm:inline-block
+            >
+              设&emsp;置
+            </div>
+          </el-menu-item>
+        </el-menu>
 
-          <!-- 折叠按钮 -->
-          <div class="collapse" flex-row-c-c p-2 duration-300 @click="isFold = !isFold">
-            <ElIconArrowLeftBold skew-y-2 />
-          </div>
+        <!-- 折叠按钮 -->
+        <div
+          class="collapse"
+          flex-row-c-c
+          p-2
+          duration-300
+          @click="isFold = !isFold"
+        >
+          <ElIconArrowLeftBold skew-y-2 />
         </div>
-      </transition>
-    </ElAffix>
+      </div>
+    </transition>
     <!-- 折叠按钮 -->
-    <div v-show="isFold" class="collapse  animate__animated animate__bounceIn collapse2" flex-row-c-c p-l-3 duration-300
-      @click="isFold = !isFold">
+    <div
+      v-show="isFold"
+      class="collapse animate__animated animate__bounceIn collapse2"
+      flex-row-c-c
+      p-l-3
+      duration-300
+      @click="isFold = !isFold"
+    >
       <ElIconArrowRightBold />
     </div>
   </ClientOnly>
@@ -58,8 +97,8 @@ const route = useRoute()
 
 <style lang="scss" scoped>
 .menu-list {
+  position: fixed;
   user-select: none;
-  position: relative;
   left: 0;
   z-index: 99;
   height: calc(100vh - $top-nav-height);
@@ -101,7 +140,6 @@ const route = useRoute()
       border-right: 3px solid var(--el-color-primary);
     }
   }
-
 }
 
 // 折叠按钮

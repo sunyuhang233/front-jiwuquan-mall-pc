@@ -8,8 +8,16 @@ import { IPage } from "~/types";
  * @param dto 查询参数
  * @returns 
  */
-export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO): Promise<Result<IPage<GoodsVO>>> {
-  return useHttp.post(`/goods/list/${page}/${size}`, { ...dto }) 
+export function getGoodsListByPageLazy(page: number, size: number, dto: GoodsPageDTO) {
+  return useLazyFetch<Result<IPage<GoodsVO>>>(()=>BaseUrl + `/goods/list/${page}/${size}`, {
+    method: "POST",
+    body: { ...dto }
+  })
+}
+// 客户端请求
+export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO) {
+  return useHttp.post<Result<IPage<GoodsVO>>>(`/goods/list/${page}/${size}`,
+    { ...dto })
 }
 /**商品分页参数类型 */
 export interface GoodsPageDTO {
@@ -26,8 +34,8 @@ export interface GoodsPageDTO {
  * @param gid 
  * @returns 
  */
-export function getGoodsInfoById(gid: string): Promise<Result<GoodsInfoVO>> {
-  return useHttp.get(`/goods/${gid}`);
+export function getGoodsInfoById(gid: string) {
+  return useFetchUtil.get<Result<GoodsInfoVO>>(BaseUrl + `/goods/${gid}`);
 }
 export interface GoodsInfoVO {
   id: string;

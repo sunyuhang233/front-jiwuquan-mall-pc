@@ -1,12 +1,12 @@
 import { Result } from "@/types/result"; 
 /**
- * 获取分页商品列表
+ * 获取全部分类列表
  * @returns 
  */
-export function getGoodsCategoryList(): Promise<Result<Category[]>> {
-  return useHttp.get("/goods/category/list")
+export function getGoodsCategoryList() {
+  return useFetch<Result<CategoryVO[]>>("/goods/category/list")
 }
-export interface Category {
+export interface CategoryVO {
   id: string;
   name: string;
   parentId: string;
@@ -15,5 +15,5 @@ export interface Category {
   isShow: number;
   createTime: string;
   updateTime: string;
-  children: Category[];
+  children?: CategoryVO[];
 }

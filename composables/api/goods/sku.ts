@@ -1,15 +1,11 @@
 import { AxiosPromise } from "axios";
-import { request } from "~/utils/request";
 import { Result, isTrue } from "@/types/result";
 /**
  * 获取分页商品列表
  * @returns 
  */
-export function getGoodsSkuByGid(gid: string): AxiosPromise<Result<GoodsSku[]>> {
-  return request({
-    method: "GET",
-    url: `/goods/sku/${gid}`,
-  }) as AxiosPromise<Result<GoodsSku[]>>;
+export function getGoodsSkuByGid(gid: string) {
+  return useFetchUtil.get<Result<GoodsSku[]>>(`/goods/${gid}`);
 }
 export interface GoodsSku {
   id: string;
