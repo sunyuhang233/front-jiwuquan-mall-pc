@@ -23,7 +23,7 @@ const { goods } = defineProps<{
 			<!-- 中下 -->
 			<p color-red-6 mt-1 mb-5>
 				￥{{ goods.price?.toFixed(2) }}
-				<small color-coolgray text-0.4em style="text-decoration: line-through">{{
+				<small color-coolgray text-0.4em style="text-decoration: line-through">￥{{
 					goods.costPrice.toFixed(2)
 				}}</small>
 			</p>

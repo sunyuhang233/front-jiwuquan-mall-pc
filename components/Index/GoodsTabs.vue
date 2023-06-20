@@ -1,6 +1,7 @@
 <template>
   <el-tabs
-    class="goods-tabs"
+    class="goods-tabs" 
+    min-h-40vh
     tab-position="top"
     v-model="activeMenu"
   >

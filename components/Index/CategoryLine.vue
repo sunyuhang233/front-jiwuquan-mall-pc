@@ -1,7 +1,6 @@
 <template>
 	<div class="category-list">
-		<div class="bg"></div>
-		<h3 class="title" dark:text-amber-4>
+		<h3 class="title" dark:text-amber-4 pl-1>
 			热门分类
 			<i i-solar:adhesive-plaster-bold-duotone ml-4 p-3 bg-yellow-4></i>
 		</h3>

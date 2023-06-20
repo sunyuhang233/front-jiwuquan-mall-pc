@@ -2,7 +2,7 @@
   <!-- <el-switch :active-icon="ElIconAddLocation" :value="isDark" inline-prompt @click="toggle">
   </el-switch> -->
   <ElButton @click="toggle"  class="btn" mx-3 round>
-    <ClientOnly><span>{{ isDark ? '切换日间' : '切换夜间' }}</span></ClientOnly>
+   <span>{{ isDark ? '切换日间' : '切换夜间' }}</span>
     <OtherMoonSun />
   </ElButton>
 </template>
@@ -31,25 +31,27 @@ let toggle = (event: MouseEvent) => {
   const x = event.clientX
   const y = event.clientY
   const endRadius = Math.hypot(
-    Math.max(x, innerWidth - x),
-    Math.max(y, innerHeight - y),
+    Math.floor(Math.max(x, innerWidth - x)),
+    Math.floor(Math.max(y, innerHeight - y)),
   )
   // @ts-expect-error: Transition API
   const transition = document.startViewTransition(() => {
     isDark.value = !isDark.value
   })
+  
   transition.ready.then(() => {
     const clipPath = [
       `circle(0px at ${x}px ${y}px)`,
-      `circle(${endRadius}px at ${x}px ${y}px)`,
+      `circle(${endRadius.toFixed(0)}px at ${x}px ${y}px)`,
     ]
+    
     document.documentElement.animate(
       {
         clipPath: isDark.value ? clipPath : [...clipPath].reverse(),
       },
       {
-        duration: 300,
-        easing: 'ease-in',
+        duration: 400,
+        easing: "linear",
         pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
       },
     )

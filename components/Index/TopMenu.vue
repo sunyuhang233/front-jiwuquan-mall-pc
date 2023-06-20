@@ -4,7 +4,7 @@
     <img absolute bg-color-indigo-6 z-0 flex-2 src="@/assets/images/logo/logo_txt.png" filter-blur-30 w-240px
       alt="极物圈 logo">
     <!-- 问候语 -->
-    <div px-5 class="title animate__animated animate__fadeInDown" mt-4 mb-8>
+    <div ml-10 px-5 class="title animate__animated animate__fadeInDown" mt-3 mb-8>
       <p text-lg py-2 tracking-1 opacity-80>
         <ClientOnly>
         {{ useNowDateText(new Date()) }}好，

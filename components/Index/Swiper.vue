@@ -63,7 +63,7 @@ const getEndDay = computed(() => {
 		mx-auto
 		md:mx-none
 		w-250px
-		md:w="580px"
+		md:w="620px"
 		h-280px
 		md:h="420px"
 		height="100%"

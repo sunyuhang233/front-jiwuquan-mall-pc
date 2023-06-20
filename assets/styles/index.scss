@@ -3,8 +3,6 @@
   padding: 0;
   font-family: Helvetica;
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
-    sans-serif;
 }
 :root {
   --animate-duration: $transition-delay;
@@ -29,16 +27,10 @@ span {
 }
 
 // 页面
-body {
+html,body {
   min-height: 100vh;
 }
 
-.dark,
-.light {
-  // will-change: transform,color,background-color,height;
-  transition-property: background-clolor, box-shadow, color;
-  transition-duration: $transition-delay;
-}
 
 @media screen and (min-width: 320px) {
   html {
@@ -67,6 +59,7 @@ html.dark {
   height: 8px;
   background-color: rgba(255, 255, 255, 0);
 }
+
 /*定义滚动条轨道
   内阴影+圆角*/
 ::-webkit-scrollbar-track {
@@ -106,6 +99,8 @@ html.dark {
   right: 50%;
   transform: translate(-50%, -50%);
 }
+
+
 // 路由跳转导航条
 // 自定义进度条颜色
 #nprogress .bar {
@@ -115,4 +110,28 @@ html.dark {
 .dark #nprogress .bar {
   height: 3px;
   background: $loading-color-dark2 !important; //自定义颜色
+}
+
+// 
+.bg {
+  position: absolute;
+  transform: translate(50%, -50%);
+  z-index: -99;
+  width: 60%;
+  height: 60%;
+  opacity: 0.6;
+  filter: blur(60px);
+  border-radius: 50%;
+  background: radial-gradient(
+      104.24% 141.88% at 8.26% 9.64%,
+      #b95be6 0%,
+      rgba(185, 91, 230, 0.18) 69.92%,
+      rgba(185, 91, 230, 0) 100%
+    ),
+    radial-gradient(
+      103.57% 140.97% at 14.06% 105.21%,
+      #f97c59 0%,
+      rgba(249, 124, 89, 0.19) 72.45%,
+      rgba(249, 124, 89, 0) 100%
+    );
 }

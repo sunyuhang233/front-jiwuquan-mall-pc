@@ -11,7 +11,6 @@
 		border="1px solid gray-200"
 		dark:border="1px solid dark-200"
 	>
-		<div class="bg"></div>
 		<h3 px-1 pb-4>
 			热门商品
 			<span p-3 bg-red-6 mx-2 i-solar:fire-bold></span>
@@ -130,27 +129,6 @@ isLoading.value = false;
 	position: relative;
 	backdrop-filter: blur(20px);
 
-	.bg {
-		position: absolute;
-		transform: translate(50%, -50%);
-		z-index: -99;
-		width: 60%;
-		height: 60%;
-		opacity: 0.6;
-		filter: blur(60px);
-		border-radius: 50%;
-		background: radial-gradient(
-				104.24% 141.88% at 8.26% 9.64%,
-				#b95be6 0%,
-				rgba(185, 91, 230, 0.18) 69.92%,
-				rgba(185, 91, 230, 0) 100%
-			),
-			radial-gradient(
-				103.57% 140.97% at 14.06% 105.21%,
-				#f97c59 0%,
-				rgba(249, 124, 89, 0.19) 72.45%,
-				rgba(249, 124, 89, 0) 100%
-			);
-	}
+
 }
 </style>

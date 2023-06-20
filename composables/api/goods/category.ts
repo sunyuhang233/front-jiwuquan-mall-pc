@@ -4,7 +4,7 @@ import { Result } from "@/types/result";
  * @returns 
  */
 export function getGoodsCategoryList() {
-  return useFetch<Result<CategoryVO[]>>("/goods/category/list")
+  return useFetch<Result<CategoryVO[]>>(BaseUrl+"/goods/category/list")
 }
 export interface CategoryVO {
   id: string;
