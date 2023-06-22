@@ -1,6 +1,7 @@
 type FetchType = typeof $fetch
 type ReqType = Parameters<FetchType>[0]
 type FetchOptions = Parameters<FetchType>[1]
+
 export function httpRequest<T = unknown>(
   method: any,
   url: ReqType,
@@ -8,13 +9,21 @@ export function httpRequest<T = unknown>(
   opts?: FetchOptions,
 ) {
   const store = useUserStore()
-  let msg:string = "";
+  let msg: string = "";
   const defaultOpts = {
     method,
     baseURL: getBaseUrl(),
-    headers: { token: store.token } as any,
+    headers: {} as { Authoriztion?: string },
     // 请求拦截器
-    onRequest: (coinfig) => {
+    onRequest: (config) => {
+      // 需要登录操作
+      // @ts-ignore
+      if (config.options.headers?.Authorization !== undefined) {
+        // @ts-ignore
+        if (config.options.headers?.Authorization === "") {
+          store.showLoginForm = true;
+        }
+      }
     },
     // 响应拦截器
     /**
@@ -42,10 +51,10 @@ export function httpRequest<T = unknown>(
         case StatusCode.DELETE_ERR:
           msg = "该目标已不存在！";
           break;
-        case StatusCode.SELECT_ERR:
-          msg = "错误，查询失败！";
-          type = "warn"
-          break;
+        // case StatusCode.SELECT_ERR:
+        //   msg = "错误，查询失败！";
+        //   type = "warn"
+        //   break;
         case StatusCode.UPDATE_ERR:
           msg = "错误，修改失败！";
           break;
@@ -70,7 +79,7 @@ export function httpRequest<T = unknown>(
       if (msg !== "") {
         // 组件
         ElMessage.error({
-          grouping:true,
+          grouping: true,
           type,
           message: data.message,
         });
@@ -84,30 +93,28 @@ export function httpRequest<T = unknown>(
     onResponseError({ response }) {
       switch (response.status) {
         case 400:
-          msg = '参数错误';
+          msg = '请求参数错误！';
           break
         case 401:
-          msg = '没有访问权限';
           store.$patch({
             showLoginForm: true,
             showRegisterForm: false,
           })
           break
         case 403:
-          msg = '服务器拒绝访问';
+          msg = '拒绝访问！';
           break
         case 404:
-          msg = '请求地址错误';
+          msg = '请求地址错误！';
           break
         case 500:
-          msg = '服务器故障';
-          break
-        default:
-          msg = '网络连接故障';
+          msg = '服务器故障！';
           break
       }
       // 客户端报错
-      ElMessage.error("服务器错误，请稍后重试！")
+      if (msg) {
+        ElMessage.error(msg)
+      }
     },
   } as FetchOptions
   if (defaultOpts) {
@@ -118,7 +125,7 @@ export function httpRequest<T = unknown>(
     else
       defaultOpts.params = bodyOrParams
   }
-  return $fetch<T>(url,{...defaultOpts, ...opts})
+  return $fetch<T>(url, { ...defaultOpts, ...opts })
 }
 
 export const useHttp = {

@@ -29,4 +29,16 @@ app.hook("app:mounted", () => {
   filter: blur(0.4em);
 }
 
+
+.layout-enter-active,
+.layout-leave-active {
+  transition: filter 0.24s;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0.2;
+  filter: blur(0.4em);
+}
+
 </style>

@@ -1,15 +1,15 @@
-
+<script lang="ts" setup></script>
 <template>
-  <NuxtLayout>
-    <div class="index" p="y-2 x-4" flex-row-c-c>
-      <ElButton >
-        <NuxtLink to="/" >
-          <span text-black font-700>返回主页</span>
-        </NuxtLink>
-      </ElButton>
-    </div>
-  </NuxtLayout>
+	<div class="error-page">
+		<MenuHeaderMenu />
+		<div flex-row-c-c mx-a>
+			<ElEmpty>
+				<div flex-row-c-c flex-col>
+					<h3 mb-5>404, 页面找不到</h3>
+					<ElButton @click="useRouter().back()" plain type="primary"> 返回 </ElButton>
+				</div>
+			</ElEmpty>
+		</div>
+	</div>
 </template>
-<script lang="ts" setup>
-</script>
 <style scoped lang="scss"></style>

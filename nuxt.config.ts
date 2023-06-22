@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
     '@pinia/nuxt',
+    'nuxt-swiper',
     '@pinia-plugin-persistedstate/nuxt'
   ],
   experimental: {

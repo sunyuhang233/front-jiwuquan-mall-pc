@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { type GoodsPageDTO } from '@/composables/api/goods';
-import { getGoodsListByPage } from '@/composables/api/goods'; 
+import { getGoodsListByPage } from '@/composables/api/goods';
 import { IPage } from '~/types';
 import { GoodsVO } from '~/types/goods';
 
@@ -54,9 +54,7 @@ const loadGoodsPage = async () => {
 		});
 	}
 };
-loadGoodsPage();// 加载一次
-
-
+loadGoodsPage(); // 加载一次
 
 const clearResult = () => {
 	goodsList.value = [];
@@ -77,25 +75,27 @@ const toGoodsView = (id: string) => {
 </script>
 <template>
 	<div class="goods-list" overflow-hidden flex style="overflow: auto" flex-wrap>
-		<transition-group name="popup">
-      <!-- 商品卡片 -->
-			<CardGoodsBox
-				@click="toGoodsView(p.id)"
-				class="mx-2.4 my-5 transition-300"
-				:goods="p"
-				:key="p.id"
-				v-infinite-scroll="loadGoodsPage"
-				:infinite-scroll-disabled="isNoMore || !isLoading"
-				element-loading-background="transparent"
-				v-for="p in goodsList"
-			>
-				<small float-right mt-2px text-blueGray>销量：{{ p.sales }}</small>
-			</CardGoodsBox>
-		</transition-group>
-		<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
-			暂无更多商品
-		</p>
-		<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
+		<ClientOnly>
+			<transition-group name="popup">
+				<!-- 商品卡片 -->
+				<CardGoodsBox
+					@click="toGoodsView(p.id)"
+					class="mr-5 my-5 transition-300"
+					:goods="p"
+					:key="p.id"
+					v-infinite-scroll="loadGoodsPage"
+					:infinite-scroll-disabled="isNoMore || !isLoading"
+					element-loading-background="transparent"
+					v-for="p in goodsList"
+				>
+					<small float-right mt-2px text-blueGray>销量：{{ p.sales }}</small>
+				</CardGoodsBox>
+			</transition-group>
+			<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
+				暂无更多商品
+			</p>
+			<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
+		</ClientOnly>
 	</div>
 </template>
 <style scoped lang="scss">

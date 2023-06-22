@@ -31,6 +31,19 @@ export const useUserStore = defineStore('user', () => {
     isPhoneVerified: 0,
   })
 
+  const getToken = computed({
+    get() {
+      if (!isLogin || !token.value) {
+        showLoginForm.value = true;
+        return "";
+      }
+      return token.value
+    },
+    set(value) {
+      token.value = value
+    }
+  })
+
   /**
    * 用户登录
    * @param token token
@@ -86,7 +99,9 @@ export const useUserStore = defineStore('user', () => {
     // actions
     onUserLogin,
     onCheckLogin,
-    onUserExit
+    onUserExit,
+    // getter
+    getToken
   }
 }, {
   // https://juejin.cn/post/7216182763250581564  持久化

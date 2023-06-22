@@ -31,7 +31,7 @@
 }
 .popup-enter-from,
 .popup-leave-to {
-  transform: scale(0.9);
+  transform: scale(0.95);
   opacity: 0;
   transition: calc($transition-delay / 2);
 }
@@ -55,11 +55,26 @@
 
 // fade-in-out
 .fadeInOut-enter-active {
-  animation: 0.2s fadeIn $animate-cubic;
+  animation: 0.15s fadeIn;
 }
 .fadeInOut-leave-active {
-  animation: 0.2s fadeOut $animate-cubic;
+  animation: 0.15s fadeIn reverse;
 }
+@keyframes fade-in-out {
+  0% {
+    position: absolute;
+    transition: 0.3s;
+    width: 100%;
+    opacity: 0;
+  }
+  100% {
+    position: absolute;
+    transition: 0.3s;
+    width: 100%;
+    opacity: 1;
+  }
+} 
+
 .animate__animated {
   animation-duration: $transition-delay;
 }

@@ -9,7 +9,7 @@ import { IPage } from "~/types";
  * @returns 
  */
 export function getGoodsListByPageLazy(page: number, size: number, dto: GoodsPageDTO) {
-  return useLazyFetch<Result<IPage<GoodsVO>>>(()=>BaseUrl + `/goods/list/${page}/${size}`, {
+  return useFetch<Result<IPage<GoodsVO>>>(()=>BaseUrl + `/goods/list/${page}/${size}`, {
     method: "POST",
     body: { ...dto }
   })
@@ -19,6 +19,7 @@ export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO
   return useHttp.post<Result<IPage<GoodsVO>>>(`/goods/list/${page}/${size}`,
     { ...dto })
 }
+
 /**商品分页参数类型 */
 export interface GoodsPageDTO {
   cid?: string,
@@ -29,13 +30,15 @@ export interface GoodsPageDTO {
   saleSort?: Sort,
   isNew?: isTrue,
 }
+
+
 /**
  * 商品详细信息
  * @param gid 
  * @returns 
  */
 export function getGoodsInfoById(gid: string) {
-  return useFetchUtil.get<Result<GoodsInfoVO>>(BaseUrl + `/goods/${gid}`);
+  return useFetch<Result<GoodsInfoVO>>(BaseUrl + `/goods/item/${gid}`);
 }
 export interface GoodsInfoVO {
   id: string;
@@ -45,7 +48,7 @@ export interface GoodsInfoVO {
   costPrice: number;
   postage: number;
   categoryId: string;
-  images: string;
+  images?: string[];
   video: string;
   isNew: number;
   warrantyTime: number;

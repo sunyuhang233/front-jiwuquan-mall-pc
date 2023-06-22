@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
 	layout: 'default',
-	title: 'Page Title',
-  description: 'Page Description',
-  keywords: 'Page Keywords'
 });
-
 </script>
 <template>
 	<NuxtLayout>
@@ -24,7 +20,7 @@ definePageMeta({
 					</div>
 				</div>
 			</div>
-			<div class="bottom" overflowx-hidden min-h-80vh>
+			<div class="bottom" overflowx-hidden >
 				<div mt-6 layout-default>
 					<!-- 热门商品分类 -->
 					<IndexCategoryLine />
@@ -35,7 +31,7 @@ definePageMeta({
 			</div>
 			<!-- 购物车 -->
 			<div class="shop-card" overflow-hidden>
-				<IndexShopCartBar />
+				<MenuShopCartBar />
 			</div>
 		</div>
 	</NuxtLayout>

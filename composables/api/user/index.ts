@@ -1,4 +1,3 @@
-import { AxiosPromise } from "axios";
 import { Result, isTrue } from "@/types/result";
 /**
  * 账号密码登录
@@ -28,8 +27,6 @@ export function toLoginByEmail(email: string, code: string) {
 export function toLoginByPhone(phone: string, code: string): Promise<Result<string>> {
   return useHttp.post<Result<string>>("/user/login/phone", { phone, code })
 }
-
-
 
 
 /**

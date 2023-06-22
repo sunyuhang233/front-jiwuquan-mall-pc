@@ -78,17 +78,32 @@ const toView = (path: string) => {
 			<!-- 头像弹窗 -->
 			<el-popover placement="top" :offset="20" :width="320" trigger="hover">
 				<template #reference>
-					<!-- 替换头像 -->
-					<el-badge :is-dot="!p.avatar || p.avatar === 'default.png'" class="item">
-						<el-avatar
-							:src="
-								!p.avatar || p.avatar === 'default.png' ? '' : BaseUrlImg + p.avatar
-							"
-							class="hovers"
+					<div flex-row-c-c border-l="1px dashed gray" dark:border-l-dark>
+						<!-- 替换头像 -->
+						<el-badge
+							:is-dot="!p.avatar || p.avatar === 'default.png'"
+							class="item pr-2 pl-4"
 						>
-							<span i-solar:user-bold style="width: 60%; height: 60%"></span>
-						</el-avatar>
-					</el-badge>
+							<el-avatar
+								:src="
+									!p.avatar || p.avatar === 'default.png'
+										? ''
+										: BaseUrlImg + p.avatar
+								"
+								class="hovers"
+							>
+								<span i-solar:user-bold style="width: 60%; height: 60%"></span>
+							</el-avatar>
+						</el-badge>
+						<div pl-2>
+							<h4 tracking-1px w-7em class="overflow-hidden truncate ...">
+								{{ p.nickname }}
+							</h4>
+							<el-tag opacity-70 class="p-0 overflow-hidden truncate ...">{{
+								p.phone || '未绑定手机号'
+							}}</el-tag>
+						</div>
+					</div>
 				</template>
 				<!-- 卡片 -->
 				<template #default>
@@ -122,35 +137,73 @@ const toView = (path: string) => {
 						</el-upload>
 						<div class="bottom" flex-col>
 							<h3 class="title" py-1>{{ p.nickname }}</h3>
-							<div flex flex-wrap>
-								<el-card shadow="hover" class="v-card" @click="toView('/my/info')">
+							<!-- 卡片集合 -->
+							<div flex flex-wrap mb-2>
+								<!-- 收货地址 -->
+								<el-card shadow="hover" class="v-card" @click="toView('/shopcart')">
 									<p
-										class="icon myself"
+										class="icon shopcart"
 										bg-yellow-5
-										i-solar:user-id-bold-duotone
+										i-solar:compass-bold-duotone
 									></p>
-									<p>主页</p>
+									<p mt-2>收货地址</p>
 								</el-card>
+								<!-- 钱包 -->
+								<el-card
+									shadow="hover"
+									class="v-card"
+									@click="toView('/user/wallet')"
+								>
+									<p class="icon wallet" bg-red-5 i-solar:wallet-bold-duotone></p>
+									<p mt-2>钱 包</p>
+								</el-card>
+								<!-- 购物车 -->
 								<el-card shadow="hover" class="v-card" @click="toView('/shopcart')">
 									<p
 										class="icon shopcart"
 										bg-yellow-5
 										i-solar:cart-large-2-bold
 									></p>
-									<p>购物车</p>
+									<p mt-2>购物车</p>
+								</el-card>
+								<!-- 订单 -->
+								<el-card shadow="hover" class="v-card" @click="toView(`/order`)">
+									<p
+										class="icon myself"
+										bg-yellow-5
+										i-solar:clipboard-bold-duotone
+									></p>
+									<p mt-2>订 单</p>
 								</el-card>
 								<el-card
 									shadow="hover"
 									class="v-card"
-									@click="toView('/my/wallet')"
+									@click="toView(`/user/bill`)"
 								>
-									<p class="icon wallet" bg-red-5 i-solar:wallet-bold-duotone></p>
-									<p>钱包</p>
+									<p
+										class="icon myself"
+										bg-yellow-5
+										i-solar:bill-list-bold-duotone
+									></p>
+									<p mt-2>账 单</p>
+								</el-card>
+								<el-card
+									shadow="hover"
+									class="v-card"
+									@click="toView(`/user/save`)"
+								>
+									<p
+										class="icon myself"
+										bg-green-5
+										i-solar:danger-bold-duotone
+									></p>
+									<p mt-2>账号安全</p>
 								</el-card>
 							</div>
+							<!-- 退出登录| 我的主页 -->
 							<div class="btn" flex-row-bt-c pt-4>
 								<el-button size="large" @click="exitLogin" ml-3>退出登录</el-button>
-								<NuxtLink to="/my/info" mr-3>
+								<NuxtLink to="/user/info" mr-3>
 									<el-button size="large" type="primary">个人主页</el-button>
 								</NuxtLink>
 							</div>
@@ -159,12 +212,6 @@ const toView = (path: string) => {
 				</template>
 			</el-popover>
 		</ClientOnly>
-		<div px-4>
-			<h4 tracking-1px w-7em class="overflow-hidden truncate ...">
-				{{ p.nickname }}
-			</h4>
-			<el-tag opacity-70 class="p-0 overflow-hidden truncate ...">{{ p.gender }}</el-tag>
-		</div>
 	</div>
 </template>
 <style scoped lang="scss">
@@ -176,7 +223,7 @@ const toView = (path: string) => {
 
 // 标签
 :deep(.el-tag) {
-	padding: 0.1em 0.2em;
+	padding: 0.1em 0.3em;
 	height: 1.2rem;
 }
 
@@ -290,4 +337,3 @@ const toView = (path: string) => {
 	height: 3em;
 }
 </style>
-~/composables/utils/useFetchUtil

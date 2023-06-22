@@ -4,8 +4,8 @@ export interface ImportMetaEnv {
 }
 // 分页
 export interface IPage<T> {
-  records: T[] ,
-  total: number ,
+  records: T[],
+  total: number,
   pages: number,
   size: number,
   current: number,
@@ -28,3 +28,6 @@ export enum UserStatus {
   TRUE = "正常",
   FALESE = "禁用",
 }
+
+// ids
+export type ids = string[];

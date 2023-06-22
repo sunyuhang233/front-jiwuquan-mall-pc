@@ -37,7 +37,7 @@ isLoading.value = false;
 					dark:bg-dark-8
 					border-gray-200
 					rounded-4px
-					shadow-sm
+					shadow-md
 					class="flex flex-col w-1/1"
 					cursor-pointer
 				>
@@ -46,7 +46,7 @@ isLoading.value = false;
 							hover:transform-scale-110
 							transition-300
 							rounded-2px
-							class="w-260px h-180px"
+							class="w-260px h-170px"
 							:src="BaseUrlImg + p.images[0]"
 							fit="cover"
 						/>

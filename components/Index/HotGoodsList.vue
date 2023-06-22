@@ -39,7 +39,7 @@
 				style="background: linear-gradient(var(--el-bg-color), #) bottom center"
 			>
 				<NuxtLink
-					:to="`/goods/detail?id=${p.id}`"
+					:to="`/goods/detail/${p.id}`"
 					class="mt-2 animate__animated animate__fadeIn"
 					v-for="(p, i) in hotGoodsList"
 					:key="p.id"
