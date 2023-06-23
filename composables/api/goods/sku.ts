@@ -1,12 +1,12 @@
 import { Result } from "~/types/result";
-
 /**
- * 获取分页商品列表
+ * 获取商品规格
  * @returns 
  */
 export function getGoodsSkuByGid(gid: string) {
-  return useFetch<Result<GoodsSkuVO[]>>(BaseUrl+`/goods/sku?gid=${gid}`);
+	return useFetch<Result<GoodsSkuVO[]>>(BaseUrl + `/goods/sku?gid=${gid}`);
 }
+
 export interface GoodsSkuVO {
 	id: string;
 	goodsId: string;

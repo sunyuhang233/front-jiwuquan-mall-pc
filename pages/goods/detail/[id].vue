@@ -4,6 +4,7 @@ import { getGoodsSkuByGid } from '~/composables/api/goods/sku';
 import { GoodsSkuVO } from '~/composables/api/goods/sku';
 const app = useNuxtApp();
 const route = useRoute();
+const user = useUserStore();
 // 商品id
 const goodsId = route.params.id;
 const isLoading = ref<boolean>(true);
@@ -49,8 +50,9 @@ useHead({
 	meta: [
 		{
 			name: 'description',
-			content: goodsInfo.value?.description,
+			content: goodsInfo.value?.name + ' ' + goodsInfo.value?.description,
 		},
+		
 	],
 });
 definePageMeta({
@@ -80,17 +82,17 @@ definePageMeta({
 					/>
 				</div>
 				<!-- 内容 -->
-				<div class="center" mt-2.2em flex justify-around>
+				<div class="center" mt-2.2em flex justify-around items-center>
 					<!-- 商品轮播图 -->
 					<GoodsPreSwiper
-						class="swiper ml-0em flex-2"
+						class="swiper ml-0em flex-2 animate__animated animate__fadeIn"
 						w-600px
 						:images="[...goodsImages]"
 						:goods-name="goodsInfo?.name"
 						ref="goodsSwiper"
 					/>
 					<!-- 规格和购物车、购买 -->
-					<div class="card flex-1" pl-20em pr-4em>
+					<div class="card flex-1 animate__animated animate__fadeIn" pl-20em pr-4em>
 						<GoodsSkuCard
 							:goods-info="goodsInfo"
 							:goods-sku="goodsSku"
@@ -99,7 +101,7 @@ definePageMeta({
 					</div>
 				</div>
 				<!-- 购物车 -->
-				<div class="shop-card" >
+				<div class="shop-card" v-if="user.isLogin">
 					<MenuShopCartBar />
 				</div>
 			</div>

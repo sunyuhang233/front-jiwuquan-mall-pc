@@ -9,15 +9,17 @@ import { IPage } from "~/types";
  * @returns 
  */
 export function getUserShopCartPage(page: number, size: number, token: string) {
-  return useHttp.get<Result<IPage<ShopcartVO[]>>>(`/user/cart/${page}/${size}`,
-    {
-      headers: {
-        "Authorization": token
-      }
-    })
+	return useHttp.get<Result<IPage<ShopcartVO>>>(`/user/cart/${page}/${size}`,
+		{},
+		{
+			headers: {
+				"Authorization": token
+			}
+		})
 }
 export interface ShopcartVO {
 	id: string;
+	name: string;
 	skuId: string;
 	goodsId: string;
 	size: string;
@@ -26,8 +28,8 @@ export interface ShopcartVO {
 	stock: number;
 	price: number;
 	costPrice: number;
-	image?: any;
-	description?: any;
+	image?: string;
+	description?: string;
 	quantity: number;
 	activityId?: any;
 	shopId?: any;
@@ -42,16 +44,76 @@ export interface ShopcartVO {
  * @returns 
  */
 export function addShopcart(dto: ShopcartDTO, token: string) {
-  return useHttp.post<Result<string>>("/user/cart/",
-    { ...dto },
-    {
-      headers: {
-        "Authorization": token
-      }
-    })
+	return useHttp.post<Result<string>>("/user/cart/",
+		{ ...dto },
+		{
+			headers: {
+				"Authorization": token
+			}
+		})
 }
 // 添加购物车DTO
 export interface ShopcartDTO {
-  skuId: string,
-  quantity: number,
+	skuId: string,
+	quantity: number,
+}
+
+
+
+/**
+ * 更新购物车
+ * @param id 购物车id
+ * @param dto 更新购物车DTO
+ * @param token 
+ * @returns 
+ */
+export function updateShopcart(id: string, dto: updateShopcartDTO, token: string) {
+	return useHttp.put<Result<string>>(`/user/cart/${id}`,
+		{ ...dto },
+		{
+			headers: {
+				"Authorization": token
+			}
+		});
+}
+export interface updateShopcartDTO {
+	skuId: string;
+	quantity: number;
+}
+
+
+
+/**
+ * 删除购物车（单个）
+ * @param id 购物车id
+ * @param token
+ * 
+ */
+export function deleteShopcart(id: string, token: string) {
+	return useHttp.deleted<Result<string>>(`/user/cart/one/${id}`,
+		{},
+		{
+			headers: {
+				"Authorization": token
+			}
+		});
+}
+
+
+/**
+ * 删除购物车（批量）
+ * @param ids 删除购物车id列表
+ * @param token 
+ * @returns 
+ */
+export function deleteBatchShopcart(ids: string[], token: string) {
+	return useHttp.deleted<Result<string>>(`/user/cart/some`,
+		{
+			ids
+		},
+		{
+			headers: {
+				"Authorization": token
+			}
+		});
 }

@@ -1,3 +1,4 @@
+import { gsap } from "gsap"
 export default defineNuxtPlugin((nuxtApp) => {
   // https://nuxt.com.cn/docs/guide/directory-structure/plugins
   nuxtApp.vueApp.directive('focus', {
@@ -47,7 +48,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     el.addEventListener("click", async function (e: Event) {
       e.preventDefault()
       e.stopPropagation()
-      const res =await useAsyncCopyText(binding.value || el.innerHTML)
+      const res = await useAsyncCopyText(binding.value || el.innerHTML)
       if (res) {
         ElMessage.success({
           message: '成功复制至剪贴板！',
@@ -57,5 +58,28 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
   });
 
+
+  // 自动递增动画
+  nuxtApp.vueApp.directive('incre-up', {
+    mounted: function (el, binding) {
+      // 目标数字
+      const targetValue = binding.value;
+      const duration = binding.arg || 1;
+      const counter = { var: 0 };
+      gsap.to(counter, {
+        var: targetValue,
+        duration: duration,
+        onUpdate: function () {
+          el.innerHTML = Math.ceil(counter.var).toFixed(2);
+        }
+      });
+    }
+  })
+
+
+  nuxtApp.vueApp.directive('cart-pool', {
+    mounted: function (el, binding) {
+    }
+  })
 
 })

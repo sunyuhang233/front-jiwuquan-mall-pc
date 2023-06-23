@@ -1,4 +1,4 @@
-import { Result, isTrue } from "@/types/result";
+import { Result } from "@/types/result";
 /**
  * 账号密码登录
  * @param username 用户名/手机号/邮箱

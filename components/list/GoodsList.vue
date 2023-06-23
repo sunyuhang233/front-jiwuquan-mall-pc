@@ -57,7 +57,7 @@ const loadGoodsPage = async () => {
 loadGoodsPage(); // 加载一次
 
 const clearResult = () => {
-	goodsList.value = [];
+	goodsList.value.splice(0);
 	pageInfo = reactive({
 		records: [],
 		total: -1,

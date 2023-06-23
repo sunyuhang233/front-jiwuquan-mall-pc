@@ -63,7 +63,7 @@
 					</ElButton>
 				</div>
 				<div class="box" v-else>
-					<CardUserLine :user-info="store.userInfo" />
+					<LazyCardUserLine :user-info="store.userInfo" />
 				</div>
 			</ClientOnly>
 		</div>

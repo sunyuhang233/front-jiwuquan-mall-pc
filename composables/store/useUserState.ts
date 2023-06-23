@@ -82,10 +82,17 @@ export const useUserStore = defineStore('user', () => {
    */
   async function onUserExit(t: string) {
     const data = await toLogout(t)
+    clearUserStore()
+  }
+
+  function clearUserStore() {
     localStorage.removeItem("user")
     sessionStorage.removeItem("user")
     token.value = ""
     isLogin.value = false
+    setTimeout(() => {
+      useShopStore().$reset()
+    }, 30);
   }
   return {
     // state
@@ -100,6 +107,7 @@ export const useUserStore = defineStore('user', () => {
     onUserLogin,
     onCheckLogin,
     onUserExit,
+    clearUserStore,
     // getter
     getToken
   }
@@ -108,7 +116,6 @@ export const useUserStore = defineStore('user', () => {
   // https://juejin.cn/post/7216174863445737528
   persist: true,
 })
-
 
 if (import.meta.hot)
   import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))

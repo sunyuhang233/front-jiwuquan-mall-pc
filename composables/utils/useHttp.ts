@@ -21,6 +21,7 @@ export function httpRequest<T = unknown>(
       if (config.options.headers?.Authorization !== undefined) {
         // @ts-ignore
         if (config.options.headers?.Authorization === "") {
+          store.clearUserStore();
           store.showLoginForm = true;
         }
       }
@@ -66,6 +67,8 @@ export function httpRequest<T = unknown>(
           break;
         case StatusCode.TOKEN_ERR:
           msg = "身份验证失败！";
+          store.clearUserStore();
+          store.showLoginForm = true
           break;
         case StatusCode.PARAM_ERR:
           msg = "传入参数错误！";
@@ -118,12 +121,12 @@ export function httpRequest<T = unknown>(
     },
   } as FetchOptions
   if (defaultOpts) {
-    if (method === 'post')
+    if (method === 'post' || method === 'put')
       defaultOpts.body = bodyOrParams
-    else if (method === 'delete')
+    else if (method === 'delete' || method === 'get')
       defaultOpts.params = bodyOrParams
     else
-      defaultOpts.params = bodyOrParams
+      defaultOpts.body = bodyOrParams
   }
   return $fetch<T>(url, { ...defaultOpts, ...opts })
 }

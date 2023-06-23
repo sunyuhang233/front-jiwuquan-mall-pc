@@ -1,46 +1,248 @@
 <script lang="ts" setup>
-import { getUserShopCartPage } from '~/composables/api/shopcart';
-const isShow = ref<boolean>(false);
-// 分页器
-const page = ref<number>(1);
-const size = ref<number>(6);
+import { ShopcartVO, getUserShopCartPage } from '~/composables/api/shopcart';
+import { IPage } from '~/types';
+const shop = useShopStore();
 const user = useUserStore();
+const isLoading = ref<boolean>(false);
+const isShow = ref<boolean>(false);
+// 查询页信息
+const isNoMore = computed<boolean>(() => shop.shopcartList.length === shop.pageInfo?.total);
+/**
+ * 加载购物车
+ */
+const loadShopcartList = async () => {
+	if (!user.isLogin || isLoading.value) return;
 
-const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
+	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) {
+		return;
+	}
+	isLoading.value = true;
+	shop.page++;
+	const { data } = await getUserShopCartPage(shop.page, shop.size, user.getToken);
+	// 没有更多
+	if (isNoMore.value || data?.total === -1) {
+		return (isLoading.value = false);
+	}
+	// 展示结果
+	shop.pageInfo = toReactive({ ...data });
+	let timer: NodeJS.Timeout | null;
+	if (!data?.records) return;
+	for await (const p of data.records) {
+		await new Promise((resolve) => {
+			timer = setTimeout(() => {
+				shop.shopcartList.push(p);
+				clearTimeout(timer ?? undefined);
+				timer = null;
+				isLoading.value = false;
+				return resolve(true);
+			}, 50);
+		});
+	}
+};
+loadShopcartList();
 
+// 清除结果
+const clearResult = () => {
+	shop.shopcartList.splice(0);
+	shop.pageInfo = reactive({
+		records: [],
+		total: -1,
+		pages: -1,
+		size: -1,
+		current: -1,
+	});
+};
+// 没有更多
+const notMore = computed(() => {
+	return (
+		shop.shopcartList.length >= shop.pageInfo.total ||
+		shop.pageInfo.current === shop.pageInfo.pages
+	);
+});
 
+// 1、选中的购物车商品
+const isEdit = ref<boolean>(false);
+const selectIds = ref<string[]>([]);
+const clearShopcart = () => {
+	ElMessageBox.alert('This is a message', 'Title', {
+		confirmButtonText: '确认删除',
+		callback: (action: string) => {
+			if (action == 'confirm') {
+			}
+		},
+	});
+};
+// 购物车选中项目id
+const isSelectAll = ref<boolean>(false);
+watch(isSelectAll, (val: boolean) => {
+	selectIds.value.splice(0);
+	if (val) {
+		selectIds.value.push(...shop.shopcartList.map((p) => p.id));
+	}
+});
+// 购物车数量
+const getShopCartLength = computed(() => {
+	return shop.shopcartList.length;
+});
+// 前往订单页面付款
+const toOrderPage = (ids: string[]) => {
+	// @ts-ignore
+	const dtoList = [];
+	shop.shopcartList.map((p) => {
+		if (ids.includes(p.id)) {
+			const { skuId, quantity } = p;
+			dtoList.push({ skuId, quantity });
+		}
+	});
+	console.log(dtoList);
+
+	// useRouter().push({
+	// 	path: '/order',
+	// 	query: {},
+	// });
+};
 </script>
 <template>
 	<div class="shop-cart">
 		<!-- 下拉框 -->
-		<el-popover
-			width="420px"
-			popper-class="popover"
-			transition="popSlice"
-			:show-after="300"
-			:hide-after="0"
-			trigger="hover"
-			popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-    height:380px; padding: 1.2em 1.2em;"
-			tabindex="0"
-		>
-			<template #reference>
-				<el-badge :value="12" class="item">
-					<div class="icon" cursor-pointer flex-row-c-c hover:opacity-85 transition-300>
+		<ClientOnly>
+			<el-popover
+				placement="top"
+				shadow-lg
+				:visible="isShow"
+				@keyup.esc="isShow = false"
+				width="500px"
+				popper-class="popover"
+				transition="popSlice"
+				:hide-after="0"
+				popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
+    min-height:380px; padding: 1.2em 1em;"
+				tabindex="0"
+			>
+				<template #reference>
+					<div
+						@click="isShow = true"
+						class="icon"
+						cursor-pointer
+						flex-row-c-c
+						hover:opacity-85
+						transition-300
+					>
+						<span class="count" shadow-sm v-show="getShopCartLength">
+							{{ getShopCartLength < 99 ? getShopCartLength : '99+' }}</span
+						>
 						<i i-solar:cart-large-bold-duotone style="width: 60%; height: 60%"></i>
 					</div>
-				</el-badge>
-			</template>
-			<!-- 2、搜索结果（商品goods） -->
-			<template #default>
-				<h1>内容</h1>
-			</template>
-		</el-popover>
+				</template>
+				<!-- 2、搜索结果（商品goods） -->
+				<template #default>
+					<div class="content">
+						<!-- 登录 -->
+						<div class="tologin" flex-row-c-c flex-col v-if="!user.isLogin">
+							<h3 text-center mt-10 mb-8>未登录，请登录！</h3>
+							<el-button
+								@click="user.showLoginForm = true"
+								size="large"
+								type="primary"
+								>立即登录</el-button
+							>
+						</div>
+						<!-- 全局 -->
+						<h2 mb-2 text-center border-0 border-b-1 border-default tracking-0.1em pb-4>
+							<span
+								style="font-size: 0.6em; position: absolute; right: 2em; top: 2em"
+								cursor-pointer
+								select-none
+								@click="isEdit = !isEdit"
+								:plain="!isEdit"
+								class="transition-300"
+								>{{ !isEdit ? '管理' : '取消' }}</span
+							>
+							购物车
+						</h2>
+						<el-scrollbar height="400px" mb-2>
+							<ul
+								v-if="user.isLogin"
+								v-infinite-scroll="loadShopcartList"
+								:infinite-scroll-delay="300"
+								:infinite-scroll-disabled="notMore"
+							>
+								<!-- 购物车项 -->
+								<el-checkbox-group v-model="selectIds">
+									<li v-for="(p, i) in shop.shopcartList" :key="p.id">
+										<CardShopLine :shop-cart="p">
+											<template #btn>
+												<el-checkbox
+													:label="p.id"
+													:disabled="!p.stock"
+												></el-checkbox>
+											</template>
+										</CardShopLine>
+									</li>
+								</el-checkbox-group>
+							</ul>
+						</el-scrollbar>
+
+						<!-- 下方按钮 -->
+						<div
+							class="bottom"
+							style="width: 100%"
+							px-2
+							flex
+							justify-between
+							items-center
+							border-default
+							rounded-6px
+							border-2px
+						>
+							<el-checkbox v-model="isSelectAll" mx-2 size="large" label="全 选" />
+							<div class="float-right">
+								<lazy-el-button
+									v-if="isEdit"
+									class="fadeInOut"
+									style="padding: 0em 1em"
+									type="danger"
+									plain
+									:disabled="!isEdit"
+									round
+									@click="clearShopcart"
+									>清空</lazy-el-button
+								>
+
+								<lazy-el-button
+									class="fadeInOut"
+									style="padding: 0em 1em"
+									type="success"
+									round
+									:disabled="selectIds.length === 0"
+									@click="toOrderPage(selectIds)"
+									tracking-0.1em
+									>去结算</lazy-el-button
+								>
+							</div>
+						</div>
+					</div>
+				</template>
+			</el-popover>
+		</ClientOnly>
+		<!-- 蒙版 -->
+		<div
+			class="shop-cart-mock"
+			w-100vw
+			h-100vh
+			bg-dark-300
+			dark:bg-dark-200
+			transition-200
+			opacity-40
+			v-show="isShow"
+			@click="isShow = false"
+			@keyup.esc="isShow = false"
+			style="position: fixed; top: 0; left: 0; z-index: -1"
+		></div>
 	</div>
 </template>
 <style scoped lang="scss">
 .shop-cart {
-	overflow: hidden;
 	position: fixed;
 	bottom: 3em;
 	right: 3em;
@@ -56,16 +258,55 @@ const { data } = await getUserShopCartPage(page.value, size.value, user.getToken
 		i {
 			color: #fff;
 		}
+		.count {
+			background-color: var(--el-color-danger);
+			color: #fff;
+			border-radius: 50%;
+			font-size: 0.9em;
+			min-width: 1.5em;
+			min-height: 1.5em;
+			text-align: center;
+			line-height: 1.2em;
+			position: absolute;
+			padding: 0.3em;
+			right: -10%;
+			top: -10%;
+		}
 	}
 
 	:deep(.badge__content) {
-		position: absolute;
-		top: 0;
 		background-color: $loading-color;
 	}
 
 	.popover {
 		position: absolute;
+	}
+}
+:deep(.el-checkbox-group) {
+	font-size: 1em;
+	line-height: 1.1em;
+
+	.el-checkbox__label {
+		display: none;
+	}
+}
+
+:deep(.el-checkbox__inner) {
+	border-radius: 4px;
+	transform: scale(1.5);
+}
+
+// 蒙版
+.shop-cart-mock {
+	animation: fadeInOut 0.24s ease-in-out;
+}
+
+@keyframes fadeInOut {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0.4;
 	}
 }
 </style>

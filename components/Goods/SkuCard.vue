@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { GoodsInfoVO } from '~/composables/api/goods';
 import { GoodsSkuVO } from '~/composables/api/goods/sku';
+import type { FormInstance, FormRules } from 'element-plus';
+import { addShopcart } from '~/composables/api/shopcart';
+import { gsap } from 'gsap';
 const user = useUserStore();
 const app = useNuxtApp();
+
+const isAllCheckSku = ref<boolean>(false);
 // emits
 const emit = defineEmits(['setActiveItem']);
 // props
@@ -10,15 +15,70 @@ const { goodsInfo, goodsSku } = defineProps<{
 	goodsInfo?: GoodsInfoVO;
 	goodsSku?: GoodsSkuVO[];
 }>();
-
+// 表单实例
+const FormRef = ref<FormInstance>();
+// 添加到购物车
+const onSubmitShopCart = (formRef: FormInstance | undefined) => {
+	formRef
+		?.validate(async (valid) => {
+			if (valid && user.getToken) {
+				const data = await addShopcart(
+					{
+						skuId: form.skuId,
+						quantity: form.quantity,
+					},
+					user.getToken
+				);
+				if (data.code === StatusCode.SUCCESS) {
+					ElMessage.success('添加成功！');
+				} else {
+					ElMessage.error('添加失败，请稍后再试！');
+				}
+			} else {
+				ElMessage.closeAll();
+				return false;
+			}
+		})
+		.catch((error) => {
+			return false;
+		});
+};
+// 购买
+const onSubmitBuy = (formRef: FormInstance | undefined) => {
+	formRef
+		?.validate((valid) => {
+			if (valid) {
+				ElMessage.success('购买成功！');
+			} else {
+				ElMessage.closeAll();
+				return false;
+			}
+		})
+		.catch((error) => {
+			return false;
+		});
+};
 // 表单
-const form = reactive({
-  skuId:"",
-  number:"",
-	size: "",
-	color: "",
-	combo: "",
+const form = reactive<formDTO>({
+	skuId: '',
+	quantity: 1,
+	size: '',
+	color: '',
+	combo: '',
 });
+interface formDTO {
+	skuId: string;
+	quantity: number;
+	size?: string;
+	color?: string;
+	combo?: string;
+}
+interface skuItem {
+	skuId: string;
+	name: string;
+	stock: number;
+	price: number;
+}
 
 // 尺寸
 const sizeList = ref<
@@ -42,7 +102,7 @@ const comboList = ref<
 		name: string;
 	}[]
 >([]);
-
+// 初始化规格
 const initSku = () => {
 	goodsSku?.map((p) => {
 		if (p.size && !sizeList.value.find((k) => k.name === p.size)) {
@@ -68,35 +128,58 @@ const initSku = () => {
 };
 initSku();
 
+// 表单监听
+watch(
+	form,
+	(dto: formDTO) => {
+		const item = goodsSku?.find((p) => {
+			return (
+				dto.color === (p.color || '') &&
+				dto.combo === (p.combo || '') &&
+				dto.size === (p.size || '')
+			);
+		});
+		if (item && item?.id) {
+			isAllCheckSku.value = true;
+			form.skuId = item?.id;
+		}
+	},
+	{ immediate: true, deep: true }
+);
+
+// 计算全部规格总库存
+const getMaxStock = computed(() => {
+	let count = 0;
+	goodsSku?.forEach((p) => {
+		count += p.stock;
+	});
+	return count;
+});
+
+// 计算当前规格的库存
+const getStock = computed(() => {
+	return goodsSku?.find((p) => p.id === form.skuId)?.stock || 0;
+});
 // 设置预览图片
 const setActiveItem = (image: string) => {
 	emit('setActiveItem', image);
-};
-
-
-// 添加到购物车 
-
-interface skuItem {
-	skuId: string;
-	name: string;
-	stock: number;
-	price: number;
-}
-const text = ref<string>("")
+}; 
 </script>
 <template>
 	<el-card class="sku-card" px-6 pt-8>
-		<el-form label-position="top" class="group">
+		<el-form ref="FormRef" :model="form" label-position="top" class="group">
 			<!-- 顶部 -->
-			<div class="top opacity-90" flex-row-bt-c mt-2 :model="form">
+			<div class="top opacity-90" flex-row-bt-c mt-2>
 				<!-- 商品标签 -->
 				<div class="left">
-					<el-tag class="mx-1" effect="dark" type="danger" v-if="goodsInfo?.isNew"
-						>新品</el-tag
-					>
-					<el-tag class="mx-1" effect="light" type="info" v-if="goodsInfo?.postage === 0"
-						>免运费</el-tag
-					>
+					<ClientOnly>
+						<el-tag class="mx-1" effect="dark" type="danger" v-if="goodsInfo?.isNew"
+							>新品</el-tag
+						>
+						<el-tag class="mx-1" effect="light" type="info">{{
+							goodsInfo?.postage ? goodsInfo?.postage : '免运费'
+						}}</el-tag>
+					</ClientOnly>
 				</div>
 				<!-- 收藏 -->
 				<BtnCollectGoods :gid="goodsInfo?.id || ''" />
@@ -107,28 +190,40 @@ const text = ref<string>("")
 				<div flex-row-bt-c my-1>
 					<small opacity-90 float-left>销售价（元）：</small>
 					<div class="righjt">
-						<span font-700 text-1.4em text-red-5 >￥{{ goodsInfo?.price.toFixed(2) }}</span>
+						<span font-700 text-1.4em text-red-5
+							>￥
+							<span v-incre-up="goodsInfo?.price.toFixed(2)"></span>
+						</span>
 						<small
 							style="text-decoration: line-through; opacity: 0.9"
 							text-bluegray-3
 							text-0.6em
-							>￥{{ goodsInfo?.costPrice.toFixed(2) }}</small>
+							>￥
+							<span v-incre-up="goodsInfo?.costPrice.toFixed(2)"></span>
+						</small>
 					</div>
 				</div>
 				<!-- 规格 -->
-				<div class="card">
-					<h4 pt-3 pb-2 v-if="sizeList.length">规 格</h4>
-					<el-form-item prop="size" v-if="sizeList.length">
-						<el-radio-group v-model="form.size" size="default">
+				<div class="card" v-if="sizeList.length">
+					<h4 pb-2>规 格</h4>
+					<el-form-item prop="size" required>
+						<template #error>
+							<small text-red-5 pl-2>请选择规格</small>
+						</template>
+						<el-radio-group v-model="form.size">
 							<el-radio-button :label="p.name" v-for="p in sizeList" :key="p.name" />
 						</el-radio-group>
 					</el-form-item>
 				</div>
 				<!-- 颜色 -->
-				<div class="card">
-					<h4 pt-3 pb-2 v-if="colorList.length">颜 色</h4>
-					<el-form-item prop="color" v-if="colorList.length">
-						<el-radio-group v-model="form.color" size="default">
+				<div class="card" v-if="colorList.length" pb-3>
+					<h4 pb-2>颜 色</h4>
+					<el-form-item prop="color" required>
+						<template #error>
+							<small text-red-5 pl-2>请选择颜色</small>
+						</template>
+						<el-radio-group v-model="form.color" size="large">
+							<!-- cts -->
 							<el-radio-button
 								border
 								v-for="p in colorList"
@@ -151,15 +246,35 @@ const text = ref<string>("")
 					</el-form-item>
 				</div>
 				<!-- 套餐 -->
-				<div class="card">
-					<h4 pt-3 pb-2 v-if="comboList.length">套 餐</h4>
-					<el-form-item prop="combo" v-if="comboList.length">
-						<el-radio-group v-model="form.combo" size="default">
+				<div class="card" v-if="comboList.length">
+					<h4 pb-2>套 餐</h4>
+					<el-form-item prop="combo" required>
+						<template #error>
+							<small text-red-5 pl-2>请选择套餐</small>
+						</template>
+						<el-radio-group v-model="form.combo">
 							<el-radio-button :label="p.name" v-for="p in comboList" :key="p.name" />
 						</el-radio-group>
 					</el-form-item>
 				</div>
 			</div>
+			<!-- 数量 -->
+			<div class="card">
+				<h4 pb-2>数 量</h4>
+				<el-form-item prop="quantity" required>
+					<el-input-number
+						:disabled="getStock === 0"
+						:min="1"
+						:max="getStock !== 0 ? 99 : 1"
+						v-model="form.quantity"
+					/>
+					<small v-show="isAllCheckSku"
+						>（库存剩余：<span text-red-5>{{ getStock }} </span>件）</small
+					>
+					<small v-show="!isAllCheckSku">（总库存剩余：{{ getMaxStock }} 件）</small>
+				</el-form-item>
+			</div>
+
 			<!-- 购物车|立即购买 -->
 			<el-form-item>
 				<div class="w-1/1 flex justify-between py-3">
@@ -175,8 +290,11 @@ const text = ref<string>("")
 							font-weight: 700;
 						"
 						plain
-						>加入购物车</el-button
-					>
+						@click="onSubmitShopCart(FormRef)"
+						>加入购物车
+						
+					</el-button>
+
 					<el-button
 						size="large"
 						style="
@@ -188,9 +306,11 @@ const text = ref<string>("")
 							padding: 0.8em 1em;
 							letter-spacing: 0.1em;
 						"
+						@clikc="onSubmitBuy(FormRef)"
 						type="info"
-						>立即购买</el-button
-					>
+						>立即购买
+						<span></span>
+					</el-button>
 				</div>
 			</el-form-item>
 		</el-form>

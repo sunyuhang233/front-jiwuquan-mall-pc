@@ -212,3 +212,8 @@
     border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%;
   }
 }
+
+
+.fadeInOut {
+  animation: fadeIn 0.24s ease-in-out;
+}
