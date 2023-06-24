@@ -22,3 +22,14 @@ export interface GoodsSkuVO {
 	createTime: string;
 	updateTime: string;
 }
+
+/**
+ * 获取规格信息ids
+ * @param ids 
+ * @returns 
+ */
+export function getGoodsSkuByIds(ids: string[]) {
+	return useHttp.post<Result<GoodsSkuVO[]>>(  `/goods/sku`,{
+		ids:[...ids]
+	});
+}

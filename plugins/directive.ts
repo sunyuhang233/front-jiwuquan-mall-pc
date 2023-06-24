@@ -59,13 +59,26 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
 
-  // 自动递增动画
+  /**
+   * 自动递增动画 arg :参数表示持续秒数
+   */
   nuxtApp.vueApp.directive('incre-up', {
-    mounted: function (el, binding) {
-      // 目标数字
+    mounted: function (el, binding) { 
       const targetValue = binding.value;
       const duration = binding.arg || 1;
-      const counter = { var: 0 };
+      const counter = { var: binding.oldValue||0 };
+      gsap.to(counter, {
+        var: targetValue,
+        duration: duration,
+        onUpdate: function () {
+          el.innerHTML = Math.ceil(counter.var).toFixed(2);
+        }
+      });
+    },
+    updated: function (el, binding) { 
+      const targetValue = binding.value;
+      const duration = binding.arg || 1;
+      const counter = { var: binding.oldValue||0 };
       gsap.to(counter, {
         var: targetValue,
         duration: duration,

@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-const route = useRoute();
-
 
 </script>
 <template>
 	<NuxtLayout>
 		<div>
-			<h3>搜索记录</h3>
-			<h3>{{ route.query }}</h3>
+			<h3>搜索记录</h3> 
 		</div>
 	</NuxtLayout>
 </template>

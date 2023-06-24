@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ShopcartVO, getUserShopCartPage } from '~/composables/api/shopcart';
-import { IPage } from '~/types';
+import { PushOrdersItemDTO } from '~/composables/api/orders';
 const shop = useShopStore();
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
@@ -41,17 +41,6 @@ const loadShopcartList = async () => {
 };
 loadShopcartList();
 
-// 清除结果
-const clearResult = () => {
-	shop.shopcartList.splice(0);
-	shop.pageInfo = reactive({
-		records: [],
-		total: -1,
-		pages: -1,
-		size: -1,
-		current: -1,
-	});
-};
 // 没有更多
 const notMore = computed(() => {
 	return (
@@ -63,14 +52,34 @@ const notMore = computed(() => {
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-const clearShopcart = () => {
-	ElMessageBox.alert('This is a message', 'Title', {
-		confirmButtonText: '确认删除',
-		callback: (action: string) => {
-			if (action == 'confirm') {
+const deleteBatchShopcart = (text: string = '删除') => {
+	ElMessageBox({
+		title: `${text}提示！`,
+		message: `确定要${text}吗？`,
+		type: 'warning',
+		showClose: false,
+		center: true,
+		customClass: 'text-center',
+		showCancelButton: true,
+		cancelButtonText: '取 消',
+		confirmButtonText: '删 除',
+	})
+		.then(async (res) => {
+			if (res === 'confirm') {
+				const res = await shop.deleteBatchShopCart(selectIds.value);
+				if (res) {
+					ElMessage.success(text + '成功！');
+				} else {
+					ElMessage.error('删除失败，请稍后再试试看！');
+				}
 			}
-		},
-	});
+		})
+		.catch((err) => {});
+};
+
+const clearShopcart = () => {
+	isSelectAll.value = true;
+	deleteBatchShopcart("清空");
 };
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
@@ -82,24 +91,29 @@ watch(isSelectAll, (val: boolean) => {
 });
 // 购物车数量
 const getShopCartLength = computed(() => {
-	return shop.shopcartList.length;
+	let count = 0;
+	for (const p of shop.shopcartList) {
+		count += p.quantity;
+	}
+	return count;
 });
 // 前往订单页面付款
 const toOrderPage = (ids: string[]) => {
-	// @ts-ignore
-	const dtoList = [];
+	const dtoList: PushOrdersItemDTO[] = [];
 	shop.shopcartList.map((p) => {
 		if (ids.includes(p.id)) {
 			const { skuId, quantity } = p;
 			dtoList.push({ skuId, quantity });
 		}
 	});
-	console.log(dtoList);
-
-	// useRouter().push({
-	// 	path: '/order',
-	// 	query: {},
-	// });
+	// 前往订单页面
+	useRouter().push({
+		path: '/order',
+		query: {
+			// @ts-ignore
+			orderItems: dtoList,
+		},
+	});
 };
 </script>
 <template>
@@ -111,7 +125,7 @@ const toOrderPage = (ids: string[]) => {
 				shadow-lg
 				:visible="isShow"
 				@keyup.esc="isShow = false"
-				width="500px"
+				width="530px"
 				popper-class="popover"
 				transition="popSlice"
 				:hide-after="0"
@@ -128,7 +142,11 @@ const toOrderPage = (ids: string[]) => {
 						hover:opacity-85
 						transition-300
 					>
-						<span class="count" shadow-sm v-show="getShopCartLength">
+						<span
+							class="count animate__animated animate__fadeIn"
+							shadow-sm
+							v-show="getShopCartLength"
+						>
 							{{ getShopCartLength < 99 ? getShopCartLength : '99+' }}</span
 						>
 						<i i-solar:cart-large-bold-duotone style="width: 60%; height: 60%"></i>
@@ -160,7 +178,7 @@ const toOrderPage = (ids: string[]) => {
 							>
 							购物车
 						</h2>
-						<el-scrollbar height="400px" mb-2>
+						<el-scrollbar height="500px" mb-2>
 							<ul
 								v-if="user.isLogin"
 								v-infinite-scroll="loadShopcartList"
@@ -168,7 +186,7 @@ const toOrderPage = (ids: string[]) => {
 								:infinite-scroll-disabled="notMore"
 							>
 								<!-- 购物车项 -->
-								<el-checkbox-group v-model="selectIds">
+								<el-checkbox-group v-model="selectIds" size="large">
 									<li v-for="(p, i) in shop.shopcartList" :key="p.id">
 										<CardShopLine :shop-cart="p">
 											<template #btn>
@@ -196,23 +214,36 @@ const toOrderPage = (ids: string[]) => {
 							border-2px
 						>
 							<el-checkbox v-model="isSelectAll" mx-2 size="large" label="全 选" />
-							<div class="float-right">
+							<div flex>
+								<lazy-el-button
+									v-if="selectIds.length"
+									class="fadeInOut flex-1"
+									style="padding: 0em 1em"
+									type="danger"
+									plain
+									:disabled="selectIds.length === 0"
+									round
+									@click="deleteBatchShopcart('批量删除')"
+									>批量删除
+									<i i-solar:trash-bin-trash-broken mr-1></i>
+								</lazy-el-button>
 								<lazy-el-button
 									v-if="isEdit"
-									class="fadeInOut"
+									class="fadeInOut flex-1"
 									style="padding: 0em 1em"
 									type="danger"
 									plain
 									:disabled="!isEdit"
 									round
 									@click="clearShopcart"
-									>清空</lazy-el-button
 								>
-
+									<i i-solar:trash-bin-trash-broken mr-1></i>
+									清空
+								</lazy-el-button>
 								<lazy-el-button
-									class="fadeInOut"
-									style="padding: 0em 1em"
-									type="success"
+									class="fadeInOut flex-1"
+									style="padding: 0em 2em"
+									type="info"
 									round
 									:disabled="selectIds.length === 0"
 									@click="toOrderPage(selectIds)"
@@ -254,7 +285,7 @@ const toOrderPage = (ids: string[]) => {
 		height: 3.5em;
 		background-color: var(--el-color-primary);
 		border-radius: 50%;
-
+		box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
 		i {
 			color: #fff;
 		}

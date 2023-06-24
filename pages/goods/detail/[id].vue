@@ -20,7 +20,9 @@ const goodsImages = ref<Set<string>>(new Set());
 const reqArr = await Promise.all([reqGoodsInfo, reqGoodsSku]);
 const goodsInfoRaw = reqArr[0].data.value?.data;
 const goodsSkuRaw = reqArr[1].data.value?.data;
-
+if (!goodsInfoRaw || !goodsSkuRaw) {
+	navigateTo('/');
+}
 // 商品介绍图和处理
 if (goodsInfoRaw) {
 	if (goodsInfoRaw.images) {
@@ -52,7 +54,6 @@ useHead({
 			name: 'description',
 			content: goodsInfo.value?.name + ' ' + goodsInfo.value?.description,
 		},
-		
 	],
 });
 definePageMeta({
@@ -68,6 +69,7 @@ definePageMeta({
 		},
 	],
 });
+
 </script>
 <template>
 	<div class="goods-detail">
@@ -88,6 +90,7 @@ definePageMeta({
 						class="swiper ml-0em flex-2 animate__animated animate__fadeIn"
 						w-600px
 						:images="[...goodsImages]"
+						:video="goodsInfo?.video"
 						:goods-name="goodsInfo?.name"
 						ref="goodsSwiper"
 					/>
@@ -99,6 +102,10 @@ definePageMeta({
 							@set-active-item="setActive"
 						/>
 					</div>
+				</div>
+				<!-- 详细介绍 -->
+				<div class="w-600px detail" mt-3em >
+					<GoodsDetailTabs :goods-info="goodsInfo" :sku-list="goodsSku" />
 				</div>
 				<!-- 购物车 -->
 				<div class="shop-card" v-if="user.isLogin">

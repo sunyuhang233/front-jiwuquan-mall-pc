@@ -2,6 +2,7 @@
 import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
 import { ShopcartVO, updateShopcart } from '~/composables/api/shopcart';
 import { GoodsSkuVO, getGoodsSkuByGid } from '~/composables/api/goods/sku';
+import currency from 'currency.js';
 const { shopCart } = defineProps<{
 	shopCart: ShopcartVO;
 }>();
@@ -133,12 +134,13 @@ const toGoodsView = (gid: string) => {
 		border-2px
 		hover:shadow
 		hover:border="solid violet-6"
+		hover:bg="gray-1"
 		dark:hover:bg="dark-1"
 		border-dashed
 		border-default
 	>
 		<ClientOnly>
-			<ElImage 
+			<ElImage
 				@click="toGoodsView(shopCart.goodsId)"
 				hover:transform-scale-110
 				transition-300
@@ -153,9 +155,9 @@ const toGoodsView = (gid: string) => {
 			</h3>
 			<!-- 中下 -->
 			<p font-700 color-red-6 mt-1 mb-5>
-				￥{{ shopCart.price?.toFixed(2) }}
+				￥{{ currency(shopCart.price) }}
 				<span color-coolgray text-0.6em style="text-decoration: line-through"
-					>￥{{ shopCart.costPrice.toFixed(2) }}</span
+					>￥{{ currency(shopCart.costPrice) }}</span
 				>
 			</p>
 			<!-- 下 -->

@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav un-select" :class="topClass" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
@@ -71,7 +71,10 @@
 </template>
 
 <script lang="ts" setup>
-const sotre = useUserStore();
+const { topClass } = defineProps<{
+	topClass?: string;
+}>();
+
 // 搜索
 let searchWord = ref<string>('');
 // 登录表单

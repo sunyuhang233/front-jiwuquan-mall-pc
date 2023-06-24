@@ -17,6 +17,7 @@ export function getUserShopCartPage(page: number, size: number, token: string) {
 			}
 		})
 }
+
 export interface ShopcartVO {
 	id: string;
 	name: string;
@@ -33,8 +34,8 @@ export interface ShopcartVO {
 	quantity: number;
 	activityId?: any;
 	shopId?: any;
-	createTime: string;
-	updateTime: string;
+	createTime?: string;
+	updateTime?: string;
 }
 
 /**

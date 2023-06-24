@@ -90,9 +90,11 @@ export const useUserStore = defineStore('user', () => {
     sessionStorage.removeItem("user")
     token.value = ""
     isLogin.value = false
-    setTimeout(() => {
-      useShopStore().$reset()
-    }, 30);
+    nextTick(() => {
+      setTimeout(() => {
+        useShopStore().$reset()
+      }, 100)
+    })
   }
   return {
     // state

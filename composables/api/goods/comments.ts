@@ -8,13 +8,14 @@ import { IPage } from "~/types";
  * @param gid 商品id
  * @returns 
  */
-export function getGoodsCommentPage(page: number, size: number, gid: string){
-  return useFetch<Result<IPage<GoodsComments>>>(()=>BaseUrl + `/goods/comments/${page}/${size}/${gid}`)
-} 
+export function getGoodsCommentPage(page: number, size: number, gid: string) {
+	return useFetch<Result<IPage<GoodsCommentsVO>>>(() => BaseUrl + `/goods/comments/${page}/${size}/${gid}`)
+}
 
 // 商品评价
-export interface GoodsComments {
+export interface GoodsCommentsVO {
 	id: string;
+	avatar: string;
 	nickName: string;
 	skuId: string;
 	isRecommend: number;
@@ -26,3 +27,13 @@ export interface GoodsComments {
 	createTime: string;
 	updateTime: string;
 }
+
+
+/**
+ * 获取评价的子评价详情
+ * @param cid 
+ * @returns 
+ */
+export function getGoodsCommentDetail(cid: string) {
+	return useFetch<Result<IPage<GoodsCommentsVO>>>(() => BaseUrl + `/goods/comments/${cid}`)
+} 

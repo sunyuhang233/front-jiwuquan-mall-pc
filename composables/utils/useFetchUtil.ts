@@ -2,8 +2,8 @@ import { UseFetchOptions } from "nuxt/app";
 import { StatusCode } from "~/types/result";
 
 type Methods = "GET" | "POST" | "DELETE" | "PUT";
-// export const BaseUrl = "http://47.115.226.150:9090";
-export const BaseUrl = "http://localhost:9090";
+export const BaseUrl = "http://47.115.226.150:9090";
+// export const BaseUrl = "http://localhost:9090";
 // 图片
 export const BaseUrlImg = BaseUrl+"/res/image/";
 export const BaseUrlVideo = BaseUrl+"/res/video/";

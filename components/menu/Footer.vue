@@ -8,7 +8,7 @@
 	>
 		<div class="content layout-default" dark:opacity-80 flex-row-c-c flex-col>
 			<img src="@/assets/images/logo/logo_txt.png" w-180px alt="Design By: Kiwi2333" />
-			<h4 pt-1em>
+			<h4 pt-1em opacity-70>
 				Design By:
 				<NuxtLink class="mark2 animate__animated" to="https://github.com/KiWi233333"
 					>Kiwi2333

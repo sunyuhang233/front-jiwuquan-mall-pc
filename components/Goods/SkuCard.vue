@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { GoodsInfoVO } from '~/composables/api/goods';
 import { GoodsSkuVO } from '~/composables/api/goods/sku';
-import type { FormInstance, FormRules } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 import { addShopcart } from '~/composables/api/shopcart';
-import { gsap } from 'gsap';
+import { PushOrdersItemDTO } from '~/composables/api/orders';
+import currency from 'currency.js';
 const user = useUserStore();
+const shop = useShopStore();
 const app = useNuxtApp();
+const router = useRouter();
 
 const isAllCheckSku = ref<boolean>(false);
 // emits
@@ -17,7 +20,10 @@ const { goodsInfo, goodsSku } = defineProps<{
 }>();
 // 表单实例
 const FormRef = ref<FormInstance>();
-// 添加到购物车
+/**
+ * 添加到购物车
+ * @param formRef
+ */
 const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 	formRef
 		?.validate(async (valid) => {
@@ -30,6 +36,7 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 					user.getToken
 				);
 				if (data.code === StatusCode.SUCCESS) {
+					shop.isRefalsh = true;
 					ElMessage.success('添加成功！');
 				} else {
 					ElMessage.error('添加失败，请稍后再试！');
@@ -39,22 +46,42 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 				return false;
 			}
 		})
-		.catch((error) => {
+		.catch(() => {
 			return false;
 		});
 };
-// 购买
+// loading 全屏
+const fullscreenLoading = ref<boolean>(false);
+/**
+ * 立即购买
+ */
 const onSubmitBuy = (formRef: FormInstance | undefined) => {
 	formRef
-		?.validate((valid) => {
-			if (valid) {
-				ElMessage.success('购买成功！');
+		?.validate(async (valid) => {
+			if (valid && user.getToken) {
+				const dto: PushOrdersItemDTO[] = [
+					{
+						skuId: form.skuId,
+						quantity: form.quantity,
+					},
+				];
+				fullscreenLoading.value = true;
+				setTimeout(() => {
+					fullscreenLoading.value = false;
+					router.push({
+						path: '/order',
+						query: {
+							// @ts-ignore
+							orderItems: dto,
+						},
+					});
+				},1000);
 			} else {
 				ElMessage.closeAll();
 				return false;
 			}
 		})
-		.catch((error) => {
+		.catch(() => {
 			return false;
 		});
 };
@@ -156,28 +183,49 @@ const getMaxStock = computed(() => {
 	return count;
 });
 
+// 计算当前的最终价格
+const allPrice = computed((): number => {
+	if (goodsSku) {
+		for (const p of goodsSku) {
+			if (p.id === form.skuId) {
+				return currency(p.price).multiply(form.quantity).value;
+			}
+		}
+	}
+
+	return 0;
+});
+
 // 计算当前规格的库存
 const getStock = computed(() => {
 	return goodsSku?.find((p) => p.id === form.skuId)?.stock || 0;
 });
+
 // 设置预览图片
 const setActiveItem = (image: string) => {
 	emit('setActiveItem', image);
-}; 
+};
 </script>
 <template>
-	<el-card class="sku-card" px-6 pt-8>
+	<el-card class="sku-card" px-8 pt-8>
 		<el-form ref="FormRef" :model="form" label-position="top" class="group">
 			<!-- 顶部 -->
 			<div class="top opacity-90" flex-row-bt-c mt-2>
 				<!-- 商品标签 -->
 				<div class="left">
 					<ClientOnly>
-						<el-tag class="mx-1" effect="dark" type="danger" v-if="goodsInfo?.isNew"
+						<el-tag
+							class="mr-2 mb-2"
+							effect="dark"
+							type="danger"
+							v-if="goodsInfo?.isNew"
 							>新品</el-tag
 						>
-						<el-tag class="mx-1" effect="light" type="info">{{
+						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
 							goodsInfo?.postage ? goodsInfo?.postage : '免运费'
+						}}</el-tag>
+						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
+							goodsInfo?.refundTime ? goodsInfo?.refundTime + '日无理由退货' : ''
 						}}</el-tag>
 					</ClientOnly>
 				</div>
@@ -186,8 +234,8 @@ const setActiveItem = (image: string) => {
 			</div>
 			<div class="sku-list" tracking-0.1em flex flex-col leading-1.4em pt-6>
 				<!-- 顶部 -->
-				<h3 tracking-0.1em mb-4>{{ goodsInfo?.name }}</h3>
-				<div flex-row-bt-c my-1>
+				<h2 leading-1.2em mb-4>{{ goodsInfo?.name }}</h2>
+				<div flex-row-bt-c mb-4>
 					<small opacity-90 float-left>销售价（元）：</small>
 					<div class="righjt">
 						<span font-700 text-1.4em text-red-5
@@ -205,8 +253,8 @@ const setActiveItem = (image: string) => {
 				</div>
 				<!-- 规格 -->
 				<div class="card" v-if="sizeList.length">
-					<h4 pb-2>规 格</h4>
-					<el-form-item prop="size" required>
+					<small>规 格</small>
+					<el-form-item prop="size" required mt-1>
 						<template #error>
 							<small text-red-5 pl-2>请选择规格</small>
 						</template>
@@ -217,8 +265,8 @@ const setActiveItem = (image: string) => {
 				</div>
 				<!-- 颜色 -->
 				<div class="card" v-if="colorList.length" pb-3>
-					<h4 pb-2>颜 色</h4>
-					<el-form-item prop="color" required>
+					<small>颜 色</small>
+					<el-form-item prop="color" mt-1 required>
 						<template #error>
 							<small text-red-5 pl-2>请选择颜色</small>
 						</template>
@@ -240,15 +288,15 @@ const setActiveItem = (image: string) => {
 									overflow-hidden
 									z-0
 								/>
-								<div text-center py-2 z-5 class="tip">{{ p.name }}</div>
+								<div text-center py-2 px-4 z-5 class="tip">{{ p.name }}</div>
 							</el-radio-button>
 						</el-radio-group>
 					</el-form-item>
 				</div>
 				<!-- 套餐 -->
 				<div class="card" v-if="comboList.length">
-					<h4 pb-2>套 餐</h4>
-					<el-form-item prop="combo" required>
+					<small>套 餐</small>
+					<el-form-item prop="combo" mt-1 required>
 						<template #error>
 							<small text-red-5 pl-2>请选择套餐</small>
 						</template>
@@ -260,8 +308,8 @@ const setActiveItem = (image: string) => {
 			</div>
 			<!-- 数量 -->
 			<div class="card">
-				<h4 pb-2>数 量</h4>
-				<el-form-item prop="quantity" required>
+				<small>数 量</small>
+				<el-form-item prop="quantity" mt-2 required>
 					<el-input-number
 						:disabled="getStock === 0"
 						:min="1"
@@ -289,10 +337,10 @@ const setActiveItem = (image: string) => {
 							margin-right: 0.6em;
 							font-weight: 700;
 						"
+						shadow
 						plain
 						@click="onSubmitShopCart(FormRef)"
 						>加入购物车
-						
 					</el-button>
 
 					<el-button
@@ -305,11 +353,27 @@ const setActiveItem = (image: string) => {
 							font-weight: 600;
 							padding: 0.8em 1em;
 							letter-spacing: 0.1em;
+							position: relative;
 						"
-						@clikc="onSubmitBuy(FormRef)"
+						shadow-md
+						@click="onSubmitBuy(FormRef)"
 						type="info"
+						v-loading.fullscreen.lock="fullscreenLoading"
 						>立即购买
-						<span></span>
+						<div
+							dark:bg-dark-200
+							border-default-dashed
+							border-2px
+							border-border-dark-300
+							shadow-md
+							rounded="t-4px"
+							p-2
+							class="all-price z-0 -translate-1/1"
+							:class="{ active: isAllCheckSku }"
+						>
+							<small text-red-5>￥</small
+							><span text-red-5 v-incre-up="allPrice.toFixed(2)"></span>
+						</div>
 					</el-button>
 				</div>
 			</el-form-item>
@@ -344,9 +408,26 @@ const setActiveItem = (image: string) => {
 	}
 	.is-checked .tip,
 	&:hover .tip {
-		transform: translateY(110%);
+		transform: translateY(120%);
 		color: var(--el-color-primary);
 		text-shadow: 1px 1px #96969696;
+	}
+}
+:deep(.el-input-number) {
+	width: 8.6em;
+}
+
+.all-price {
+	position: absolute;
+	left: 12%;
+	top: 0;
+	display: block;
+	width: 7em;
+	z-index: -1;
+	transform: translateY(0%);
+	transition: $transition-delay;
+	&.active {
+		transform: translateY(-90%);
 	}
 }
 </style>

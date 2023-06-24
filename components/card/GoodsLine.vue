@@ -8,7 +8,7 @@ const { goods } = defineProps<{
 <template>
 	<div class="card" flex-row-bt-c cursor-pointer p-1>
 		<ClientOnly>
-			<ElImage
+			<ElImage 
 				hover:transform-scale-110
 				transition-300
 				:src="BaseUrlImg + goods.images[0]"

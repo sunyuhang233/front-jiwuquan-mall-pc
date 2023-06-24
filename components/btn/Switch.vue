@@ -51,7 +51,7 @@ let toggle = (event: MouseEvent) => {
       },
       {
         duration: 400,
-        easing: "linear",
+        easing: "ease-in",
         pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
       },
     )

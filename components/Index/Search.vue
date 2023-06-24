@@ -110,7 +110,7 @@
 				>
 					<!-- 跳转详情页 -->
 					<NuxtLink
-						:to="`/goods/detail?id=${p.id}`"
+						:to="`/goods/detail/${p.id}`"
 						class="mt-2 animate__animated animate__fadeIn"
 						v-for="(p, i) in searchPageList"
 						:key="p.id"

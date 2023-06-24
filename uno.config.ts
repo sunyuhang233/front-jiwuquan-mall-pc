@@ -20,6 +20,7 @@ export default defineConfig({
     ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
     ['border-default-dashed', 'hover:shadow-sm border-2px hover:bg="gray-1" dark:hover:bg="dark-1"  border-default border-dashed'],
     ['layout-default', 'mx-auto pt-8 pb-6 w-1400px overflow-hidden transition-300'],
+    ['layout-default-se', 'mx-auto pt-8 pb-6 w-1000px overflow-hidden transition-300'],
   ],
   theme: {
     // ...

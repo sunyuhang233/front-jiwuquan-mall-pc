@@ -1,4 +1,5 @@
-import { Result } from "@/types/result";
+import { Result, isTrue } from "@/types/result";
+import { ids } from "~/types";
 
 /**
  * 获取用户地址列表
@@ -39,7 +40,7 @@ export function addAddressByDto(dto: AddressDTO, token: string) {
 export interface AddressDTO {
   name: string,
   phone: string,
-  isDefault: 0,// 是否默认
+  isDefault: isTrue,// 是否默认
   province: string,
   city: string,
   county: string,
@@ -48,14 +49,46 @@ export interface AddressDTO {
 }
 
 /**
- * 更新用户id
+ * 更新收货地址
  * @param addressId 地址id
  * @param dto 
  * @param token 
  * @returns 
  */
 export function updateAddressById(addressId: string, dto: AddressDTO, token: string) {
-  return useHttp.post<Result<string>>(`/user/address/${addressId}`, {}, { headers: { "Authorization": token } });
+  return useHttp.put<Result<string>>(`/user/address/${addressId}`, {}, { headers: { "Authorization": token } });
+}
+
+/**
+ * 设为默认地址
+ * @param addressId 地址id
+ * @param isDefault 
+ * @param token 
+ * @returns 
+ */
+export function updateDefaultAddress(addressId: string, isDefault: isTrue, token: string) {
+  return useHttp.put<Result<string>>(`/user/address/default/${addressId}`, {}, { headers: { "Authorization": token } });
+}
+
+/**
+ * 删除收货地址(单个)
+ * @param addressId 收货地址id
+ * @param token 
+ * @returns 
+ */
+export function deleteAddressById(addressId: string, token: string) {
+  return useHttp.deleted<Result<string>>(`/user/address/one/${addressId}`, {}, { headers: { "Authorization": token } });
 }
 
 
+/**
+ * 删除收货地址(批量)
+ * @param ids 
+ * @param token 
+ * @returns 
+ */
+export function deleteBatchAddressByIds(ids: ids, token: string) {
+  return useHttp.deleted<Result<string>>(`/user/address/some`, {
+    ids
+  }, { headers: { "Authorization": token } });
+}

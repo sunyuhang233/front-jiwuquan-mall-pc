@@ -8,7 +8,7 @@ const props = defineProps({
 	},
 });
 const store = useUserStore();
-const p = props.userInfo || store.userInfo;
+const p = store.userInfo;
 const formData = new FormData();
 
 // 表单
@@ -76,7 +76,7 @@ const toView = (path: string) => {
 	<div class="user-card" flex-row-c-c cursor-pointer p-1>
 		<ClientOnly>
 			<!-- 头像弹窗 -->
-			<el-popover placement="top" :offset="20" :width="320" trigger="hover">
+			<el-popover placement="bottom" :offset="20" :width="320" trigger="hover">
 				<template #reference>
 					<div flex-row-c-c border-l="1px dashed gray" dark:border-l-dark>
 						<!-- 替换头像 -->
@@ -190,7 +190,7 @@ const toView = (path: string) => {
 								<el-card
 									shadow="hover"
 									class="v-card"
-									@click="toView(`/user/save`)"
+									@click="toView(`/user/safe`)"
 								>
 									<p
 										class="icon myself"

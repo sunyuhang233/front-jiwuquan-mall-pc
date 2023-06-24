@@ -1,8 +1,21 @@
 <script lang="ts" setup>
-const { goodsName, images } = defineProps<{
+const { goodsName, images, video } = defineProps<{
 	goodsName?: string;
 	images: string[];
+	video?: string;
 }>();
+// 打开视频播放
+const isOpenVideo = ref<boolean>(false);
+const openVideo = async () => {
+	let video = document.querySelector('.videoRef');
+	if (video) {
+		isOpenVideo.value = true;
+		// @ts-ignore
+		if (video.requestFullscreen) {
+			// video.requestFullscreen();
+		}
+	}
+};
 // 预览图片
 const getImagesPreview = computed(() => {
 	return images.map((p) => (p = BaseUrlImg + p));
@@ -77,6 +90,7 @@ defineComponent({
 				</el-image>
 			</el-carousel-item>
 		</el-carousel>
+
 		<!-- 预览列表 -->
 		<div class="scale-imgs" mt-4 flex-row-c-c>
 			<ElIconArrowLeftBold
@@ -91,7 +105,13 @@ defineComponent({
 				:src="BaseUrlImg + p"
 				:alt="goodsName || 'Design by Kiwi2333'"
 				class="scale-img"
-				style="max-width: 6em;max-height: 4em; margin: 0 0.4em; padding: 0; border-radius: 4px"
+				style="
+					max-width: 6em;
+					max-height: 4em;
+					margin: 0 0.4em;
+					padding: 0;
+					border-radius: 4px;
+				"
 				fit="contain"
 				transition-300
 				hover:scale-110
@@ -107,6 +127,38 @@ defineComponent({
 				class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
 			/>
 		</div>
+		<!-- 打开视频 -->
+		<small
+			@click="isOpenVideo = true"
+			v-if="video"
+			cursor-pointer
+			mx-a
+			mt-2
+			leading-1.2em
+			bg-gray-200
+			p-2
+			transition-200
+			hover:scale-110
+			flex-row-c-c
+			w-6em
+			rounded-2em
+			><i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
+		>
+		<Teleport to="body" >
+			<transition name="fadeInOut">
+				<div class="mock" v-if="isOpenVideo" @click.self="isOpenVideo=false">
+				<!-- 视频播放 -->
+				<video
+					class="videoRef"
+					:src="BaseUrlVideo + video"
+					:alt="goodsName || ' By Kiwi23333'"
+					:key="video"
+					:name="video"
+					controls
+				></video>
+			</div>
+			</transition>
+		</Teleport>
 	</div>
 </template>
 <style scoped lang="scss">
@@ -124,6 +176,22 @@ defineComponent({
 	.scale-img:hover {
 		opacity: 1;
 		border: 2px solid var(--el-color-primary);
+	}
+}
+.mock {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	z-index: 2000;
+	justify-content: center;
+	align-items: center;
+	background-color: #5252528a;
+	.videoRef {
+		width: 40vw;
+		display: block;
 	}
 }
 </style>
