@@ -32,15 +32,16 @@ export interface AddressInfoVO {
  * @param token 
  * @returns 
  */
-export function addAddressByDto(dto: AddressDTO, token: string) {
-  return useHttp.post<Result<AddressInfoVO[]>>("/user/address", {}, { headers: { "Authorization": token } });
+export function addAddressByDTO(dto: AddressDTO, token: string) {
+  dto.isDefault = +dto.isDefault
+  return useHttp.post<Result<string>>("/user/address", { ...dto }, { headers: { "Authorization": token } });
 }
 
 // 添加收货地址参数
 export interface AddressDTO {
   name: string,
   phone: string,
-  isDefault: isTrue,// 是否默认
+  isDefault: number,// 是否默认
   province: string,
   city: string,
   county: string,
@@ -56,7 +57,8 @@ export interface AddressDTO {
  * @returns 
  */
 export function updateAddressById(addressId: string, dto: AddressDTO, token: string) {
-  return useHttp.put<Result<string>>(`/user/address/${addressId}`, {}, { headers: { "Authorization": token } });
+  dto.isDefault = +dto.isDefault
+  return useHttp.put<Result<string>>(`/user/address/${addressId}`, {...dto}, { headers: { "Authorization": token } });
 }
 
 /**
@@ -66,8 +68,8 @@ export function updateAddressById(addressId: string, dto: AddressDTO, token: str
  * @param token 
  * @returns 
  */
-export function updateDefaultAddress(addressId: string, isDefault: isTrue, token: string) {
-  return useHttp.put<Result<string>>(`/user/address/default/${addressId}`, {}, { headers: { "Authorization": token } });
+export function updateDefaultAddress(addressId: string, isDefault: number, token: string) {
+  return useHttp.put<Result<string>>(`/user/address/default/${addressId}`, { isDefault: +isDefault }, { headers: { "Authorization": token } });
 }
 
 /**

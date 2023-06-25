@@ -140,7 +140,7 @@ const toView = (path: string) => {
 							<!-- 卡片集合 -->
 							<div flex flex-wrap mb-2>
 								<!-- 收货地址 -->
-								<el-card shadow="hover" class="v-card" @click="toView('/shopcart')">
+								<el-card shadow="hover" class="v-card" @click="toView('/user/address')">
 									<p
 										class="icon shopcart"
 										bg-yellow-5

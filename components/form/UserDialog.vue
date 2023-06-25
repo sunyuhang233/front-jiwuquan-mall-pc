@@ -1,17 +1,18 @@
 <template>
    <transition name="fadeInOutShadow">
       <div class="forms" @keyup.esc="exitForm" @click.self="exitForm"
-         v-if="userStore.showLoginForm || userStore.showRegisterForm">
+         v-if="userStore.showLoginForm || userStore.showRegisterForm"
+         relative>
          <!-- 登录 -->
-         <transition name="fade">
+         <transition name="fade-list">
             <FormLoginForm v-show="userStore.showLoginForm" />
          </transition>
          <!-- 注册 -->
-         <transition name="fade">
+         <transition name="fade-list">
             <FormRegisterForm v-if="userStore.showRegisterForm" />
          </transition>
          <!-- 找回密码 -->
-         <transition name="fade">
+         <transition name="fade-list">
             <FormRegisterForm v-if="userStore.showUpdatePwd" />
          </transition>
       </div>

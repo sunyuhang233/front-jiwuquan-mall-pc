@@ -107,7 +107,7 @@ export function deleteShopcart(id: string, token: string) {
  * @param token 
  * @returns 
  */
-export function deleteBatchShopcart(ids: string[], token: string) {
+export function deleteBatchShopcartByIds(ids: string[], token: string) {
 	return useHttp.deleted<Result<string>>(`/user/cart/some`,
 		{
 			ids

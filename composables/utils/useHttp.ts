@@ -84,7 +84,7 @@ export function httpRequest<T = unknown>(
         ElMessage.error({
           grouping: true,
           type,
-          message: data.message,
+          message: data.message.length > 50 ? msg : data.message,
         });
       }
     },

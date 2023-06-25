@@ -136,6 +136,8 @@ defineComponent({
 			mt-2
 			leading-1.2em
 			bg-gray-200
+			dark:bg-dark-200
+			shadow-md
 			p-2
 			transition-200
 			hover:scale-110

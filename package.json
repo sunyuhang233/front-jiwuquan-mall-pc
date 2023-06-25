@@ -43,6 +43,7 @@
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
     "currency.js": "^2.0.4",
+    "element-china-area-data": "^6.0.2",
     "gsap": "^3.12.1",
     "http-proxy": "^1.18.1",
     "nprogress": "^0.2.0",

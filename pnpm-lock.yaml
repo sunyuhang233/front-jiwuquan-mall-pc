@@ -19,6 +19,9 @@ dependencies:
   currency.js:
     specifier: ^2.0.4
     version: 2.0.4
+  element-china-area-data:
+    specifier: ^6.0.2
+    version: 6.0.2
   gsap:
     specifier: ^3.12.1
     version: 3.12.1
@@ -4289,6 +4292,10 @@ packages:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
 
+  /china-division@2.6.1:
+    resolution: {integrity: sha512-Iq9YCEWqPcSrD7/7McKpN9QHNbn2iibLmg1NEAxLacijqJzLbytr0sLuKJNY4Exd0LA77N18Pwr9JGgU1p5S6w==}
+    dev: false
+
   /chokidar@3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
@@ -5509,6 +5516,12 @@ packages:
 
   /electron-to-chromium@1.4.434:
     resolution: {integrity: sha512-5Gvm09UZTQRaWrimRtWRO5rvaX6Kpk5WHAPKDa7A4Gj6NIPuJ8w8WNpnxCXdd+CJJt6RBU6tUw0KyULoW6XuHw==}
+
+  /element-china-area-data@6.0.2:
+    resolution: {integrity: sha512-LGVp0crOnXrcQqNc5RHwPiR8AV2qUrDl4UgZ/Qn2n/izLqMcn924gcJ/pTRPnuT74AFin2SUyMtmmcoe5PDfQQ==}
+    dependencies:
+      china-division: 2.6.1
+    dev: false
 
   /element-plus@2.3.6(vue@3.3.4):
     resolution: {integrity: sha512-GLz0pXUYI2zRfIgyI6W7SWmHk6dSEikP9yR++hsQUyy63+WjutoiGpA3SZD4cGPSXUzRFeKfVr8CnYhK5LqXZw==}

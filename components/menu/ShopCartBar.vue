@@ -1,6 +1,12 @@
 <script lang="ts" setup>
-import { ShopcartVO, getUserShopCartPage } from '~/composables/api/shopcart';
+import {
+	ShopcartVO,
+	deleteBatchShopcartByIds,
+	getUserShopCartPage,
+} from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
+import { useOrderStore } from '~/composables/store/useOrderStore';
+import currency from 'currency.js';
 const shop = useShopStore();
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
@@ -66,11 +72,13 @@ const deleteBatchShopcart = (text: string = '删除') => {
 	})
 		.then(async (res) => {
 			if (res === 'confirm') {
-				const res = await shop.deleteBatchShopCart(selectIds.value);
-				if (res) {
-					ElMessage.success(text + '成功！');
-				} else {
-					ElMessage.error('删除失败，请稍后再试试看！');
+				if (res === 'confirm') {
+					const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
+					if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
+						ElMessage.success(text + '成功！');
+					} else {
+						ElMessage.error('删除失败，请稍后再试试看！');
+					}
 				}
 			}
 		})
@@ -79,7 +87,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 
 const clearShopcart = () => {
 	isSelectAll.value = true;
-	deleteBatchShopcart("清空");
+	deleteBatchShopcart('清空');
 };
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
@@ -97,6 +105,19 @@ const getShopCartLength = computed(() => {
 	}
 	return count;
 });
+// 计算总价
+const getAllPrice = computed(() => {
+	const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
+	let count = currency('0.00');
+	selectList.forEach((p) => {
+		count = count.add(currency(p.price).multiply(p.quantity));
+	});
+	return count;
+});
+// 全屏
+const fullscreenLoading = ref<boolean>(false);
+const router = useRouter();
+const order = useOrderStore();
 // 前往订单页面付款
 const toOrderPage = (ids: string[]) => {
 	const dtoList: PushOrdersItemDTO[] = [];
@@ -106,18 +127,22 @@ const toOrderPage = (ids: string[]) => {
 			dtoList.push({ skuId, quantity });
 		}
 	});
-	// 前往订单页面
-	useRouter().push({
-		path: '/order',
-		query: {
-			// @ts-ignore
-			orderItems: dtoList,
-		},
-	});
+
+	fullscreenLoading.value = true;
+	// 提交订单
+	setTimeout(() => {
+		fullscreenLoading.value = false;
+		order.$patch({
+			pushOrderItems: dtoList,
+		});
+		router.push({
+			path: '/order/pay',
+		});
+	}, 1000);
 };
 </script>
 <template>
-	<div class="shop-cart">
+	<div class="shop-cart" v-loading.fullscreen.lock="fullscreenLoading">
 		<!-- 下拉框 -->
 		<ClientOnly>
 			<el-popover
@@ -145,9 +170,14 @@ const toOrderPage = (ids: string[]) => {
 						<span
 							class="count animate__animated animate__fadeIn"
 							shadow-sm
-							v-show="getShopCartLength"
-						>
-							{{ getShopCartLength < 99 ? getShopCartLength : '99+' }}</span
+							v-show="getShopCartLength && getShopCartLength < 99"
+							v-incre-up-int="getShopCartLength"
+						></span>
+						<span
+							class="count animate__animated animate__fadeIn"
+							shadow-sm
+							v-show="getShopCartLength && getShopCartLength > 99"
+							>99+</span
 						>
 						<i i-solar:cart-large-bold-duotone style="width: 60%; height: 60%"></i>
 					</div>

@@ -147,7 +147,7 @@ const getLoginCode = async (type: LoginType) => {
   isLoading.value = false;
 }
 /**
-* 
+* 定时器
 * @param timer 本地定时器
 * @param num 计数对象
 * @param target 开始秒数

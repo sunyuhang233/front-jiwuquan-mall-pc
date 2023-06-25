@@ -69,7 +69,6 @@ definePageMeta({
 		},
 	],
 });
-
 </script>
 <template>
 	<div class="goods-detail">
@@ -104,8 +103,39 @@ definePageMeta({
 					</div>
 				</div>
 				<!-- 详细介绍 -->
-				<div class="w-600px detail" mt-3em >
-					<GoodsDetailTabs :goods-info="goodsInfo" :sku-list="goodsSku" />
+				<div
+					flex
+					justify-between
+					mt-5em
+					border-default
+					border-0
+					border-t="2px solid"
+					py-3em
+					class="bottom"
+				>
+					<div class="left">
+						<h2 tracking-0.1em><i i-solar:bolt-outline bg-amber p-3.5 mr-2></i>商品介绍</h2>
+						<GoodsDetailTabs
+							class="w-640px detail"
+							:goods-info="goodsInfo"
+							:sku-list="goodsSku"
+							py-1em
+							rounded-10px
+							dark:bg-dark-500
+							dark:opacity-90
+							min-h-700px
+							shadow-sm
+						/>
+					</div>
+					<!-- 猜你喜欢 -->
+					<div class="w-2/5">
+						<h2 tracking-0.1em mb-0.8em><i i-solar:bomb-emoji-outline bg-lime p-4 mr-2></i> 猜你喜欢</h2>
+						<ListGoodsList
+							class="w-1/1"
+							:dto="{ name: goodsInfo?.name[Math.floor(Math.random())] }"
+							:limit="10"
+						/>
+					</div>
 				</div>
 				<!-- 购物车 -->
 				<div class="shop-card" v-if="user.isLogin">

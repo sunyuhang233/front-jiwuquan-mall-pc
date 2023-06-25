@@ -79,6 +79,7 @@ const getProps = computed({
 			shopCart.size = p.size;
 			shopCart.color = p.color;
 			shopCart.combo = p.combo;
+			shopCart.skuId = skuId;
 		}
 	},
 });
@@ -98,8 +99,8 @@ const deleteShopCart = () => {
 	})
 		.then(async (res) => {
 			if (res === 'confirm') {
-				const res = await shop.deleteShopCartById(shopCart.id);
-				if (res) {
+				const flag = await shop.deleteShopCartById(shopCart.id);
+				if (flag) {
 					ElMessage.success('删除成功！');
 				} else {
 					ElMessage.error('删除错误，请稍后再试试看！');
@@ -138,7 +139,7 @@ const toGoodsView = (gid: string) => {
 		border-default
 	>
 		<ClientOnly>
-			<ElImage 
+			<ElImage
 				@click="toGoodsView(shopCart.goodsId)"
 				hover:transform-scale-110
 				transition-300
@@ -182,11 +183,21 @@ const toGoodsView = (gid: string) => {
 					</el-select>
 				</ClientOnly>
 				<!-- 数量 -->
-				<el-input-number :min="1" :max="99" v-model="shopCart.quantity"  />
-			</p> 
+				<el-input-number :min="1" :max="99" v-model="shopCart.quantity" />
+			</p>
 		</div>
-		<div flex flex-col items-center flex-1 relative >
-		<span i-solar:trash-bin-minimalistic-bold-duotone p-3  dark:bg-light @click="deleteShopCart" transition-300 absolute opacity-0 group-hover:opacity-80 style="top: -3em;" ></span>
+		<div flex flex-col items-center flex-1 relative>
+			<span
+				i-solar:trash-bin-minimalistic-bold-duotone
+				p-3
+				dark:bg-light
+				@click="deleteShopCart"
+				transition-300
+				absolute
+				opacity-0
+				group-hover:opacity-80
+				style="top: -3em"
+			></span>
 			<slot name="btn"></slot>
 		</div>
 	</div>

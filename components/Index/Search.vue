@@ -108,21 +108,26 @@
 					v-loading="isLoading"
 					element-loading-background="transparent"
 				>
-					<!-- 跳转详情页 -->
-					<NuxtLink
-						:to="`/goods/detail/${p.id}`"
-						class="mt-2 animate__animated animate__fadeIn"
-						v-for="(p, i) in searchPageList"
-						:key="p.id"
+					<transition-group
+						tag="div"
+						name="fade-list"
+						class="relative"
 					>
-						<!-- 商品卡片 -->
-						<CardGoodsLine :goods="p" :key="p.id" />
-						<ElDivider
-							dark:opacity-50
-							v-if="i !== searchPageList.length - 1"
-							style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
-						/>
-					</NuxtLink>
+						<!-- 跳转详情页 -->
+						<NuxtLink
+							:to="`/goods/detail/${p.id}`"
+							class="mt-2 animate__animated animate__fadeIn"
+							v-for="(p, i) in searchPageList"
+							:key="p.id"
+						>
+							<!-- 商品卡片 -->
+							<CardGoodsLine :goods="p" :key="p.id" />
+							<ElDivider
+								dark:opacity-50
+								v-if="i !== searchPageList.length - 1"
+								style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
+							/> </NuxtLink
+					></transition-group>
 					<ElEmpty
 						mt-10
 						:image-size="80"

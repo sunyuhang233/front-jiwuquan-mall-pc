@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+const user = useUserStore()
+useAsyncData(async ()=>{
+
+})
  
 // 定义当前页面
 useHead({
@@ -15,10 +19,7 @@ useHead({
 });
 </script>
 <template>
-   <div>
-
-   </div>
+	<NuxtLayout name="second">
+	</NuxtLayout>
 </template>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

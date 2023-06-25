@@ -44,12 +44,21 @@ export const useUserStore = defineStore('user', () => {
     }
   })
 
+  watch(token,(val)=>{
+    if (val) {
+      onUserLogin(val)
+    }
+  })
+
   /**
    * 用户登录
    * @param token token
    */
   const onUserLogin = async (token: string, saveLocal?: boolean) => {
     await useAsyncData(async () => {
+      // 购物车
+      useShopStore().loadShopcartList()
+      // 用户信息
       const store = useUserStore()
       let res = await getUserInfo(token)
       if (res.code === StatusCode.SUCCESS) {
@@ -83,18 +92,25 @@ export const useUserStore = defineStore('user', () => {
   async function onUserExit(t: string) {
     const data = await toLogout(t)
     clearUserStore()
+    useShopStore().shopcartList.splice(0)
+    useAddresStore().$reset()
+    useOrderStore().$reset()
   }
 
   function clearUserStore() {
-    localStorage.removeItem("user")
-    sessionStorage.removeItem("user")
+    useAsyncData(async () => {
+      localStorage.setItem("user", "{}")
+      sessionStorage.setItem("user", "{}")
+    })
     token.value = ""
     isLogin.value = false
-    nextTick(() => {
-      setTimeout(() => {
-        useShopStore().$reset()
-      }, 100)
-    })
+    userInfo.avatar = ""
+    userInfo.birthday = ""
+    userInfo.email = ""
+    userInfo.phone = ""
+    userInfo.username = ""
+    userInfo.id = ""
+    userInfo.lastLoginTime = ""
   }
   return {
     // state

@@ -73,7 +73,7 @@
     width: 100%;
     opacity: 1;
   }
-} 
+}
 
 .animate__animated {
   animation-duration: $transition-delay;
@@ -213,7 +213,22 @@
   }
 }
 
-
 .fadeInOut {
   animation: fadeIn 0.24s ease-in-out;
+}
+// group动画
+.fade-list-move,
+.fade-list-enter-active,
+.fade-list-leave-active {
+  transition: all 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.fade-list-enter-from,
+.fade-list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+.fade-list-leave-active {
+  position: absolute;
 }

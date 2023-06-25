@@ -90,8 +90,30 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
 
-  nuxtApp.vueApp.directive('cart-pool', {
-    mounted: function (el, binding) {
+  nuxtApp.vueApp.directive('incre-up-int', {
+    mounted: function (el, binding) { 
+      const targetValue = binding.value;
+      const duration = binding.arg || 1;
+      const counter = { var: binding.oldValue||0 };
+      gsap.to(counter, {
+        var: targetValue,
+        duration: duration,
+        onUpdate: function () {
+          el.innerHTML = Math.ceil(counter.var);
+        }
+      });
+    },
+    updated: function (el, binding) { 
+      const targetValue = binding.value;
+      const duration = binding.arg || 1;
+      const counter = { var: binding.oldValue||0 };
+      gsap.to(counter, {
+        var: targetValue,
+        duration: duration,
+        onUpdate: function () {
+          el.innerHTML = Math.ceil(counter.var);
+        }
+      });
     }
   })
 

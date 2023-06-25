@@ -99,8 +99,8 @@ const deleteShopCart = () => {
 	})
 		.then(async (res) => {
 			if (res === 'confirm') {
-				const res = await shop.deleteShopCartById(shopCart.id);
-				if (res) {
+				const flag = await shop.deleteShopCartById(shopCart.id);
+				if (flag) {
 					ElMessage.success('删除成功！');
 				} else {
 					ElMessage.error('删除错误，请稍后再试试看！');

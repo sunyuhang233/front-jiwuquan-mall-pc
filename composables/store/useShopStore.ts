@@ -26,12 +26,6 @@ export const useShopStore = defineStore('shop', () => {
     current: -1,
   });
 
-  /**
-   * 重置数据
-   */
-  const clearData = () => {
-    useShopStore().$reset()
-  }
 
   /**
    * 添加触发-重新加载
@@ -93,14 +87,13 @@ export const useShopStore = defineStore('shop', () => {
   const deleteBatchShopCart = (ids: string[]): boolean => {
     for (let i = 0; i < shopcartList.value.length; i++) {
       const p = shopcartList.value[i];
+      console.log(p.id);
       if (ids.includes(p.id)) {
         shopcartList.value.splice(i, 1)
-        break;
       }
     }
-    return false;
+    return true;
   }
-
 
   /**
    * 加载购物车
@@ -132,8 +125,8 @@ export const useShopStore = defineStore('shop', () => {
     size,
     // actions 
     deleteShopCartById,
-    clearData,
     deleteBatchShopCart,
+    loadShopcartList
     // getter 
   }
 })

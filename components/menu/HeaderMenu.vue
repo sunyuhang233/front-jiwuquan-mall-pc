@@ -46,12 +46,16 @@
 			<ClientOnly>
 				<!-- 消息 -->
 				<BtnBell v-if="store.isLogin" />
+				<!--  -->
+				<NuxtLink to="/shopcart" v-if="store.isLogin">
+					<i i-solar:cart-large-2-linear p-3 ml-2></i>
+				</NuxtLink>
 				<!-- 切换主题 -->
 				<BtnSwitch />
 				<!-- 登陆注册 -->
 				<div class="box" v-if="!store.isLogin">
-					<span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)"
-						>登 录</span
+					<span text-1em px-2 mx-1 cursor-pointer @click="onLogin(FormType.LOGIN)">
+						登 录</span
 					>
 					<ElButton
 						style="border-radius: 30px"

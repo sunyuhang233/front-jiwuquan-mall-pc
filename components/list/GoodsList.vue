@@ -7,6 +7,7 @@ import { GoodsVO } from '~/types/goods';
 // props
 const props = defineProps<{
 	dto: GoodsPageDTO;
+	limit?: number;
 }>();
 
 const isLoading = ref<boolean>(false);
@@ -14,7 +15,7 @@ const isLoading = ref<boolean>(false);
 const goodsList = ref<GoodsVO[]>([]);
 // 分页器
 const page = ref<number>(0);
-const size = ref<number>(10);
+const size = ref<number>(props.limit || 10);
 // 查询页信息
 let pageInfo = reactive<IPage<GoodsVO>>({
 	records: [],
@@ -74,9 +75,13 @@ const toGoodsView = (id: string) => {
 };
 </script>
 <template>
-	<div class="goods-list" overflow-hidden flex style="overflow: auto" flex-wrap>
+	<div class="goods-list">
 		<ClientOnly>
-			<transition-group name="popup">
+			<transition-group
+				tag="div"
+				name="fade-list"
+				class="overflow-hidden flex flex-wrap goods-list relative"
+			>
 				<!-- 商品卡片 -->
 				<CardGoodsBox
 					@click="toGoodsView(p.id)"
@@ -84,7 +89,7 @@ const toGoodsView = (id: string) => {
 					:goods="p"
 					:key="p.id"
 					v-infinite-scroll="loadGoodsPage"
-					:infinite-scroll-disabled="isNoMore || !isLoading"
+					:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
 					element-loading-background="transparent"
 					v-for="p in goodsList"
 				>

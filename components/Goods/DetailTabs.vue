@@ -34,7 +34,7 @@
 		</el-tab-pane>
 		<!-- 评价 -->
 		<el-tab-pane name="omments" lazy class="animate__animated animate__fadeIn mt-2" :label="'评 价'">
-			<GoodsComments :goods-id="goodsInfo?.id" :sku-list="skuList"  />
+			<GoodsComments :goods-id="goodsInfo?.id||''" :sku-list="skuList"  />
 		</el-tab-pane>
 		<!-- 其他 -->
 		<el-tab-pane name="other" lazy class="animate__animated animate__fadeIn mt-2" label="其 他">

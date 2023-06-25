@@ -5,6 +5,7 @@ import type { FormInstance } from 'element-plus';
 import { addShopcart } from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
 import currency from 'currency.js';
+import { useOrderStore } from '~/composables/store/useOrderStore';
 const user = useUserStore();
 const shop = useShopStore();
 const app = useNuxtApp();
@@ -66,16 +67,17 @@ const onSubmitBuy = (formRef: FormInstance | undefined) => {
 					},
 				];
 				fullscreenLoading.value = true;
+
+				// 提交订单
+				const order = useOrderStore();
 				setTimeout(() => {
+					order.pushOrderItems.splice(0);
+					order.pushOrderItems.push(...dto);
 					fullscreenLoading.value = false;
 					router.push({
-						path: '/order',
-						query: {
-							// @ts-ignore
-							orderItems: dto,
-						},
+						path: '/order/pay',
 					});
-				},1000);
+				}, 1000);
 			} else {
 				ElMessage.closeAll();
 				return false;
@@ -192,7 +194,6 @@ const allPrice = computed((): number => {
 			}
 		}
 	}
-
 	return 0;
 });
 
@@ -207,13 +208,13 @@ const setActiveItem = (image: string) => {
 };
 </script>
 <template>
-	<el-card class="sku-card" px-8 pt-8>
-		<el-form ref="FormRef" :model="form" label-position="top" class="group">
-			<!-- 顶部 -->
-			<div class="top opacity-90" flex-row-bt-c mt-2>
-				<!-- 商品标签 -->
-				<div class="left">
-					<ClientOnly>
+	<ClientOnly>
+		<el-card class="sku-card" px-8 pt-8>
+			<el-form ref="FormRef" :model="form" label-position="top" class="group">
+				<!-- 顶部 -->
+				<div class="top opacity-90" flex-row-bt-c mt-2>
+					<!-- 商品标签 -->
+					<div class="left">
 						<el-tag
 							class="mr-2 mb-2"
 							effect="dark"
@@ -222,163 +223,172 @@ const setActiveItem = (image: string) => {
 							>新品</el-tag
 						>
 						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
-							goodsInfo?.postage ? goodsInfo?.postage : '免运费'
+							goodsInfo?.postage ? goodsInfo?.postage + '元运费' : '免运费'
 						}}</el-tag>
 						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
 							goodsInfo?.refundTime ? goodsInfo?.refundTime + '日无理由退货' : ''
 						}}</el-tag>
-					</ClientOnly>
+					</div>
+					<!-- 收藏 -->
+					<BtnCollectGoods :gid="goodsInfo?.id || ''" />
 				</div>
-				<!-- 收藏 -->
-				<BtnCollectGoods :gid="goodsInfo?.id || ''" />
-			</div>
-			<div class="sku-list" tracking-0.1em flex flex-col leading-1.4em pt-6>
-				<!-- 顶部 -->
-				<h2 leading-1.2em mb-4>{{ goodsInfo?.name }}</h2>
-				<div flex-row-bt-c mb-4>
-					<small opacity-90 float-left>销售价（元）：</small>
-					<div class="righjt">
-						<span font-700 text-1.4em text-red-5
-							>￥
-							<span v-incre-up="goodsInfo?.price.toFixed(2)"></span>
-						</span>
-						<small
-							style="text-decoration: line-through; opacity: 0.9"
-							text-bluegray-3
-							text-0.6em
-							>￥
-							<span v-incre-up="goodsInfo?.costPrice.toFixed(2)"></span>
-						</small>
+				<div class="sku-list" tracking-0.1em flex flex-col leading-1.4em pt-6>
+					<!-- 顶部 -->
+					<h2 leading-1.2em mb-4>{{ goodsInfo?.name }}</h2>
+					<div flex-row-bt-c mb-4>
+						<small opacity-90 float-left>销售价（元）：</small>
+						<div class="righjt">
+							<span font-700 text-1.4em text-red-5
+								>￥
+								<span v-incre-up="goodsInfo?.price.toFixed(2)"></span>
+							</span>
+							<small
+								style="text-decoration: line-through; opacity: 0.9"
+								text-bluegray-3
+								text-0.6em
+								>￥
+								<span v-incre-up="goodsInfo?.costPrice.toFixed(2)"></span>
+							</small>
+						</div>
+					</div>
+					<!-- 规格 -->
+					<div class="card" v-if="sizeList.length">
+						<small>规 格</small>
+						<el-form-item prop="size" required mt-1>
+							<template #error>
+								<small text-red-5 pl-2>请选择规格</small>
+							</template>
+							<el-radio-group v-model="form.size">
+								<el-radio-button
+									:label="p.name"
+									v-for="p in sizeList"
+									:key="p.name"
+								/>
+							</el-radio-group>
+						</el-form-item>
+					</div>
+					<!-- 颜色 -->
+					<div class="card" v-if="colorList.length" pb-3>
+						<small>颜 色</small>
+						<el-form-item prop="color" mt-1 required>
+							<template #error>
+								<small text-red-5 pl-2>请选择颜色</small>
+							</template>
+							<el-radio-group v-model="form.color" size="large">
+								<!-- cts -->
+								<el-radio-button
+									border
+									v-for="p in colorList"
+									:key="p.name"
+									:label="p.name"
+									style="height: auto; border-radius: 6px"
+									@click="setActiveItem(p.image)"
+									class="flex flex-col color-group mr-4"
+								>
+									<img
+										class="sku-img"
+										:src="BaseUrlImg + p.image"
+										rounded-4px
+										overflow-hidden
+										z-0
+									/>
+									<div text-center py-2 px-4 z-5 class="tip">{{ p.name }}</div>
+								</el-radio-button>
+							</el-radio-group>
+						</el-form-item>
+					</div>
+					<!-- 套餐 -->
+					<div class="card" v-if="comboList.length">
+						<small>套 餐</small>
+						<el-form-item prop="combo" mt-1 required>
+							<template #error>
+								<small text-red-5 pl-2>请选择套餐</small>
+							</template>
+							<el-radio-group v-model="form.combo">
+								<el-radio-button
+									:label="p.name"
+									v-for="p in comboList"
+									:key="p.name"
+								/>
+							</el-radio-group>
+						</el-form-item>
 					</div>
 				</div>
-				<!-- 规格 -->
-				<div class="card" v-if="sizeList.length">
-					<small>规 格</small>
-					<el-form-item prop="size" required mt-1>
-						<template #error>
-							<small text-red-5 pl-2>请选择规格</small>
-						</template>
-						<el-radio-group v-model="form.size">
-							<el-radio-button :label="p.name" v-for="p in sizeList" :key="p.name" />
-						</el-radio-group>
-					</el-form-item>
-				</div>
-				<!-- 颜色 -->
-				<div class="card" v-if="colorList.length" pb-3>
-					<small>颜 色</small>
-					<el-form-item prop="color" mt-1 required>
-						<template #error>
-							<small text-red-5 pl-2>请选择颜色</small>
-						</template>
-						<el-radio-group v-model="form.color" size="large">
-							<!-- cts -->
-							<el-radio-button
-								border
-								v-for="p in colorList"
-								:key="p.name"
-								:label="p.name"
-								style="height: auto; border-radius: 6px"
-								@click="setActiveItem(p.image)"
-								class="flex flex-col color-group mr-4"
-							>
-								<img
-									class="sku-img"
-									:src="BaseUrlImg + p.image"
-									rounded-4px
-									overflow-hidden
-									z-0
-								/>
-								<div text-center py-2 px-4 z-5 class="tip">{{ p.name }}</div>
-							</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</div>
-				<!-- 套餐 -->
-				<div class="card" v-if="comboList.length">
-					<small>套 餐</small>
-					<el-form-item prop="combo" mt-1 required>
-						<template #error>
-							<small text-red-5 pl-2>请选择套餐</small>
-						</template>
-						<el-radio-group v-model="form.combo">
-							<el-radio-button :label="p.name" v-for="p in comboList" :key="p.name" />
-						</el-radio-group>
-					</el-form-item>
-				</div>
-			</div>
-			<!-- 数量 -->
-			<div class="card">
-				<small>数 量</small>
-				<el-form-item prop="quantity" mt-2 required>
-					<el-input-number
-						:disabled="getStock === 0"
-						:min="1"
-						:max="getStock !== 0 ? 99 : 1"
-						v-model="form.quantity"
-					/>
-					<small v-show="isAllCheckSku"
-						>（库存剩余：<span text-red-5>{{ getStock }} </span>件）</small
-					>
-					<small v-show="!isAllCheckSku">（总库存剩余：{{ getMaxStock }} 件）</small>
-				</el-form-item>
-			</div>
-
-			<!-- 购物车|立即购买 -->
-			<el-form-item>
-				<div class="w-1/1 flex justify-between py-3">
-					<el-button
-						size="large"
-						style="
-							flex: 1;
-							transition: 300ms;
-							font-size: 1.2em;
-							padding: 0.8em 1em;
-							letter-spacing: 0.1em;
-							margin-right: 0.6em;
-							font-weight: 700;
-						"
-						shadow
-						plain
-						@click="onSubmitShopCart(FormRef)"
-						>加入购物车
-					</el-button>
-
-					<el-button
-						size="large"
-						style="
-							flex: 1;
-							margin-right: 0.6em;
-							transition: 300ms;
-							font-size: 1.2em;
-							font-weight: 600;
-							padding: 0.8em 1em;
-							letter-spacing: 0.1em;
-							position: relative;
-						"
-						shadow-md
-						@click="onSubmitBuy(FormRef)"
-						type="info"
-						v-loading.fullscreen.lock="fullscreenLoading"
-						>立即购买
-						<div
-							dark:bg-dark-200
-							border-default-dashed
-							border-2px
-							border-border-dark-300
-							shadow-md
-							rounded="t-4px"
-							p-2
-							class="all-price z-0 -translate-1/1"
-							:class="{ active: isAllCheckSku }"
+				<!-- 数量 -->
+				<div class="card">
+					<small>数 量</small>
+					<el-form-item prop="quantity" mt-2 required>
+						<el-input-number
+							:disabled="getStock === 0"
+							:min="1"
+							:max="getStock !== 0 ? 99 : 1"
+							v-model="form.quantity"
+						/>
+						<small v-show="isAllCheckSku"
+							>（库存剩余：<span text-red-5>{{ getStock }} </span>件）</small
 						>
-							<small text-red-5>￥</small
-							><span text-red-5 v-incre-up="allPrice.toFixed(2)"></span>
-						</div>
-					</el-button>
+						<small v-show="!isAllCheckSku">（总库存剩余：{{ getMaxStock }} 件）</small>
+					</el-form-item>
 				</div>
-			</el-form-item>
-		</el-form>
-	</el-card>
+
+				<!-- 购物车|立即购买 -->
+				<el-form-item>
+					<div class="w-1/1 flex justify-between py-3">
+						<el-button
+							size="large"
+							style="
+								flex: 1;
+								transition: 300ms;
+								font-size: 1.2em;
+								padding: 0.8em 1em;
+								letter-spacing: 0.1em;
+								margin-right: 0.6em;
+								font-weight: 700;
+							"
+							shadow
+							plain
+							@click="onSubmitShopCart(FormRef)"
+							>加入购物车
+						</el-button>
+
+						<el-button
+							size="large"
+							style="
+								flex: 1;
+								margin-right: 0.6em;
+								transition: 300ms;
+								font-size: 1.2em;
+								font-weight: 600;
+								padding: 0.8em 1em;
+								letter-spacing: 0.1em;
+								position: relative;
+							"
+							shadow-md
+							@click="onSubmitBuy(FormRef)"
+							type="info"
+							v-loading.fullscreen.lock="fullscreenLoading"
+							>立即购买
+							<div
+								border-default-dashed
+								border-2px
+								border-border-dark-300
+								shadow-md
+								rounded="t-4px"
+								bg-white
+								dark:bg-dark-6
+								p-2
+								text-red-5
+								class="all-price z-0 -translate-1/1 "
+								:class="{ active: isAllCheckSku }"
+							>
+								<small>￥</small><span v-incre-up="allPrice.toFixed(2)"></span>
+					</div>
+						</el-button>
+					</div>
+				</el-form-item>
+			</el-form>
+		</el-card>
+	</ClientOnly>
 </template>
 <style scoped lang="scss">
 .card {
@@ -417,6 +427,7 @@ const setActiveItem = (image: string) => {
 	width: 8.6em;
 }
 
+.dark .all-price,
 .all-price {
 	position: absolute;
 	left: 12%;
