@@ -142,165 +142,185 @@ const toOrderPage = (ids: string[]) => {
 };
 </script>
 <template>
-	<div class="shop-cart" v-loading.fullscreen.lock="fullscreenLoading">
-		<!-- 下拉框 -->
-		<ClientOnly>
-			<el-popover
-				placement="top"
-				shadow-lg
-				:visible="isShow"
-				@keyup.esc="isShow = false"
-				width="530px"
-				popper-class="popover"
-				transition="popSlice"
-				:hide-after="0"
-				popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
+	<ClientOnly>
+		<div class="shop-cart" v-if="user.isLogin" v-loading.fullscreen.lock="fullscreenLoading">
+			<!-- 下拉框 -->
+			<ClientOnly>
+				<el-popover
+					placement="top"
+					shadow-lg
+					:visible="isShow"
+					@keyup.esc="isShow = false"
+					width="530px"
+					popper-class="popover"
+					transition="popSlice"
+					:hide-after="0"
+					popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
     min-height:380px; padding: 1.2em 1em;"
-				tabindex="0"
-			>
-				<template #reference>
-					<div
-						@click="isShow = true"
-						class="icon"
-						cursor-pointer
-						flex-row-c-c
-						hover:opacity-85
-						transition-300
-					>
-						<span
-							class="count animate__animated animate__fadeIn"
-							shadow-sm
-							v-show="getShopCartLength && getShopCartLength < 99"
-							v-incre-up-int="getShopCartLength"
-						></span>
-						<span
-							class="count animate__animated animate__fadeIn"
-							shadow-sm
-							v-show="getShopCartLength && getShopCartLength > 99"
-							>99+</span
-						>
-						<i i-solar:cart-large-bold-duotone style="width: 60%; height: 60%"></i>
-					</div>
-				</template>
-				<!-- 2、搜索结果（商品goods） -->
-				<template #default>
-					<div class="content">
-						<!-- 登录 -->
-						<div class="tologin" flex-row-c-c flex-col v-if="!user.isLogin">
-							<h3 text-center mt-10 mb-8>未登录，请登录！</h3>
-							<el-button
-								@click="user.showLoginForm = true"
-								size="large"
-								type="primary"
-								>立即登录</el-button
-							>
-						</div>
-						<!-- 全局 -->
-						<h2 mb-2 text-center border-0 border-b-1 border-default tracking-0.1em pb-4>
-							<span
-								style="font-size: 0.6em; position: absolute; right: 2em; top: 2em"
-								cursor-pointer
-								select-none
-								@click="isEdit = !isEdit"
-								:plain="!isEdit"
-								class="transition-300"
-								>{{ !isEdit ? '管理' : '取消' }}</span
-							>
-							购物车
-						</h2>
-						<el-scrollbar height="500px" mb-2>
-							<ul
-								v-if="user.isLogin"
-								v-infinite-scroll="loadShopcartList"
-								:infinite-scroll-delay="300"
-								:infinite-scroll-disabled="notMore"
-							>
-								<!-- 购物车项 -->
-								<el-checkbox-group v-model="selectIds" size="large">
-									<li v-for="(p, i) in shop.shopcartList" :key="p.id">
-										<CardShopLine :shop-cart="p">
-											<template #btn>
-												<el-checkbox
-													:label="p.id"
-													:disabled="!p.stock"
-												></el-checkbox>
-											</template>
-										</CardShopLine>
-									</li>
-								</el-checkbox-group>
-							</ul>
-						</el-scrollbar>
-
-						<!-- 下方按钮 -->
+					tabindex="0"
+				>
+					<template #reference>
 						<div
-							class="bottom"
-							style="width: 100%"
-							px-2
-							flex
-							justify-between
-							items-center
-							border-default
-							rounded-6px
-							border-2px
+							@click="isShow = true"
+							class="icon"
+							cursor-pointer
+							flex-row-c-c
+							hover:opacity-85
+							transition-300
 						>
-							<el-checkbox v-model="isSelectAll" mx-2 size="large" label="全 选" />
-							<div flex>
-								<lazy-el-button
-									v-if="selectIds.length"
-									class="fadeInOut flex-1"
-									style="padding: 0em 1em"
-									type="danger"
-									plain
-									:disabled="selectIds.length === 0"
-									round
-									@click="deleteBatchShopcart('批量删除')"
-									>批量删除
-									<i i-solar:trash-bin-trash-broken mr-1></i>
-								</lazy-el-button>
-								<lazy-el-button
-									v-if="isEdit"
-									class="fadeInOut flex-1"
-									style="padding: 0em 1em"
-									type="danger"
-									plain
-									:disabled="!isEdit"
-									round
-									@click="clearShopcart"
-								>
-									<i i-solar:trash-bin-trash-broken mr-1></i>
-									清空
-								</lazy-el-button>
-								<lazy-el-button
-									class="fadeInOut flex-1"
-									style="padding: 0em 2em"
-									type="info"
-									round
-									:disabled="selectIds.length === 0"
-									@click="toOrderPage(selectIds)"
-									tracking-0.1em
-									>去结算</lazy-el-button
+							<span
+								class="count animate__animated animate__fadeIn"
+								shadow-sm
+								v-show="getShopCartLength && getShopCartLength < 99"
+								v-incre-up-int="getShopCartLength"
+							></span>
+							<span
+								class="count animate__animated animate__fadeIn"
+								shadow-sm
+								v-show="getShopCartLength && getShopCartLength > 99"
+								>99+</span
+							>
+							<i i-solar:cart-large-bold-duotone style="width: 60%; height: 60%"></i>
+						</div>
+					</template>
+					<!-- 2、搜索结果（商品goods） -->
+					<template #default>
+						<div class="content">
+							<!-- 登录 -->
+							<div class="tologin" flex-row-c-c flex-col v-if="!user.isLogin">
+								<h3 text-center mt-10 mb-8>未登录，请登录！</h3>
+								<el-button
+									@click="user.showLoginForm = true"
+									size="large"
+									type="primary"
+									>立即登录</el-button
 								>
 							</div>
+							<!-- 全局 -->
+							<h2
+								mb-2
+								text-center
+								border-0
+								border-b-1
+								border-default
+								tracking-0.1em
+								pb-4
+							>
+								<span
+									style="
+										font-size: 0.6em;
+										position: absolute;
+										right: 2em;
+										top: 2em;
+									"
+									cursor-pointer
+									select-none
+									@click="isEdit = !isEdit"
+									:plain="!isEdit"
+									class="transition-300"
+									>{{ !isEdit ? '管理' : '取消' }}</span
+								>
+								购物车
+							</h2>
+							<el-scrollbar height="500px" class="overflow-auto" mb-2>
+								<ul
+									v-infinite-scroll="loadShopcartList"
+									:infinite-scroll-delay="300"
+									:infinite-scroll-disabled="notMore"
+									style="overflow: auto"
+								>
+									<!-- 购物车项 -->
+									<el-checkbox-group v-model="selectIds" size="large">
+										<li v-for="(p, i) in shop.shopcartList" :key="p.id">
+											<CardShopLine :shop-cart="p">
+												<template #btn>
+													<el-checkbox
+														:label="p.id"
+														:disabled="!p.stock"
+													></el-checkbox>
+												</template>
+											</CardShopLine>
+										</li>
+									</el-checkbox-group>
+								</ul>
+							</el-scrollbar>
+
+							<!-- 下方按钮 -->
+							<div
+								class="bottom"
+								style="width: 100%"
+								px-2
+								flex
+								justify-between
+								items-center
+								border-default
+								rounded-6px
+								border-2px
+							>
+								<el-checkbox
+									v-model="isSelectAll"
+									mx-2
+									size="large"
+									label="全 选"
+								/>
+								<div flex>
+									<lazy-el-button
+										v-if="selectIds.length"
+										class="fadeInOut flex-1"
+										style="padding: 0em 1em"
+										type="danger"
+										plain
+										:disabled="selectIds.length === 0"
+										round
+										@click="deleteBatchShopcart('批量删除')"
+										>批量删除
+										<i i-solar:trash-bin-trash-broken mr-1></i>
+									</lazy-el-button>
+									<lazy-el-button
+										v-if="isEdit"
+										class="fadeInOut flex-1"
+										style="padding: 0em 1em"
+										type="danger"
+										plain
+										:disabled="!isEdit"
+										round
+										@click="clearShopcart"
+									>
+										<i i-solar:trash-bin-trash-broken mr-1></i>
+										清空
+									</lazy-el-button>
+									<lazy-el-button
+										class="fadeInOut flex-1"
+										style="padding: 0em 2em"
+										type="info"
+										round
+										:disabled="selectIds.length === 0"
+										@click="toOrderPage(selectIds)"
+										tracking-0.1em
+										>去结算</lazy-el-button
+									>
+								</div>
+							</div>
 						</div>
-					</div>
-				</template>
-			</el-popover>
-		</ClientOnly>
-		<!-- 蒙版 -->
-		<div
-			class="shop-cart-mock"
-			w-100vw
-			h-100vh
-			bg-dark-300
-			dark:bg-dark-200
-			transition-200
-			opacity-40
-			v-show="isShow"
-			@click="isShow = false"
-			@keyup.esc="isShow = false"
-			style="position: fixed; top: 0; left: 0; z-index: -1"
-		></div>
-	</div>
+					</template>
+				</el-popover>
+			</ClientOnly>
+			<!-- 蒙版 -->
+			<div
+				class="shop-cart-mock"
+				w-100vw
+				h-100vh
+				bg-dark-300
+				dark:bg-dark-200
+				transition-200
+				opacity-40
+				v-show="isShow"
+				@click="isShow = false"
+				@keyup.esc="isShow = false"
+				style="position: fixed; top: 0; left: 0; z-index: -1"
+			></div>
+		</div>
+	</ClientOnly>
 </template>
 <style scoped lang="scss">
 .shop-cart {

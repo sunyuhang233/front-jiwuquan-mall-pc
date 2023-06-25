@@ -8,7 +8,6 @@ const noticeTip = ref<number>(0);
 				<i p-3  mx-1 i-solar:bell-outline w-1.4em h-1.4em > </i>
 			</el-badge>
 		</template>
-    <!-- 消息 -->
     <template #default>
     <small text-center class="w-1/1">暂无消息</small>
     </template>

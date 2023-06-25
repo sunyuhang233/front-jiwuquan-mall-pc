@@ -134,8 +134,6 @@ const toGoodsView = (gid: string) => {
 		border-2px
 		hover:shadow
 		hover:border="solid violet-6"
-		hover:bg="gray-1"
-		dark:hover:bg="dark-1"
 		border-dashed
 		border-default
 	>

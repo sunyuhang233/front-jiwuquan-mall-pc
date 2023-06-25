@@ -81,8 +81,8 @@ const size = ref<number>(6);
 // 骨架屏
 const isLoading = ref<boolean>(true);
 const { data } = await getGoodsListByPage(page.value, size.value, {
-	viewsSort: Sort.DESC,
-	saleSort: Sort.DESC,
+	viewsSort: isTrue.TRUE,
+	saleSort: isTrue.TRUE,
 });
 // 展示结果
 const searchPage = reactive(
@@ -128,7 +128,5 @@ isLoading.value = false;
 	background-color: #ffffff;
 	position: relative;
 	backdrop-filter: blur(20px);
-
-
 }
 </style>

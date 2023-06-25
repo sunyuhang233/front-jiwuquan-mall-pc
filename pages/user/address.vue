@@ -204,7 +204,7 @@ const rules = reactive({
 		<ClientOnly>
 			<div class="address-list" layout-default w-900px>
 				<!-- 表单 -->
-				<el-dialog
+				<lazy-el-dialog
 					style="width: 400px; padding: 0 20px"
 					v-model="isShow"
 					:show-close="true"
@@ -273,7 +273,7 @@ const rules = reactive({
 							</el-button>
 						</el-form-item>
 					</el-form>
-				</el-dialog>
+				</lazy-el-dialog>
 
 				<!-- 列表 -->
 				<div
@@ -333,7 +333,7 @@ const rules = reactive({
 								/>
 								<p mt-1>添加新地址</p>
 							</div>
-
+							<!-- 地址项 -->
 							<div
 								m-2
 								cursor-pointer

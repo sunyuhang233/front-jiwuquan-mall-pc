@@ -100,7 +100,7 @@ const toView = (path: string) => {
 								{{ p.nickname }}
 							</h4>
 							<el-tag opacity-70 class="p-0 overflow-hidden truncate ...">{{
-								p.phone || '未绑定手机号'
+								p.username || '未填写用户名'
 							}}</el-tag>
 						</div>
 					</div>

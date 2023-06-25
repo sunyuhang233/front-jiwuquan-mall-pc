@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
   })
 
   watch(token,(val)=>{
-    if (val) {
+    if (val!=="") {
       onUserLogin(val)
     }
   })
@@ -56,8 +56,6 @@ export const useUserStore = defineStore('user', () => {
    */
   const onUserLogin = async (token: string, saveLocal?: boolean) => {
     await useAsyncData(async () => {
-      // 购物车
-      useShopStore().loadShopcartList()
       // 用户信息
       const store = useUserStore()
       let res = await getUserInfo(token)

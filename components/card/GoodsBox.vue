@@ -42,7 +42,8 @@ isLoading.value = false;
 					cursor-pointer
 				>
 					<ClientOnly>
-						<ElImage lazy
+						<ElImage
+							lazy
 							hover:transform-scale-110
 							transition-300
 							rounded-2px
@@ -56,14 +57,13 @@ isLoading.value = false;
 					</h4>
 					<p color-red-5 px-3 pb-3 class="texts">
 						<strong pr-1>￥{{ goods.price?.toFixed(2) }}</strong>
-						<small color-coolgray text-0.6em style="text-decoration: line-through">￥{{
-							goods.costPrice.toFixed(2)
-						}}</small>
+						<small color-coolgray text-0.6em style="text-decoration: line-through"
+							>￥{{ goods.costPrice.toFixed(2) }}</small
+						>
 						<!-- 小标填充 -->
 						<slot :goods="goods"></slot>
 					</p>
 					<slot name="bottom" :goods="goods"></slot>
-
 				</div>
 			</template>
 		</el-skeleton>
@@ -73,7 +73,7 @@ isLoading.value = false;
 .texts {
 	position: relative;
 	line-height: 1.2em;
-	&:hover >*{
+	&:hover > * {
 		opacity: 0;
 	}
 	&::before {

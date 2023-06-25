@@ -11,10 +11,7 @@ app.hook("app:mounted", () => {
   }
 })
 </script>
-<!-- html  -->
 <template>
-  <!-- 处理错误 -->
-  <FormUserDialog />
   <NuxtPage />
 </template>
 <style> 

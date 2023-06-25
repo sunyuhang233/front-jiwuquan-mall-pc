@@ -11,7 +11,7 @@
 		<MenuFooter v-if="footer" />
 	</div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup> 
 const { footer } = defineProps({
 	footer: {
 		type: Boolean,

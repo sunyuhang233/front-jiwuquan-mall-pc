@@ -1,7 +1,7 @@
 <template>
-  <!-- <el-switch :active-icon="ElIconAddLocation" :value="isDark" inline-prompt @click="toggle">
-  </el-switch> -->
   <ElButton @click="toggle"  class="btn" mx-3 round>
+      <!-- <el-switch :active-icon="ElIconAddLocation" :value="isDark" inline-prompt @click="toggle">
+  </el-switch> -->
    <span>{{ isDark ? '切换日间' : '切换夜间' }}</span>
     <OtherMoonSun />
   </ElButton>

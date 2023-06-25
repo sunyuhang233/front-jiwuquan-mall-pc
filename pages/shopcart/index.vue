@@ -148,45 +148,47 @@ const getAllPrice = computed(() => {
 });
 </script>
 <template>
-	<NuxtLayout name="second" :footer="false">
-		<div
-			class="shopcart-list"
-			border-default
-			rounded-t-10px
-			shadow-md
-			bg-white
-			dark:bg-dark
-			p-20px
-			min-h-95vh
-			relative
-			mt-2em
-			mx-a
-			w-700px
-		>
-			<h2 mb-2 text-center border-0 border-b-1 border-default tracking-0.1em pb-4>
-				<small
-					style="font-size: 0.8em; padding-top: 0.2em; position: absolute; right: 1em"
-					cursor-pointer
-					select-none
-					@click="isEdit = !isEdit"
-					:plain="!isEdit"
-					class="transition-300"
-					text-green-5
-					>{{ !isEdit ? '管理' : '取消' }}</small
-				>
-				购物车
-			</h2>
-			<ClientOnly>
-				<el-scrollbar mb-2>
+	<NuxtLayout name="second">
+		<ClientOnly>
+			<div
+				v-if="user.isLogin"
+				class="shopcart-list"
+				border-default
+				rounded-t-10px
+				shadow-md
+				bg-white
+				dark:bg-dark
+				p-20px
+				min-h-95vh
+				relative
+				mt-2em
+				mx-a
+				w-700px
+			>
+				<h2 mb-2 text-center border-0 border-b-1 border-default tracking-0.1em pb-4>
+					<small
+						style="font-size: 0.8em; padding-top: 0.2em; position: absolute; right: 1em"
+						cursor-pointer
+						select-none
+						@click="isEdit = !isEdit"
+						:plain="!isEdit"
+						class="transition-300"
+						text-green-5
+						>{{ !isEdit ? '管理' : '取消' }}</small
+					>
+					购物车
+				</h2>
+				<ClientOnly>
 					<ul
-						v-if="user.isLogin"
+						mb-2
 						v-infinite-scroll="loadShopcartList"
 						:infinite-scroll-delay="300"
 						:infinite-scroll-disabled="notMore"
+						overflow-auto
 					>
 						<!-- 购物车项 -->
-						<el-checkbox-group v-model="selectIds" size="large">
-							<transition-group tag="div" name="fade-list" class="relative">
+						<el-checkbox-group v-model="selectIds" size="large" class="relative">
+							<transition-group tag="div" name="fade-list">
 								<li v-for="(p, i) in shop.shopcartList" :key="p.id">
 									<CardShopLine :shop-cart="p">
 										<template #btn>
@@ -200,87 +202,87 @@ const getAllPrice = computed(() => {
 							</transition-group>
 						</el-checkbox-group>
 					</ul>
-				</el-scrollbar>
-			</ClientOnly>
-			<!-- 下方按钮 -->
-			<div
-				class="bottom"
-				mt-4em
-				style="width: 660px; position: fixed"
-				fixed
-				bottom-0
-				h-4em
-				px-4
-				flex
-				justify-between
-				items-center
-				border-default
-				rounded-10px
-				animate-fade-in-up
-				border-2px
-				my-4
-				shadow-md
-				relative
-				bg-white
-				dark-bg-dark-6
-				z-999
-			>
+				</ClientOnly>
+				<!-- 下方按钮 -->
 				<div
-					absolute
-					class="-top-3em right-0"
-					p-2
+					class="bottom"
+					mt-4em
+					style="width: 660px; position: fixed"
+					fixed
+					bottom-0
+					h-4em
 					px-4
-					w-660px
 					flex
-					items-end
 					justify-between
+					items-center
+					border-default
+					rounded-10px
+					animate-fade-in-up
+					border-2px
+					my-4
+					shadow-md
+					relative
+					bg-white
+					dark-bg-dark-6
+					z-999
 				>
-					<span float-left p-1>共计 {{ getAllNums }} 件</span>
-					<div flex items-end>
-						<span p-1>总计：￥</span>
-						<h2 text-red-5 v-incre-up="getAllPrice"></h2>
+					<div
+						absolute
+						class="-top-3em right-0"
+						p-2
+						px-4
+						w-660px
+						flex
+						items-end
+						justify-between
+					>
+						<span float-left p-1>共计 {{ getAllNums }} 件</span>
+						<div flex items-end>
+							<span p-1>总计：￥</span>
+							<h2 text-red-5 v-incre-up="getAllPrice"></h2>
+						</div>
+					</div>
+					<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
+					<div flex>
+						<lazy-el-button
+							v-if="selectIds.length"
+							class="fadeInOut flex-1"
+							style="padding: 0em 1em"
+							type="danger"
+							plain
+							:disabled="selectIds.length === 0"
+							round
+							@click="deleteBatchShopcart('批量删除')"
+							>批量删除
+							<i i-solar:trash-bin-trash-broken mr-1></i>
+						</lazy-el-button>
+						<lazy-el-button
+							v-if="isEdit"
+							class="fadeInOut flex-1"
+							style="padding: 0em 1em"
+							type="danger"
+							plain
+							:disabled="!isEdit"
+							round
+							@click="clearShopcart"
+						>
+							<i i-solar:trash-bin-trash-broken mr-1></i>
+							清空
+						</lazy-el-button>
+						<lazy-el-button
+							class="fadeInOut flex-1"
+							style="padding: 0em 2em"
+							type="info"
+							round
+							:disabled="selectIds.length === 0"
+							@click="toOrderPage(selectIds)"
+							tracking-0.1em
+							>去结算</lazy-el-button
+						>
 					</div>
 				</div>
-				<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
-				<div flex>
-					<lazy-el-button
-						v-if="selectIds.length"
-						class="fadeInOut flex-1"
-						style="padding: 0em 1em"
-						type="danger"
-						plain
-						:disabled="selectIds.length === 0"
-						round
-						@click="deleteBatchShopcart('批量删除')"
-						>批量删除
-						<i i-solar:trash-bin-trash-broken mr-1></i>
-					</lazy-el-button>
-					<lazy-el-button
-						v-if="isEdit"
-						class="fadeInOut flex-1"
-						style="padding: 0em 1em"
-						type="danger"
-						plain
-						:disabled="!isEdit"
-						round
-						@click="clearShopcart"
-					>
-						<i i-solar:trash-bin-trash-broken mr-1></i>
-						清空
-					</lazy-el-button>
-					<lazy-el-button
-						class="fadeInOut flex-1"
-						style="padding: 0em 2em"
-						type="info"
-						round
-						:disabled="selectIds.length === 0"
-						@click="toOrderPage(selectIds)"
-						tracking-0.1em
-						>去结算</lazy-el-button
-					>
-				</div>
 			</div>
-		</div>
+		</ClientOnly>
 	</NuxtLayout>
 </template>
 <style scoped lang="scss">

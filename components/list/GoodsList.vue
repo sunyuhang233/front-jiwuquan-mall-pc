@@ -8,6 +8,7 @@ import { GoodsVO } from '~/types/goods';
 const props = defineProps<{
 	dto: GoodsPageDTO;
 	limit?: number;
+	load?: boolean;
 }>();
 
 const isLoading = ref<boolean>(false);
@@ -24,7 +25,13 @@ let pageInfo = reactive<IPage<GoodsVO>>({
 	size: -1,
 	current: -1,
 });
-const isNoMore = computed<boolean>(() => goodsList.value.length === pageInfo?.total);
+const isNot = ref<boolean>(false);
+const isNoMore = computed<boolean>({
+	get() {
+		return goodsList.value.length === pageInfo?.total;
+	},
+	set(val: boolean) {},
+});
 
 const loadGoodsPage = async () => {
 	if (isLoading.value) return;
@@ -40,7 +47,10 @@ const loadGoodsPage = async () => {
 	// 展示结果
 	pageInfo = toReactive({ ...data });
 	let timer: NodeJS.Timeout | null;
-	if (!data?.records) return;
+	if (!data?.records || data?.records.length === 0) {
+		isNot.value = true;
+		return (isLoading.value = false);
+	}
 	for await (const p of data.records) {
 		await new Promise((resolve) => {
 			timer = setTimeout(() => {
@@ -48,7 +58,6 @@ const loadGoodsPage = async () => {
 				goodsList.value.push(p);
 				clearTimeout(timer ?? undefined);
 				timer = null;
-
 				isLoading.value = false;
 				return resolve(true);
 			}, 50);
@@ -56,7 +65,6 @@ const loadGoodsPage = async () => {
 	}
 };
 loadGoodsPage(); // 加载一次
-
 const clearResult = () => {
 	goodsList.value.splice(0);
 	pageInfo = reactive({
@@ -73,14 +81,22 @@ const toGoodsView = (id: string) => {
 		path: `/goods/detail/${id}`,
 	});
 };
+defineExpose({
+	clearResult, // 清除
+	loadGoodsPage,
+});
 </script>
 <template>
-	<div class="goods-list">
+	<div class="goods-list" min-h-100vh>
 		<ClientOnly>
 			<transition-group
 				tag="div"
 				name="fade-list"
-				class="overflow-hidden flex flex-wrap goods-list relative"
+				:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
+				v-infinite-scroll="loadGoodsPage"
+				:infinite-scroll-delay="300"
+				style="overflow: auto"
+				class="overflow-auto flex flex-wrap goods-list relative"
 			>
 				<!-- 商品卡片 -->
 				<CardGoodsBox
@@ -88,8 +104,6 @@ const toGoodsView = (id: string) => {
 					class="mr-5 my-5 transition-300"
 					:goods="p"
 					:key="p.id"
-					v-infinite-scroll="loadGoodsPage"
-					:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
 					element-loading-background="transparent"
 					v-for="p in goodsList"
 				>
@@ -99,6 +113,7 @@ const toGoodsView = (id: string) => {
 			<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
 				暂无更多商品
 			</p>
+			<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNot">暂无商品</p>
 			<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
 		</ClientOnly>
 	</div>

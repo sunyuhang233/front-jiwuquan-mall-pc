@@ -9,20 +9,9 @@ export const useAddresStore = defineStore('Addres', () => {
   // 重新获取
   const resetRequestList = async (token: string): Promise<boolean> => {
     const res = await getAddressList(token);
-    addressList.value.splice(0)
     if (res.code === StatusCode.SUCCESS) {
-      // 展示结果 
-      let timer: NodeJS.Timeout | null;
-      for await (const p of res.data) {
-        await new Promise((resolve) => {
-          timer = setTimeout(() => {
-            addressList.value.push(p);
-            clearTimeout(timer ?? undefined);
-            timer = null;
-            return resolve(true);
-          }, 60);
-        });
-      }
+      addressList.value.splice(0)
+      addressList.value.push(...res.data);
       return Promise.resolve(true);
     } else {
       return Promise.resolve(false);

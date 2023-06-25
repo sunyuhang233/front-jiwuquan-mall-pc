@@ -8,8 +8,7 @@ definePageMeta({
 <template>
   <NuxtLayout>
     <div>
-      搜索详情页
-      {{ route.params.eid }}
+      {{ route.query.eid }}
     </div>
   </NuxtLayout>
 </template>

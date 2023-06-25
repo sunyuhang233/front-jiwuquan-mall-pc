@@ -24,10 +24,10 @@ export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO
 export interface GoodsPageDTO {
   cid?: string,
   name?: string,
-  isPostage?: Sort,
-  priceSort?: Sort,
-  viewsSort?: Sort,
-  saleSort?: Sort,
+  priceSort?: isTrue,
+  viewsSort?: isTrue,
+  saleSort?: isTrue,
+  isPostage?: isTrue,
   isNew?: isTrue,
 }
 

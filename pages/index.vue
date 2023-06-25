@@ -25,16 +25,18 @@ const user = useUserStore();
 			<div class="bottom" overflowx-hidden>
 				<div mt-6 layout-default>
 					<!-- 热门商品分类 -->
-					<IndexCategoryLine />
+					<LazyIndexCategoryLine />
 					<!-- title -->
 					<!-- 商品列表tabs -->
 					<IndexGoodsTabs class="mt-6" />
 				</div>
 			</div>
 			<!-- 购物车 -->
-			<div class="shop-card" v-if="user.isLogin">
-				<MenuShopCartBar />
-			</div>
+			<ClientOnly>
+				<div class="shop-card" v-if="user.isLogin">
+					<MenuShopCartBar />
+				</div>
+			</ClientOnly>
 		</div>
 	</NuxtLayout>
 </template>

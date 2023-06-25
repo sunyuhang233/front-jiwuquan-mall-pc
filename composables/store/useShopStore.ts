@@ -79,8 +79,6 @@ export const useShopStore = defineStore('shop', () => {
     return Promise.resolve(true);
   }
 
-
-
   /**
    * 批量删除
    */
