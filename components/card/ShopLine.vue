@@ -77,6 +77,9 @@ const getProps = computed({
 		// 更新
 		if (p && p.size && p.color && p.combo) {
 			shopCart.size = p.size;
+			shopCart.image = p.image;
+			shopCart.price = p.price;
+			shopCart.costPrice = p.costPrice;
 			shopCart.color = p.color;
 			shopCart.combo = p.combo;
 			shopCart.skuId = skuId;

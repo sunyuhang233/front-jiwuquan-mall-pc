@@ -7,12 +7,19 @@ const props = defineProps({
 		required: false,
 	},
 });
-const store = useUserStore();
-const p = store.userInfo;
+const user = useUserStore();
 const formData = new FormData();
 
 // 表单
-const avatarUrl = ref<string>(p.avatar);
+const avatarUrl = computed({
+	get() {
+		return user.userInfo.avatar;
+	},
+	set(val) {
+		user.userInfo.avatar = val;
+	},
+});
+
 /**
  * 上传之前验证类型
  */
@@ -34,11 +41,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
  */
 const updateSucess: UploadProps['onSuccess'] = async (data, file) => {
 	if (data.code === StatusCode.SUCCESS) {
-		store.$patch({
-			userInfo: {
-				avatar: data.data,
-			},
-		});
+		user.userInfo.avatar = data.data;
 		avatarUrl.value = data.data || '';
 		ElMessage.success('更换头像成功！');
 	} else {
@@ -58,7 +61,7 @@ const exitLogin = () => {
 	})
 		.then((e) => {
 			// 退出登录
-			store.onUserExit(store.token);
+			user.onUserExit(user.token);
 			document.body.style.paddingRight = init + 'px';
 			ElMessage.success('退出成功！');
 		})
@@ -81,14 +84,16 @@ const toView = (path: string) => {
 					<div flex-row-c-c border-l="1px dashed gray" dark:border-l-dark>
 						<!-- 替换头像 -->
 						<el-badge
-							:is-dot="!p.avatar || p.avatar === 'default.png'"
+							:is-dot="
+								!user.userInfo.avatar || user.userInfo.avatar === 'default.png'
+							"
 							class="item pr-2 pl-4"
 						>
 							<el-avatar
 								:src="
-									!p.avatar || p.avatar === 'default.png'
+									!user.userInfo.avatar || user.userInfo.avatar === 'default.png'
 										? ''
-										: BaseUrlImg + p.avatar
+										: BaseUrlImg + user.userInfo.avatar
 								"
 								class="hovers"
 							>
@@ -97,10 +102,10 @@ const toView = (path: string) => {
 						</el-badge>
 						<div pl-2>
 							<h4 tracking-1px w-7em class="overflow-hidden truncate ...">
-								{{ p.nickname }}
+								{{ user.userInfo.nickname }}
 							</h4>
 							<el-tag opacity-70 class="p-0 overflow-hidden truncate ...">{{
-								p.username || '未填写用户名'
+								user.userInfo.username || '未填写用户名'
 							}}</el-tag>
 						</div>
 					</div>
@@ -116,7 +121,7 @@ const toView = (path: string) => {
 							style="width: 100%; height: 100%; border-radius: 50%"
 							drag
 							action="/api/user/info/avatar"
-							:headers="{ Authorization: store.token }"
+							:headers="{ Authorization: user.token }"
 							method="PUT"
 							:limit="1"
 							:multiple="false"
@@ -136,14 +141,18 @@ const toView = (path: string) => {
 							<ElIconPlus size="2em" v-else />
 						</el-upload>
 						<div class="bottom" flex-col>
-							<h3 class="title" py-1>{{ p.nickname }}</h3>
+							<h3 class="title" py-1>{{ user.userInfo.nickname }}</h3>
 							<!-- 卡片集合 -->
 							<div flex flex-wrap mb-2>
 								<!-- 收货地址 -->
-								<el-card shadow="hover" class="v-card" @click="toView('/user/address')">
+								<el-card
+									shadow="hover"
+									class="v-card"
+									@click="toView('/user/address')"
+								>
 									<p
 										class="icon shopcart"
-										bg-yellow-5
+										bg-lime-5
 										i-solar:compass-bold-duotone
 									></p>
 									<p mt-2>收货地址</p>
@@ -166,6 +175,18 @@ const toView = (path: string) => {
 									></p>
 									<p mt-2>购物车</p>
 								</el-card>
+								<el-card
+									shadow="hover"
+									class="v-card"
+									@click="toView(`/user/bill`)"
+								>
+									<p
+										class="icon myself"
+										bg-yellow-6
+										i-solar:bill-list-bold-duotone
+									></p>
+									<p mt-2>账 单</p>
+								</el-card>
 								<!-- 订单 -->
 								<el-card shadow="hover" class="v-card" @click="toView(`/order`)">
 									<p
@@ -175,18 +196,7 @@ const toView = (path: string) => {
 									></p>
 									<p mt-2>订 单</p>
 								</el-card>
-								<el-card
-									shadow="hover"
-									class="v-card"
-									@click="toView(`/user/bill`)"
-								>
-									<p
-										class="icon myself"
-										bg-yellow-5
-										i-solar:bill-list-bold-duotone
-									></p>
-									<p mt-2>账 单</p>
-								</el-card>
+								<!-- 安全 -->
 								<el-card
 									shadow="hover"
 									class="v-card"

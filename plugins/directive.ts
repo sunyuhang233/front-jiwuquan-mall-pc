@@ -63,10 +63,10 @@ export default defineNuxtPlugin((nuxtApp) => {
    * 自动递增动画 arg :参数表示持续秒数
    */
   nuxtApp.vueApp.directive('incre-up', {
-    mounted: function (el, binding) { 
+    mounted: function (el, binding) {
       const targetValue = binding.value;
       const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue||0 };
+      const counter = { var: binding.oldValue || 0 };
       gsap.to(counter, {
         var: targetValue,
         duration: duration,
@@ -75,10 +75,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       });
     },
-    updated: function (el, binding) { 
+    updated: function (el, binding) {
       const targetValue = binding.value;
       const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue||0 };
+      const counter = { var: binding.oldValue || 0 };
       gsap.to(counter, {
         var: targetValue,
         duration: duration,
@@ -89,12 +89,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   })
 
-
+  // 整数
   nuxtApp.vueApp.directive('incre-up-int', {
-    mounted: function (el, binding) { 
+    mounted: function (el, binding) {
       const targetValue = binding.value;
       const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue||0 };
+      const counter = { var: binding.oldValue || 0 };
       gsap.to(counter, {
         var: targetValue,
         duration: duration,
@@ -103,10 +103,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       });
     },
-    updated: function (el, binding) { 
+    updated: function (el, binding) {
       const targetValue = binding.value;
       const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue||0 };
+      const counter = { var: binding.oldValue || 0 };
       gsap.to(counter, {
         var: targetValue,
         duration: duration,

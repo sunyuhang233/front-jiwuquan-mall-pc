@@ -9,7 +9,6 @@ const user = useUserStore();
 	<NuxtLayout>
 		<div class="index w-1/1" flex flex-col items-center>
 			<div overflow-x-hidden layout-default>
-				<!-- 顶部导航 -->
 				<IndexTopMenu />
 				<div flex pt-4>
 					<!-- 轮播图 -->
@@ -31,12 +30,6 @@ const user = useUserStore();
 					<IndexGoodsTabs class="mt-6" />
 				</div>
 			</div>
-			<!-- 购物车 -->
-			<ClientOnly>
-				<div class="shop-card" v-if="user.isLogin">
-					<MenuShopCartBar />
-				</div>
-			</ClientOnly>
 		</div>
 	</NuxtLayout>
 </template>

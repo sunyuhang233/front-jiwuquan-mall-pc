@@ -37,7 +37,6 @@ const loadGoodsPage = async () => {
 	if (isLoading.value) return;
 	isLoading.value = true;
 	page.value++;
-
 	const { data } = await getGoodsListByPage(page.value, size.value, props.dto);
 
 	// 没有更多
@@ -50,6 +49,9 @@ const loadGoodsPage = async () => {
 	if (!data?.records || data?.records.length === 0) {
 		isNot.value = true;
 		return (isLoading.value = false);
+	}else {
+		isNot.value = false;
+
 	}
 	for await (const p of data.records) {
 		await new Promise((resolve) => {
@@ -65,6 +67,7 @@ const loadGoodsPage = async () => {
 	}
 };
 loadGoodsPage(); // 加载一次
+
 const clearResult = () => {
 	goodsList.value.splice(0);
 	pageInfo = reactive({
@@ -81,22 +84,33 @@ const toGoodsView = (id: string) => {
 		path: `/goods/detail/${id}`,
 	});
 };
+const dto = toReactive(props.dto)
+watch(
+	dto,
+	() => {
+		clearResult();
+		loadGoodsPage();
+	},
+	{ deep: true, immediate: true }
+);
+
 defineExpose({
 	clearResult, // 清除
 	loadGoodsPage,
+	goodsList,
+	pageInfo,
 });
 </script>
 <template>
-	<div class="goods-list" min-h-100vh>
+	<div class="goods-list min-h-80vh" style="overflow: auto">
 		<ClientOnly>
 			<transition-group
 				tag="div"
 				name="fade-list"
-				:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
 				v-infinite-scroll="loadGoodsPage"
+				:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
 				:infinite-scroll-delay="300"
-				style="overflow: auto"
-				class="overflow-auto flex flex-wrap goods-list relative"
+				class="flex flex-wrap relative overflow-x-hidden"
 			>
 				<!-- 商品卡片 -->
 				<CardGoodsBox
@@ -110,12 +124,12 @@ defineExpose({
 					<small float-right mt-2px text-blueGray>销量：{{ p.sales }}</small>
 				</CardGoodsBox>
 			</transition-group>
-			<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
-				暂无更多商品
-			</p>
-			<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNot">暂无商品</p>
-			<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
 		</ClientOnly>
+		<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
+			暂无更多商品
+		</p>
+		<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNot">暂无商品</p>
+		<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
 	</div>
 </template>
 <style scoped lang="scss">

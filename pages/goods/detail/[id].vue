@@ -123,7 +123,6 @@ definePageMeta({
 							:sku-list="goodsSku"
 							py-1em
 							rounded-10px
-							dark:bg-dark-500
 							dark:opacity-90
 							min-h-700px
 							shadow-sm
@@ -141,12 +140,6 @@ definePageMeta({
 						/>
 					</div>
 				</div>
-				<!-- 购物车 -->
-				<ClientOnly>
-					<div class="shop-card" v-if="user.isLogin">
-						<MenuShopCartBar />
-					</div>
-				</ClientOnly>
 			</div>
 		</NuxtLayout>
 	</div>

@@ -41,7 +41,7 @@ export function addAddressByDTO(dto: AddressDTO, token: string) {
 export interface AddressDTO {
   name: string,
   phone: string,
-  isDefault: number,// 是否默认
+  isDefault: number | boolean,// 是否默认
   province: string,
   city: string,
   county: string,
@@ -58,7 +58,7 @@ export interface AddressDTO {
  */
 export function updateAddressById(addressId: string, dto: AddressDTO, token: string) {
   dto.isDefault = +dto.isDefault
-  return useHttp.put<Result<string>>(`/user/address/${addressId}`, {...dto}, { headers: { "Authorization": token } });
+  return useHttp.put<Result<string>>(`/user/address/${addressId}`, { ...dto }, { headers: { "Authorization": token } });
 }
 
 /**

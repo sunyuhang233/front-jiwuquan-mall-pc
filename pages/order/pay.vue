@@ -1,20 +1,23 @@
 <script lang="ts" setup>
 import { GoodsSkuVO, getGoodsSkuByIds } from '~/composables/api/goods/sku';
 import { appName } from '~/constants';
-const route = useRoute();
 // 1、订单子项
 const order = useOrderStore();
 const address = useAddresStore();
+const user = useUserStore();
 // @ts-ignore
 // 2、查询属性信息
 const skuIdList: string[] = [];
 order.pushOrderItems?.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
+address.resetRequestList(user.getToken);
 const skuList = ref<GoodsSkuVO[]>([]);
 // 加载属性购物列表
 useAsyncData(async () => {
 	const { data, code } = await getGoodsSkuByIds(skuIdList);
+	console.log(data);
+	
 });
 
 // 中间件
@@ -48,15 +51,13 @@ useHead({
 			</div>
 			<div>
 				<label my-4>收货地址：</label>
-				<div class="address">
+				<div class="address w-1/1 flex flex-wrap p-0">
 					<div
-						m-2
 						cursor-pointer
 						transition-300
-						mt-4
 						w-260px
 						relative
-						h-200px
+						h-180px
 						border-default
 						border-2px
 						rounded-8px
@@ -64,15 +65,14 @@ useHead({
 						dark:hover:border-gray-5
 						p-6
 						rounded-6px
-						my-4
-						class="group"
-						shadow-sm
-						v-for="(p, i) in address.addressList"
-						:key="p.id"
 						opacity-90
 						flex
 						flex-col
 						leading-1.3em
+						class="group"
+						shadow-sm
+						v-for="(p, i) in address.addressList"
+						:key="p.id"
 					>
 						<div
 							flex-row-c-c
@@ -89,7 +89,7 @@ useHead({
 								class="opacity-0 group-hover:opacity-90 ml-2"
 								v-if="p.isDefault && p.isDefault === 1"
 								plain
-								>默认地址</el-tag
+								>默认地址{{ p.isDefault }}</el-tag
 							>
 						</div>
 						<small pt-2>{{ p.phone }}</small>
@@ -99,19 +99,6 @@ useHead({
 							<small pr-1>{{ p.county }}</small>
 						</div>
 						<small> {{ p.address }} 邮编:{{ p.postalCode }} </small>
-						<div class="btns">
-							<el-button
-								type="info"
-								absolute
-								bottom-1.3em
-								right-2em
-								w-4em
-								size="small"
-								class="opacity-0 group-hover:opacity-90"
-								plain
-								>修改</el-button
-							>
-						</div>
 					</div>
 				</div>
 			</div>

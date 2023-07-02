@@ -4,6 +4,7 @@ import { codeToText, regionData } from 'element-china-area-data';
 import {
 	addAddressByDTO,
 	updateDefaultAddress,
+	deleteBatchAddressByIds,
 	AddressInfoVO,
 	deleteAddressById,
 	AddressDTO,
@@ -33,7 +34,9 @@ const isLoadingAll = ref<boolean>(false);
 const isEdit = ref<boolean>(false);
 const isUpdate = ref<boolean>(false);
 const isShow = ref<boolean>(false);
+const selectAll = ref<boolean>(false);
 // 地址
+const selectAddressOption = ref<string[]>([]);
 const selectAddress = ref<string[]>([]);
 // 添加 | 修改
 import type { FormInstance } from 'element-plus';
@@ -81,11 +84,18 @@ const onReqAddress = (formRef: FormInstance | undefined) => {
 		});
 };
 // 监听选中
-watch(selectAddress, (val) => {
+watch(selectAddressOption, (val) => {
 	form.province = codeToText[val[0]];
 	form.city = codeToText[val[1]];
 	form.county = codeToText[val[2]];
 	form.postalCode = val[2];
+});
+
+watch(selectAll, (val) => {
+	selectAddress.value.splice(0);
+	if (val) {
+		selectAddress.value.push(...address.addressList.map((p) => p.id));
+	}
 });
 
 // 刷新
@@ -107,7 +117,7 @@ const showUpdate = (p: AddressInfoVO) => {
 	isUpdate.value = true;
 	form.name = p.name;
 	form.phone = p.phone;
-	form.isDefault = p.isDefault;
+	form.isDefault = Boolean(p.isDefault);
 	form.province = p.province;
 	form.city = p.city;
 	form.county = p.county;
@@ -116,7 +126,7 @@ const showUpdate = (p: AddressInfoVO) => {
 	// id
 	activeAddresId.value = p.id;
 };
-
+// 删除单个地址
 const deleteAddress = async (id: string) => {
 	ElMessageBox({
 		title: '删除提示！',
@@ -147,7 +157,36 @@ const deleteAddress = async (id: string) => {
 		})
 		.catch((err) => {});
 };
+// 删除地址
+const deleteAddressByIds = async () => {
+	ElMessageBox.confirm(`是否删除选中${selectAddress.value.length}条?`, {
+		confirmButtonText: `确认`,
+		cancelButtonText: '取消',
+		type: 'warning',
+	})
+		.then(async (e) => {
+			if (e === 'confirm') {
+				const { code } = await deleteBatchAddressByIds(
+					[...selectAddress.value],
+					user.getToken
+				);
 
+				ElMessage.closeAll();
+				if (code === StatusCode.SUCCESS) {
+					for (let i = 0; i < address.addressList.length; i++) {
+						if (selectAddress.value.includes(address.addressList[i].id)) {
+							address.addressList.splice(i, 1);
+							break;
+						}
+					}
+					ElMessage.success('删除成功！');
+				} else {
+					ElMessage.error('删除失败！');
+				}
+			}
+		})
+		.catch(() => {});
+};
 const showAdd = () => {
 	isShow.value = true;
 	form.name = '';
@@ -202,14 +241,13 @@ const rules = reactive({
 <template>
 	<NuxtLayout name="second" :footer="false">
 		<ClientOnly>
-			<div class="address-list" layout-default w-900px>
-				<!-- 表单 -->
+			<div class="address-list" v-if="user.isLogin" layout-default w-900px>
+				<!-- 表单弹窗 -->
 				<lazy-el-dialog
 					style="width: 400px; padding: 0 20px"
 					v-model="isShow"
 					:show-close="true"
 				>
-					<!-- 登录 -->
 					<el-form
 						ref="addressRef"
 						v-loading="isLoading"
@@ -243,8 +281,13 @@ const rules = reactive({
 							<el-cascader
 								style="width: 100%"
 								size="large"
+								:placeholder="
+									form.province
+										? `${form.province} / ${form.city} / ${form.county}`
+										: '选择地址'
+								"
 								:options="regionDatas"
-								v-model="selectAddress"
+								v-model="selectAddressOption"
 							>
 							</el-cascader>
 						</el-form-item>
@@ -289,133 +332,174 @@ const rules = reactive({
 				>
 					<div class="top w-1/1" flex-row-bt-c>
 						<h3 opacity-90 tracking-0.1em>收货地址</h3>
-						<div>
+						<div cursor-pointer flex-row-c-c>
 							<i
+								inline-block
+								hover:rotate-180
+								hover:scale-120
+								transition-300
 								p-3
 								i-solar:refresh-circle-line-duotone
 								bg-green-5
 								mr-4
 								@click="refreshData"
 							></i>
-							<el-text select-none cursor-pointer @click="isEdit = true" type="info">
-								管理
+							<el-text
+								select-none
+								cursor-pointer
+								@click="isEdit = !isEdit"
+								:type="isEdit ? 'danger' : 'info'"
+							>
+								{{ isEdit ? '取消' : '管理' }}
 							</el-text>
 						</div>
 					</div>
 					<!-- 列表 -->
 					<div class="list" flex flex-wrap>
 						<!-- 单项 -->
-						<TransitionGroup tag="div" name="fade-list" class="flex flex-wrap relative">
-							<!-- 添加按钮 -->
-							<div
-								:key="2030303"
-								m-2
-								select-none
-								hover:scale-98
-								cursor-pointer
-								flex-row-c-c
-								flex-col
-								class="add"
-								mt-4
-								w-260px
-								h-200px
-								border-default-dashed
-								border-3px
-								rounded-8px
-								transition-300
-								hover:border="3px solid dark-4"
-								dark:hover:border-gray-5
-								group
-								@click="showAdd"
+						<el-checkbox-group v-model="selectAddress">
+							<TransitionGroup
+								tag="div"
+								name="fade-list"
+								class="flex flex-wrap relative"
 							>
-								<ElIconCirclePlusFilled
-									class="w-4em h-4em opacity-40 group-hover:opacity-80"
-								/>
-								<p mt-1>添加新地址</p>
-							</div>
-							<!-- 地址项 -->
-							<div
-								m-2
-								cursor-pointer
-								transition-300
-								mt-4
-								w-260px
-								relative
-								h-200px
-								border-default
-								border-2px
-								rounded-8px
-								hover:border="solid dark-4"
-								dark:hover:border-gray-5
-								p-6
-								rounded-6px
-								my-4
-								class="group"
-								shadow-sm
-								v-for="(p, i) in address.addressList"
-								:key="p.id"
-								opacity-90
-								flex
-								flex-col
-								leading-1.3em
-							>
+								<!-- 添加按钮 -->
 								<div
+									:key="2030303"
+									m-2
+									select-none
+									hover:scale-98
+									cursor-pointer
 									flex-row-c-c
-									justify-start
-									text-1.2em
+									flex-col
+									class="add group"
+									mt-4
+									w-260px
+									h-200px
 									border-default-dashed
-									border-0
-									border-b-2px
-									pb-1
+									border-3px
+									rounded-8px
+									transition-300
+									hover:border="3px solid dark-4"
+									dark:hover:border-gray-5
+									@click="showAdd"
 								>
-									{{ p.name }}
-
-									<el-tag
-										class="opacity-0 group-hover:opacity-90 ml-2"
-										v-if="p.isDefault && p.isDefault === 1"
-										plain
-										>默认地址</el-tag
+									<ElIconCirclePlusFilled
+										text-dark-2
+										class="w-4em h-4em opacity-20 group-hover:opacity-80 transition-300"
+									/>
+									<p mt-2 opacity-20 group-hover:opacity-80 transition-300>
+										添加新地址
+									</p>
+								</div>
+								<!-- 地址项 -->
+								<div
+									m-2
+									cursor-pointer
+									transition-300
+									mt-4
+									w-265px
+									relative
+									h-200px
+									border-default
+									border-2px
+									rounded-8px
+									hover:border="solid dark-4"
+									dark:hover:border-gray-5
+									p-6
+									rounded-6px
+									my-4
+									class="group"
+									shadow-sm
+									v-for="(p, i) in address.addressList"
+									:key="p.id"
+									opacity-90
+									flex
+									flex-col
+									leading-1.3em
+								>
+									<div
+										flex-row-c-c
+										justify-start
+										text-1.2em
+										border-0
+										border-default-dashed
+										border-b-2px
+										pb-2
 									>
+										<p>{{ p.name }}</p>
+										<el-tag
+											class="ml-a mr-6"
+											v-if="p.isDefault && p.isDefault === 1"
+											plain
+											>默认地址</el-tag
+										>
+									</div>
+									<small pt-2>{{ p.phone }}</small>
+									<div opacity-80 mt-1>
+										<small pr-1>{{ p.province }}</small>
+										<small pr-1>{{ p.city }}</small>
+										<small pr-1>{{ p.county }}</small>
+									</div>
+									<small>{{ p.address }}</small>
+									<small> 邮编:{{ p.postalCode }}</small>
+									<div class="btns flex-row-bt-c w-1/1 mt-2">
+										<div class="check">
+											<el-checkbox
+												block
+												w-4em
+												:label="p.id"
+												size="large"
+												v-show="isEdit"
+											/>
+										</div>
+										<el-button
+											type="info"
+											w-4em
+											size="small"
+											class="opacity-0 group-hover:opacity-90"
+											@click="showUpdate(p)"
+											plain
+											>修改</el-button
+										>
+										<span
+											absolute
+											top-1.5em
+											right-1.3em
+											hover:bg-red-5
+											hover:scale-110
+											i-solar:trash-bin-minimalistic-bold-duotone
+											p-3
+											p-2
+											dark:bg-light
+											@click="deleteAddress(p.id)"
+											transition-300
+											opacity-0
+											group-hover:opacity-80
+										></span>
+									</div>
 								</div>
-								<small pt-2>{{ p.phone }}</small>
-								<div opacity-80 mt-1>
-									<small pr-1>{{ p.province }}</small>
-									<small pr-1>{{ p.city }}</small>
-									<small pr-1>{{ p.county }}</small>
-								</div>
-								<small> {{ p.address }} 邮编:{{ p.postalCode }} </small>
-								<div class="btns">
-									<el-button
-										type="info"
-										absolute
-										bottom-1.3em
-										right-2em
-										w-4em
-										size="small"
-										class="opacity-0 group-hover:opacity-90"
-										@click="showUpdate(p)"
-										plain
-										>修改</el-button
-									>
-									<span
-										absolute
-										top-1.5em
-										right-1.3em
-										hover:bg-red-5
-										hover:scale-110
-										i-solar:trash-bin-minimalistic-bold-duotone
-										p-3
-										p-2
-										dark:bg-light
-										@click="deleteAddress(p.id)"
-										transition-300
-										opacity-0
-										group-hover:opacity-80
-									></span>
-								</div>
-							</div>
-						</TransitionGroup>
+							</TransitionGroup>
+						</el-checkbox-group>
 					</div>
+				</div>
+				<!-- 按钮 -->
+				<div
+					animate-fade-in-up
+					animate-duration-300
+					class="fixed bottom-0 mt-4 p-4 flex-row-bt-c dark:bg-dark-5 shadow border-default layout-default w-900px z-1000 bg-light-1 dark:bg-dark-6 border-1px rounded-t-10px"
+					v-show="isEdit"
+				>
+					<el-checkbox v-model="selectAll" label="全选" />
+					<el-button
+						type="danger"
+						size="large"
+						class="shadow-md border-default-dashed"
+						@click="deleteAddressByIds"
+						:loading="isLoading"
+					>
+						删除选中
+					</el-button>
 				</div>
 			</div>
 		</ClientOnly>
@@ -425,5 +509,17 @@ const rules = reactive({
 <style scoped lang="scss">
 :deep(.el-dialog__body) {
 	padding: 10px;
+}
+:deep(.el-checkbox-group) {
+	font-size: 100%;
+	line-height: 100%;
+	.el-checkbox__label {
+		display: none;
+	}
+
+	.el-checkbox__inner {
+		border-radius: 4px;
+		transform: scale(1.2);
+	}
 }
 </style>

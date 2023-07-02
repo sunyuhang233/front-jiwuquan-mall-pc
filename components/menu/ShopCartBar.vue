@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-	ShopcartVO,
-	deleteBatchShopcartByIds,
-	getUserShopCartPage,
-} from '~/composables/api/shopcart';
+import { deleteBatchShopcartByIds, getUserShopCartPage } from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
 import { useOrderStore } from '~/composables/store/useOrderStore';
 import currency from 'currency.js';
@@ -31,19 +27,9 @@ const loadShopcartList = async () => {
 	}
 	// 展示结果
 	shop.pageInfo = toReactive({ ...data });
-	let timer: NodeJS.Timeout | null;
-	if (!data?.records) return;
-	for await (const p of data.records) {
-		await new Promise((resolve) => {
-			timer = setTimeout(() => {
-				shop.shopcartList.push(p);
-				clearTimeout(timer ?? undefined);
-				timer = null;
-				isLoading.value = false;
-				return resolve(true);
-			}, 50);
-		});
-	}
+	data.records.forEach((p) => {
+		shop.shopcartList.push(p);
+	});
 };
 loadShopcartList();
 
@@ -75,6 +61,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 				if (res === 'confirm') {
 					const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
 					if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
+						selectIds.value.splice(0);
 						ElMessage.success(text + '成功！');
 					} else {
 						ElMessage.error('删除失败，请稍后再试试看！');
@@ -162,7 +149,7 @@ const toOrderPage = (ids: string[]) => {
 					<template #reference>
 						<div
 							@click="isShow = true"
-							class="icon"
+							class="icon hover:scale-90 transition-300"
 							cursor-pointer
 							flex-row-c-c
 							hover:opacity-85
@@ -324,15 +311,15 @@ const toOrderPage = (ids: string[]) => {
 </template>
 <style scoped lang="scss">
 .shop-cart {
-	position: fixed;
-	bottom: 3em;
-	right: 3em;
+	position: relative;
 	transition: $transition-delay;
 	z-index: 999;
 	border-radius: 50%;
+	width: 50px;
+	height: 50px;
 	.icon {
-		width: 3.5em;
-		height: 3.5em;
+		width: 100%;
+		height: 100%;
 		background-color: var(--el-color-primary);
 		border-radius: 50%;
 		box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
@@ -343,15 +330,18 @@ const toOrderPage = (ids: string[]) => {
 			background-color: var(--el-color-danger);
 			color: #fff;
 			border-radius: 50%;
-			font-size: 0.9em;
-			min-width: 1.5em;
-			min-height: 1.5em;
+			font-size: 0.8em;
+			min-width: 2.2em;
+			min-height: 2.2em;
+			aspect-ratio: 1/1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			line-height: 2em;
 			text-align: center;
-			line-height: 1.2em;
 			position: absolute;
-			padding: 0.3em;
-			right: -10%;
-			top: -10%;
+			right: -20%;
+			top: -20%;
 		}
 	}
 

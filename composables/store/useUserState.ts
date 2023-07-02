@@ -35,6 +35,7 @@ export const useUserStore = defineStore('user', () => {
     get() {
       if (!isLogin || !token.value) {
         showLoginForm.value = true;
+        showLoginForm.value
         return "";
       }
       return token.value

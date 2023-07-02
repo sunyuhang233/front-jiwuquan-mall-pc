@@ -11,9 +11,9 @@
 			<h4 pt-1em opacity-70>
 				Design By:
 				<NuxtLink class="mark2 animate__animated" to="https://github.com/KiWi233333"
-					>Kiwi2333
+					>
+					<img src="@/assets/images/logo/kiwi_strong.svg" class="mx-4 w-100px "/>
 				</NuxtLink>
-				<i i-carbon:logo-github p-2.6 mx-1 cursor-pointer></i>
 			</h4>
 		</div>
 	</footer>

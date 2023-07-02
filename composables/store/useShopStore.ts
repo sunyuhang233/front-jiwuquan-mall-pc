@@ -85,7 +85,6 @@ export const useShopStore = defineStore('shop', () => {
   const deleteBatchShopCart = (ids: string[]): boolean => {
     for (let i = 0; i < shopcartList.value.length; i++) {
       const p = shopcartList.value[i];
-      console.log(p.id);
       if (ids.includes(p.id)) {
         shopcartList.value.splice(i, 1)
       }

@@ -2,7 +2,7 @@
 	<ClientOnly>
 		<!-- 下拉框 -->
 		<el-popover
-			width="min(435px,38vw)"
+			width="min(460px,38vw)"
 			popper-class="popover"
 			transition="popSliceUpDown"
 			:placement="'bottom-end'"
@@ -11,7 +11,7 @@
 			trigger="click"
 			:visible="isShowResult"
 			popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                          height:380px; padding: 1.2em 1.2em;"
+                                          height:385px; padding: 1.2em 1.2em;"
 			tabindex="0"
 		>
 			<template #reference>
@@ -71,7 +71,6 @@
 								@click="clickTag(p, i)"
 								mr-1
 								mt-2
-								hover:opacity-60
 								transition-300
 							>
 								<span pr-0.3em>{{ p }}</span>
@@ -271,7 +270,6 @@ const app = useNuxtApp();
 let searchInpRef = {};
 app.hook('app:mounted', () => {
 	searchInpRef = ref('searchInpRef'); // dom
-	console.dir(searchInpRef);
 });
 /**
  * 点击历史标签
@@ -291,9 +289,10 @@ $input-width: min(22vw, 260px);
 
 .v-input {
 	:deep(.el-button) {
-		padding: 0 20px;
+		padding: 0 30px;
 		letter-spacing: 0.2em;
 		height: $height;
+		margin-right: 0;
 	}
 
 	:deep(.el-input__wrapper) {
@@ -303,12 +302,12 @@ $input-width: min(22vw, 260px);
 		letter-spacing: 0.2em;
 
 		&.is-focus {
-			width: min(30vw, 360px);
+			width: min(30vw, 385px);
 		}
 	}
 
 	:deep(inp.el-input__inner):focus {
-		width: min(30vw, 360px);
+		width: min(30vw, 385px);
 	}
 }
 

@@ -43,7 +43,6 @@ isLoading.value = false;
 				>
 					<ClientOnly>
 						<ElImage
-							lazy
 							hover:transform-scale-110
 							transition-300
 							rounded-2px

@@ -55,6 +55,7 @@ export default defineNuxtConfig({
       'composables',
       'composables/utils/**',
       'composables/store/**',
+      'middleware/**',
       'types',
       'types/*/.ts',
     ]
@@ -131,6 +132,6 @@ export default defineNuxtConfig({
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: false,
+    enabled: true,
   }
 })

@@ -57,7 +57,9 @@ const loadShopcartList = async () => {
 		});
 	}
 };
-loadShopcartList();
+if (shop.shopcartList.length === 0) {
+	loadShopcartList();
+}
 
 // 没有更多
 const notMore = computed(() => {
@@ -86,6 +88,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 			if (res === 'confirm') {
 				const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
 				if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
+					selectIds.value.splice(0);
 					ElMessage.success(text + '成功！');
 				} else {
 					ElMessage.error('删除失败，请稍后再试试看！');
@@ -96,7 +99,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 };
 // 2、清空购物车
 const clearShopcart = () => {
-	isSelectAll.value = true;
+	selectIds.value.push(...shop.shopcartList.map((p) => p.id));
 	deleteBatchShopcart('清空');
 };
 // 购物车选中项目id
@@ -144,11 +147,11 @@ const getAllPrice = computed(() => {
 		getAllNums.value += p.quantity;
 		count = count.add(currency(p.price).multiply(p.quantity));
 	});
-	return count;
+	return count.value;
 });
 </script>
 <template>
-	<NuxtLayout name="second">
+	<NuxtLayout name="second" :footer="false">
 		<ClientOnly>
 			<div
 				v-if="user.isLogin"
@@ -179,12 +182,12 @@ const getAllPrice = computed(() => {
 					购物车
 				</h2>
 				<ClientOnly>
-					<ul
+					<div
 						mb-2
 						v-infinite-scroll="loadShopcartList"
 						:infinite-scroll-delay="300"
 						:infinite-scroll-disabled="notMore"
-						overflow-auto
+						style="overflow: auto"
 					>
 						<!-- 购物车项 -->
 						<el-checkbox-group v-model="selectIds" size="large" class="relative">
@@ -201,7 +204,7 @@ const getAllPrice = computed(() => {
 								</li>
 							</transition-group>
 						</el-checkbox-group>
-					</ul>
+					</div>
 				</ClientOnly>
 				<!-- 下方按钮 -->
 				<div

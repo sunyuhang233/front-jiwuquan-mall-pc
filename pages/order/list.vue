@@ -12,8 +12,6 @@ orderItems.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
 const skuList = await getGoodsSkuByIds(skuIdList);
-console.log(skuList);
-
 definePageMeta({
 	middleware: [
 		(to, from) => { 

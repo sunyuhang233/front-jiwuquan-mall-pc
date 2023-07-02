@@ -16,13 +16,13 @@ if (data.value&& data.value.code === StatusCode.SUCCESS) {
 	if (eventList.length === data.value.data.length) {
 		setTimeout(() => {
 			isLoading.value = false;
-		}, 500);
+		}, 30);
 	}
 }else {
   // 失败重新请求
   setTimeout(() => {
     refresh()
-  }, 500);
+  }, 30);
 }
 // 跳转详情页
 const toEventDetailView = (eid: string) => {

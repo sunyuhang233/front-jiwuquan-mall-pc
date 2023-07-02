@@ -59,7 +59,7 @@ const fullscreenLoading = ref<boolean>(false);
 const onSubmitBuy = (formRef: FormInstance | undefined) => {
 	formRef
 		?.validate(async (valid) => {
-			if (valid && user.getToken) {
+			if (valid && user.getToken!=="") {
 				const dto: PushOrdersItemDTO[] = [
 					{
 						skuId: form.skuId,
@@ -378,11 +378,11 @@ const setActiveItem = (image: string) => {
 								dark:bg-dark-6
 								p-2
 								text-red-5
-								class="all-price z-0 -translate-1/1 "
+								class="all-price z-0 -translate-1/1"
 								:class="{ active: isAllCheckSku }"
 							>
 								<small>￥</small><span v-incre-up="allPrice.toFixed(2)"></span>
-					</div>
+							</div>
 						</el-button>
 					</div>
 				</el-form-item>

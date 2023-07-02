@@ -1,5 +1,4 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { IPage } from '~/types';
 import { AddressInfoVO, getAddressList } from '../api/user/address';
 export const useAddresStore = defineStore('Addres', () => {
 
@@ -21,7 +20,6 @@ export const useAddresStore = defineStore('Addres', () => {
   return {
     // state
     addressList,
-
     // actions  
     resetRequestList,
     // getter 

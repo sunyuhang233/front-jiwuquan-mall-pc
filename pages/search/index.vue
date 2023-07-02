@@ -21,13 +21,13 @@ const dto = reactive<GoodsPageDTO>({
 	saleSort: undefined,
 	isNew: undefined,
 });
-watch(
-	dto,
-	() => {
-		onSearch();
-	},
-	{ deep: true, immediate: true }
-);
+// watch(
+// 	dto,
+// 	() => {
+// 		onSearch();
+// 	},
+// 	{ deep: true, immediate: true }
+// );
 
 interface GoodsPageDTO {
 	cid?: string;
@@ -66,10 +66,12 @@ const reset = () => {
 	dto.saleSort = undefined;
 	dto.isNew = undefined;
 };
+
 </script>
 <template>
 	<NuxtLayout name="second">
 		<div layout-default-se w-860px flex flex-col justify-center>
+			<!-- 搜索栏目 -->
 			<div class="flex-row-c-c">
 				<ElInput
 					clearable
@@ -82,7 +84,7 @@ const reset = () => {
 					:prefix-icon="ElIconSearch"
 					minlength="2"
 					maxlength="30"
-					v-model.trim="dto.name"
+					v-model.lazy="dto.name"
 					:onSearch="onSearch"
 					:placeholder="'搜索商品'"
 					@keyup.enter="onSearch"
@@ -96,7 +98,8 @@ const reset = () => {
 					>搜 索</el-button
 				>
 			</div>
-			<div class="flex px-2 pt-3">
+			<!-- 结果 -->
+			<div class="flex pt-4 opacity-80">
 				<el-checkbox
 					border
 					bg-white
@@ -142,11 +145,13 @@ const reset = () => {
 				</el-select>
 				<el-button @click="reset" class="ml-6">重置</el-button>
 			</div>
-			<ClientOnly>
-				<h3 opacity-80 ml-2 mt-4>搜索结果</h3>
+				<!-- <p opacity-80  mt-2>{{ `搜索结果` }}</p> -->
 				<div v-show="isLoading" v-loading="isLoading" p-2em mt-4em></div>
-				<ListGoodsList v-if="!isLoading" class="list w-1/1" :dto="{ ...dto }" />
-			</ClientOnly>
+				<ListGoodsList
+					ref="GoodsList"
+					class="list w-1/1"
+					:dto="dto"
+				/>
 		</div>
 	</NuxtLayout>
 </template>
