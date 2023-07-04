@@ -21,8 +21,8 @@ const toBack = () => {
 		<div class="btns">
 			<!-- 回到顶部 -->
 			<el-backtop
-				class="cursor-pointer hover:scale-90 mt-3 transition-300 animate-zoom-in-right animate-duration-500"
-				style="width: 52px; height: 52px"
+				style="width: 52px; height: 52px;overflow: auto;"
+				class="animate-zoom-in-right animate-duration-500 cursor-pointer hover:scale-90 transition-300 rounded-10em shadow-[#0bdb85] shadow-opacity-60 shadow-md"
 			/>
 			<!-- 返回 -->
 			<span
@@ -34,6 +34,7 @@ const toBack = () => {
 				animate-duration-600
 				hover:scale-90
 				transition-300
+				class="icon shadow-[#5d33f9] shadow-opacity-40 shadow-md"
 				p-2
 				mt-3
 				rounded-4em

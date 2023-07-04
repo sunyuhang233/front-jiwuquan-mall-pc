@@ -12,7 +12,7 @@ const isUpdateLoading = ref<boolean>(false);
 const isLoading = ref<boolean>(true);
 // 获取分页信息
 const skuList = ref<GoodsSkuVO[]>([]);
-const selectSkuId = ref<string>(shopCart.id);
+const selectShopcartId = ref<string>(shopCart.id);
 
 // 改变规格
 watch(
@@ -22,12 +22,12 @@ watch(
 	},
 	{ deep: true }
 );
-
+// 修改购物车
 const changeUpdateShopcart = async (skuId: string, quantity: number) => {
 	if (isUpdateLoading.value) return;
 	isUpdateLoading.value = true;
 	const data = await updateShopcart(
-		selectSkuId.value,
+		selectShopcartId.value,
 		{
 			skuId,
 			quantity,
@@ -73,8 +73,7 @@ const getProps = computed({
 		return (shopCart.size || '') + ' ' + (shopCart.color || '') + ' ' + (shopCart.combo || '');
 	},
 	set(skuId: string) {
-		selectSkuId.value = skuId;
-		const p = toRaw(skuList.value.find((p) => p.id === selectSkuId.value));
+		const p = toRaw(skuList.value.find((p) => p.id === skuId));
 		// 更新
 		if (p && p.size && p.color && p.combo) {
 			shopCart.size = p.size;

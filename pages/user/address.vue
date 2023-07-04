@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useAddresStore } from '~/composables/store/useAddress';
-import { codeToText, regionData } from 'element-china-area-data';
+import { useAddresStore } from "~/composables/store/useAddress";
+import { codeToText, regionData } from "element-china-area-data";
 import {
 	addAddressByDTO,
 	updateDefaultAddress,
@@ -9,25 +9,25 @@ import {
 	deleteAddressById,
 	AddressDTO,
 	updateAddressById,
-} from '~/composables/api/user/address';
+} from "~/composables/api/user/address";
 const user = useUserStore();
 const address = useAddresStore();
 const regionDatas = ref(regionData);
 address.resetRequestList(user.getToken);
 
 const form = reactive<AddressDTO>({
-	name: '',
-	phone: '',
-	province: '',
-	city: '',
-	county: '',
-	address: '',
+	name: "",
+	phone: "",
+	province: "",
+	city: "",
+	county: "",
+	address: "",
 	isDefault: 0,
-	postalCode: '',
+	postalCode: "",
 });
 // 对象
 const addressRef = ref<FormInstance>();
-const activeAddresId = ref<string>('');
+const activeAddresId = ref<string>("");
 // 功能
 const isLoading = ref<boolean>(false);
 const isLoadingAll = ref<boolean>(false);
@@ -39,12 +39,12 @@ const selectAll = ref<boolean>(false);
 const selectAddressOption = ref<string[]>([]);
 const selectAddress = ref<string[]>([]);
 // 添加 | 修改
-import type { FormInstance } from 'element-plus';
+import type { FormInstance } from "element-plus";
 const onReqAddress = (formRef: FormInstance | undefined) => {
 	formRef
 		?.validate(async (valid: boolean) => {
-			if (form.province === '' || form.city === '' || form.county === '') {
-				return ElMessage.warning('地址不能为空！');
+			if (form.province === "" || form.city === "" || form.county === "") {
+				return ElMessage.warning("地址不能为空！");
 			}
 			if (valid && user.getToken) {
 				let data;
@@ -59,16 +59,16 @@ const onReqAddress = (formRef: FormInstance | undefined) => {
 					// 添加
 					data = await addAddressByDTO({ ...form }, user.getToken);
 				}
-				let msg = isUpdate.value ? '更新' : '添加';
+				let msg = isUpdate.value ? "更新" : "添加";
 				if (data.code === StatusCode.SUCCESS) {
-					ElMessage.success(msg + '成功！');
+					ElMessage.success(msg + "成功！");
 					if (isUpdate.value) {
 						const flag = await address.resetRequestList(user.getToken);
 					} else {
 						const flag = await address.resetRequestList(user.getToken);
 					}
 				} else {
-					ElMessage.error(msg + '失败，请稍后再试！');
+					ElMessage.error(msg + "失败，请稍后再试！");
 				}
 
 				isUpdate.value = false;
@@ -103,9 +103,9 @@ const refreshData = async () => {
 	isLoadingAll.value = true;
 	const res = await address.resetRequestList(user.getToken);
 	if (res) {
-		ElMessage.success('刷新成功！🎉');
+		ElMessage.success("刷新成功！🎉");
 	} else {
-		ElMessage.error('刷新失败！😥');
+		ElMessage.error("刷新失败！😥");
 	}
 	setTimeout(() => {
 		isLoadingAll.value = false;
@@ -129,18 +129,18 @@ const showUpdate = (p: AddressInfoVO) => {
 // 删除单个地址
 const deleteAddress = async (id: string) => {
 	ElMessageBox({
-		title: '删除提示！',
-		message: '确定要删除吗？',
-		type: 'warning',
+		title: "删除提示！",
+		message: "确定要删除吗？",
+		type: "warning",
 		showClose: false,
 		center: true,
-		customClass: 'text-center',
+		customClass: "text-center",
 		showCancelButton: true,
-		cancelButtonText: '取 消',
-		confirmButtonText: '删 除',
+		cancelButtonText: "取 消",
+		confirmButtonText: "删 除",
 	})
 		.then(async (res) => {
-			if (res === 'confirm') {
+			if (res === "confirm") {
 				const { code } = await deleteAddressById(id, user.getToken);
 				if (code === StatusCode.SUCCESS) {
 					for (let i = 0; i < address.addressList.length; i++) {
@@ -149,9 +149,9 @@ const deleteAddress = async (id: string) => {
 							break;
 						}
 					}
-					ElMessage.success('删除成功！');
+					ElMessage.success("删除成功！");
 				} else {
-					ElMessage.error('删除错误，请稍后再试试看！');
+					ElMessage.error("删除错误，请稍后再试试看！");
 				}
 			}
 		})
@@ -161,11 +161,11 @@ const deleteAddress = async (id: string) => {
 const deleteAddressByIds = async () => {
 	ElMessageBox.confirm(`是否删除选中${selectAddress.value.length}条?`, {
 		confirmButtonText: `确认`,
-		cancelButtonText: '取消',
-		type: 'warning',
+		cancelButtonText: "取消",
+		type: "warning",
 	})
 		.then(async (e) => {
-			if (e === 'confirm') {
+			if (e === "confirm") {
 				const { code } = await deleteBatchAddressByIds(
 					[...selectAddress.value],
 					user.getToken
@@ -179,9 +179,9 @@ const deleteAddressByIds = async () => {
 							break;
 						}
 					}
-					ElMessage.success('删除成功！');
+					ElMessage.success("删除成功！");
 				} else {
-					ElMessage.error('删除失败！');
+					ElMessage.error("删除失败！");
 				}
 			}
 		})
@@ -189,25 +189,25 @@ const deleteAddressByIds = async () => {
 };
 const showAdd = () => {
 	isShow.value = true;
-	form.name = '';
-	form.province = '';
-	form.city = '';
-	form.county = '';
-	form.phone = '';
+	form.name = "";
+	form.province = "";
+	form.city = "";
+	form.county = "";
+	form.phone = "";
 	form.isDefault = 0;
 	isUpdate.value = false;
 };
 
 // 定义当前页面
 useHead({
-	title: '收货地址',
+	title: "收货地址",
 	meta: [
 		{
-			name: 'description',
-			content: '极物圈-收货地址',
+			name: "description",
+			content: "极物圈-收货地址",
 		},
 		{
-			name: 'isPermission',
+			name: "isPermission",
 			content: true,
 		},
 	],
@@ -215,33 +215,39 @@ useHead({
 // 规则
 const rules = reactive({
 	name: [
-		{ required: true, message: '收货人不能为空！', trigger: 'blur' },
-		{ min: 2, max: 10, message: '长度在2-10个字符！', trigger: 'change' },
+		{ required: true, message: "收货人不能为空！", trigger: "blur" },
+		{ min: 2, max: 10, message: "长度在2-10个字符！", trigger: "change" },
 	],
 	address: [
-		{ required: true, message: '收货人不能为空！', trigger: 'blur' },
-		{ min: 3, max: 25, message: '长度在3-25个字符！', trigger: 'change' },
+		{ required: true, message: "收货人不能为空！", trigger: "blur" },
+		{ min: 3, max: 25, message: "长度在3-25个字符！", trigger: "change" },
 	],
 	phone: [
-		{ required: true, message: '手机号不能为空！', trigger: 'blur' },
+		{ required: true, message: "手机号不能为空！", trigger: "blur" },
 		{
 			pattern:
 				/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/,
-			message: '手机号格式不正确！',
-			trigger: 'change',
+			message: "手机号格式不正确！",
+			trigger: "change",
 		},
 	],
-	province: [{ required: true, message: '省份不能为空！', trigger: 'blur' }],
-	city: [{ required: true, message: '城市不能为空！', trigger: 'blur' }],
-	county: [{ required: true, message: '区县不能为空！', trigger: 'blur' }],
-	isDefault: [{ required: true, message: '是否默认不能为空！', trigger: 'blur' }],
-	postalCode: [{ required: true, message: '邮政编码不能为空！', trigger: 'blur' }],
+	province: [{ required: true, message: "省份不能为空！", trigger: "blur" }],
+	city: [{ required: true, message: "城市不能为空！", trigger: "blur" }],
+	county: [{ required: true, message: "区县不能为空！", trigger: "blur" }],
+	isDefault: [{ required: true, message: "是否默认不能为空！", trigger: "blur" }],
+	postalCode: [{ required: true, message: "邮政编码不能为空！", trigger: "blur" }],
 });
 </script>
 <template>
 	<NuxtLayout name="second" :footer="false">
 		<ClientOnly>
-			<div class="address-list" v-if="user.isLogin" layout-default w-900px>
+			<div
+				class="address-list"
+				@keyup.esc="isEdit = false"
+				v-if="user.isLogin"
+				layout-default
+				w-900px
+			>
 				<!-- 表单弹窗 -->
 				<lazy-el-dialog
 					style="width: 400px; padding: 0 20px"
@@ -258,7 +264,7 @@ const rules = reactive({
 						@submit.prevent="onReqAddress"
 						class="form animate__animated"
 					>
-						<h2 mb-5 tracking-0.2em>{{ isUpdate ? '修改地址' : '添加地址' }}</h2>
+						<h2 mb-5 tracking-0.2em>{{ isUpdate ? "修改地址" : "添加地址" }}</h2>
 						<!-- 收货人 -->
 						<el-form-item label="收货人" prop="name" class="animated pb-2">
 							<el-input
@@ -312,7 +318,7 @@ const rules = reactive({
 								size="large"
 								class="button"
 								@click="onReqAddress(addressRef)"
-								>{{ isUpdate ? '更 新' : '添 加' }}
+								>{{ isUpdate ? "更 新" : "添 加" }}
 							</el-button>
 						</el-form-item>
 					</el-form>
@@ -350,7 +356,7 @@ const rules = reactive({
 								@click="isEdit = !isEdit"
 								:type="isEdit ? 'danger' : 'info'"
 							>
-								{{ isEdit ? '取消' : '管理' }}
+								{{ isEdit ? "取消" : "管理" }}
 							</el-text>
 						</div>
 					</div>
@@ -375,7 +381,7 @@ const rules = reactive({
 									class="add group"
 									mt-4
 									w-260px
-									h-200px
+									h-210px
 									border-default-dashed
 									border-3px
 									rounded-8px
@@ -393,91 +399,46 @@ const rules = reactive({
 									</p>
 								</div>
 								<!-- 地址项 -->
-								<div
-									m-2
-									cursor-pointer
-									transition-300
-									mt-4
-									w-265px
-									relative
-									h-200px
-									border-default
-									border-2px
-									rounded-8px
-									hover:border="solid dark-4"
-									dark:hover:border-gray-5
-									p-6
-									rounded-6px
-									my-4
-									class="group"
-									shadow-sm
-									v-for="(p, i) in address.addressList"
-									:key="p.id"
-									opacity-90
-									flex
-									flex-col
-									leading-1.3em
-								>
-									<div
-										flex-row-c-c
-										justify-start
-										text-1.2em
-										border-0
-										border-default-dashed
-										border-b-2px
-										pb-2
-									>
-										<p>{{ p.name }}</p>
-										<el-tag
-											class="ml-a mr-6"
-											v-if="p.isDefault && p.isDefault === 1"
-											plain
-											>默认地址</el-tag
-										>
-									</div>
-									<small pt-2>{{ p.phone }}</small>
-									<div opacity-80 mt-1>
-										<small pr-1>{{ p.province }}</small>
-										<small pr-1>{{ p.city }}</small>
-										<small pr-1>{{ p.county }}</small>
-									</div>
-									<small>{{ p.address }}</small>
-									<small> 邮编:{{ p.postalCode }}</small>
-									<div class="btns flex-row-bt-c w-1/1 mt-2">
-										<div class="check">
-											<el-checkbox
-												block
-												w-4em
-												:label="p.id"
-												size="large"
+								<div v-for="(p, i) in address.addressList" :key="p.id">
+									<CardAddressBox :address="p">
+										<template #btns>
+											<div
+												class="check"
 												v-show="isEdit"
-											/>
-										</div>
-										<el-button
-											type="info"
-											w-4em
-											size="small"
-											class="opacity-0 group-hover:opacity-90"
-											@click="showUpdate(p)"
-											plain
-											>修改</el-button
-										>
-										<span
-											absolute
-											top-1.5em
-											right-1.3em
-											hover:bg-red-5
-											hover:scale-110
-											i-solar:trash-bin-minimalistic-bold-duotone
-											p-3
-											p-2
-											dark:bg-light
-											@click="deleteAddress(p.id)"
-											transition-300
-											opacity-0
-											group-hover:opacity-80
-										></span>
-									</div>
+												block
+												animate-fade-in
+												animate-duration-300
+												flex-row-c-c
+											>
+												<el-checkbox w-4em :label="p.id" size="large" />
+												<span class="-ml-2em">选中</span>
+											</div>
+											<el-button
+												type="info"
+												w-4em
+												size="small"
+												class="opacity-0 group-hover:opacity-90"
+												@click="showUpdate(p)"
+												plain
+												>修改</el-button
+											>
+											<span
+												absolute
+												top-1.5em
+												right-1.3em
+												hover:bg-red-5
+												hover:scale-110
+												i-solar:trash-bin-minimalistic-bold-duotone
+												p-3
+												p-2
+												dark:bg-light
+												@click="deleteAddress(p.id)"
+												transition-300
+												opacity-0
+												group-hover:opacity-80
+											></span>
+										</template>
+									</CardAddressBox>
 								</div>
 							</TransitionGroup>
 						</el-checkbox-group>

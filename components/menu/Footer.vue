@@ -10,9 +10,12 @@
 			<img src="@/assets/images/logo/logo_txt.png" w-180px alt="Design By: Kiwi2333" />
 			<h4 pt-1em opacity-70>
 				Design By:
-				<NuxtLink class="mark2 animate__animated" to="https://github.com/KiWi233333"
-					>
-					<img src="@/assets/images/logo/kiwi_strong.svg" class="mx-4 w-100px "/>
+				<NuxtLink class="mark2 animate__animated" target="_blank" to="https://github.com/KiWi233333">
+					<img
+						src="@/assets/images/logo/kiwi_strong.svg"
+						class="mx-4 w-100px"
+						dark:filter-invert-100
+					/>
 				</NuxtLink>
 			</h4>
 		</div>

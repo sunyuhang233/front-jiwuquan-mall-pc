@@ -2,14 +2,22 @@
 definePageMeta({
 	layout: 'default',
 });
-
+useHead({
+	title: '极物圈',
+	meta: [
+		{
+			name: 'description',
+			content: '极物圈-主页 开启你的极物之旅！',
+		},
+	],
+});
 const user = useUserStore();
 </script>
 <template>
 	<NuxtLayout>
 		<div class="index w-1/1" flex flex-col items-center>
 			<div overflow-x-hidden layout-default>
-				<IndexTopMenu />
+				<IndexTopMenu min-h-160px/>
 				<div flex pt-4>
 					<!-- 轮播图 -->
 					<div class="flex-1" flex-row-c-c>
@@ -24,7 +32,7 @@ const user = useUserStore();
 			<div class="bottom" overflowx-hidden>
 				<div mt-6 layout-default>
 					<!-- 热门商品分类 -->
-					<LazyIndexCategoryLine />
+					<IndexCategoryLine />
 					<!-- title -->
 					<!-- 商品列表tabs -->
 					<IndexGoodsTabs class="mt-6" />

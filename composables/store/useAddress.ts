@@ -10,7 +10,7 @@ export const useAddresStore = defineStore('Addres', () => {
     const res = await getAddressList(token);
     if (res.code === StatusCode.SUCCESS) {
       addressList.value.splice(0)
-      addressList.value.push(...res.data);
+      addressList.value.push(...res.data.sort((a,b)=>b.isDefault-a.isDefault));
       return Promise.resolve(true);
     } else {
       return Promise.resolve(false);
@@ -25,7 +25,3 @@ export const useAddresStore = defineStore('Addres', () => {
     // getter 
   }
 })
-
-
-if (import.meta.hot)
-  import.meta.hot.accept(acceptHMRUpdate(useAddresStore, import.meta.hot))

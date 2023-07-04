@@ -16,7 +16,13 @@ export function getUserInfo(token: string) {
 }
 
 export interface UserWallet {
-
+  userId?: string;
+  balance?: number;
+  recharge?: number;
+  spend?: number;
+  points?: number;
+  updateTime?: string;
+  createTime?: string;
 }
 export interface UserInfo {
   id: string;
@@ -42,15 +48,15 @@ export interface UserInfo {
  * @param token 
  * @returns 
  */
-export function updateAvatar(file:any, token: string): Promise<Result<string>> {
+export function updateAvatar(file: any, token: string): Promise<Result<string>> {
   return useHttp.put<Result<string>>(
     `/user/info/avatar`, {
-    },
+  },
     {
-      headers: { 
+      headers: {
         "Authorization": token
       },
-      body:file
+      body: file
     })
 }
 

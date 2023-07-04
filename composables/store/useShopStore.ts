@@ -105,12 +105,11 @@ export const useShopStore = defineStore('shop', () => {
     size.value = 8;
     const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
     pageInfo = reactive(data);
-    if (!data?.records) return;
-    for (const p of data.records) {
-      shopcartList.value.push(p);
-    };
+    if (data?.records?.length <= 0) return;
+    shopcartList.value.push(...data.records);
     isRefalsh.value = false;
   };
+  loadShopcartList()
 
 
   return {
@@ -130,8 +129,3 @@ export const useShopStore = defineStore('shop', () => {
 
 
 
-
-
-
-if (import.meta.hot)
-  import.meta.hot.accept(acceptHMRUpdate(useShopStore, import.meta.hot))

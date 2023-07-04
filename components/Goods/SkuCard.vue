@@ -5,12 +5,15 @@ import type { FormInstance } from 'element-plus';
 import { addShopcart } from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
 import currency from 'currency.js';
-import { useOrderStore } from '~/composables/store/useOrderStore';
+const app = useNuxtApp();
 const user = useUserStore();
 const shop = useShopStore();
-const app = useNuxtApp();
-const router = useRouter();
 
+const router = useRouter();
+// 功能
+// loading全屏
+const fullscreenLoading = ref<boolean>(false);
+// 是否全选规格
 const isAllCheckSku = ref<boolean>(false);
 // emits
 const emit = defineEmits(['setActiveItem']);
@@ -51,15 +54,14 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 			return false;
 		});
 };
-// loading 全屏
-const fullscreenLoading = ref<boolean>(false);
+
 /**
  * 立即购买
  */
 const onSubmitBuy = (formRef: FormInstance | undefined) => {
 	formRef
 		?.validate(async (valid) => {
-			if (valid && user.getToken!=="") {
+			if (valid && user.getToken !== '') {
 				const dto: PushOrdersItemDTO[] = [
 					{
 						skuId: form.skuId,
@@ -95,20 +97,15 @@ const form = reactive<formDTO>({
 	color: '',
 	combo: '',
 });
+
+
 interface formDTO {
 	skuId: string;
 	quantity: number;
 	size?: string;
 	color?: string;
 	combo?: string;
-}
-interface skuItem {
-	skuId: string;
-	name: string;
-	stock: number;
-	price: number;
-}
-
+}  
 // 尺寸
 const sizeList = ref<
 	{
@@ -131,7 +128,9 @@ const comboList = ref<
 		name: string;
 	}[]
 >([]);
-// 初始化规格
+/**
+ * 初始化获取规格
+ */
 const initSku = () => {
 	goodsSku?.map((p) => {
 		if (p.size && !sizeList.value.find((k) => k.name === p.size)) {
@@ -209,7 +208,7 @@ const setActiveItem = (image: string) => {
 </script>
 <template>
 	<ClientOnly>
-		<el-card class="sku-card" px-8 pt-8>
+		<el-card class="sku-card relative -z-1" px-8 pt-8>
 			<el-form ref="FormRef" :model="form" label-position="top" class="group">
 				<!-- 顶部 -->
 				<div class="top opacity-90" flex-row-bt-c mt-2>
@@ -230,7 +229,9 @@ const setActiveItem = (image: string) => {
 						}}</el-tag>
 					</div>
 					<!-- 收藏 -->
-					<BtnCollectGoods :gid="goodsInfo?.id || ''" />
+					<ClientOnly>
+						<BtnCollectGoods :gid="goodsInfo?.id || ''" />
+					</ClientOnly>
 				</div>
 				<div class="sku-list" tracking-0.1em flex flex-col leading-1.4em pt-6>
 					<!-- 顶部 -->
@@ -333,7 +334,8 @@ const setActiveItem = (image: string) => {
 
 				<!-- 购物车|立即购买 -->
 				<el-form-item>
-					<div class="w-1/1 flex justify-between py-3">
+					<div class="w-1/1 flex justify-between py-3 relative">
+						<!-- 加入 -->
 						<el-button
 							size="large"
 							style="
@@ -350,7 +352,7 @@ const setActiveItem = (image: string) => {
 							@click="onSubmitShopCart(FormRef)"
 							>加入购物车
 						</el-button>
-
+						<!-- 立即购买 -->
 						<el-button
 							size="large"
 							style="
@@ -360,30 +362,31 @@ const setActiveItem = (image: string) => {
 								font-size: 1.2em;
 								font-weight: 600;
 								padding: 0.8em 1em;
-								letter-spacing: 0.1em;
-								position: relative;
+								letter-spacing: 0.1em; 
 							"
 							shadow-md
 							@click="onSubmitBuy(FormRef)"
 							type="info"
 							v-loading.fullscreen.lock="fullscreenLoading"
 							>立即购买
-							<div
-								border-default-dashed
-								border-2px
-								border-border-dark-300
-								shadow-md
-								rounded="t-4px"
-								bg-white
-								dark:bg-dark-6
-								p-2
-								text-red-5
-								class="all-price z-0 -translate-1/1"
-								:class="{ active: isAllCheckSku }"
-							>
-								<small>￥</small><span v-incre-up="allPrice.toFixed(2)"></span>
-							</div>
 						</el-button>
+						<p
+							border-default-dashed
+							border-2px
+							border-border-dark-300
+							shadow-md
+							rounded="t-6px"
+							bg-white
+							dark:bg-dark-6
+							p-2
+							text-red-5
+							flex-row-c-c
+							class="all-price -translate-1/1"
+							:class="{ active: isAllCheckSku }"
+						>
+							<small block>￥</small>
+							<h3 v-incre-up="allPrice"></h3>
+						</p>
 					</div>
 				</el-form-item>
 			</el-form>
@@ -427,18 +430,18 @@ const setActiveItem = (image: string) => {
 	width: 8.6em;
 }
 
-.dark .all-price,
 .all-price {
 	position: absolute;
-	left: 12%;
-	top: 0;
-	display: block;
-	width: 7em;
+	right: 2em;
+	width: 9em;
+	height: 3em;
 	z-index: -1;
+	opacity: 0;
 	transform: translateY(0%);
 	transition: $transition-delay;
 	&.active {
-		transform: translateY(-90%);
+	opacity: 1;
+		transform: translateY(-80%);
 	}
 }
 </style>

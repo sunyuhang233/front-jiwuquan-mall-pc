@@ -1,28 +1,28 @@
 <template>
    <transition name="fadeInOutShadow">
       <div class="forms" @keyup.esc="exitForm" @click.self="exitForm"
-         v-if="userStore.showLoginForm || userStore.showRegisterForm"
+         v-if="user.showLoginForm || user.showRegisterForm"
          relative>
          <!-- 登录 -->
          <transition name="fade-list">
-            <FormLoginForm v-show="userStore.showLoginForm" />
+            <FormLoginForm v-show="user.showLoginForm" />
          </transition>
          <!-- 注册 -->
          <transition name="fade-list">
-            <FormRegisterForm v-if="userStore.showRegisterForm" />
+            <FormRegisterForm v-if="user.showRegisterForm" />
          </transition>
          <!-- 找回密码 -->
          <transition name="fade-list">
-            <FormRegisterForm v-if="userStore.showUpdatePwd" />
+            <FormRegisterForm v-if="user.showUpdatePwd" />
          </transition>
       </div>
    </transition>
 </template>
 <script lang="ts" setup>
-const userStore = useUserStore()
+const user = useUserStore()
 const exitForm = () => {
-   userStore.showLoginForm = false
-   userStore.showRegisterForm = false
+   user.showLoginForm = false
+   user.showRegisterForm = false
 }
 </script>
 <style scoped lang="scss">
@@ -32,7 +32,7 @@ const exitForm = () => {
    left: 0;
    z-index: 1002;
    background-color: rgba(70, 70, 70, 0.3);
-   backdrop-filter: blur(3px);
+   backdrop-filter: blur(4px);
    width: 100vw;
    height: 100vh;
    display: flex;
@@ -47,7 +47,6 @@ const exitForm = () => {
 
 // fade-in-out
 .fadeInOutShadow-enter-active {
-   backdrop-filter: blur(4px);
    animation: 0.2s fadeIn $animate-cubic;
 }
 

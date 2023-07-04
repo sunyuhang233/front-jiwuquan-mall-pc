@@ -23,32 +23,34 @@ const onCollectGoods = async () => {
 };
 </script>
 <template>
-	<el-popconfirm
-		style="text-align: center"
-		confirm-button-type="danger"
-		confirm-button-text="确认"
-		cancel-button-text="取消"
-		:title="isCollect ? '是否取消收藏?' : '是否添加收藏?'"
-		@confirm="onCollectGoods"
-	>
-		<template #reference >
-			<!-- 收藏 -->
-			<div cursor-pointer > 
-				<span
-					class="collect"
-					i-solar:stars-minimalistic-bold-duotone
-					bg-yellow-5
-					p-3
-					v-show="isCollect" animate-zoom-in
-				></span>
-				<span
-					class="collect"
-					v-show="!isCollect" animate-zoom-in
-					i-solar:stars-minimalistic-broken
-					p-3
-				></span>
-			</div>
-		</template>
-	</el-popconfirm>
+		<el-popconfirm
+			style="text-align: center"
+			confirm-button-type="danger"
+			confirm-button-text="确认"
+			cancel-button-text="取消"
+			:title="isCollect ? '是否取消收藏?' : '是否添加收藏?'"
+			@confirm="onCollectGoods"
+		>
+			<template #reference>
+				<!-- 收藏 -->
+				<div cursor-pointer>
+					<span
+						class="collect"
+						i-solar:stars-minimalistic-bold-duotone
+						bg-yellow-5
+						p-3
+						v-show="isCollect"
+						animate-zoom-in
+					></span>
+					<span
+						class="collect"
+						v-show="!isCollect"
+						animate-zoom-in
+						i-solar:stars-minimalistic-broken
+						p-3
+					></span>
+				</div>
+			</template>
+		</el-popconfirm>
 </template>
 <style scoped lang="scss"></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="top " overflow-hidden flex-row-bt-c flex-col md:flex-row>
     <!-- bg -->
-    <img absolute bg-color-indigo-6 z-0 flex-2 src="@/assets/images/logo/logo_txt.png" filter-blur-30 w-240px
+    <img absolute bg-color-indigo-6 z-0 flex-2 select-none style="user-select: none;" src="@/assets/images/logo/logo_txt.png" filter-blur-30 w-240px
       alt="极物圈 logo">
     <!-- 问候语 -->
     <div ml-10 px-5 class="title animate__animated animate__fadeInDown" mt-3 mb-8>

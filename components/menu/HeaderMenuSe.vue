@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" :class="topClass" flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav un-select" :class="topClass" layout-default-se flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
@@ -52,23 +52,6 @@
 				</NuxtLink>
 				<!-- 切换主题 -->
 				<BtnSwitch />
-				<!-- 登陆注册 -->
-				<div class="box" v-if="!store.isLogin">
-					<ElButton round type="primary" shadow-md px-2cursor-pointer @click="onLogin(FormType.LOGIN)">
-						登 录</ElButton
-					>
-					<ElButton
-						style="border-radius: 30px"
-						px-2
-						mx-1
-						cursor-pointer
-						@click="onLogin(FormType.REGISTER)"
-						>注 册
-					</ElButton>
-				</div>
-				<div class="box" v-else>
-					<CardUserLine :user-info="store.userInfo" />
-				</div>
 			</ClientOnly>
 		</div>
 	</div>

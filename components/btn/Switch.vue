@@ -2,10 +2,18 @@
 	<ElButton @click="toggle" class="btn" mx-3 round>
 		<span>{{ isDark ? '切换日间' : '切换夜间' }}</span>
 		<!-- <OtherMoonSun /> -->
-		<img src="@/assets/images/icon/sun.svg" class=" w-1.4em h-1.4em" 
-    alt="sun 日间模式" v-if="!isDark"/>
-		<img src="@/assets/images/icon/moon.svg" class="fill-light-5 w-1.4em h-1.4em" 
-    alt="sun 日间模式" v-else/>
+		<img
+			src="@/assets/images/icon/sun.svg"
+			class="w-1.3em h-1.3em"
+			alt="sun 日间模式"
+			v-if="!isDark"
+		/>
+		<img
+			src="@/assets/images/icon/moon.svg"
+			class="fill-light-5 w-1.3em h-1.3em"
+			alt="sun 日间模式"
+			v-else
+		/>
 	</ElButton>
 </template>
 <script lang="ts" setup>

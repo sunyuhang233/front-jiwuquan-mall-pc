@@ -1,6 +1,5 @@
 // 路由中间件
 export default defineNuxtRouteMiddleware((to, from) => {
-  console.log("路由拦截");
   //  权限页面
   if (to.meta.isPermission || to.meta.isPermission === true) {
     const store = useUserStore()

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {
-	ShopcartVO,
 	deleteBatchShopcartByIds,
 	getUserShopCartPage,
 } from '~/composables/api/shopcart';
@@ -57,10 +56,6 @@ const loadShopcartList = async () => {
 		});
 	}
 };
-if (shop.shopcartList.length === 0) {
-	loadShopcartList();
-}
-
 // 没有更多
 const notMore = computed(() => {
 	return (
@@ -147,11 +142,11 @@ const getAllPrice = computed(() => {
 		getAllNums.value += p.quantity;
 		count = count.add(currency(p.price).multiply(p.quantity));
 	});
-	return count.value;
+	return count;
 });
 </script>
 <template>
-	<NuxtLayout name="second" :footer="false">
+	<NuxtLayout name="second" :menu="['back']" :footer="false">
 		<ClientOnly>
 			<div
 				v-if="user.isLogin"
@@ -185,7 +180,7 @@ const getAllPrice = computed(() => {
 					<div
 						mb-2
 						v-infinite-scroll="loadShopcartList"
-						:infinite-scroll-delay="300"
+						:infinite-scroll-delay="1000"
 						:infinite-scroll-disabled="notMore"
 						style="overflow: auto"
 					>
@@ -247,7 +242,7 @@ const getAllPrice = computed(() => {
 					</div>
 					<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
 					<div flex>
-						<lazy-el-button
+						<el-button
 							v-if="selectIds.length"
 							class="fadeInOut flex-1"
 							style="padding: 0em 1em"
@@ -258,8 +253,8 @@ const getAllPrice = computed(() => {
 							@click="deleteBatchShopcart('批量删除')"
 							>批量删除
 							<i i-solar:trash-bin-trash-broken mr-1></i>
-						</lazy-el-button>
-						<lazy-el-button
+						</el-button>
+						<el-button
 							v-if="isEdit"
 							class="fadeInOut flex-1"
 							style="padding: 0em 1em"
@@ -271,8 +266,8 @@ const getAllPrice = computed(() => {
 						>
 							<i i-solar:trash-bin-trash-broken mr-1></i>
 							清空
-						</lazy-el-button>
-						<lazy-el-button
+						</el-button>
+						<el-button
 							class="fadeInOut flex-1"
 							style="padding: 0em 2em"
 							type="info"
@@ -280,7 +275,7 @@ const getAllPrice = computed(() => {
 							:disabled="selectIds.length === 0"
 							@click="toOrderPage(selectIds)"
 							tracking-0.1em
-							>去结算</lazy-el-button
+							>去结算</el-button
 						>
 					</div>
 				</div>

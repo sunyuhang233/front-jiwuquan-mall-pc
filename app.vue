@@ -18,7 +18,7 @@ app.hook("app:mounted", () => {
 <style> 
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 .page-enter-from,
 .page-leave-to {
@@ -28,7 +28,7 @@ app.hook("app:mounted", () => {
 
 .layout-enter-active,
 .layout-leave-active {
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 .layout-enter-from,
 .layout-leave-to {

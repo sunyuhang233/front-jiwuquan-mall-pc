@@ -14,7 +14,6 @@ const isNoMore = computed<boolean>(() => shop.shopcartList.length === shop.pageI
  */
 const loadShopcartList = async () => {
 	if (!user.isLogin || isLoading.value) return;
-
 	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) {
 		return;
 	}
@@ -31,7 +30,6 @@ const loadShopcartList = async () => {
 		shop.shopcartList.push(p);
 	});
 };
-loadShopcartList();
 
 // 没有更多
 const notMore = computed(() => {
@@ -149,10 +147,13 @@ const toOrderPage = (ids: string[]) => {
 					<template #reference>
 						<div
 							@click="isShow = true"
-							class="icon hover:scale-90 transition-300"
+							class="icon shadow-[#5d33f9] shadow-opacity-60 shadow-md"
+							hover:scale-92
+							animate-zoom-in
+							animate-duration-600
 							cursor-pointer
 							flex-row-c-c
-							hover:opacity-85
+							hover:opacity-90
 							transition-300
 						>
 							<span
@@ -212,7 +213,7 @@ const toOrderPage = (ids: string[]) => {
 							<el-scrollbar height="500px" class="overflow-auto" mb-2>
 								<ul
 									v-infinite-scroll="loadShopcartList"
-									:infinite-scroll-delay="300"
+									:infinite-scroll-delay="1000"
 									:infinite-scroll-disabled="notMore"
 									style="overflow: auto"
 								>
@@ -250,8 +251,12 @@ const toOrderPage = (ids: string[]) => {
 									size="large"
 									label="全 选"
 								/>
-								<div flex>
-									<lazy-el-button
+								<div flex-row-bt-c>
+									<h3 class="mx-4">
+										总计：￥
+										<span v-incre-up="getAllPrice"></span>
+									</h3>
+									<el-button
 										v-if="selectIds.length"
 										class="fadeInOut flex-1"
 										style="padding: 0em 1em"
@@ -262,8 +267,8 @@ const toOrderPage = (ids: string[]) => {
 										@click="deleteBatchShopcart('批量删除')"
 										>批量删除
 										<i i-solar:trash-bin-trash-broken mr-1></i>
-									</lazy-el-button>
-									<lazy-el-button
+									</el-button>
+									<el-button
 										v-if="isEdit"
 										class="fadeInOut flex-1"
 										style="padding: 0em 1em"
@@ -275,8 +280,8 @@ const toOrderPage = (ids: string[]) => {
 									>
 										<i i-solar:trash-bin-trash-broken mr-1></i>
 										清空
-									</lazy-el-button>
-									<lazy-el-button
+									</el-button>
+									<el-button
 										class="fadeInOut flex-1"
 										style="padding: 0em 2em"
 										type="info"
@@ -284,7 +289,7 @@ const toOrderPage = (ids: string[]) => {
 										:disabled="selectIds.length === 0"
 										@click="toOrderPage(selectIds)"
 										tracking-0.1em
-										>去结算</lazy-el-button
+										>去结算</el-button
 									>
 								</div>
 							</div>
@@ -322,7 +327,6 @@ const toOrderPage = (ids: string[]) => {
 		height: 100%;
 		background-color: var(--el-color-primary);
 		border-radius: 50%;
-		box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
 		i {
 			color: #fff;
 		}

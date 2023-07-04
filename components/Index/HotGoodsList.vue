@@ -51,10 +51,11 @@
 							<div opacity-0 class="item" float-right>
 								<el-button
 									group:hover:block
+									plain
 									type="danger"
 									style="padding: 0 1em; margin-left: 2em"
 									><nuxt-link to="" style="font-size: 10px"
-										>前往购买</nuxt-link
+										>购买</nuxt-link
 									></el-button
 								>
 							</div>
