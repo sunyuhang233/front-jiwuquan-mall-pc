@@ -1,9 +1,9 @@
 <template>
-	<div class="second" min-h-100vh flex flex-col justify-between>
+	<div class="user" min-h-100vh flex flex-col justify-between>
 		<!-- 顶部导航 -->
 		<MenuHeaderMenu />
+		<!-- 内容 -->
 		<div flex-1>
-			<!-- 内容 -->
 			<slot></slot>
 		</div>
 		<!-- 右下角功能区 -->
