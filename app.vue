@@ -23,7 +23,7 @@ app.hook("app:mounted", () => {
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  filter:blur(1rem) grayscale(1);
+  /* filter:blur(1rem) grayscale(1); */
 }
 
 .layout-enter-active,
@@ -33,6 +33,6 @@ app.hook("app:mounted", () => {
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
-  filter:blur(1rem) grayscale(1);
+  /* filter:blur(1rem) grayscale(1); */
 } 
 </style>

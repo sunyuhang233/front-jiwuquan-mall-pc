@@ -9,7 +9,7 @@
 		</div>
 		<!-- 右下角功能区 -->
 		<ClientOnly>
-			<MenuLeftBottom :menu="menu" />
+			<MenuRightButtons :menu="menu" />
 		</ClientOnly>
 		<!-- 页脚 -->
 		<MenuFooter v-if="footer" />

@@ -9,7 +9,7 @@ import { IPage } from "~/types";
  * @returns 
  */
 export function getGoodsListByPageLazy(page: number, size: number, dto: GoodsPageDTO) {
-  return useFetch<Result<IPage<GoodsVO>>>(()=>BaseUrl + `/goods/list/${page}/${size}`, {
+  return useFetch<Result<IPage<GoodsVO>>>(() => BaseUrl + `/goods/list/${page}/${size}`, {
     method: "POST",
     body: { ...dto }
   })
@@ -56,6 +56,23 @@ export interface GoodsInfoVO {
   province: string;
   city: string;
   district: string;
+}
+
+
+
+
+/**
+ * 添加商品浏览量
+ * @param gid 
+ * @param token
+ * @returns 
+ */
+export function addGoodsViewsById(gid: string, token: string) {
+  return useHttp.put<Result<string>>(`/goods/views/${gid}`, {}, {
+    headers: {
+      "Authorization": token
+    }
+  });
 }
 
 

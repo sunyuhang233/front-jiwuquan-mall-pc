@@ -44,7 +44,8 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: false,
     inlineSSRStyles: false,
-    renderJsonPayloads: true,
+    renderJsonPayloads: true,// 
+    viewTransition:true,// 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
     crossOriginPrefetch: true, //使用 Speculation Rules API 启用跨源预取。
   },
   // 自动导入

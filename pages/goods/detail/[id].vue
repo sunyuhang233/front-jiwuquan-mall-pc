@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { GoodsInfoVO, getGoodsInfoById } from '~/composables/api/goods';
-import { getGoodsSkuByGid } from '~/composables/api/goods/sku';
-import { GoodsSkuVO } from '~/composables/api/goods/sku';
+import { GoodsInfoVO, addGoodsViewsById, getGoodsInfoById } from "~/composables/api/goods";
+import { getGoodsSkuByGid } from "~/composables/api/goods/sku";
+import { GoodsSkuVO } from "~/composables/api/goods/sku";
 const app = useNuxtApp();
 const route = useRoute();
 const user = useUserStore();
@@ -11,6 +11,14 @@ const isLoading = ref<boolean>(true);
 // 商品详细信息
 const reqGoodsInfo = getGoodsInfoById(goodsId.toString());
 let goodsInfo = ref<GoodsInfoVO>();
+useAsyncData(async () => {
+	if (user.isLogin) {
+		const { data } = await addGoodsViewsById(goodsId.toString(), user.getToken);
+		console.log(data);
+		
+	}
+});
+
 // 规格信息
 const reqGoodsSku = getGoodsSkuByGid(goodsId.toString());
 let goodsSku = ref<GoodsSkuVO[]>();
@@ -21,12 +29,12 @@ const reqArr = await Promise.all([reqGoodsInfo, reqGoodsSku]);
 const goodsInfoRaw = reqArr[0].data.value?.data;
 const goodsSkuRaw = reqArr[1].data.value?.data;
 if (!goodsInfoRaw || !goodsSkuRaw) {
-	navigateTo('/');
+	navigateTo("/");
 }
 // 商品介绍图和处理
 if (goodsInfoRaw) {
 	if (goodsInfoRaw.images) {
-		goodsInfoRaw.images = goodsInfoRaw?.images.toString().split(',');
+		goodsInfoRaw.images = goodsInfoRaw?.images.toString().split(",");
 	}
 	goodsInfo = toRef(goodsInfoRaw); // 商品信息
 	goodsInfoRaw?.images?.forEach((p) => {
@@ -48,11 +56,11 @@ const setActive = (name: string) => {
 
 // 定义当前页面
 useHead({
-	title: '极物 ' + goodsInfo.value?.name,
+	title: "极物 " + goodsInfo.value?.name,
 	meta: [
 		{
-			name: 'description',
-			content: goodsInfo.value?.name + ' ' + goodsInfo.value?.description,
+			name: "description",
+			content: goodsInfo.value?.name + " " + goodsInfo.value?.description,
 		},
 	],
 });
@@ -64,7 +72,7 @@ definePageMeta({
 	middleware: [
 		(to, from) => {
 			if (!to.params.id) {
-				return navigateTo('/');
+				return navigateTo("/");
 			}
 		},
 	],
