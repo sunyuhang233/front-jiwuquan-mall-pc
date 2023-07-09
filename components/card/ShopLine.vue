@@ -88,11 +88,10 @@ const getProps = computed({
 // 删除单个
 const deleteShopCart = () => {
 	ElMessageBox({
-		title: '删除提示！',
+		title: '删除提示',
 		message: '确定要删除吗？',
 		type: 'warning',
 		showClose: false,
-		center: true,
 		customClass: 'text-center',
 		showCancelButton: true,
 		cancelButtonText: '取 消',

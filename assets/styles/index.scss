@@ -55,8 +55,8 @@ html.dark {
 
 // 全局滚动条
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 0.5vw;
+  height: 0.5vw;
   background-color: rgba(255, 255, 255, 0);
 }
 
@@ -64,7 +64,7 @@ html.dark {
   内阴影+圆角*/
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  border-radius: 0.8rem;
   background-color: #fdfdfd;
 }
 .dark ::-webkit-scrollbar-track {
@@ -74,7 +74,7 @@ html.dark {
 /*定义滑块
   内阴影+圆角*/
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: 0.8rem;
   -webkit-box-shadow: inset 0 0 6px rgba(134, 134, 134, 0.3);
   background-color: #252525;
 }
@@ -165,20 +165,42 @@ html.dark {
   -webkit-box-orient: vertical;
 }
 
+
 // element-plus
 // 消息确认框
 .el-message-box {
-  .el-message-box__content {
-  }
-
   .el-message-box__btns {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px 20px;
+    margin: 0.2em 1em;
+    .el-button {
+      width: auto;
+      height: auto;
+    }
   }
+  .el-message-box__header {
+    text-align: center;
+    font-size: 2em;
+    letter-spacing: 0.1em;
+  }
+
+
+  .el-message-box__content {
+    margin: 0.4em 1em;
+  }
+}
+
+.el-radio-group {
+  font-size: medium;
 }
 
 .el-button {
   transform: $transition-delay;
+}
+
+
+// 消息
+.el-message {
+  top: 1em !important;
 }

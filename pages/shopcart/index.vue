@@ -1,20 +1,17 @@
 <script lang="ts" setup>
-import {
-	deleteBatchShopcartByIds,
-	getUserShopCartPage,
-} from '~/composables/api/shopcart';
-import { PushOrdersItemDTO } from '~/composables/api/orders';
-import currency from 'currency.js';
+import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
+import { PushOrdersItemDTO } from "~/composables/api/orders";
+import currency from "currency.js";
 // 定义当前页面
 useHead({
-	title: '我的购物车',
+	title: "极物 我的购物车",
 	meta: [
 		{
-			name: 'description',
-			content: '极物圈-我的购物车',
+			name: "description",
+			content: "极物圈-我的购物车",
 		},
 		{
-			name: 'isPermission',
+			name: "isPermission",
 		},
 	],
 });
@@ -63,30 +60,33 @@ const notMore = computed(() => {
 		shop.pageInfo.current === shop.pageInfo.pages
 	);
 });
+if (shop.shopcartList.length === 0) {
+	loadShopcartList();
+}
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-const deleteBatchShopcart = (text: string = '删除') => {
+const deleteBatchShopcart = (text: string = "删除") => {
 	ElMessageBox({
 		title: `${text}提示！`,
 		message: `确定要${text}吗？`,
-		type: 'warning',
+		type: "warning",
 		showClose: false,
 		center: true,
-		customClass: 'text-center',
+		customClass: "text-center",
 		showCancelButton: true,
-		cancelButtonText: '取 消',
-		confirmButtonText: '删 除',
+		cancelButtonText: "取 消",
+		confirmButtonText: "删 除",
 	})
 		.then(async (res) => {
-			if (res === 'confirm') {
+			if (res === "confirm") {
 				const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
 				if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
 					selectIds.value.splice(0);
-					ElMessage.success(text + '成功！');
+					ElMessage.success(text + "成功！");
 				} else {
-					ElMessage.error('删除失败，请稍后再试试看！');
+					ElMessage.error("删除失败，请稍后再试试看！");
 				}
 			}
 		})
@@ -95,7 +95,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 // 2、清空购物车
 const clearShopcart = () => {
 	selectIds.value.push(...shop.shopcartList.map((p) => p.id));
-	deleteBatchShopcart('清空');
+	deleteBatchShopcart("清空");
 };
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
@@ -129,7 +129,7 @@ const toOrderPage = (ids: string[]) => {
 		pushOrderItems: dtoList,
 	});
 	useRouter().push({
-		path: '/order/pay',
+		path: "/order/pay",
 	});
 };
 // 计算总价
@@ -172,57 +172,36 @@ const getAllPrice = computed(() => {
 						:plain="!isEdit"
 						class="transition-300"
 						text-green-5
-						>{{ !isEdit ? '管理' : '取消' }}</small
+						>{{ !isEdit ? "管理" : "取消" }}</small
 					>
 					购物车
 				</h2>
-				<ClientOnly>
-					<div
-						mb-2
-						v-infinite-scroll="loadShopcartList"
-						:infinite-scroll-delay="1000"
-						:infinite-scroll-disabled="notMore"
-						style="overflow: auto"
-					>
-						<!-- 购物车项 -->
-						<el-checkbox-group v-model="selectIds" size="large" class="relative">
-							<transition-group tag="div" name="fade-list">
-								<li v-for="(p, i) in shop.shopcartList" :key="p.id">
-									<CardShopLine :shop-cart="p">
-										<template #btn>
-											<el-checkbox
-												:label="p.id"
-												:disabled="!p.stock"
-											></el-checkbox>
-										</template>
-									</CardShopLine>
-								</li>
-							</transition-group>
-						</el-checkbox-group>
-					</div>
-				</ClientOnly>
+				<div
+					mb-2
+					v-infinite-scroll="loadShopcartList"
+					:infinite-scroll-delay="1000"
+					:infinite-scroll-disabled="notMore"
+					style="overflow: auto"
+				>
+					<!-- 购物车项 -->
+					<el-checkbox-group v-model="selectIds" size="large" class="relative">
+						<transition-group tag="div" name="fade-list">
+							<li v-for="(p, i) in shop.shopcartList" :key="p.id">
+								<CardShopLine :shop-cart="p">
+									<template #btn>
+										<el-checkbox
+											:label="p.id"
+											:disabled="!p.stock"
+										></el-checkbox>
+									</template>
+								</CardShopLine>
+							</li>
+						</transition-group>
+					</el-checkbox-group>
+				</div>
 				<!-- 下方按钮 -->
 				<div
-					class="bottom"
-					mt-4em
-					style="width: 660px; position: fixed"
-					fixed
-					bottom-0
-					h-4em
-					px-4
-					flex
-					justify-between
-					items-center
-					border-default
-					rounded-10px
-					animate-fade-in-up
-					border-2px
-					my-4
-					shadow-md
-					relative
-					bg-white
-					dark-bg-dark-6
-					z-999
+					class="bottom drop-blur-2em mb-0 w-660px mt-4em fixed bottom-4 h-4em px-4 flex justify-between items-center border-default rounded-10px animate-fade-in-up border-2px my-4 shadow-md bg-white dark-bg-dark-6 z-999"
 				>
 					<div
 						absolute
@@ -243,12 +222,12 @@ const getAllPrice = computed(() => {
 					<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
 					<div flex>
 						<el-button
-							v-if="selectIds.length"
+							v-if="isEdit && selectIds.length"
 							class="fadeInOut flex-1"
 							style="padding: 0em 1em"
 							type="danger"
 							plain
-							:disabled="selectIds.length === 0"
+							:disabled="selectIds.length === 0 && !isEdit"
 							round
 							@click="deleteBatchShopcart('批量删除')"
 							>批量删除
@@ -291,15 +270,18 @@ const getAllPrice = computed(() => {
 	transition: $transition-delay;
 	z-index: 999;
 	border-radius: 50%;
+
 	.icon {
 		width: 3.5em;
 		height: 3.5em;
 		background-color: var(--el-color-primary);
 		border-radius: 50%;
 		box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+
 		i {
 			color: #fff;
 		}
+
 		.count {
 			background-color: var(--el-color-danger);
 			color: #fff;
@@ -323,6 +305,7 @@ const getAllPrice = computed(() => {
 		position: absolute;
 	}
 }
+
 :deep(.el-checkbox-group) {
 	font-size: 1em;
 	line-height: 1.1em;
@@ -346,6 +329,7 @@ const getAllPrice = computed(() => {
 	0% {
 		opacity: 0;
 	}
+
 	100% {
 		opacity: 0.4;
 	}

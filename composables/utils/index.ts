@@ -9,8 +9,6 @@ export function useCheckXXSText(text: string): string {
   return text;
 }
 
-
-
 /**
  * 获取本地位置
  * @returns

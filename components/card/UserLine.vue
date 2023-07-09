@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { UploadProps } from 'element-plus';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import { UploadProps } from "element-plus";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 const props = defineProps({
 	userInfo: {
 		type: Object,
@@ -23,29 +23,29 @@ const avatarUrl = computed({
 /**
  * 上传之前验证类型
  */
-const imageTypeList = ref<string[]>(['image/png', 'image/jpg', 'image/jpeg', 'image/svg']);
-const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
+const imageTypeList = ref<string[]>(["image/png", "image/jpg", "image/jpeg", "image/svg"]);
+const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
 	if (!imageTypeList.value.includes(rawFile.type)) {
-		ElMessage.error('文件格式不是图片格式!');
+		ElMessage.error("文件格式不是图片格式!");
 		return false;
 	} else if (rawFile.size / 1024 / 1024 > 2) {
-		ElMessage.error('头像需要小于2MB!');
+		ElMessage.error("头像需要小于2MB!");
 		return false;
 	}
 	// check success
-	formData.append('file', rawFile);
+	formData.append("file", rawFile);
 	return true;
 };
 /**
  * 更新
  */
-const updateSucess: UploadProps['onSuccess'] = async (data, file) => {
+const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
 	if (data.code === StatusCode.SUCCESS) {
 		user.userInfo.avatar = data.data;
-		avatarUrl.value = data.data || '';
-		ElMessage.success('更换头像成功！');
+		avatarUrl.value = data.data || "";
+		ElMessage.success("更换头像成功！");
 	} else {
-		ElMessage.error('更换头像失败！');
+		ElMessage.error("更换头像失败！");
 	}
 };
 // 退出登录
@@ -54,19 +54,19 @@ const exitLogin = () => {
 	const iWidth = window.innerWidth; //浏览器窗口大小
 	const init = document.body.style.paddingRight;
 	document.body.style.paddingRight = `${iWidth - cWidth}px`;
-	ElMessageBox.confirm('是否确认退出登录？', '退出登录', {
-		confirmButtonText: '确认退出',
-		cancelButtonText: '取消',
-		type: 'warning',
+	ElMessageBox.confirm("是否确认退出登录？", "退出登录", {
+		confirmButtonText: "确认退出",
+		cancelButtonText: "取消",
+		type: "warning",
 	})
 		.then((e) => {
 			// 退出登录
 			user.onUserExit(user.token);
-			document.body.style.paddingRight = init + 'px';
-			ElMessage.success('退出成功！');
+			document.body.style.paddingRight = init + "px";
+			ElMessage.success("退出成功！");
 		})
 		.catch(() => {
-			document.body.style.paddingRight = init + 'px';
+			document.body.style.paddingRight = init + "px";
 		});
 };
 // 跳转
@@ -104,9 +104,15 @@ const toView = (path: string) => {
 							<h4 tracking-1px w-7em class="overflow-hidden truncate ...">
 								{{ user.userInfo.nickname }}
 							</h4>
-							<el-tag opacity-70 class="p-0 overflow-hidden truncate ...">{{
-								user.userInfo.username || '未填写用户名'
-							}}</el-tag>
+							<small
+								opacity-80
+								v-copying="user.userInfo.id"
+								class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
+								>ID:{{ user.userInfo.id }}
+								<span class="group-hover:opacity-100 opacity-0 transition-300"
+									>复制</span
+								>
+							</small>
 						</div>
 					</div>
 				</template>
@@ -119,8 +125,8 @@ const toView = (path: string) => {
 							class="avatar-uploader"
 							ref="uploader"
 							style="width: 100%; height: 100%; border-radius: 50%"
-							drag
-							action="/api/user/info/avatar"
+							drag 
+							:action="getBaseUrl()+'/user/info/avatar'"
 							:headers="{ Authorization: user.token }"
 							method="PUT"
 							:limit="1"
@@ -242,7 +248,7 @@ const toView = (path: string) => {
 	position: relative;
 
 	&::before {
-		content: '';
+		content: "";
 		width: 100%;
 		height: 100%;
 		position: absolute;

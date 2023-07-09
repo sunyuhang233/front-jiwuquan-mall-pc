@@ -109,9 +109,6 @@ export const useShopStore = defineStore('shop', () => {
     shopcartList.value.push(...data.records);
     isRefalsh.value = false;
   };
-  loadShopcartList()
-
-
   return {
     // state
     isRefalsh,

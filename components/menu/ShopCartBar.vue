@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { deleteBatchShopcartByIds, getUserShopCartPage } from '~/composables/api/shopcart';
-import { PushOrdersItemDTO } from '~/composables/api/orders';
-import { useOrderStore } from '~/composables/store/useOrderStore';
-import currency from 'currency.js';
+import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
+import { PushOrdersItemDTO } from "~/composables/api/orders";
+import { useOrderStore } from "~/composables/store/useOrderStore";
+import currency from "currency.js";
 const shop = useShopStore();
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
@@ -31,6 +31,10 @@ const loadShopcartList = async () => {
 	});
 };
 
+if (shop.shopcartList.length <= 0) {
+	loadShopcartList();
+}
+
 // 没有更多
 const notMore = computed(() => {
 	return (
@@ -42,27 +46,27 @@ const notMore = computed(() => {
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-const deleteBatchShopcart = (text: string = '删除') => {
+const deleteBatchShopcart = (text: string = "删除") => {
 	ElMessageBox({
 		title: `${text}提示！`,
 		message: `确定要${text}吗？`,
-		type: 'warning',
+		type: "warning",
 		showClose: false,
 		center: true,
-		customClass: 'text-center',
+		customClass: "text-center",
 		showCancelButton: true,
-		cancelButtonText: '取 消',
-		confirmButtonText: '删 除',
+		cancelButtonText: "取 消",
+		confirmButtonText: "删 除",
 	})
 		.then(async (res) => {
-			if (res === 'confirm') {
-				if (res === 'confirm') {
+			if (res === "confirm") {
+				if (res === "confirm") {
 					const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
 					if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
 						selectIds.value.splice(0);
-						ElMessage.success(text + '成功！');
+						ElMessage.success(text + "成功！");
 					} else {
-						ElMessage.error('删除失败，请稍后再试试看！');
+						ElMessage.error("删除失败，请稍后再试试看！");
 					}
 				}
 			}
@@ -72,7 +76,7 @@ const deleteBatchShopcart = (text: string = '删除') => {
 
 const clearShopcart = () => {
 	isSelectAll.value = true;
-	deleteBatchShopcart('清空');
+	deleteBatchShopcart("清空");
 };
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
@@ -93,7 +97,7 @@ const getShopCartLength = computed(() => {
 // 计算总价
 const getAllPrice = computed(() => {
 	const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
-	let count = currency('0.00');
+	let count = currency("0.00");
 	selectList.forEach((p) => {
 		count = count.add(currency(p.price).multiply(p.quantity));
 	});
@@ -121,7 +125,7 @@ const toOrderPage = (ids: string[]) => {
 			pushOrderItems: dtoList,
 		});
 		router.push({
-			path: '/order/pay',
+			path: "/order/pay",
 		});
 	}, 1000);
 };
@@ -206,7 +210,7 @@ const toOrderPage = (ids: string[]) => {
 									@click="isEdit = !isEdit"
 									:plain="!isEdit"
 									class="transition-300"
-									>{{ !isEdit ? '管理' : '取消' }}</span
+									>{{ !isEdit ? "管理" : "取消" }}</span
 								>
 								购物车
 							</h2>
@@ -253,16 +257,16 @@ const toOrderPage = (ids: string[]) => {
 								/>
 								<div flex-row-bt-c>
 									<h3 class="mx-4">
-										总计：￥
-										<span v-incre-up="getAllPrice"></span>
+										<small>总计：￥</small>
+										<span text-red-5 v-incre-up="getAllPrice"></span>
 									</h3>
 									<el-button
-										v-if="selectIds.length"
+										v-if="isEdit && selectIds.length"
 										class="fadeInOut flex-1"
 										style="padding: 0em 1em"
 										type="danger"
 										plain
-										:disabled="selectIds.length === 0"
+										:disabled="selectIds.length === 0 && !isEdit"
 										round
 										@click="deleteBatchShopcart('批量删除')"
 										>批量删除
@@ -322,14 +326,17 @@ const toOrderPage = (ids: string[]) => {
 	border-radius: 50%;
 	width: 50px;
 	height: 50px;
+
 	.icon {
 		width: 100%;
 		height: 100%;
 		background-color: var(--el-color-primary);
 		border-radius: 50%;
+
 		i {
 			color: #fff;
 		}
+
 		.count {
 			background-color: var(--el-color-danger);
 			color: #fff;
@@ -357,6 +364,7 @@ const toOrderPage = (ids: string[]) => {
 		position: absolute;
 	}
 }
+
 :deep(.el-checkbox-group) {
 	font-size: 1em;
 	line-height: 1.1em;
@@ -380,6 +388,7 @@ const toOrderPage = (ids: string[]) => {
 	0% {
 		opacity: 0;
 	}
+
 	100% {
 		opacity: 0.4;
 	}

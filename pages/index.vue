@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-	layout: 'default',
-});
 useHead({
 	title: '极物圈',
 	meta: [
@@ -10,11 +7,10 @@ useHead({
 			content: '极物圈-主页 开启你的极物之旅！',
 		},
 	],
-});
-const user = useUserStore();
+}); 
 </script>
 <template>
-	<NuxtLayout>
+	<NuxtLayout name="default">
 		<div class="index w-1/1" flex flex-col items-center>
 			<div overflow-x-hidden layout-default>
 				<IndexTopMenu min-h-160px/>

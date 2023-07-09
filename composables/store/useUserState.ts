@@ -120,8 +120,8 @@ export const useUserStore = defineStore(
     }
 
     function clearUserStore() {
-      localStorage.removeItem("user");
-      sessionStorage.removeItem("user");
+      // localStorage.removeItem("user");
+      // sessionStorage.removeItem("user");
       useUserStore().$patch({
         token: "",
         isLogin: false,
@@ -176,5 +176,4 @@ export const useUserStore = defineStore(
     persist: true,
   }
 );
-
 if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));

@@ -21,13 +21,7 @@ const dto = reactive<GoodsPageDTO>({
 	saleSort: undefined,
 	isNew: undefined,
 });
-// watch(
-// 	dto,
-// 	() => {
-// 		onSearch();
-// 	},
-// 	{ deep: true, immediate: true }
-// );
+
 
 interface GoodsPageDTO {
 	cid?: string;
@@ -123,6 +117,7 @@ const reset = () => {
 					<el-option label="销量升序" :value="0" />
 					<el-option label="销量降序" :value="1" />
 				</el-select>
+				
 
 				<el-select
 					v-model="dto.priceSort"

@@ -10,13 +10,12 @@ export const useAddresStore = defineStore('Addres', () => {
     const res = await getAddressList(token);
     if (res.code === StatusCode.SUCCESS) {
       addressList.value.splice(0)
-      addressList.value.push(...res.data.sort((a,b)=>b.isDefault-a.isDefault));
+      addressList.value.push(...res.data.sort((a, b) => b.isDefault - a.isDefault));
       return Promise.resolve(true);
     } else {
       return Promise.resolve(false);
     }
   }
-
   return {
     // state
     addressList,

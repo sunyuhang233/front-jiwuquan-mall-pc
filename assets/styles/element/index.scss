@@ -50,11 +50,12 @@
       "indicator-out-color": getCssVar("border-color-hover")
     ),
   // el-card
-  $card: (
-    "border-color": getCssVar("border-color", "light"),
-    "border-radius": 4px,
-    "padding": 2px,
-    "bg-color": getCssVar("fill-color", "blank")
-  )
-  // 表单
+  $card:
+    (
+      "border-color": getCssVar("border-color", "light"),
+      "border-radius": 4px,
+      "padding": 2px,
+      "bg-color": getCssVar("fill-color", "blank")
+    )
+    // 表单
 );

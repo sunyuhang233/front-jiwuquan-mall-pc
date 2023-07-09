@@ -13,9 +13,7 @@ const reqGoodsInfo = getGoodsInfoById(goodsId.toString());
 let goodsInfo = ref<GoodsInfoVO>();
 useAsyncData(async () => {
 	if (user.isLogin) {
-		const { data } = await addGoodsViewsById(goodsId.toString(), user.getToken);
-		console.log(data);
-		
+		await addGoodsViewsById(goodsId.toString(), user.getToken);
 	}
 });
 

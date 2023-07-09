@@ -45,7 +45,7 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     inlineSSRStyles: false,
     renderJsonPayloads: true,// 
-    viewTransition:true,// 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
+    viewTransition: true,// 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
     crossOriginPrefetch: true, //使用 Speculation Rules API 启用跨源预取。
   },
   // 自动导入
@@ -61,7 +61,6 @@ export default defineNuxtConfig({
       'types/*/.ts',
     ]
   },
-
 
   // 主题
   colorMode: {
@@ -96,12 +95,9 @@ export default defineNuxtConfig({
     ],
   },
 
-  devServer: {
-    url: BaseUrl
-  },
   // pinia持久化到会话存储
   piniaPersistedstate: {
-    storage: 'sessionStorage',
+    storage: "cookies",
   },
 
   // nitro
@@ -115,13 +111,16 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
     },
-    devProxy: {
-      "/api": {
-        target: BaseUrl,
-        prependPath: true,
-        changeOrigin: true,
-      }
-    }
+    // devServer: {
+    //   url: BaseUrl
+    // },
+    // devProxy: {
+    //   "/api": {
+    //     target: BaseUrl,
+    //     prependPath: true,
+    //     changeOrigin: true,
+    //   }
+    // }
   },
   // elementPlus
   elementPlus: {
