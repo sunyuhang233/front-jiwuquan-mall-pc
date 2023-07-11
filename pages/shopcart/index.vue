@@ -3,16 +3,16 @@ import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api
 import { PushOrdersItemDTO } from "~/composables/api/orders";
 import currency from "currency.js";
 // 定义当前页面
+// definePageMeta({
+// 	middleware: ["auth"],
+// });
 useHead({
 	title: "极物 我的购物车",
 	meta: [
 		{
 			name: "description",
 			content: "极物圈-我的购物车",
-		},
-		{
-			name: "isPermission",
-		},
+		}, 
 	],
 });
 const shop = useShopStore();
@@ -146,7 +146,7 @@ const getAllPrice = computed(() => {
 });
 </script>
 <template>
-	<NuxtLayout name="second" :menu="['back']" :footer="false">
+	<NuxtLayout :menu="['back']" :footer="false">
 		<ClientOnly>
 			<div
 				v-if="user.isLogin"

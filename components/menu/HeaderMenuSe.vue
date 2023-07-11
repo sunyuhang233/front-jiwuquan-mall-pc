@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" :class="topClass" layout-default-se flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav un-select" :class="topClass" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
@@ -37,19 +37,9 @@
 				<span tracking-2 m-4 font-700 text-xl hidden md:inline-block>极物圈</span>
 			</NuxtLink>
 		</div>
-		<!-- 搜索框 -->
-		<div class="animate__animated input-search">
-			<InputSearch v-model="searchWord" :onSerch="onSerch" />
-		</div>
 		<!-- 右侧 -->
 		<div class="right" flex-row-c-c hidden md:flex>
 			<ClientOnly>
-				<!-- 消息 -->
-				<BtnBell v-if="store.isLogin" />
-				<!--  -->
-				<NuxtLink to="/shopcart" v-if="store.isLogin">
-					<i i-solar:cart-large-2-linear p-3 ml-2></i>
-				</NuxtLink>
 				<!-- 切换主题 -->
 				<BtnSwitch />
 			</ClientOnly>
@@ -88,6 +78,7 @@ const onSerch = (val: string) => {};
 <style lang="scss" scoped>
 .nav {
 	position: sticky;
+	box-shadow: rgba(9, 30, 66, 0.1) 0px 4px 2px -2px;
 	top: 0;
 	z-index: 999;
 	height: $top-nav-height;

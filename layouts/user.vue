@@ -1,28 +1,38 @@
 <template>
-	<div class="user" min-h-100vh flex flex-col justify-between>
-		<!-- 顶部导航 -->
-		<MenuHeaderMenu />
-		<!-- 内容 -->
-		<div flex-1>
-			<slot></slot>
+	<div class="defalut min-h-100vh flex flex-col justify-between">
+		<!-- 头部 -->
+		<MenuHeaderMenuSe />
+		<div class="flex flex-1">
+			<!-- 左侧边导航 -->
+			<ClientOnly>
+				<MenuCollMenu />
+			</ClientOnly>
+			<!-- 内容 -->
+			<div class="w-1/1 animate-fade-in animate-duration-300">
+				<slot></slot>
+			</div>
 		</div>
 		<!-- 右下角功能区 -->
 		<ClientOnly>
 			<MenuRightButtons :menu="menu" />
 		</ClientOnly>
-		<!-- 页脚 -->
-		<MenuFooter v-if="footer" />
 	</div>
 </template>
+
 <script lang="ts" setup>
-const { footer, menu } = defineProps({
+const { footer, menu, leftMenu } = defineProps({
 	footer: {
 		type: Boolean,
 		default: true,
 		required: false,
 	},
+	leftMenu: {
+		type: Boolean,
+		default: true,
+		required: false,
+	},
 	menu: {
-		default: ["back"],
+		default: ["shopcart"],
 		required: false,
 	},
 });

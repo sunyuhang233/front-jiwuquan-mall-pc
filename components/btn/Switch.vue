@@ -74,7 +74,7 @@ let toggle = (event: MouseEvent) => {
 </script>
 <style lang="scss" scoped>
 .btn {
-	padding: 0em 0.5em;
+	padding: 0em 0.4em;
 	transition: $transition-delay;
 
 	span {

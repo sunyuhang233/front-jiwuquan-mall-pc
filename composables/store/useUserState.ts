@@ -45,8 +45,8 @@ export const useUserStore = defineStore(
     const getToken = computed({
       get() {
         if (!isLogin || !token.value) {
-          showLoginForm.value = true;
-          showLoginForm.value;
+          showLoginForm.value = true; 
+          showLoginForm.value; 
           return "";
         }
         return token.value;

@@ -6,8 +6,9 @@ const isFold = useStorage<boolean>("jiwu_isFold", true);
 const route = useRoute();
 </script>
 <template>
-		<!-- 菜单 -->
-		<ClientOnly>
+	<!-- 菜单 -->
+	<ClientOnly>
+		<div>
 			<transition name="slideInOut">
 				<div v-show="!isFold" class="menu-list" w-auto md:w-200px>
 					<el-menu :router="true" :default-active="route.path" bg=" dark:dark-600">
@@ -48,7 +49,8 @@ const route = useRoute();
 			>
 				<ElIconArrowRightBold />
 			</div>
-		</ClientOnly>
+		</div>
+	</ClientOnly>
 </template>
 
 <style lang="scss" scoped>

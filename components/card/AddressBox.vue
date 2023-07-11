@@ -6,32 +6,31 @@ const { address } = defineProps<{
 </script>
 <template>
 	<div
-		m-2
 		cursor-pointer
 		transition-300
+		mr-4
 		mt-4
-		w-265px
+		w-260px
+		h-200px
+		p-4
 		relative
-		h-210px
 		border-default
 		border-2px
 		rounded-8px
 		hover:border="solid dark-4"
 		dark:hover:border-gray-5
-		p-6
 		rounded-6px
-		my-4
 		class="group"
 		shadow-sm
 		:key="address.id"
 		opacity-90
 		flex
 		flex-col
-		leading-1.3em
+		leading-1.2em
 	>
-		<div flex-row-c-c justify-start text-1.2em border-0 border-default-dashed border-b-2px pb-2>
+		<div flex-row-c-c justify-start font-600 border-0 border-default-dashed border-b-2px pb-2>
 			<p>{{ address.name }}</p>
-			<el-tag class="ml-a mr-6" v-if="address.isDefault && address.isDefault === 1" plain
+			<el-tag class="ml-a" v-if="address.isDefault && address.isDefault === 1" plain
 				>默认地址</el-tag
 			>
 		</div>
@@ -41,9 +40,9 @@ const { address } = defineProps<{
 			<small pr-1>{{ address.city }}</small>
 			<small pr-1>{{ address.county }}</small>
 		</div>
-		<small>{{ address.address }}</small>
+		<small class="truncate">{{ address.address }}</small>
 		<small> 邮编:{{ address.postalCode }}</small>
-		<div class="btns flex-row-bt-c w-1/1 mt-2">
+		<div class="btns flex-row-bt-c w-1/1 mt-a">
 			<slot name="btns"></slot>
 		</div>
 	</div>

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { Sort, isTrue } from '@/types/result';
+import { Sort, isTrue } from "@/types/result";
 const r = useRoute();
 const isLoading = ref<boolean>(false);
 const onSearch = () => {
 	if (isLoading.value) {
-		return ElMessage.warning('搜索太频繁了');
+		return ElMessage.warning("搜索太频繁了");
 	}
 	isLoading.value = true;
 	setTimeout(() => {
@@ -21,7 +21,6 @@ const dto = reactive<GoodsPageDTO>({
 	saleSort: undefined,
 	isNew: undefined,
 });
-
 
 interface GoodsPageDTO {
 	cid?: string;
@@ -60,10 +59,9 @@ const reset = () => {
 	dto.saleSort = undefined;
 	dto.isNew = undefined;
 };
-
 </script>
 <template>
-	<NuxtLayout name="second">
+	<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
 		<div layout-default-se w-860px flex flex-col justify-center>
 			<!-- 搜索栏目 -->
 			<div class="flex-row-c-c">
@@ -117,7 +115,6 @@ const reset = () => {
 					<el-option label="销量升序" :value="0" />
 					<el-option label="销量降序" :value="1" />
 				</el-select>
-				
 
 				<el-select
 					v-model="dto.priceSort"
@@ -140,13 +137,9 @@ const reset = () => {
 				</el-select>
 				<el-button @click="reset" class="ml-6">重置</el-button>
 			</div>
-				<!-- <p opacity-80  mt-2>{{ `搜索结果` }}</p> -->
-				<div v-show="isLoading" v-loading="isLoading" p-2em mt-4em></div>
-				<ListGoodsList
-					ref="GoodsList"
-					class="list w-1/1"
-					:dto="dto"
-				/>
+			<!-- <p opacity-80  mt-2>{{ `搜索结果` }}</p> -->
+			<div v-show="isLoading" v-loading="isLoading" p-2em mt-4em></div>
+			<ListGoodsList ref="GoodsList" class="list w-1/1" :dto="dto" />
 		</div>
 	</NuxtLayout>
 </template>

@@ -165,7 +165,6 @@ html.dark {
   -webkit-box-orient: vertical;
 }
 
-
 // element-plus
 // 消息确认框
 .el-message-box {
@@ -185,7 +184,6 @@ html.dark {
     letter-spacing: 0.1em;
   }
 
-
   .el-message-box__content {
     margin: 0.4em 1em;
   }
@@ -193,14 +191,13 @@ html.dark {
 
 .el-radio-group {
   font-size: medium;
+  .el-radio__inner {
+    border-radius: 4px;
+    transform: scale(1.1);
+    margin-left: 2px;
+  }
 }
 
 .el-button {
-  transform: $transition-delay;
-}
-
-
-// 消息
-.el-message {
-  top: 1em !important;
+  transition: $transition-delay;
 }

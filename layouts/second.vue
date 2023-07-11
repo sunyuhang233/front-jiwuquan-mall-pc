@@ -19,11 +19,11 @@
 const { footer, menu } = defineProps({
 	footer: {
 		type: Boolean,
-		default: false,
+		default: true,
 		required: false,
 	},
 	menu: {
-		default: ['shopcart', 'back'],
+		default: ["shopcart", "back"],
 		required: false,
 	},
 });

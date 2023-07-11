@@ -75,7 +75,7 @@ defineComponent({
 				<el-image
 					:preview-teleported="true"
 					:preview-src-list="getImagesPreview"
-					:initial-index="i"
+					:initial-index="+i"
 					:src="BaseUrlImg + p"
 					:alt="goodsName || 'Design By Kiwi23333'"
 					class="e-img"
@@ -147,7 +147,7 @@ defineComponent({
 			><i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
 		>
 		<Teleport to="body" >
-			<transition name="fadeInOut">
+			<transition name="fade">
 				<div class="mock" v-if="isOpenVideo" @click.self="isOpenVideo=false">
 				<!-- 视频播放 -->
 				<video

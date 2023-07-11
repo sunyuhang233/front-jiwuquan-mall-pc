@@ -1,4 +1,3 @@
-import { AxiosPromise } from "axios";
 import { Result, isTrue } from "@/types/result";
 import { Gender, UserStatus } from "~/types";
 import { DeviceType } from ".";
@@ -14,7 +13,6 @@ export function getUserInfo(token: string) {
     }
   })
 }
-
 export interface UserWallet {
   userId?: string;
   balance?: number;
@@ -88,7 +86,7 @@ interface UpdatePwd {
  * @param token 用户身份
  * @returns 
  */
-export function updateInfoByToken(upUserInfo: UpdateInfo, token: string): Promise<Result<string>> {
+export function updateInfoByDTO(upUserInfo: UpdateInfo, token: string): Promise<Result<string>> {
   return useHttp.put<Result<string>>(
     `/user/info`,
     { ...upUserInfo },

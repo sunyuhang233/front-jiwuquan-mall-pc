@@ -2,7 +2,6 @@
 import { GoodsInfoVO, addGoodsViewsById, getGoodsInfoById } from "~/composables/api/goods";
 import { getGoodsSkuByGid } from "~/composables/api/goods/sku";
 import { GoodsSkuVO } from "~/composables/api/goods/sku";
-const app = useNuxtApp();
 const route = useRoute();
 const user = useUserStore();
 // 商品id
@@ -64,91 +63,73 @@ useHead({
 });
 definePageMeta({
 	key: (route) => route.fullPath,
-	keepalive: {
-		exclude: [],
-	},
-	middleware: [
-		(to, from) => {
-			if (!to.params.id) {
-				return navigateTo("/");
-			}
-		},
-	],
 });
 </script>
 <template>
-	<div class="goods-detail">
-		<NuxtLayout name="second">
-			<div layout-default class="goods-detail">
-				<div class="top" flex items-center>
-					<!-- 树形分类 -->
-					<GoodsCategoryTree
-						class="left"
-						:gid="goodsId.toString()"
-						:name="goodsInfo?.name"
+	<NuxtLayout :menu="['shopcart', 'back']" :left-menu="false">
+		<div layout-default class="goods-detail">
+			<div class="top" flex items-center>
+				<!-- 树形分类 -->
+				<GoodsCategoryTree class="left" :gid="goodsId.toString()" :name="goodsInfo?.name" />
+			</div>
+			<!-- 内容 -->
+			<div class="center" mt-2.2em flex justify-around items-center>
+				<!-- 商品轮播图 -->
+				<GoodsPreSwiper
+					class="swiper ml-0em flex-2 animate__animated animate__fadeIn"
+					w-600px
+					:images="[...goodsImages]"
+					:video="goodsInfo?.video"
+					:goods-name="goodsInfo?.name"
+					ref="goodsSwiper"
+				/>
+				<!-- 规格和购物车、购买 -->
+				<div class="card flex-1 animate__animated animate__fadeIn" pl-20em pr-4em>
+					<GoodsSkuCard
+						:goods-info="goodsInfo"
+						:goods-sku="goodsSku"
+						@set-active-item="setActive"
 					/>
-				</div>
-				<!-- 内容 -->
-				<div class="center" mt-2.2em flex justify-around items-center>
-					<!-- 商品轮播图 -->
-					<GoodsPreSwiper
-						class="swiper ml-0em flex-2 animate__animated animate__fadeIn"
-						w-600px
-						:images="[...goodsImages]"
-						:video="goodsInfo?.video"
-						:goods-name="goodsInfo?.name"
-						ref="goodsSwiper"
-					/>
-					<!-- 规格和购物车、购买 -->
-					<div class="card flex-1 animate__animated animate__fadeIn" pl-20em pr-4em>
-						<GoodsSkuCard
-							:goods-info="goodsInfo"
-							:goods-sku="goodsSku"
-							@set-active-item="setActive"
-						/>
-					</div>
-				</div>
-				<!-- 详细介绍 -->
-				<div
-					flex
-					justify-between
-					mt-5em
-					border-default
-					border-0
-					border-t="2px solid"
-					py-3em
-					class="bottom"
-				>
-					<div class="left">
-						<h2 tracking-0.1em>
-							<i i-solar:bolt-outline bg-amber p-3.5 mr-2></i>商品介绍
-						</h2>
-						<GoodsDetailTabs
-							class="w-640px detail"
-							:goods-info="goodsInfo"
-							:sku-list="goodsSku"
-							py-1em
-							rounded-10px
-							dark:opacity-90
-							min-h-700px
-							shadow-sm
-						/>
-					</div>
-					<!-- 猜你喜欢 -->
-					<div class="w-2/5">
-						<h2 tracking-0.1em mb-0.8em>
-							<i i-solar:bomb-emoji-outline bg-lime p-4 mr-2></i> 猜你喜欢
-						</h2>
-						<ListGoodsList
-							class="w-1/1"
-							:dto="{ name: goodsInfo?.name[Math.floor(Math.random())] }"
-							:limit="10"
-						/>
-					</div>
 				</div>
 			</div>
-		</NuxtLayout>
-	</div>
+			<!-- 详细介绍 -->
+			<div
+				flex
+				justify-between
+				mt-5em
+				border-default
+				border-0
+				border-t="2px solid"
+				py-3em
+				class="bottom"
+			>
+				<div class="left">
+					<h2 tracking-0.1em><i i-solar:bolt-outline bg-amber p-3.5 mr-2></i>商品介绍</h2>
+					<GoodsDetailTabs
+						class="w-640px detail"
+						:goods-info="goodsInfo"
+						:sku-list="goodsSku"
+						py-1em
+						rounded-10px
+						dark:opacity-90
+						min-h-700px
+						shadow-sm
+					/>
+				</div>
+				<!-- 猜你喜欢 -->
+				<div class="w-2/5">
+					<h2 tracking-0.1em mb-0.8em>
+						<i i-solar:bomb-emoji-outline bg-lime p-4 mr-2></i> 猜你喜欢
+					</h2>
+					<ListGoodsList
+						class="w-1/1"
+						:dto="{ name: goodsInfo?.name[Math.floor(Math.random())] }"
+						:limit="10"
+					/>
+				</div>
+			</div>
+		</div>
+	</NuxtLayout>
 </template>
 
 <style scoped lang="scss">

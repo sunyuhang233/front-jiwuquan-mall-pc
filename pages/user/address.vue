@@ -10,6 +10,21 @@ import {
 	AddressDTO,
 	updateAddressById,
 } from "~/composables/api/user/address";
+
+// 页面
+definePageMeta({
+	pageTransition: false,
+	layoutTransition: false,
+});
+useHead({
+	title: "收货地址 - 个人中心",
+	meta: [
+		{
+			name: "description",
+			content: "个人中心 收货地址",
+		},
+	],
+});
 const user = useUserStore();
 const address = useAddresStore();
 const regionDatas = ref(regionData);
@@ -197,20 +212,6 @@ const showAdd = () => {
 	isUpdate.value = false;
 };
 
-// 定义当前页面
-useHead({
-	title: "收货地址",
-	meta: [
-		{
-			name: "description",
-			content: "极物圈-收货地址",
-		},
-		{
-			name: "isPermission",
-			content: true,
-		},
-	],
-});
 // 规则
 const rules = reactive({
 	name: [
@@ -238,231 +239,211 @@ const rules = reactive({
 });
 </script>
 <template>
-	<NuxtLayout name="second" :footer="false">
-		<ClientOnly>
-			<div
-				class="address-list"
-				@keyup.esc="isEdit = false"
-				v-if="user.isLogin"
-				layout-default
-				w-900px
-			>
-				<!-- 表单弹窗 -->
-				<lazy-el-dialog
-					style="width: 400px; padding: 0 20px"
-					v-model="isShow"
-					:show-close="true"
-				>
-					<el-form
-						ref="addressRef"
-						v-loading="isLoading"
-						label-position="top"
-						hide-required-asterisk
-						:rules="rules"
-						:model="form"
-						@submit.prevent="onReqAddress"
-						class="form animate__animated"
+	<NuxtLayout name="user" :menu="['back']" :footer="false">
+		<div class="py-5em px-10rem">
+			<ClientOnly>
+				<div class="address-list" @keyup.esc="isEdit = false" v-if="user.isLogin">
+					<!-- 表单弹窗 -->
+					<lazy-el-dialog
+						style="width: 400px; padding: 0 20px"
+						v-model="isShow"
+						:show-close="true"
 					>
-						<h2 mb-5 tracking-0.2em>{{ isUpdate ? "修改地址" : "添加地址" }}</h2>
-						<!-- 收货人 -->
-						<el-form-item label="收货人" prop="name" class="animated pb-2">
-							<el-input
-								prefix-icon="user"
-								v-model.trim="form.name"
-								size="large"
-								placeholder="请输入2-10字姓名"
-							/>
-						</el-form-item>
-						<!-- 手机号 -->
-						<el-form-item label="手机号" prop="phone" class="animated pb-2">
-							<el-input
-								prefix-icon="phone"
-								v-model.trim="form.phone"
-								size="large"
-								placeholder="手机号"
-							/>
-						</el-form-item>
-						<el-form-item required label="地址">
-							<el-cascader
-								style="width: 100%"
-								size="large"
-								:placeholder="
-									form.province
-										? `${form.province} / ${form.city} / ${form.county}`
-										: '选择地址'
-								"
-								:options="regionDatas"
-								v-model="selectAddressOption"
-							>
-							</el-cascader>
-						</el-form-item>
-						<!-- 详细地址 -->
-						<el-form-item label="详细地址" prop="address" class="animated pb-2">
-							<el-input
-								prefix-icon="location"
-								v-model.trim="form.address"
-								size="large"
-								placeholder="详细地址"
-							/>
-						</el-form-item>
-						<!-- 是否默认 -->
-						<el-form-item prop="isDefault" class="animated" flex-row-c-c>
-							<el-checkbox v-model="form.isDefault" label="是否默认" size="large" />
-						</el-form-item>
-						<!-- 是否默认 -->
-						<el-form-item mt-1em>
-							<el-button
-								:type="isUpdate ? 'info' : 'primary'"
-								flex-1
-								size="large"
-								class="button"
-								@click="onReqAddress(addressRef)"
-								>{{ isUpdate ? "更 新" : "添 加" }}
-							</el-button>
-						</el-form-item>
-					</el-form>
-				</lazy-el-dialog>
-
-				<!-- 列表 -->
-				<div
-					v-loading="isLoadingAll"
-					class="address"
-					dark:bg-dark-5
-					shadow
-					border-default
-					border-1px
-					rounded-10px
-					p-6
-					mt-2em
-				>
-					<div class="top w-1/1" flex-row-bt-c>
-						<h3 opacity-90 tracking-0.1em>收货地址</h3>
-						<div cursor-pointer flex-row-c-c>
-							<i
-								inline-block
-								hover:rotate-180
-								hover:scale-120
-								transition-300
-								p-3
-								i-solar:refresh-circle-line-duotone
-								bg-green-5
-								mr-4
-								@click="refreshData"
-							></i>
-							<el-text
-								select-none
-								cursor-pointer
-								@click="isEdit = !isEdit"
-								:type="isEdit ? 'danger' : 'info'"
-							>
-								{{ isEdit ? "取消" : "管理" }}
-							</el-text>
+						<el-form
+							ref="addressRef"
+							v-loading="isLoading"
+							label-position="top"
+							hide-required-asterisk
+							:rules="rules"
+							:model="form"
+							@submit.prevent="onReqAddress"
+							class="form animate__animated"
+						>
+							<h2 mb-5 tracking-0.2em>{{ isUpdate ? "修改地址" : "添加地址" }}</h2>
+							<!-- 收货人 -->
+							<el-form-item label="收货人" prop="name" class="animated pb-2">
+								<el-input
+									prefix-icon="user"
+									v-model.trim="form.name"
+									size="large"
+									placeholder="请输入2-10字姓名"
+								/>
+							</el-form-item>
+							<!-- 手机号 -->
+							<el-form-item label="手机号" prop="phone" class="animated pb-2">
+								<el-input
+									prefix-icon="phone"
+									v-model.trim="form.phone"
+									size="large"
+									placeholder="手机号"
+								/>
+							</el-form-item>
+							<el-form-item required label="地址">
+								<el-cascader
+									style="width: 100%"
+									size="large"
+									:placeholder="
+										form.province
+											? `${form.province} / ${form.city} / ${form.county}`
+											: '选择地址'
+									"
+									:options="regionDatas"
+									v-model="selectAddressOption"
+								>
+								</el-cascader>
+							</el-form-item>
+							<!-- 详细地址 -->
+							<el-form-item label="详细地址" prop="address" class="animated pb-2">
+								<el-input
+									prefix-icon="location"
+									v-model.trim="form.address"
+									size="large"
+									placeholder="详细地址"
+								/>
+							</el-form-item>
+							<!-- 是否默认 -->
+							<el-form-item prop="isDefault" class="animated" flex-row-c-c>
+								<el-checkbox
+									v-model="form.isDefault"
+									label="是否默认"
+									size="large"
+								/>
+							</el-form-item>
+							<!-- 是否默认 -->
+							<el-form-item mt-1em>
+								<el-button
+									:type="isUpdate ? 'info' : 'primary'"
+									flex-1
+									size="large"
+									class="button"
+									@click="onReqAddress(addressRef)"
+									>{{ isUpdate ? "更 新" : "添 加" }}
+								</el-button>
+							</el-form-item>
+						</el-form>
+					</lazy-el-dialog>
+					<!-- 列表 -->
+					<div
+						v-loading="isLoadingAll"
+						class="address"
+					>
+						<div flex-row-bt-c border-default pb-4 border-0 border-b-2px mb-5>
+							<h3 inline-block>收货地址</h3>
+							<div class="cursor-pointer flex items-center justify-end ml-a">
+								<i
+									class="inline-block hover:rotate-180 hover:scale-120 transition-300 p-3 i-solar:refresh-circle-line-duotone bg-green-5 mr-4 hover:text-[var(--el-color-success)]"
+									@click="refreshData"
+								></i>
+								<el-text
+									plain
+									class="transition-300 select-none cursor-pointer hover:text-[var(--el-color-success)]"
+									@click="isEdit = !isEdit"
+									:type="isEdit ? 'danger' : 'info'"
+								>
+									{{ isEdit ? "取消" : "管理" }}
+								</el-text>
+							</div>
+						</div>
+						<!-- 列表 -->
+						<div class="list" flex flex-wrap>
+							<!-- 单项 -->
+							<el-checkbox-group v-model="selectAddress">
+								<TransitionGroup
+									tag="div"
+									name="fade-list"
+									class="flex flex-wrap relative "
+								>
+									<!-- 添加按钮 -->
+									<div
+										:key="2030303"
+										mr-4
+										mt-4
+										select-none
+										hover:scale-98
+										cursor-pointer
+										flex-row-c-c
+										flex-col
+										class="add group"
+										w-260px
+										h-200px
+										border-default-dashed
+										border-3px
+										rounded-8px
+										transition-300
+										hover:border="3px solid dark-4"
+										dark:hover:border-gray-5
+										@click="showAdd"
+									>
+										<ElIconCirclePlusFilled
+											text-dark-2
+											class="w-4em h-4em opacity-20 group-hover:opacity-80 transition-300"
+										/>
+										<p mt-2 opacity-20 group-hover:opacity-80 transition-300>
+											添加新地址
+										</p>
+									</div>
+									<!-- 地址项 -->
+									<div v-for="(p, i) in address.addressList" :key="p.id">
+										<CardAddressBox :address="p" >
+											<template #btns>
+												<div
+													class="check"
+													v-show="isEdit"
+													block
+													flex-row-c-c
+												>
+													<el-checkbox w-4em :label="p.id" />
+													<span class="-ml-2em opacity-80">选中</span>
+												</div>
+												<el-button
+													type="info"
+													w-4em
+													size="small"
+													class="opacity-0 group-hover:opacity-90"
+													@click="showUpdate(p)"
+													plain
+													>修改</el-button
+												>
+												<span
+													hover:bg-red-6
+													hover:scale-110
+													i-solar:trash-bin-minimalistic-bold-duotone
+													p-3
+													p-2
+													dark:bg-light
+													@click="deleteAddress(p.id)"
+													transition-300
+													opacity-0
+													group-hover:opacity-80
+												></span>
+											</template>
+										</CardAddressBox>
+									</div>
+								</TransitionGroup>
+							</el-checkbox-group>
 						</div>
 					</div>
-					<!-- 列表 -->
-					<div class="list" flex flex-wrap>
-						<!-- 单项 -->
-						<el-checkbox-group v-model="selectAddress">
-							<TransitionGroup
-								tag="div"
-								name="fade-list"
-								class="flex flex-wrap relative"
+					<!-- 按钮 -->
+					<transition name="popup">
+						<div
+							class="fixed bottom-0 mt-4 p-4 flex-row-bt-c dark:bg-dark-5 shadow border-default w-900px z-1000 bg-light-1 dark:bg-dark-6 border-1px rounded-t-10px"
+							v-show="isEdit"
+						>
+							<el-checkbox v-model="selectAll" label="全选" />
+							<el-button
+								type="danger"
+								size="large"
+								class="shadow-md border-default-dashed"
+								@click="deleteAddressByIds"
+								:loading="isLoading"
 							>
-								<!-- 添加按钮 -->
-								<div
-									:key="2030303"
-									m-2
-									select-none
-									hover:scale-98
-									cursor-pointer
-									flex-row-c-c
-									flex-col
-									class="add group"
-									mt-4
-									w-260px
-									h-210px
-									border-default-dashed
-									border-3px
-									rounded-8px
-									transition-300
-									hover:border="3px solid dark-4"
-									dark:hover:border-gray-5
-									@click="showAdd"
-								>
-									<ElIconCirclePlusFilled
-										text-dark-2
-										class="w-4em h-4em opacity-20 group-hover:opacity-80 transition-300"
-									/>
-									<p mt-2 opacity-20 group-hover:opacity-80 transition-300>
-										添加新地址
-									</p>
-								</div>
-								<!-- 地址项 -->
-								<div v-for="(p, i) in address.addressList" :key="p.id">
-									<CardAddressBox :address="p">
-										<template #btns>
-											<div
-												class="check"
-												v-show="isEdit"
-												block
-												animate-fade-in
-												animate-duration-300
-												flex-row-c-c
-											>
-												<el-checkbox w-4em :label="p.id" size="large" />
-												<span class="-ml-2em">选中</span>
-											</div>
-											<el-button
-												type="info"
-												w-4em
-												size="small"
-												class="opacity-0 group-hover:opacity-90"
-												@click="showUpdate(p)"
-												plain
-												>修改</el-button
-											>
-											<span
-												absolute
-												top-1.5em
-												right-1.3em
-												hover:bg-red-5
-												hover:scale-110
-												i-solar:trash-bin-minimalistic-bold-duotone
-												p-3
-												p-2
-												dark:bg-light
-												@click="deleteAddress(p.id)"
-												transition-300
-												opacity-0
-												group-hover:opacity-80
-											></span>
-										</template>
-									</CardAddressBox>
-								</div>
-							</TransitionGroup>
-						</el-checkbox-group>
-					</div>
+								删除选中
+							</el-button>
+						</div>
+					</transition>
 				</div>
-				<!-- 按钮 -->
-				<div
-					animate-fade-in-up
-					animate-duration-300
-					class="fixed bottom-0 mt-4 p-4 flex-row-bt-c dark:bg-dark-5 shadow border-default layout-default w-900px z-1000 bg-light-1 dark:bg-dark-6 border-1px rounded-t-10px"
-					v-show="isEdit"
-				>
-					<el-checkbox v-model="selectAll" label="全选" />
-					<el-button
-						type="danger"
-						size="large"
-						class="shadow-md border-default-dashed"
-						@click="deleteAddressByIds"
-						:loading="isLoading"
-					>
-						删除选中
-					</el-button>
-				</div>
-			</div>
-		</ClientOnly>
+			</ClientOnly>
+		</div>
 		<!-- https://www.npmjs.com/package/element-china-area-data -->
 	</NuxtLayout>
 </template>
@@ -479,7 +460,13 @@ const rules = reactive({
 
 	.el-checkbox__inner {
 		border-radius: 4px;
-		transform: scale(1.2);
+		transform: scale(1.1);
 	}
+}
+
+:deep(.el-checkbox__inner) {
+	border-radius: 4px;
+	transform: scale(1.1);
+	margin-left: 2px;
 }
 </style>

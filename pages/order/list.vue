@@ -12,13 +12,10 @@ orderItems.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
 const skuList = await getGoodsSkuByIds(skuIdList);
-definePageMeta({
-	middleware: [
-		(to, from) => { 
-		},
-	],
-});
 // 定义当前页面
+// definePageMeta({
+// 	middleware: ["auth"],
+// });
 useHead({
 	title: appName + ' - 订单',
 	meta: [

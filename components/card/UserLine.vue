@@ -76,18 +76,18 @@ const toView = (path: string) => {
 };
 </script>
 <template>
-	<div class="user-card" flex-row-c-c cursor-pointer p-1>
+	<div class="user-card" flex-row-c-c cursor-pointer>
 		<ClientOnly>
 			<!-- 头像弹窗 -->
 			<el-popover placement="bottom" :offset="20" :width="320" trigger="hover">
 				<template #reference>
-					<div flex-row-c-c border-l="1px dashed gray" dark:border-l-dark>
+					<div flex-row-c-c >
 						<!-- 替换头像 -->
 						<el-badge
 							:is-dot="
 								!user.userInfo.avatar || user.userInfo.avatar === 'default.png'
 							"
-							class="item pr-2 pl-4"
+							class="item mr-2 border-default rounded-10em"
 						>
 							<el-avatar
 								:src="
@@ -95,7 +95,7 @@ const toView = (path: string) => {
 										? ''
 										: BaseUrlImg + user.userInfo.avatar
 								"
-								class="hovers"
+								class="hovers border-default"
 							>
 								<span i-solar:user-bold style="width: 60%; height: 60%"></span>
 							</el-avatar>
@@ -109,8 +109,8 @@ const toView = (path: string) => {
 								v-copying="user.userInfo.id"
 								class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
 								>ID:{{ user.userInfo.id }}
-								<span class="group-hover:opacity-100 opacity-0 transition-300"
-									>复制</span
+								<span class="group-hover:opacity-80 opacity-0 transition-300"
+									p2 i-solar:copy-bold-duotone ></span
 								>
 							</small>
 						</div>
@@ -235,6 +235,9 @@ const toView = (path: string) => {
 	width: 2.3em;
 	height: 2.3em;
 	border-radius: 50%;
+	display:flex;
+	justify-content: center;
+	align-items: center;
 }
 
 // 标签
@@ -268,6 +271,7 @@ const toView = (path: string) => {
 		border-radius: 4px;
 
 		.img {
+
 			.avatar-uploader {
 				width: 100%;
 

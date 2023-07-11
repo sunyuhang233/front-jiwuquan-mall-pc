@@ -61,10 +61,13 @@ export function useCopyText(text: string) {
  * @param text 复制的文本
  * @returns promise
  */
-export function useAsyncCopyText(text: string): Promise<boolean | void> {
+export function useAsyncCopyText(text: string): Promise<boolean> {
   // 新语法
   if (navigator.clipboard) {
-    return navigator.clipboard.writeText(text);
+    return new Promise<boolean>(async (resolve, reject) => {
+      await navigator.clipboard.writeText(text)
+      resolve(true)
+    })
   } else {
     // 兼容移动端版本
     return new Promise((res, rej) => {

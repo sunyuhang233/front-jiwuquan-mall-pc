@@ -5,7 +5,6 @@ import type { FormInstance } from 'element-plus';
 import { addShopcart } from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
 import currency from 'currency.js';
-const app = useNuxtApp();
 const user = useUserStore();
 const shop = useShopStore();
 
@@ -69,7 +68,6 @@ const onSubmitBuy = (formRef: FormInstance | undefined) => {
 					},
 				];
 				fullscreenLoading.value = true;
-
 				// 提交订单
 				const order = useOrderStore();
 				setTimeout(() => {

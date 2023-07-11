@@ -54,7 +54,13 @@
 				<BtnSwitch />
 				<!-- 登陆注册 -->
 				<div class="box" v-if="!store.isLogin">
-					<ElButton round type="primary" shadow-md px-2cursor-pointer @click="onLogin(FormType.LOGIN)">
+					<ElButton
+						round
+						type="primary"
+						shadow-md
+						px-2cursor-pointer
+						@click="onLogin(FormType.LOGIN)"
+					>
 						登 录</ElButton
 					>
 					<ElButton
@@ -80,7 +86,7 @@ const { topClass } = defineProps<{
 }>();
 
 // 搜索
-let searchWord = ref<string>('');
+let searchWord = ref<string>("");
 // 登录表单
 const store = useUserStore();
 enum FormType {
@@ -104,6 +110,7 @@ const onSerch = (val: string) => {};
 </script>
 <style lang="scss" scoped>
 .nav {
+	box-shadow: rgba(9, 30, 66, 0.1) 0px 4px 2px -2px;
 	position: sticky;
 	top: 0;
 	z-index: 999;

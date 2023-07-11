@@ -38,7 +38,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@element-plus/nuxt',
     '@pinia/nuxt',
-    'nuxt-swiper',
     '@pinia-plugin-persistedstate/nuxt'
   ],
   experimental: {
@@ -56,7 +55,6 @@ export default defineNuxtConfig({
       'composables',
       'composables/utils/**',
       'composables/store/**',
-      'middleware/*.ts',
       'types',
       'types/*/.ts',
     ]

@@ -1,4 +1,7 @@
 import { gsap } from "gsap"
+import { DirectiveBinding } from "nuxt/dist/app/compat/capi"
+
+
 export default defineNuxtPlugin((nuxtApp) => {
   // https://nuxt.com.cn/docs/guide/directory-structure/plugins
   nuxtApp.vueApp.directive('focus', {
@@ -14,48 +17,49 @@ export default defineNuxtPlugin((nuxtApp) => {
   /**
    * 长按事件
    */
-  nuxtApp.vueApp.directive("longpress", function (el, binding) {
-    let timer: NodeJS.Timeout | number;
-    let start = (e: Event) => {
-      e.preventDefault();
-      if (e.type === "click") return; // 点击停止
-      if (timer === null) {
-        timer = setTimeout(() => {
-          binding.value(e);
-        }, 600);
-      }
-    };
-    let cancel = (e: Event) => {
-      e.preventDefault();
-      if (timer !== null) {
-        clearTimeout(timer);
-        timer = 0;
-      }
-    };
+  nuxtApp.vueApp.directive("longpress", {
+    mounted(el, binding) {
+      let timer: NodeJS.Timeout | number;
+      let start = (e: Event) => {
+        if (e.type === "click") return; // 点击停止
+        if (timer === null) {
+          timer = setTimeout(() => {
+            binding.value(e);
+          }, 600);
+        }
+      };
+      let cancel = (e: Event) => {
+        if (timer !== null) {
+          clearTimeout(timer);
+          timer = 0;
+        }
+      };
 
-    // 开始
-    el.addEventListener("mousedown", start);
-    el.addEventListener("touchstart", start);
-    // 取消
-    el.addEventListener("mouseout", cancel);
-    el.addEventListener("touchend", cancel);
-    el.addEventListener("click", cancel);
+      // 开始
+      el.addEventListener("mousedown", start, { passive: true });
+      el.addEventListener("touchstart", start, { passive: true });
+      // 取消
+      el.addEventListener("mouseout", cancel, { passive: true });
+      el.addEventListener("touchend", cancel, { passive: true });
+      el.addEventListener("click", cancel, { passive: true });
+    }
   });
   /**
    * 复制文本
    */
-  nuxtApp.vueApp.directive("copying", function (el, binding) {
-    el.addEventListener("click", async function (e: Event) {
-      e.preventDefault()
-      e.stopPropagation()
-      const res = await useAsyncCopyText(binding.value || el.innerHTML)
-      if (res) {
-        ElMessage.success({
-          message: '成功复制至剪贴板！',
-          grouping: true,
-        })
-      }
-    });
+  nuxtApp.vueApp.directive("copying", {
+    mounted(el, binding) {
+      el.addEventListener("click", async function (e: Event) {
+        e.stopPropagation()
+        const res = await useAsyncCopyText(binding.value || el.innerHTML)
+        if (res) {
+          ElMessage.success({
+            message: '成功复制至剪贴板！',
+            grouping: true,
+          })
+        }
+      }, { passive: true });
+    }
   });
 
 
@@ -64,57 +68,34 @@ export default defineNuxtPlugin((nuxtApp) => {
    */
   nuxtApp.vueApp.directive('incre-up', {
     mounted: function (el, binding) {
-      const targetValue = binding.value;
-      const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue || 0 };
-      gsap.to(counter, {
-        var: targetValue,
-        duration: duration,
-        onUpdate: function () {
-          el.innerHTML = Math.ceil(counter.var).toFixed(2);
-        }
-      });
+      increNumber(el, binding)
     },
     updated: function (el, binding) {
-      const targetValue = binding.value;
-      const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue || 0 };
-      gsap.to(counter, {
-        var: targetValue,
-        duration: duration,
-        onUpdate: function () {
-          el.innerHTML = Math.ceil(counter.var).toFixed(2);
-        }
-      });
-    }
-  })
+      increNumber(el, binding)
+    },
+  });
 
   // 整数
   nuxtApp.vueApp.directive('incre-up-int', {
     mounted: function (el, binding) {
-      const targetValue = binding.value;
-      const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue || 0 };
-      gsap.to(counter, {
-        var: targetValue,
-        duration: duration,
-        onUpdate: function () {
-          el.innerHTML = Math.ceil(counter.var);
-        }
-      });
+      increNumber(el, binding, true)
     },
     updated: function (el, binding) {
-      const targetValue = binding.value;
-      const duration = binding.arg || 1;
-      const counter = { var: binding.oldValue || 0 };
-      gsap.to(counter, {
-        var: targetValue,
-        duration: duration,
-        onUpdate: function () {
-          el.innerHTML = Math.ceil(counter.var);
-        }
-      });
-    }
+      increNumber(el, binding, true)
+    },
   })
 
 })
+
+function increNumber(el: Element, binding: DirectiveBinding<any>, isInt?: boolean): void {
+  const targetValue = binding.value;
+  const duration = binding.arg || 1;
+  const counter = { var: binding.oldValue || 0 };
+  gsap.to(counter, {
+    var: targetValue,
+    duration: duration,
+    onUpdate: function () {
+      el.innerHTML = !isInt ? Math.ceil(counter.var).toFixed(2) : String(Math.ceil(counter.var));
+    }
+  });
+}
