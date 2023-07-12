@@ -3,8 +3,8 @@
 		<!-- 头部 -->
 		<MenuHeaderMenuSe />
 		<div class="flex flex-1">
-			<!-- 左侧边导航 -->
 			<ClientOnly>
+				<!-- 左侧边导航 -->
 				<MenuCollMenu />
 			</ClientOnly>
 			<!-- 内容 -->

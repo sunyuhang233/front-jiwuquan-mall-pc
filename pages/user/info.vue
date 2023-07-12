@@ -13,16 +13,29 @@ definePageMeta({
 	pageTransition: false,
 	layoutTransition: false,
 });
+const user = useUserStore();
 </script>
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']">
-			<div class="userinfo">
+			<div class="userinfo" v-show="user.isLogin">
 				<!-- 壁纸 -->
-				<UserBgToggle/>
-				<!-- 用户头像 -->
-				<div class="mx-4em avatar-card -translate-y-1/3">
-					<CardUserLineSe />
+				<UserBgToggle />
+				<div class="mx-4em">
+					<div class="avatar-card flex flex-wrap">
+						<!-- 用户头像 -->
+						<div class="avatars relative -top-3.5em flex-1">
+							<UserInfoLine />
+							<div class="m-2">
+								<UserInfoTabs />
+							</div>
+						</div>
+						<!-- 右侧 -->
+						<div class="ml-2em mt-4">
+							<!-- 签到 -->
+							<UserSigninCard />
+						</div>
+					</div>
 				</div>
 			</div>
 		</NuxtLayout>

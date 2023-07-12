@@ -1,3 +1,4 @@
+$font-family: Helvetica;
 // 菜单
 $top-nav-height: 66px;
 $transition-delay: 0.3s;
@@ -8,22 +9,17 @@ $theme-bg-color2: #f3f3f3;
 $theme-text-color: #f3f3f3;
 $theme-text-color2: #ffffff;
 
-$theme-tip-color: #5d33f6;
-$theme-tip-color2: #4bf380;
-$theme-tip-color3: #4bf380;
-$theme-color: #fff;
-$theme-color2: #1d1d1d;
 $text-mark-color: #73FFA0;
-$font-family: Helvetica;
 $theme-font-color: #444444;
-$boder-color: #dfdfdf36;
 $box-shadow-color: #eee;
 $text-mark-color2: #7c51fb;
 $text-mark-color3: #ffbc0d;
 $text-mark-color4: #dc284d;
 $text-mark-color5: #f1f1f1;
 
-
+// 边框
+$boder-color: #dfdfdf36;
+$border-radius-def: 4px;
 
 // 加载条颜色
 $loading-color:#5d33f6;

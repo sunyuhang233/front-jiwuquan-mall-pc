@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { getUserInfo, type UserInfo, type UserWallet } from "../api/user/info";
+import { getUserInfo, type UserInfoVO, type UserWallet } from "../api/user/info";
 import { toLogout } from "../api/user";
 import { getUserWallet } from "../api/user/wallet";
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
@@ -25,7 +25,7 @@ export const useUserStore = defineStore(
       createTime: "",
     });
     // 用户个人信息
-    const userInfo = reactive<UserInfo>({
+    const userInfo = reactive<UserInfoVO>({
       id: "",
       username: "",
       email: "",
@@ -35,6 +35,7 @@ export const useUserStore = defineStore(
       avatar: "",
       birthday: "",
       createTime: "",
+      slogan: "",
       updateTime: "",
       lastLoginTime: "",
       status: UserStatus.FALESE,
@@ -45,8 +46,8 @@ export const useUserStore = defineStore(
     const getToken = computed({
       get() {
         if (!isLogin || !token.value) {
-          showLoginForm.value = true; 
-          showLoginForm.value; 
+          showLoginForm.value = true;
+          showLoginForm.value;
           return "";
         }
         return token.value;
@@ -145,6 +146,7 @@ export const useUserStore = defineStore(
           birthday: "",
           createTime: "",
           updateTime: "",
+          slogan: "",
           lastLoginTime: "",
           status: UserStatus.FALESE,
           isEmailVerified: 0,

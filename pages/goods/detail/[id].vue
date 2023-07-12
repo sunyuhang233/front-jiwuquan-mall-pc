@@ -106,14 +106,9 @@ definePageMeta({
 				<div class="left">
 					<h2 tracking-0.1em><i i-solar:bolt-outline bg-amber p-3.5 mr-2></i>商品介绍</h2>
 					<GoodsDetailTabs
-						class="w-640px detail"
+						class="w-680px mt-10 overflow-hidden rounded-4px dark:opacity-90 min-h-800px shadow-sm"
 						:goods-info="goodsInfo"
 						:sku-list="goodsSku"
-						py-1em
-						rounded-10px
-						dark:opacity-90
-						min-h-700px
-						shadow-sm
 					/>
 				</div>
 				<!-- 猜你喜欢 -->
@@ -131,7 +126,6 @@ definePageMeta({
 		</div>
 	</NuxtLayout>
 </template>
-
 <style scoped lang="scss">
 .scale-imgs {
 	display: flex;

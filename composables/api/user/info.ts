@@ -4,10 +4,10 @@ import { DeviceType } from ".";
 /**
  * 获取用户个人信息
  * @param token token
- * @returns UserInfo
+ * @returns UserInfoVO
  */
 export function getUserInfo(token: string) {
-  return useHttp.get<Result<UserInfo>>(`/user/info`, {}, {
+  return useHttp.get<Result<UserInfoVO>>(`/user/info`, {}, {
     headers: {
       "Authorization": token
     }
@@ -22,7 +22,7 @@ export interface UserWallet {
   updateTime?: string;
   createTime?: string;
 }
-export interface UserInfo {
+export interface UserInfoVO {
   id: string;
   username: string;
   email: string;
@@ -31,6 +31,7 @@ export interface UserInfo {
   gender: Gender;
   avatar: string;
   birthday: string;
+  slogan: string;
   createTime: string;
   updateTime: string;
   lastLoginTime: string;
@@ -96,10 +97,11 @@ export function updateInfoByDTO(upUserInfo: UpdateInfo, token: string): Promise<
       }
     })
 }
-interface UpdateInfo {
-  gender: Gender,
-  nickname: string,
-  birthday: Date,
+export interface UpdateInfo {
+  gender?: Gender,
+  nickname?: string,
+  birthday?: string,
+  slogan?: string
 }
 
 /**

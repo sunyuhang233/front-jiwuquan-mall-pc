@@ -45,12 +45,11 @@ body {
 }
 html {
   // background-color: #fbfaff;
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(149, 148, 255, 0.4), rgba(0, 0, 0, 0)) no-repeat;
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(149, 148, 255, 0.4), #94a3b809) no-repeat;
 }
-
 html.dark {
   // background-color: #171717;
-  background: radial-gradient(ellipse 80% 50% at 50% -15%, rgba(148, 150, 255, 0.16), #222222) no-repeat;
+  background: radial-gradient(ellipse 80% 50% at 50% -15%, rgba(148, 150, 255, 0.16), rgb(22, 22, 22)) no-repeat;
 }
 
 // 全局滚动条
@@ -112,7 +111,7 @@ html.dark {
 }
 
 //
-.bg {
+.bg-mark {
   position: absolute;
   transform: translate(50%, -50%);
   z-index: -99;
@@ -164,6 +163,25 @@ html.dark {
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 }
+// 盒子卡片
+.v-card {
+  background-color: #fff;
+  border-radius: 4px;
+  transition: box-shadow $transition-delay;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 0px 4px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  &:hover {
+    box-shadow:
+      rgba(19, 19, 19, 0.2) 0px 0px 5px 0px,
+      rgba(19, 19, 19, 0.2) 0px 0px 1px 0px;
+  }
+}
+.dark .v-card {
+  background-color: rgba(37, 37, 37, 0.144);
+  border: 1px solid #99999934;
+  backdrop-filter: blur(2em);
+}
 
 // element-plus
 // 消息确认框
@@ -200,4 +218,8 @@ html.dark {
 
 .el-button {
   transition: $transition-delay;
+}
+
+.el-popper-init {
+  padding: 2px 4px;
 }

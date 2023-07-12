@@ -240,7 +240,7 @@ const rules = reactive({
 </script>
 <template>
 	<NuxtLayout name="user" :menu="['back']" :footer="false">
-		<div class="py-5em px-10rem">
+		<div class="py-5em px-9rem layout-default">
 			<ClientOnly>
 				<div class="address-list" @keyup.esc="isEdit = false" v-if="user.isLogin">
 					<!-- 表单弹窗 -->
@@ -345,7 +345,7 @@ const rules = reactive({
 							</div>
 						</div>
 						<!-- 列表 -->
-						<div class="list" flex flex-wrap>
+						<div class="list"  flex flex-wrap>
 							<!-- 单项 -->
 							<el-checkbox-group v-model="selectAddress">
 								<TransitionGroup
