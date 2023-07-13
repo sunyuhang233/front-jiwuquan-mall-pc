@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const user = useUserStore();
-
 // 定义当前页面
 // definePageMeta({
 // 	middleware: ["auth"],
@@ -14,14 +13,17 @@ useHead({
 		},
 	],
 });
-
 // 页面
 definePageMeta({
 	pageTransition: false,
-	layoutTransition: false
+	layoutTransition: false,
 });
 </script>
 <template>
-	<NuxtLayout name="user" :menu="['back']" :footer="false"> </NuxtLayout>
+	<div>
+		<NuxtLayout name="user" :menu="['back']" :footer="false">
+			<div class="wallet-page" v-if="user.isLogin"></div>
+		</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss"></style>

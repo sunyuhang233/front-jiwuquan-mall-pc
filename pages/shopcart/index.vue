@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
-import { PushOrdersItemDTO } from "~/composables/api/orders";
 import currency from "currency.js";
+import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
+import type { PushOrdersItemDTO } from "~/composables/api/orders";
+
 // 定义当前页面
 // definePageMeta({
 // 	middleware: ["auth"],
@@ -12,7 +13,7 @@ useHead({
 		{
 			name: "description",
 			content: "极物圈-我的购物车",
-		}, 
+		},
 	],
 });
 const shop = useShopStore();
@@ -24,19 +25,17 @@ const isNoMore = computed<boolean>(() => shop.shopcartList.length === shop.pageI
 /**
  * 加载购物车
  */
-const loadShopcartList = async () => {
+async function loadShopcartList() {
 	if (!user.isLogin || isLoading.value) return;
 
-	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) {
-		return;
-	}
+	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) return;
+
 	isLoading.value = true;
 	shop.page++;
 	const { data } = await getUserShopCartPage(shop.page, shop.size, user.getToken);
 	// 没有更多
-	if (isNoMore.value || data?.total === -1) {
-		return (isLoading.value = false);
-	}
+	if (isNoMore.value || data?.total === -1) return (isLoading.value = false);
+
 	// 展示结果
 	shop.pageInfo = toReactive({ ...data });
 	let timer: NodeJS.Timeout | null;
@@ -52,7 +51,7 @@ const loadShopcartList = async () => {
 			}, 50);
 		});
 	}
-};
+}
 // 没有更多
 const notMore = computed(() => {
 	return (
@@ -60,14 +59,12 @@ const notMore = computed(() => {
 		shop.pageInfo.current === shop.pageInfo.pages
 	);
 });
-if (shop.shopcartList.length === 0) {
-	loadShopcartList();
-}
+if (shop.shopcartList.length === 0) loadShopcartList();
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-const deleteBatchShopcart = (text: string = "删除") => {
+function deleteBatchShopcart(text = "删除") {
 	ElMessageBox({
 		title: `${text}提示！`,
 		message: `确定要${text}吗？`,
@@ -84,39 +81,36 @@ const deleteBatchShopcart = (text: string = "删除") => {
 				const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
 				if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
 					selectIds.value.splice(0);
-					ElMessage.success(text + "成功！");
+					ElMessage.success(`${text}成功！`);
 				} else {
 					ElMessage.error("删除失败，请稍后再试试看！");
 				}
 			}
 		})
 		.catch((err) => {});
-};
+}
 // 2、清空购物车
-const clearShopcart = () => {
+function clearShopcart() {
 	selectIds.value.push(...shop.shopcartList.map((p) => p.id));
 	deleteBatchShopcart("清空");
-};
+}
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
 // 3、修改
 watch(isSelectAll, (val: boolean) => {
 	selectIds.value.splice(0);
-	if (val) {
-		selectIds.value.push(...shop.shopcartList.map((p) => p.id));
-	}
+	if (val) selectIds.value.push(...shop.shopcartList.map((p) => p.id));
 });
 // 购物车数量
 const getShopCartLength = computed(() => {
 	let count = 0;
-	for (const p of shop.shopcartList) {
-		count += p.quantity;
-	}
+	for (const p of shop.shopcartList) count += p.quantity;
+
 	return count;
 });
 
 // 4、前往订单页面付款
-const toOrderPage = (ids: string[]) => {
+function toOrderPage(ids: string[]) {
 	const dtoList: PushOrdersItemDTO[] = [];
 	shop.shopcartList.map((p) => {
 		if (ids.includes(p.id)) {
@@ -131,7 +125,7 @@ const toOrderPage = (ids: string[]) => {
 	useRouter().push({
 		path: "/order/pay",
 	});
-};
+}
 // 计算总价
 const getAllNums = ref<number>(0);
 const getAllPrice = computed(() => {
@@ -145,40 +139,41 @@ const getAllPrice = computed(() => {
 	return count;
 });
 </script>
+
 <template>
 	<NuxtLayout :menu="['back']" :footer="false">
 		<ClientOnly>
 			<div
 				v-if="user.isLogin"
 				class="shopcart-list"
-				border-default
-				rounded-t-10px
-				shadow-md
-				bg-white
-				dark:bg-dark
-				p-20px
-				min-h-95vh
 				relative
-				mt-2em
 				mx-a
+				mt-2em
+				min-h-95vh
 				w-700px
+				rounded-t-10px
+				bg-white
+				p-20px
+				shadow-md
+				border-default
+				dark:bg-dark
 			>
-				<h2 mb-2 text-center border-0 border-b-1 border-default tracking-0.1em pb-4>
+				<h2 mb-2 border-0 border-b-1 pb-4 text-center tracking-0.1em border-default>
 					<small
 						style="font-size: 0.8em; padding-top: 0.2em; position: absolute; right: 1em"
 						cursor-pointer
 						select-none
-						@click="isEdit = !isEdit"
 						:plain="!isEdit"
 						class="transition-300"
 						text-green-5
+						@click="isEdit = !isEdit"
 						>{{ !isEdit ? "管理" : "取消" }}</small
 					>
 					购物车
 				</h2>
 				<div
-					mb-2
 					v-infinite-scroll="loadShopcartList"
+					mb-2
 					:infinite-scroll-delay="1000"
 					:infinite-scroll-disabled="notMore"
 					style="overflow: auto"
@@ -186,13 +181,10 @@ const getAllPrice = computed(() => {
 					<!-- 购物车项 -->
 					<el-checkbox-group v-model="selectIds" size="large" class="relative">
 						<transition-group tag="div" name="fade-list">
-							<li v-for="(p, i) in shop.shopcartList" :key="p.id">
+							<li v-for="p in shop.shopcartList" :key="p.id">
 								<CardShopLine :shop-cart="p">
 									<template #btn>
-										<el-checkbox
-											:label="p.id"
-											:disabled="!p.stock"
-										></el-checkbox>
+										<el-checkbox :label="p.id" :disabled="!p.stock" />
 									</template>
 								</CardShopLine>
 							</li>
@@ -201,22 +193,22 @@ const getAllPrice = computed(() => {
 				</div>
 				<!-- 下方按钮 -->
 				<div
-					class="bottom drop-blur-2em mb-0 w-660px mt-4em fixed bottom-4 h-4em px-4 flex justify-between items-center border-default rounded-10px animate-fade-in-up border-2px my-4 shadow-md bg-white dark-bg-dark-6 z-999"
+					class="bottom drop-blur-2em fixed bottom-4 z-999 my-4 mb-0 mt-4em h-4em w-660px flex animate-fade-in-up items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
 				>
 					<div
+						class="right-0 -top-3em"
 						absolute
-						class="-top-3em right-0"
-						p-2
-						px-4
 						w-660px
 						flex
 						items-end
 						justify-between
+						p-2
+						px-4
 					>
 						<span float-left p-1>共计 {{ getAllNums }} 件</span>
 						<div flex items-end>
 							<span p-1>总计：￥</span>
-							<h2 text-red-5 v-incre-up="getAllPrice"></h2>
+							<h2 v-incre-up="getAllPrice" text-red-5 />
 						</div>
 					</div>
 					<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
@@ -230,8 +222,9 @@ const getAllPrice = computed(() => {
 							:disabled="selectIds.length === 0 && !isEdit"
 							round
 							@click="deleteBatchShopcart('批量删除')"
-							>批量删除
-							<i i-solar:trash-bin-trash-broken mr-1></i>
+						>
+							批量删除
+							<i i-solar:trash-bin-trash-broken mr-1 />
 						</el-button>
 						<el-button
 							v-if="isEdit"
@@ -243,7 +236,7 @@ const getAllPrice = computed(() => {
 							round
 							@click="clearShopcart"
 						>
-							<i i-solar:trash-bin-trash-broken mr-1></i>
+							<i i-solar:trash-bin-trash-broken mr-1 />
 							清空
 						</el-button>
 						<el-button
@@ -252,16 +245,18 @@ const getAllPrice = computed(() => {
 							type="info"
 							round
 							:disabled="selectIds.length === 0"
-							@click="toOrderPage(selectIds)"
 							tracking-0.1em
-							>去结算</el-button
+							@click="toOrderPage(selectIds)"
 						>
+							去结算
+						</el-button>
 					</div>
 				</div>
 			</div>
 		</ClientOnly>
 	</NuxtLayout>
 </template>
+
 <style scoped lang="scss">
 .shop-cart {
 	position: fixed;
@@ -281,7 +276,6 @@ const getAllPrice = computed(() => {
 		i {
 			color: #fff;
 		}
-
 		.count {
 			background-color: var(--el-color-danger);
 			color: #fff;

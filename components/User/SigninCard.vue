@@ -20,7 +20,7 @@ const getLeave = computed(() => {
 });
 </script>
 <template>
-	<div class="py-6 px-10 rounded-4px min-w-360px max-w-500px v-card">
+	<div class="py-8 px-10 rounded-4px min-w-360px max-w-500px v-card">
 		<div class="flex justify-between">
 			<!-- 积分 -->
 			<strong class="opacity-90 hover:scale-110 transition-300 cursor-pointer flex-row-c-c">
@@ -28,7 +28,7 @@ const getLeave = computed(() => {
 				<h2 inline-block v-incre-up-int="points"></h2>
 			</strong>
 			<!-- 等级 -->
-			<div flex flex-col w-6em >
+			<div flex flex-col w-6em>
 				<small pb-3>等级：lv.{{ getLeave }}</small>
 				<el-progress :percentage="getLeave * 10" :show-text="false" striped />
 			</div>
@@ -38,11 +38,17 @@ const getLeave = computed(() => {
 			<el-button type="info"> 签 到 </el-button>
 			<small opacity-80 ml-3>每日签到+100积分</small>
 		</div>
-		<el-tooltip content="1、通过每日签到" placement="bottom">
-			<small cursor-pointer text-blueGray underline
-				>如何获取积分? <i p-2 ml-2 text-blueGray i-solar:dollar-linear></i
-			></small>
-		</el-tooltip>
+		<el-popover :width="160" trigger="hover">
+			<template #reference>
+				<small cursor-pointer text-blueGray underline
+					>如何获取积分? <i p-2 ml-2 text-blueGray i-solar:dollar-linear></i
+				></small>
+			</template>
+			<template>
+				<li>1、通过钱包额度充值</li>
+				<li>2、通过每日签到</li>
+			</template>
+		</el-popover>
 	</div>
 </template>
 <style scoped lang="scss"></style>

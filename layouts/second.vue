@@ -3,7 +3,7 @@
 		<!-- 顶部导航 -->
 		<MenuHeaderMenu />
 		<!-- 左侧边导航 -->
-		<div flex-1>
+		<div class="flex-1 animate-fade-slice">
 			<!-- 内容 -->
 			<slot></slot>
 		</div>
@@ -28,3 +28,16 @@ const { footer, menu } = defineProps({
 	},
 });
 </script>
+<style lang="scss">
+.animate-fade-slice {
+	animation: fade-slice-anim $transition-delay linear;
+}
+
+@keyframes fade-slice-anim {
+	0% {
+		transform: translateY(10%);
+		transition: 0.3s;
+		opacity: 0;
+	}
+}
+</style>

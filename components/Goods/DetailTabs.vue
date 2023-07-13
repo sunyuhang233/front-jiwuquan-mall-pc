@@ -7,12 +7,10 @@
 	>
 		<!-- 详情 -->
 		<el-tab-pane name="detail" class="animate__animated animate__fadeIn mt-2" label="详 情">
-			<h3 ml-2 mb-4>{{ goodsInfo?.name }}</h3>
+			<!-- 标题 -->
+			<h3 ml-2 mb-4 v-show="!goodsInfo?.description">{{ goodsInfo?.name }}</h3>
 			<!-- markdown -->
-			<v-md-preview-html
-				:html="goodsInfo?.description"
-				preview-class="vuepress-markdown-body"
-			/>
+			<v-md-preview class="mb-4 markdown" :text="goodsInfo?.description" />
 			<!-- des -->
 			<div class="text" leading-2em px-4 border-default-dashed rounded-6px mb-4>
 				<small>
@@ -49,7 +47,7 @@
 			<GoodsComments :goods-id="goodsInfo?.id || ''" :sku-list="skuList" />
 		</el-tab-pane>
 		<!-- 其他 -->
-		<el-tab-pane name="other" lazy class="animate__animated animate__fadeIn mt-2" label="其 他">
+		<el-tab-pane name="other" lazy class="animate-fade-in mt-2 px-2" label="其 他">
 			<GoodsOtherTmp />
 		</el-tab-pane>
 	</el-tabs>
@@ -57,9 +55,6 @@
 <script lang="ts" setup>
 import { GoodsInfoVO } from "~/composables/api/goods";
 import { GoodsSkuVO } from "~/composables/api/goods/sku";
-// markdown
-// @ts-ignore
-import VMdPreviewHtml from "@kangc/v-md-editor/lib/preview-html";
 const { goodsInfo, skuList } = defineProps<{
 	goodsInfo?: GoodsInfoVO;
 	skuList?: GoodsSkuVO[];
@@ -78,5 +73,10 @@ const activeMenu = ref<string>("detail");
 		display: flex;
 		justify-content: center;
 	}
+}
+// https://code-farmer-i.github.io/vue-markdown-editor/zh/theme/vuepress.html#%E4%BB%8B%E7%BB%8D
+:deep(.vuepress-markdown-body) {
+	padding: 1.5em;
+	border-radius: 4px;
 }
 </style>

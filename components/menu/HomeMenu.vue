@@ -65,7 +65,7 @@ const route = useRoute();
 					<span class="title ml-3">账号与安全</span>
 				</el-menu-item>
 				<!-- 回到首页 -->
-				<el-menu-item class="overflow-x-hidden truncate" index="/">
+				<el-menu-item class="overflow-x-hidden truncate ..." index="/">
 					<i i-solar:square-alt-arrow-left-broken></i>
 					<span class="title ml-3">回到首页</span>
 				</el-menu-item>
@@ -83,7 +83,6 @@ const route = useRoute();
 
 	:deep(.el-menu) {
 		height: 100%;
-
 		.el-menu-item {
 			padding: 0.8em;
 			padding-top: 0px;
@@ -95,25 +94,21 @@ const route = useRoute();
 			margin: 10px;
 			transition: $transition-delay;
 			border: 1px dashed transparent;
-
 			span {
 				overflow: hidden;
 				text-overflow: ellipsis;
 				transition: 100ms;
 			}
-
 			&:hover,
 			&.is-active:hover,
 			&.is-active {
 				border: 1px solid;
 				color: var(--el-color-primary);
 				background-color: var(--el-color-primary-light-9);
-
 				i {
 					color: var(--el-color-primary);
 				}
 			}
-
 			&:hover {
 				border: 1px dashed;
 			}
@@ -123,17 +118,14 @@ const route = useRoute();
 			.el-menu-item {
 				background-color: #8181811a;
 				opacity: 0.9;
-
 				&:hover {
 					background-color: #8181811a;
 					opacity: 1;
 				}
-
 				.second-icon {
 					padding: 2px;
 				}
 			}
-
 			.el-menu-item:hover {
 				background-color: transparent;
 				color: var(--el-color-primary);
@@ -147,13 +139,11 @@ const route = useRoute();
 		// 图标
 		i {
 			padding: 0.6rem;
-
 			&:hover {
 				transition: $transition-delay;
 				color: var(--el-color-primary);
 			}
 		}
-
 		.title {
 			margin-left: 0.8em;
 		}

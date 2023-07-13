@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { appName } from "@/constants/index";
+
 useHead({
 	title: appName,
 });
@@ -7,17 +8,18 @@ useHead({
 const app = useNuxtApp();
 app.hook("app:mounted", () => {
 	const store = useUserStore();
-	if (store.isLogin) {
-		store.onCheckLogin();
-	}
+	if (store.isLogin) store.onCheckLogin();
 });
 </script>
+
 <template>
-	<div id="app">
-		<FormUserDialog />
+	<div>
 		<NuxtPage />
+		<!-- <VitePwaManifest /> -->
+		<FormUserDialog />
 	</div>
 </template>
+
 <style>
 .page-enter-active,
 .page-leave-active {

@@ -1,13 +1,13 @@
 <template>
-	<div class="defalut min-h-100vh flex flex-col justify-between">
+	<div class="min-h-100vh flex flex-col justify-between">
 		<MenuHeaderMenu />
-		<!-- 左侧边导航 -->
-		<div flex flex-1>
+		<div class="flex">
+			<!-- 左侧边导航 -->
 			<ClientOnly>
 				<MenuDrawerMenu v-if="leftMenu" />
 			</ClientOnly>
 			<!-- 内容 -->
-			<div class="w-1/1">
+			<div class="flex-1">
 				<slot></slot>
 			</div>
 		</div>
@@ -21,7 +21,6 @@
 		</ClientOnly>
 	</div>
 </template>
-
 <script lang="ts" setup>
 const { footer, menu, leftMenu } = defineProps({
 	footer: {

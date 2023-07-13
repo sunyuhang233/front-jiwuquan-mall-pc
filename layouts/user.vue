@@ -1,14 +1,14 @@
 <template>
-	<div class="defalut min-h-100vh flex flex-col justify-between">
+	<div class="min-h-100vh flex flex-col justify-between">
 		<!-- 头部 -->
 		<MenuHeaderMenuSe />
-		<div class="flex flex-1">
+		<div class="flex">
 			<ClientOnly>
 				<!-- 左侧边导航 -->
 				<MenuCollMenu />
 			</ClientOnly>
 			<!-- 内容 -->
-			<div class="w-1/1 animate-fade-in animate-duration-300">
+			<div class="flex-1 animate-fade-in animate-duration-300">
 				<slot></slot>
 			</div>
 		</div>

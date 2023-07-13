@@ -1,6 +1,6 @@
+// import { BaseUrl } from './composables/utils/useFetchUtil'
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
-import { BaseUrl } from './composables/utils/useFetchUtil'
 
 export default defineNuxtConfig({
   alias: {
@@ -12,8 +12,8 @@ export default defineNuxtConfig({
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
-    pageTransition: { name: 'page', mode: 'out-in' },
-    layoutTransition: { name: 'layout', mode: 'out-in' },
+    // pageTransition: { name: 'page', mode: 'out-in' },
+    // layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
       viewport: 'width=device-width,initial-scale=1',
       // 网站头部信息
@@ -34,8 +34,8 @@ export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
-    '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
+    '@vite-pwa/nuxt',
     '@element-plus/nuxt',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt'
@@ -104,10 +104,6 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    },
-    prerender: {
-      crawlLinks: false,
-      routes: ['/'],
     },
     // devServer: {
     //   url: BaseUrl

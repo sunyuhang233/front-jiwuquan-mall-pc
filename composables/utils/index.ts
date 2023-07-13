@@ -1,4 +1,5 @@
 export function useCheckXXSText(text: string): string {
+  //  https://github.com/leizongmin/js-xss/blob/master/README.zh.md
   text = text
     .replace(/(<br[^>]*>| |\s*)/g, "")
     .replace(/\&/g, "&amp;")
