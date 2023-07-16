@@ -52,6 +52,13 @@ async function loadShopcartList() {
 		});
 	}
 }
+
+// useAsyncData(async () => {
+// 	if (shop.shopcartList.length === 0) {
+// 		return loadShopcartList();
+// 	}
+// });
+
 // 没有更多
 const notMore = computed(() => {
 	return (
@@ -59,7 +66,6 @@ const notMore = computed(() => {
 		shop.pageInfo.current === shop.pageInfo.pages
 	);
 });
-if (shop.shopcartList.length === 0) loadShopcartList();
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
@@ -126,17 +132,26 @@ function toOrderPage(ids: string[]) {
 		path: "/order/pay",
 	});
 }
+// 邮费
+const getAllPostate = ref<number>(0);
 // 计算总价
 const getAllNums = ref<number>(0);
 const getAllPrice = computed(() => {
 	getAllNums.value = 0;
 	const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
-	let count = currency(0);
+	let prices = currency(0);
 	selectList.forEach((p) => {
+		if (p.postage) {
+			getAllPostate.value += +p.postage;
+		}
 		getAllNums.value += p.quantity;
-		count = count.add(currency(p.price).multiply(p.quantity));
+		prices = prices.add(
+			currency(p.price)
+				.multiply(p.quantity)
+				.add(+(p.postage || 0))
+		);
 	});
-	return count;
+	return prices;
 });
 </script>
 
@@ -193,63 +208,62 @@ const getAllPrice = computed(() => {
 				</div>
 				<!-- 下方按钮 -->
 				<div
-					class="bottom drop-blur-2em fixed bottom-4 z-999 my-4 mb-0 mt-4em h-4em w-660px flex animate-fade-in-up items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+					class="drop-blur-20px animate-fade-in-up animate-duration-300 bg btns fixed bottom-4 z-999 my-4 mb-0 mt-4em"
 				>
-					<div
-						class="right-0 -top-3em"
-						absolute
-						w-660px
-						flex
-						items-end
-						justify-between
-						p-2
-						px-4
-					>
+					<!-- 价格 -->
+					<div class="" flex-row-bt-c w-660px p-2 px-4>
 						<span float-left p-1>共计 {{ getAllNums }} 件</span>
-						<div flex items-end>
+						<div flex ml-a items-end>
 							<span p-1>总计：￥</span>
 							<h2 v-incre-up="getAllPrice" text-red-5 />
 						</div>
+						<small claas="" v-show="getAllPostate > 0"
+							>（运费：{{ getAllPostate.toFixed(2) }}￥）</small
+						>
 					</div>
-					<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
-					<div flex>
-						<el-button
-							v-if="isEdit && selectIds.length"
-							class="fadeInOut flex-1"
-							style="padding: 0em 1em"
-							type="danger"
-							plain
-							:disabled="selectIds.length === 0 && !isEdit"
-							round
-							@click="deleteBatchShopcart('批量删除')"
-						>
-							批量删除
-							<i i-solar:trash-bin-trash-broken mr-1 />
-						</el-button>
-						<el-button
-							v-if="isEdit"
-							class="fadeInOut flex-1"
-							style="padding: 0em 1em"
-							type="danger"
-							plain
-							:disabled="!isEdit"
-							round
-							@click="clearShopcart"
-						>
-							<i i-solar:trash-bin-trash-broken mr-1 />
-							清空
-						</el-button>
-						<el-button
-							class="fadeInOut flex-1"
-							style="padding: 0em 2em"
-							type="info"
-							round
-							:disabled="selectIds.length === 0"
-							tracking-0.1em
-							@click="toOrderPage(selectIds)"
-						>
-							去结算
-						</el-button>
+					<div
+						class="bottom drop-blur-2em h-4em w-660px flex items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+					>
+						<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
+						<div flex>
+							<el-button
+								v-if="isEdit && selectIds.length"
+								class="fadeInOut flex-1"
+								style="padding: 0em 1em"
+								type="danger"
+								plain
+								:disabled="selectIds.length === 0 && !isEdit"
+								round
+								@click="deleteBatchShopcart('批量删除')"
+							>
+								批量删除
+								<i i-solar:trash-bin-trash-broken mr-1 />
+							</el-button>
+							<el-button
+								v-if="isEdit"
+								class="fadeInOut flex-1"
+								style="padding: 0em 1em"
+								type="danger"
+								plain
+								:disabled="!isEdit"
+								round
+								@click="clearShopcart"
+							>
+								<i i-solar:trash-bin-trash-broken mr-1 />
+								清空
+							</el-button>
+							<el-button
+								class="fadeInOut flex-1"
+								style="padding: 0em 2em"
+								type="info"
+								round
+								:disabled="selectIds.length === 0"
+								tracking-0.1em
+								@click="toOrderPage(selectIds)"
+							>
+								去结算
+							</el-button>
+						</div>
 					</div>
 				</div>
 			</div>

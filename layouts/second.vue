@@ -28,16 +28,21 @@ const { footer, menu } = defineProps({
 	},
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .animate-fade-slice {
-	animation: fade-slice-anim $transition-delay linear;
+	animation: fade-slice-anim $transition-delay;
 }
 
 @keyframes fade-slice-anim {
 	0% {
-		transform: translateY(10%);
+		transform: translateY(20%);
 		transition: 0.3s;
 		opacity: 0;
+	}
+
+	100% {
+		transform: translateY(0%);
+		opacity: 1;
 	}
 }
 </style>

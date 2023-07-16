@@ -29,6 +29,7 @@ export interface ShopcartVO {
 	stock: number;
 	price: number;
 	costPrice: number;
+	postage?: number;
 	image?: string;
 	description?: string;
 	quantity: number;

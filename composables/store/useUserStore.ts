@@ -80,18 +80,31 @@ export const useUserStore = defineStore(
           });
         } else {
           onUserExit(token);
+          return;
         }
         // 钱包
-        const wallet = await getUserWallet(token);
-        if (wallet.code === StatusCode.SUCCESS) {
-          store.$patch({
-            userWallet: {
-              ...wallet.data,
-            },
-          });
-        }
+        loadUserWallet(token)
       });
     };
+
+    /**
+     * 加载用户钱包信息
+     * @param token 用户token
+     */
+    const loadUserWallet = async (token: string): Promise<boolean> => {
+      const wallet = await getUserWallet(token);
+      if (wallet.code === StatusCode.SUCCESS) {
+        useUserStore().$patch({
+          userWallet: {
+            ...wallet.data,
+          },
+        });
+        return true
+      } else {
+        return false
+
+      }
+    }
 
     /**
      * 用户确认状态
@@ -99,27 +112,24 @@ export const useUserStore = defineStore(
      */
     const onCheckLogin = () => {
       if (token.value) {
-        onUserLogin(token.value);
+        return onUserLogin(token.value);
       }
     };
-
-    const shop = useShopStore();
-    const address = useAddresStore();
-    const order = useOrderStore();
     /**
      * 退出登录
      * @param t token
      */
-    async function onUserExit(t: string) {
-      const data = await toLogout(t);
+    async function onUserExit(t?: string) {
+      if (t) {
+        const data = await toLogout(t);
+      }
       clearUserStore();
       useNuxtApp().hook("app:mounted", () => {
-        shop?.$reset();
-        address?.$reset();
-        order?.$reset();
+        useShopStore().$reset();
+        useAddressStore().$reset();
+        useOrderStore().$reset();
       });
     }
-
     function clearUserStore() {
       // localStorage.removeItem("user");
       // sessionStorage.removeItem("user");
@@ -168,6 +178,7 @@ export const useUserStore = defineStore(
       onCheckLogin,
       onUserExit,
       clearUserStore,
+      loadUserWallet,
       // getter
       getToken,
     };

@@ -53,7 +53,7 @@ const genderList = ref<string[]>(["男", "女", "保密"]);
 // 用户基本信息
 const userCopy = reactive<UpdateInfo>({
 	nickname: user.userInfo.nickname,
-	slogan: user.userInfo.slogan,
+	slogan: user.userInfo.slogan || "",
 	gender: user.userInfo.gender || Gender.DEFAULT,
 	birthday: user.userInfo.birthday || "",
 });
@@ -149,7 +149,7 @@ const showInvitation = () => {
 				class="title min-h-2em group flex-row-c-c justify-start"
 			>
 				<div v-show="!isEditNickname" key="nickname1" class="group">
-					<span @click="isEditNickname=true">{{ user.userInfo.nickname }}</span>
+					<span @click="isEditNickname = true">{{ user.userInfo.nickname }}</span>
 					<span
 						@click="isEditNickname = true"
 						class="ml-2 p-3 i-solar:ruler-cross-pen-bold-duotone cursor-pointer bg-bluegray group-hover:bg-[var(--el-color-success)]"
@@ -173,13 +173,13 @@ const showInvitation = () => {
 					>
 					</el-input>
 					<el-button
-						style="padding:0 1.5em;"
+						style="padding: 0 1.5em"
 						icon="Select"
 						type="primary"
 						@click="submitUpdateUser('nickname')"
 					/>
 					<el-button
-						style="padding:0 1.5em;"
+						style="padding: 0 1.5em"
 						icon="Close"
 						plain
 						type="primary"

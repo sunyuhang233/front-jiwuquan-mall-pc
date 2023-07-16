@@ -46,7 +46,7 @@ export interface GoodsInfoVO {
   description: string;
   price: number;
   costPrice: number;
-  postage: number;
+  postage?: number;
   categoryId: string;
   images?: string[];
   video: string;

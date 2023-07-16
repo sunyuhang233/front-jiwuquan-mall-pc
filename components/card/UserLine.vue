@@ -62,6 +62,10 @@ const exitLogin = () => {
 		.then((e) => {
 			// 退出登录
 			user.onUserExit(user.token);
+			user.$reset();
+			useOrderStore().$reset();
+			useShopStore().$reset();
+			// useAddressStore().$reset();
 			document.body.style.paddingRight = init + "px";
 			ElMessage.success("退出成功！");
 		})
@@ -81,7 +85,7 @@ const toView = (path: string) => {
 			<!-- 头像弹窗 -->
 			<el-popover placement="bottom" :offset="20" :width="320" trigger="hover">
 				<template #reference>
-					<div flex-row-c-c >
+					<div flex-row-c-c>
 						<!-- 替换头像 -->
 						<el-badge
 							:is-dot="
@@ -109,9 +113,11 @@ const toView = (path: string) => {
 								v-copying="user.userInfo.id"
 								class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
 								>ID:{{ user.userInfo.id }}
-								<span class="group-hover:opacity-80 opacity-0 transition-300"
-									p2 i-solar:copy-bold-duotone ></span
-								>
+								<span
+									class="group-hover:opacity-80 opacity-0 transition-300"
+									p2
+									i-solar:copy-bold-duotone
+								></span>
 							</small>
 						</div>
 					</div>
@@ -125,8 +131,8 @@ const toView = (path: string) => {
 							class="avatar-uploader"
 							ref="uploader"
 							style="width: 100%; height: 100%; border-radius: 50%"
-							drag 
-							:action="getBaseUrl()+'/user/info/avatar'"
+							drag
+							:action="getBaseUrl() + '/user/info/avatar'"
 							:headers="{ Authorization: user.token }"
 							method="PUT"
 							:limit="1"
@@ -235,7 +241,7 @@ const toView = (path: string) => {
 	width: 2.3em;
 	height: 2.3em;
 	border-radius: 50%;
-	display:flex;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -271,7 +277,6 @@ const toView = (path: string) => {
 		border-radius: 4px;
 
 		.img {
-
 			.avatar-uploader {
 				width: 100%;
 

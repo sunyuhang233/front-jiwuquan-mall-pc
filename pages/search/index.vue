@@ -1,19 +1,21 @@
 <script lang="ts" setup>
 import { Sort, isTrue } from "@/types/result";
 const r = useRoute();
+const showResult = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const onSearch = () => {
 	if (isLoading.value) {
 		return ElMessage.warning("搜索太频繁了");
 	}
 	isLoading.value = true;
+
 	setTimeout(() => {
 		isLoading.value = false;
-	}, 300);
+		showResult.value = false;
+	}, 600);
 };
 
 const dto = reactive<GoodsPageDTO>({
-	name: r.query?.name as string,
 	cid: r.query?.cid as string,
 	isPostage: undefined,
 	priceSort: undefined,
@@ -21,6 +23,8 @@ const dto = reactive<GoodsPageDTO>({
 	saleSort: undefined,
 	isNew: undefined,
 });
+
+const keyWord = ref<string>("");
 
 interface GoodsPageDTO {
 	cid?: string;
@@ -50,6 +54,9 @@ const isPostage = computed({
 	},
 });
 
+/**
+ * 重置
+ */
 const reset = () => {
 	dto.cid = undefined;
 	dto.name = undefined;
@@ -62,47 +69,44 @@ const reset = () => {
 </script>
 <template>
 	<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
-		<div layout-default-se w-860px flex flex-col justify-center>
+		<div layout-default-se w-840px flex flex-col items-center>
 			<!-- 搜索栏目 -->
-			<div class="flex-row-c-c">
+			<div class="flex-row-c-c w-1/1">
 				<ElInput
 					clearable
 					ref="searchInpRef"
-					input-style="border-radius:20px;;height:52px;font-size:1.1em;font-weight:700;"
+					input-style="border-radius:20px;height:52px;font-size:1em;"
 					type="text"
 					size="large"
-					class="shadow-md"
+					class="shadow-sm"
 					autocomplete="off"
 					:prefix-icon="ElIconSearch"
 					minlength="2"
 					maxlength="30"
-					v-model.lazy="dto.name"
+					v-model.lazy="keyWord"
 					:onSearch="onSearch"
-					:placeholder="'搜索商品'"
+					:placeholder="'搜索关键字或商品'"
 					@keyup.enter="onSearch"
 				/>
 				<el-button
 					@click="onSearch"
 					type="info"
 					shadow-md
-					style="width: 10em; height: 50px; font-size: 1.1em; margin-left: 1em"
+					style="width: 10em; height: 50px; font-size: 1em; margin-left: 1em"
 					size="large"
 					>搜 索</el-button
 				>
+				{{ dto.name }}
 			</div>
-			<!-- 结果 -->
-			<div class="flex pt-4 opacity-80">
+			<!-- 筛选 -->
+			<div class="flex pt-4 opacity-80" v-show="showResult">
 				<el-checkbox
-					border
-					bg-white
-					dark:bg-dark-6
+					class="border bg-white dark:bg-dark-6"
 					v-model="isNew"
 					label="新品"
 				></el-checkbox>
 				<el-checkbox
-					border
-					bg-white
-					dark:bg-dark-6
+					class="border bg-white dark:bg-dark-6"
 					v-model="isPostage"
 					label="免运费"
 				></el-checkbox>
@@ -138,8 +142,7 @@ const reset = () => {
 				<el-button @click="reset" class="ml-6">重置</el-button>
 			</div>
 			<!-- <p opacity-80  mt-2>{{ `搜索结果` }}</p> -->
-			<div v-show="isLoading" v-loading="isLoading" p-2em mt-4em></div>
-			<ListGoodsList ref="GoodsList" class="list w-1/1" :dto="dto" />
+			<ListGoodsList ref="GoodsList" class="list min-h-60vh w-1/1" :dto="dto" />
 		</div>
 	</NuxtLayout>
 </template>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
 import { PushOrdersItemDTO } from "~/composables/api/orders";
-import { useOrderStore } from "~/composables/store/useOrderStore";
 import currency from "currency.js";
 const shop = useShopStore();
 const user = useUserStore();
@@ -30,10 +29,6 @@ const loadShopcartList = async () => {
 		shop.shopcartList.push(p);
 	});
 };
-
-if (shop.shopcartList.length <= 0) {
-	loadShopcartList();
-}
 
 // 没有更多
 const notMore = computed(() => {

@@ -38,7 +38,8 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@element-plus/nuxt',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt'
+    '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-swiper',
   ],
   experimental: {
     payloadExtraction: false,
@@ -126,6 +127,6 @@ export default defineNuxtConfig({
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: true,
+    enabled: false,
   }
 })

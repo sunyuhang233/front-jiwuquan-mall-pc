@@ -7,16 +7,21 @@ useHead({
 // 1、确认是否登录
 const app = useNuxtApp();
 app.hook("app:mounted", () => {
-	const store = useUserStore();
-	if (store.isLogin) store.onCheckLogin();
+	const user = useUserStore();
+	useAsyncData(async () => {
+		if (user.isLogin) {
+			await user.onCheckLogin();
+			await useShopStore().loadShopcartList();
+		} else {
+			user.onUserExit();
+		}
+	});
 });
 </script>
-
 <template>
 	<div>
-		<NuxtPage />
-		<!-- <VitePwaManifest /> -->
 		<FormUserDialog />
+		<NuxtPage />
 	</div>
 </template>
 

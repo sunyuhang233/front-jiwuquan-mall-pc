@@ -12,7 +12,7 @@
 			style="width: 100%"
 		>
 			<div class="scroll flex flex-nowrap">
-				<div flex-row-c-c mr-2 my-4 v-for="p in categoryList" :key="p.id" relative>
+				<div class="flex-row-c-c mr-4 my-4 relative" v-for="p in categoryList" :key="p.id">
 					<!-- 一级 -->
 					<el-button
 						size="large"
@@ -74,15 +74,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getGoodsCategoryList, type CategoryVO } from '~/composables/api/goods/category';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import { getGoodsCategoryList, type CategoryVO } from "~/composables/api/goods/category";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 const { data } = await getGoodsCategoryList();
 const categoryList = data.value?.data || [];
 const router = useRouter();
 // 跳转对应分类
 const toView = (item: CategoryVO) => {
 	router.push({
-		path: '/search',
+		path: "/search",
 		query: {
 			cname: item.name,
 			cid: item.id,

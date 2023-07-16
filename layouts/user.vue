@@ -9,7 +9,9 @@
 			</ClientOnly>
 			<!-- 内容 -->
 			<div class="flex-1 animate-fade-in animate-duration-300">
-				<slot></slot>
+				<ClientOnly>
+					<slot></slot>
+				</ClientOnly>
 			</div>
 		</div>
 		<!-- 右下角功能区 -->

@@ -2,35 +2,35 @@
 @forward "element-plus/theme-chalk/src/dark/var.scss" with (
   $bg-color: (
     "page": #282828,
-    "overlay": #1d1e1f,
+    "overlay": #1d1e1f
   ),
-  $border-color:(
-    "primary":#fff
+  $border-color: (
+    "primary": #fff
   ),
   $colors: (
     "white": #ffffffe1,
     "black": #131313,
-    "main": #6037f3,
+    "main": #55a7fb,
     "primary": (
-      "base": #6037f3,
+      "base": #55a7fb,
       "tip": #dc284d,
       "tip2": #ffbc0d,
-      "tip3": #00fff6,
+      "tip3": #00fff6
     ),
     "success": (
-      "base": #62d827,
+      "base": #62d827
     ),
     "warning": (
-      "base": #ffbc0d,
+      "base": #ffbc0d
     ),
     "danger": (
-      "base": #f34848,
+      "base": #f34848
     ),
     "error": (
-      "base": #e7234a,
+      "base": #e7234a
     ),
     "info": (
-      "base": #16e4be,
-    ),
+      "base": #16e4be
+    )
   )
 );

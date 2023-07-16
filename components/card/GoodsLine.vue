@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { type GoodsVO } from '~/types/goods';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import { type GoodsVO } from "~/types/goods";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 const { goods } = defineProps<{
 	goods: GoodsVO;
-}>(); 
+}>();
 </script>
 <template>
 	<div class="card" flex-row-bt-c cursor-pointer p-1>
 		<ClientOnly>
-			<ElImage 
+			<ElImage
 				hover:transform-scale-110
 				transition-300
 				:src="BaseUrlImg + goods.images[0]"
@@ -23,9 +23,9 @@ const { goods } = defineProps<{
 			<!-- 中下 -->
 			<p font-700 color-red-6 mt-1 mb-5>
 				￥{{ goods.price?.toFixed(2) }}
-				<small color-coolgray text-0.4em style="text-decoration: line-through">￥{{
-					goods.costPrice.toFixed(2)
-				}}</small>
+				<small color-coolgray text-0.4em style="text-decoration: line-through"
+					>￥{{ goods.costPrice.toFixed(2) }}</small
+				>
 			</p>
 			<!-- 下 -->
 			<p flex-row-bt-c class="w-1/1">

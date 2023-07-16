@@ -1,11 +1,10 @@
 <template>
-	<div class="top" overflow-hidden flex-row-bt-c flex-col md:flex-row>
+	<div ml-4em relative flex-row-bt-c flex-col md:flex-row>
 		<!-- bg -->
-		<img
-			class="absolute bg-color-indigo-6 z-0 select-none filter-blur-30 w-240px"
-			src="@/assets/images/logo/logo_txt.png"
-			alt="极物圈 logo"
-		/>
+		<span
+			class="mx-2em mb-4em w-12em h-6em opacity-70 absolute bg-[var(--el-color-primary)] z-0 select-none filter-blur-3em -z-1"
+		></span>
+
 		<!-- 问候语 -->
 		<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
 			<p text-lg py-4 tracking-1 opacity-80>
@@ -16,7 +15,7 @@
 					>
 				</ClientOnly>
 			</p>
-			<h2 text-2xl tracking-1>欢迎来到<span class="mark3 animate"> 极物圈社区 </span>🎉</h2>
+			<h2 text-2xl tracking-1>欢迎来到<span class="mark3 animate">极物圈社区 </span>🎉</h2>
 		</div>
 		<!-- 搜索 -->
 		<div class="animate__animated animate__pulse" animate-delay-500 p-2>

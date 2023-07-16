@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useAddresStore } from "~/composables/store/useAddress";
 import { codeToText, regionData } from "element-china-area-data";
 import {
 	addAddressByDTO,
@@ -26,7 +25,7 @@ useHead({
 	],
 });
 const user = useUserStore();
-const address = useAddresStore();
+const address = useAddressStore();
 const regionDatas = ref(regionData);
 address.resetRequestList(user.getToken);
 
@@ -323,10 +322,7 @@ const rules = reactive({
 						</el-form>
 					</lazy-el-dialog>
 					<!-- 列表 -->
-					<div
-						v-loading="isLoadingAll"
-						class="address"
-					>
+					<div v-loading="isLoadingAll" class="address">
 						<div flex-row-bt-c border-default pb-4 border-0 border-b-2px mb-5>
 							<h3 inline-block>收货地址</h3>
 							<div class="cursor-pointer flex items-center justify-end ml-a">
@@ -345,13 +341,13 @@ const rules = reactive({
 							</div>
 						</div>
 						<!-- 列表 -->
-						<div class="list"  flex flex-wrap>
+						<div class="list" flex flex-wrap>
 							<!-- 单项 -->
 							<el-checkbox-group v-model="selectAddress">
 								<TransitionGroup
 									tag="div"
 									name="fade-list"
-									class="flex flex-wrap relative "
+									class="flex flex-wrap relative"
 								>
 									<!-- 添加按钮 -->
 									<div
@@ -384,7 +380,7 @@ const rules = reactive({
 									</div>
 									<!-- 地址项 -->
 									<div v-for="(p, i) in address.addressList" :key="p.id">
-										<CardAddressBox :address="p" >
+										<CardAddressBox :address="p">
 											<template #btns>
 												<div
 													class="check"

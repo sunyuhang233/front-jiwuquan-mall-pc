@@ -1,3 +1,136 @@
+<script lang="ts" setup>
+import { getGoodsListByPage } from "@/composables/api/goods";
+import { useStorage } from "@vueuse/core";
+import { kebabCase } from "vant/lib/utils";
+import { IPage } from "~/types";
+import { GoodsVO } from "~/types/goods";
+// 搜索相关
+const searchKeyWords = ref<string>("");
+const isSearch = ref<boolean>(false);
+const isShowResult = ref<boolean>(false);
+let searchPage = reactive<IPage<GoodsVO>>({
+	records: [],
+	total: 0,
+	pages: 0,
+	size: 0,
+	current: 0,
+});
+const searchPageList = reactive<GoodsVO[]>([]);
+// 分页器
+const isLoading = ref<boolean>(false);
+const page = ref<number>(1);
+const size = ref<number>(6);
+const noMore = computed(() => searchPage.total > 0 && searchPageList.length === searchPage.total);
+// 搜索历史 本地存储
+let searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
+/**
+ * 搜索商品
+ */
+const onSearch = async () => {
+	if (isSearch.value) return ElMessage.error("搜索太频繁！");
+	if (!searchKeyWords.value) {
+		return ElMessage.error({
+			message: "搜索内容不能为空！",
+		});
+	}
+	isLoading.value = true;
+
+	// 1、请求
+	isSearch.value = true;
+	isShowResult.value = true;
+	// 清空
+	page.value = 1;
+	size.value = 6;
+	searchPageList.splice(0);
+	searchPage = toReactive({
+		records: [],
+		total: 0,
+		pages: 0,
+		size: 0,
+		current: 0,
+	});
+
+	const data = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
+	const pageData = data.data;
+	// 展示结果
+	searchPage = toReactive({ ...pageData });
+	pageData.records?.forEach((p) => {
+		p.images = typeof p.images === "string" ? p.images.split(",") : [];
+		searchPageList.push(p);
+	});
+	// 添加记录
+	if (
+		!searchHistoryList.value.includes(searchKeyWords.value) &&
+		searchHistoryList.value.length <= 6
+	) {
+		searchHistoryList.value.unshift(searchKeyWords.value.trim());
+	} else {
+		searchHistoryList.value.pop();
+	}
+	// 结束
+	// searchKeyWords.value = ""
+	setTimeout(() => {
+		isLoading.value = false;
+		isSearch.value = false;
+	}, 800);
+};
+
+const onLoadMore = async () => {
+	if (page.value < searchPage.pages) {
+		page.value += 1;
+		const data = await getGoodsListByPage(page.value, size.value, {
+			name: searchKeyWords.value,
+		});
+		const pageData = data.data;
+		// 展示结果
+		searchPage = toReactive({ ...pageData });
+		pageData.records?.forEach((p) => {
+			p.images = typeof p.images === "string" ? p.images.split(",") : [];
+			searchPageList.push(p);
+		});
+	}
+};
+
+/**
+ * 清除
+ */
+const clearSearch = (e: any) => {
+	setTimeout(() => {
+		isShowResult.value = false;
+		searchKeyWords.value = "";
+		reactive<IPage<GoodsVO>>({
+			records: [],
+			total: 0,
+			pages: 0,
+			size: 0,
+			current: 0,
+		});
+	}, 10);
+};
+
+/**
+ * 关闭历史标签
+ * @param tag
+ */
+const handleClose = (tag: string) => {
+	searchHistoryList.value.splice(searchHistoryList.value.indexOf(tag), 1);
+};
+const app = useNuxtApp();
+let searchInpRef = {};
+app.hook("app:mounted", () => {
+	searchInpRef = ref("searchInpRef"); // dom
+});
+/**
+ * 点击历史标签
+ */
+const clickTag = (val: string, i: number) => {
+	searchHistoryList.value.splice(i, 1);
+	searchHistoryList.value.push(val);
+	searchKeyWords.value = val;
+	onSearch();
+};
+</script>
+
 <template>
 	<ClientOnly>
 		<!-- 下拉框 -->
@@ -10,8 +143,7 @@
 			:hide-after="0"
 			trigger="click"
 			:visible="isShowResult"
-			popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px;
-                                          height:385px; padding: 1.2em 1.2em;"
+			popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px; height:385px; padding: 1.2em 1.2em;"
 			tabindex="0"
 		>
 			<template #reference>
@@ -22,7 +154,6 @@
 							@click="isShowResult = true"
 							ref="searchInpRef"
 							@focus="isShowResult = true"
-							input-style=""
 							class="mr-1 lg:mr-2"
 							type="text"
 							size="large"
@@ -59,8 +190,10 @@
 							top-0
 							cursor-pointer
 							py-1
-							flex-row
-							flex-wrap
+							flex
+							items-center
+							flex-nowrap
+							overflow-hidden
 						>
 							<ElTag
 								size="large"
@@ -69,9 +202,7 @@
 								closable
 								@close="handleClose(p)"
 								@click="clickTag(p, i)"
-								mr-1
-								mt-2
-								transition-300
+								class="mr-1 mt-2 transition-300"
 							>
 								<span pr-0.3em>{{ p }}</span>
 							</ElTag>
@@ -107,11 +238,7 @@
 					v-loading="isLoading"
 					element-loading-background="transparent"
 				>
-					<transition-group
-						tag="div"
-						name="fade-list"
-						class="relative"
-					>
+					<transition-group tag="div" name="fade-list" class="relative">
 						<!-- 跳转详情页 -->
 						<NuxtLink
 							:to="`/goods/detail/${p.id}`"
@@ -151,141 +278,11 @@
 		</el-popover>
 	</ClientOnly>
 </template>
-<script lang="ts" setup>
-import { getGoodsListByPage } from '@/composables/api/goods';
-import { useStorage } from '@vueuse/core';
-import { IPage } from '~/types';
-import { GoodsVO } from '~/types/goods';
-// 搜索相关
-const searchKeyWords = ref<string>('');
-const isSearch = ref<boolean>(false);
-const isShowResult = ref<boolean>(false);
-let searchPage = reactive<IPage<GoodsVO>>({
-	records: [],
-	total: 0,
-	pages: 0,
-	size: 0,
-	current: 0,
-});
-const searchPageList = reactive<GoodsVO[]>([]);
-// 分页器
-const isLoading = ref<boolean>(false);
-const page = ref<number>(1);
-const size = ref<number>(6);
-const noMore = computed(() => searchPage.total > 0 && searchPageList.length === searchPage.total);
-// 搜索历史 本地存储
-let searchHistoryList = useStorage<string[]>('jiwu_index_search', []);
-/**
- * 搜索商品
- */
-const onSearch = async () => {
-	if (isSearch.value) return ElMessage.error('搜索太频繁！');
-	if (!searchKeyWords.value) {
-		return ElMessage.error({
-			message: '搜索内容不能为空！',
-		});
-	}
-	isLoading.value = true;
-
-	// 1、请求
-	isSearch.value = true;
-	isShowResult.value = true;
-	// 清空
-	page.value = 1;
-	size.value = 6;
-	searchPageList.splice(0);
-	searchPage = toReactive({
-		records: [],
-		total: 0,
-		pages: 0,
-		size: 0,
-		current: 0,
-	});
-
-	const data = await getGoodsListByPage(page.value, size.value, { name: searchKeyWords.value });
-	const pageData = data.data;
-	// 展示结果
-	searchPage = toReactive({ ...pageData });
-	pageData.records?.forEach((p) => {
-		p.images = typeof p.images === 'string' ? p.images.split(',') : [];
-		searchPageList.push(p);
-	});
-	// 添加记录
-	if (
-		!searchHistoryList.value.includes(searchKeyWords.value) &&
-		searchHistoryList.value.length <= 6
-	) {
-		searchHistoryList.value.unshift(searchKeyWords.value.trim());
-	} else {
-		searchHistoryList.value.pop();
-	}
-	// 结束
-	// searchKeyWords.value = ""
-	setTimeout(() => {
-		isLoading.value = false;
-		isSearch.value = false;
-	}, 500);
-};
-
-const onLoadMore = async () => {
-	if (page.value < searchPage.pages) {
-		page.value += 1;
-		const data = await getGoodsListByPage(page.value, size.value, {
-			name: searchKeyWords.value,
-		});
-		const pageData = data.data;
-		// 展示结果
-		searchPage = toReactive({ ...pageData });
-		pageData.records?.forEach((p) => {
-			p.images = typeof p.images === 'string' ? p.images.split(',') : [];
-			searchPageList.push(p);
-		});
-	}
-};
-
-/**
- * 清除
- */
-const clearSearch = (e: any) => {
-	setTimeout(() => {
-		isShowResult.value = false;
-		reactive<IPage<GoodsVO>>({
-			records: [],
-			total: 0,
-			pages: 0,
-			size: 0,
-			current: 0,
-		});
-	}, 10);
-};
-
-/**
- * 关闭历史标签
- * @param tag
- */
-const handleClose = (tag: string) => {
-	searchHistoryList.value.splice(searchHistoryList.value.indexOf(tag), 1);
-};
-const app = useNuxtApp();
-let searchInpRef = {};
-app.hook('app:mounted', () => {
-	searchInpRef = ref('searchInpRef'); // dom
-});
-/**
- * 点击历史标签
- */
-const clickTag = (val: string, i: number) => {
-	searchHistoryList.value.splice(i, 1);
-	searchHistoryList.value.push(val);
-	searchKeyWords.value = val;
-	onSearch();
-};
-</script>
 
 <!-- 样式scss -->
 <style scoped lang="scss">
 $height: 40px;
-$input-width: min(22vw, 260px);
+$input-width: 385px;
 
 .v-input {
 	:deep(.el-button) {
@@ -302,12 +299,13 @@ $input-width: min(22vw, 260px);
 		letter-spacing: 0.2em;
 
 		&.is-focus {
-			width: min(30vw, 385px);
+			backdrop-filter: blur(20px);
+			width: 385px;
 		}
 	}
 
 	:deep(inp.el-input__inner):focus {
-		width: min(30vw, 385px);
+		width: 385px;
 	}
 }
 

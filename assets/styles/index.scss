@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: Helvetica;
+  font-family: "Alimama", Helvetica, sans-serif;
   box-sizing: border-box;
 }
 :root {
@@ -25,10 +25,19 @@ li {
 span {
   line-height: 100%;
 }
+@font-face {
+  font-display: auto;
+  font-family: "Alimama";
+  src:
+    local("Alimama"),
+    url(http://quang.kiwi2333.top/font/Alimama.woff2) format("woff2");
+}
 
 // 页面
 html,
 body {
+  width: 100%;
+  font-family: "Alimama", Helvetica, sans-serif;
   min-height: 100vh;
 }
 
@@ -110,14 +119,13 @@ html.dark {
   background: $loading-color-dark2 !important; //自定义颜色
 }
 
-//
+// 背景颜色
 .bg-mark {
   position: absolute;
   transform: translate(50%, -50%);
   z-index: -99;
   width: 60%;
   height: 60%;
-  opacity: 0.6;
   filter: blur(60px);
   border-radius: 50%;
   background: radial-gradient(
@@ -163,9 +171,16 @@ html.dark {
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 }
+// 渐变背景
+.bg-linear {
+  background-image: linear-gradient(to right, var(--el-color-primary) 0, transparent 50%);
+  backdrop-filter: blur(1em);
+  // background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+}
+
 // 盒子卡片
 .v-card {
-  background-color: #fff;
+  background-color: #ffffff93;
   border-radius: 4px;
   transition: box-shadow $transition-delay;
   box-shadow:
@@ -176,11 +191,11 @@ html.dark {
       rgba(19, 19, 19, 0.2) 0px 0px 5px 0px,
       rgba(19, 19, 19, 0.2) 0px 0px 1px 0px;
   }
+  backdrop-filter: blur(2em);
 }
 .dark .v-card {
   background-color: rgba(37, 37, 37, 0.144);
-  border: 1px solid #99999934;
-  backdrop-filter: blur(2em);
+  border: 1px solid #424242a1;
 }
 
 // element-plus
@@ -207,6 +222,7 @@ html.dark {
   }
 }
 
+// 单选钮
 .el-radio-group {
   font-size: medium;
   .el-radio__inner {
@@ -215,11 +231,11 @@ html.dark {
     margin-left: 2px;
   }
 }
-
+// 按钮
 .el-button {
   transition: $transition-delay;
 }
-
+// popper
 .el-popper-init {
   padding: 2px 4px;
 }

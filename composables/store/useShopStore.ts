@@ -109,6 +109,9 @@ export const useShopStore = defineStore('shop', () => {
     shopcartList.value.push(...data.records);
     isRefalsh.value = false;
   };
+
+
+
   return {
     // state
     isRefalsh,
@@ -124,5 +127,5 @@ export const useShopStore = defineStore('shop', () => {
   }
 })
 
-
-
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useShopStore, import.meta.hot))

@@ -181,13 +181,16 @@ const getMaxStock = computed(() => {
 	});
 	return count;
 });
-
+const allPostate = ref<number>(0);
 // 计算当前的最终价格
 const allPrice = computed((): number => {
 	if (goodsSku) {
 		for (const p of goodsSku) {
 			if (p.id === form.skuId) {
-				return currency(p.price).multiply(form.quantity).value;
+				if (goodsInfo?.postage) {
+					allPostate.value = goodsInfo?.postage
+				}
+				return currency(p.price).multiply(form.quantity).add(allPostate.value).value;
 			}
 		}
 	}
@@ -276,7 +279,6 @@ const setActiveItem = (image: string) => {
 							<el-radio-group v-model="form.color" size="large">
 								<!-- cts -->
 								<el-radio-button
-									border
 									v-for="p in colorList"
 									:key="p.name"
 									:label="p.name"

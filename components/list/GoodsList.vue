@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { type GoodsPageDTO } from '@/composables/api/goods';
-import { getGoodsListByPage } from '@/composables/api/goods';
-import { IPage } from '~/types';
-import { GoodsVO } from '~/types/goods';
+import { type GoodsPageDTO } from "@/composables/api/goods";
+import { getGoodsListByPage } from "@/composables/api/goods";
+import { IPage } from "~/types";
+import { GoodsVO } from "~/types/goods";
 
 // props
 const props = defineProps<{
@@ -49,14 +49,13 @@ const loadGoodsPage = async () => {
 	if (!data?.records || data?.records.length === 0) {
 		isNot.value = true;
 		return (isLoading.value = false);
-	}else {
+	} else {
 		isNot.value = false;
-
 	}
 	for await (const p of data.records) {
 		await new Promise((resolve) => {
 			timer = setTimeout(() => {
-				p.images = typeof p.images === 'string' ? p.images.split(',') : [];
+				p.images = typeof p.images === "string" ? p.images.split(",") : [];
 				goodsList.value.push(p);
 				clearTimeout(timer ?? undefined);
 				timer = null;
@@ -67,7 +66,6 @@ const loadGoodsPage = async () => {
 	}
 };
 loadGoodsPage(); // 加载一次
-
 const clearResult = () => {
 	goodsList.value.splice(0);
 	pageInfo = reactive({
@@ -84,7 +82,8 @@ const toGoodsView = (id: string) => {
 		path: `/goods/detail/${id}`,
 	});
 };
-const dto = toReactive(props.dto)
+// 条件筛选
+const dto = toReactive(props.dto);
 watch(
 	dto,
 	() => {
@@ -115,10 +114,10 @@ defineExpose({
 				<!-- 商品卡片 -->
 				<CardGoodsBox
 					@click="toGoodsView(p.id)"
-					class="mr-5 my-5 transition-300"
+					class="mr-5 mt-8 transition-300"
+					element-loading-background="transparent"
 					:goods="p"
 					:key="p.id"
-					element-loading-background="transparent"
 					v-for="p in goodsList"
 				>
 					<small float-right mt-2px text-blueGray>销量：{{ p.sales }}</small>
