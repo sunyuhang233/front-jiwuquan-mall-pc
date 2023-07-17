@@ -8,11 +8,11 @@
 				<MenuCollMenu />
 			</ClientOnly>
 			<!-- 内容 -->
-			<div class="flex-1 animate-fade-in animate-duration-300">
-				<ClientOnly>
-					<slot></slot>
-				</ClientOnly>
-			</div>
+			<ClientOnly>
+				<div class="flex-1 animate-fade-in animate-duration-300">
+					<slot name="default"></slot>
+				</div>
+			</ClientOnly>
 		</div>
 		<!-- 右下角功能区 -->
 		<ClientOnly>

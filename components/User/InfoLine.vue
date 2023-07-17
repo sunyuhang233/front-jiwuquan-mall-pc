@@ -100,7 +100,7 @@ const submitUpdateUser = async (key: string) => {
  * 邀请方法
  */
 const showInvitation = () => {
-	useAsyncCopyText(route.fullPath)
+	useAsyncCopyText(`${document.URL}?id=${user.userInfo.id}`)
 		.then(() => {
 			ElMessage.success("链接已复制到剪切板！");
 		})
@@ -131,6 +131,7 @@ const showInvitation = () => {
 				<div class="flex-row-c-c relative group">
 					<img
 						v-if="avatarUrl"
+						alt="Design By Kiwi23333"
 						:src="BaseUrlImg + avatarUrl"
 						class="avatar-mark group-hover:filter-blur-4 transition-300 p-0 object-cover w-6em h-6em overflow-hidden"
 					/>

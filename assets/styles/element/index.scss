@@ -6,23 +6,23 @@
     "black": #1d1d1d,
     "main": #5d33f6,
     "primary": (
-      "base": #5d33f6,
+      "base": #5d33f6
     ),
 
     "success": (
-      "base": #67c23a,
+      "base": #67c23a
     ),
     "warning": (
-      "base": #e6a23c,
+      "base": #e6a23c
     ),
     "danger": (
-      "base": #fd4848,
+      "base": #fd4848
     ),
     "error": (
-      "base": #fc2929,
+      "base": #fc2929
     ),
     "info": (
-      "base": #0bdb85,
+      "base": #0bdb85
     )
   ),
   $bg-color: ("black": #111111, "primary": #303133),
@@ -57,7 +57,7 @@
       "padding": 2px,
       "bg-color": getCssVar("fill-color", "blank")
     ),
-    // message
+  // message
   $message:
     (
       "bg-color": getCssVar("color", "info", "light-9"),

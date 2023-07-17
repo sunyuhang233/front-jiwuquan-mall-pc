@@ -289,6 +289,7 @@ const setActiveItem = (image: string) => {
 									<img
 										class="sku-img"
 										:src="BaseUrlImg + p.image"
+						:alt="p.name || 'Design By Kiwi23333'"
 										rounded-4px
 										overflow-hidden
 										z-0

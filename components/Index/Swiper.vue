@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { getEventsLists } from '~/composables/api/event';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import { getEventsLists } from "~/composables/api/event";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 
 // 活动事件列表
 const eventList = reactive<EventVO[]>([]);
 const isLoading = ref<boolean>(true);
 // 请求
-const {data,refresh} = await getEventsLists();
-if (data.value&& data.value.code === StatusCode.SUCCESS) {
+const { data, refresh } = await getEventsLists();
+if (data.value && data.value.code === StatusCode.SUCCESS) {
 	// 结束时间排序
 	const res = data.value.data.sort((a, b) => b.status - a.status);
 	res.forEach((p) => {
@@ -18,16 +18,16 @@ if (data.value&& data.value.code === StatusCode.SUCCESS) {
 			isLoading.value = false;
 		}, 30);
 	}
-}else {
-  // 失败重新请求
-  setTimeout(() => {
-    refresh()
-  }, 30);
+} else {
+	// 失败重新请求
+	setTimeout(() => {
+		refresh();
+	}, 30);
 }
 // 跳转详情页
 const toEventDetailView = (eid: string) => {
 	useRouter().push({
-		path: '/event/detail',
+		path: "/event/detail",
 		query: {
 			eid,
 		},
@@ -88,7 +88,6 @@ const getEndDay = computed(() => {
 					:key="p.id"
 					class="swiper-item"
 				>
-
 					<ClientOnly>
 						<!-- 图片 -->
 						<el-image

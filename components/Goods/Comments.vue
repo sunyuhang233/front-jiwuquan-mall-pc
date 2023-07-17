@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { GoodsCommentsVO, getGoodsCommentPage } from '~/composables/api/goods/comments';
-import { GoodsSkuVO } from '~/composables/api/goods/sku';
-import { IPage } from '~/types';
+import { GoodsCommentsVO, getGoodsCommentPage } from "~/composables/api/goods/comments";
+import { GoodsSkuVO } from "~/composables/api/goods/sku";
+import { IPage } from "~/types";
 const router = useRouter();
 const { goodsId, skuList } = defineProps<{
 	goodsId: string;
@@ -36,7 +36,7 @@ const loadGoodsPage = async () => {
 	// 没有更多
 	if (isNoMore.value || data?.total === -1) {
 		return (isLoading.value = false);
-	} 
+	}
 	// 展示结果
 	pageInfo = data as IPage<GoodsCommentsVO>;
 	let timer: NodeJS.Timeout | null;
@@ -45,7 +45,7 @@ const loadGoodsPage = async () => {
 		await new Promise((resolve) => {
 			timer = setTimeout(() => {
 				// @ts-ignore
-				p.images = p.images.split(',');
+				p.images = p.images.split(",");
 				commentList.value.push(p);
 				clearTimeout(timer ?? undefined);
 				timer = null;
@@ -76,11 +76,11 @@ const toCommentDetailView = (commentId: string) => {
 };
 </script>
 <template>
-	<div class="comment-list" v-for="(p, i) in commentList" :key="p.id" style="width: 100%;">
-		<CardGoodsComment :comment="p" :sku-item="skuMap.get(p.skuId)"/>
+	<div class="comment-list" v-for="(p, i) in commentList" :key="p.id" style="width: 100%">
+		<CardGoodsComment :comment="p" :sku-item="skuMap.get(p.skuId)" />
 	</div>
 	<div class="comment-list" v-if="!commentList.length">
-    <small>暂时没有评论</small>
-  </div>
+		<small>暂时没有评论</small>
+	</div>
 </template>
 <style scoped lang="scss"></style>

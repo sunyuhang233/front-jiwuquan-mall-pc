@@ -148,6 +148,7 @@ const toView = (path: string) => {
 								h-6em
 								v-if="avatarUrl"
 								:src="BaseUrlImg + avatarUrl"
+								:alt="user.userInfo.nickname"
 								class="avatar"
 							/>
 							<ElIconPlus size="2em" v-else />

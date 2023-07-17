@@ -17,7 +17,7 @@ const bgUrl = useLocalStorage("jiwu_user_bg", "kiwi-bg-4.jpg");
 				<el-button
 					class="opacity-0 group-hover:opacity-100 absolute right-1em bottom-1.4em z-1"
 					type="info"
-					plain 
+					plain
 					style="
 						padding: 8px;
 						background-color: rgba(97, 255, 163, 0.1);
@@ -33,6 +33,7 @@ const bgUrl = useLocalStorage("jiwu_user_bg", "kiwi-bg-4.jpg");
 						<lazy-el-image
 							v-for="(p, i) in bgList"
 							:key="i"
+							alt="Design By Kiwi23333"
 							:src="BaseUrlImg + p"
 							object-cover
 							@click="bgUrl = p"

@@ -1,6 +1,6 @@
 import NProgress from "nprogress"
 export default defineNuxtPlugin((nuxtApp) => {
-  addRouteMiddleware('global-loading', () => {
+  addRouteMiddleware('global-loading', (to, from) => {
     // https://juejin.cn/post/6917801127065550856
     // https://nuxt.com.cn/docs/guide/going-further/hooks#lifecycle-hooks
     // 页面开始时
@@ -13,7 +13,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }).start();
     })
     // 完成
-    nuxtApp.hook('page:finish',()=>{
+    nuxtApp.hook('page:finish', () => {
       NProgress.done()
     })
   }, { global: true })

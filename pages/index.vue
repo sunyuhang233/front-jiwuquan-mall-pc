@@ -29,7 +29,6 @@ useHead({
 				<div layout-default mt-6>
 					<!-- 热门商品分类 -->
 					<IndexCategoryLine />
-					<!-- title -->
 					<!-- 商品列表tabs -->
 					<IndexGoodsTabs class="mt-6" />
 				</div>

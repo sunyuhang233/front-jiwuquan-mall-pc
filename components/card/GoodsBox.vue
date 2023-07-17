@@ -21,6 +21,7 @@ const getDiscount = computed<number>(() => {
 					transition-300
 					class="w-1/1 h-1/1 rounded-t-4px overflow-hidden"
 					:src="BaseUrlImg + goods.images[0]"
+					:alt="goods.name"
 					fit="cover"
 				/>
 				<!-- 浏览量 -->

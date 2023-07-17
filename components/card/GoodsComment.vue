@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { GoodsCommentsVO } from '~/composables/api/goods/comments';
-import { GoodsSkuVO } from '~/composables/api/goods/sku';
+import { GoodsCommentsVO } from "~/composables/api/goods/comments";
+import { GoodsSkuVO } from "~/composables/api/goods/sku";
 
 const { comment, skuItem } = defineProps<{
 	comment: GoodsCommentsVO;
-	skuItem: GoodsSkuVO;
+	skuItem?: GoodsSkuVO;
 }>();
 
 const getPreImages = computed(() => {
@@ -13,12 +13,12 @@ const getPreImages = computed(() => {
 });
 
 const getRateComm = (rate: number): string => {
-	let msg = ['很差', '差', '一般', '较满意', '强烈推荐'];
+	let msg = ["很差", "差", "一般", "较满意", "强烈推荐"];
 	return msg[Math.floor(rate - 1)];
 };
 
 const getProps = (p: GoodsSkuVO): string => {
-	return (p?.size || '') + (p?.color || '') + (p?.combo || '');
+	return (p?.size || "") + (p?.color || "") + (p?.combo || "");
 };
 </script>
 <template>
@@ -45,7 +45,7 @@ const getProps = (p: GoodsSkuVO): string => {
 				fit="cover"
 			/>
 			<div flex flex-col justify-around flex-1>
-				<p text-0.9em>{{ comment.isAnonymous ? '匿名用户' : comment.nickName }}</p>
+				<p text-0.9em>{{ comment.isAnonymous ? "匿名用户" : comment.nickName }}</p>
 				<div flex-row-c-c justify-start>
 					<small mr-4 opacity-80>{{ comment.createTime }}</small>
 					<el-rate v-model="comment.rate" disabled allow-half />
@@ -112,7 +112,7 @@ const getProps = (p: GoodsSkuVO): string => {
 				class="rounded-4px mr-2 border-default-dashed border-1px"
 				fit="cover"
 			/>
-			<small>{{ getProps(skuItem) }}</small>
+			<small>{{ skuItem ? getProps(skuItem) : "" }}</small>
 		</div>
 		<!-- 底部 -->
 		<div class="bottom" px-2 flex-row-bt-c>

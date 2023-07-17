@@ -36,7 +36,11 @@ const reLoadUserWallet = async () => {
 				<i i-solar:banknote-2-bold-duotone mr-2 p-3 bg-white />
 				极物圈</small
 			>
-			<img src="@/assets/images/logo/logo.png" class="w-2em opacity-95 shadow-lg" />
+			<img
+				src="@/assets/images/logo/logo.png"
+				alt="LOGO Design By Kiwi23333"
+				class="w-2em opacity-95 shadow-lg"
+			/>
 		</div>
 		<!-- 余额： -->
 		<div class="blance leading-1.6em">

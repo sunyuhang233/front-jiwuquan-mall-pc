@@ -1,7 +1,7 @@
 // /* 覆盖你需要的变量 */
 @forward "element-plus/theme-chalk/src/dark/var.scss" with (
   $bg-color: (
-    "page": #282828,
+    "page": #1d1d1d,
     "overlay": #1d1e1f
   ),
   $border-color: (
@@ -10,15 +10,15 @@
   $colors: (
     "white": #ffffffe1,
     "black": #131313,
-    "main": #55a7fb,
+    "main": #5b32f3,
     "primary": (
-      "base": #55a7fb,
+      "base": #5b32f3,
       "tip": #dc284d,
       "tip2": #ffbc0d,
-      "tip3": #00fff6
+      "tip3": #00e9ce
     ),
     "success": (
-      "base": #62d827
+      "base": #01d078
     ),
     "warning": (
       "base": #ffbc0d
@@ -30,7 +30,7 @@
       "base": #e7234a
     ),
     "info": (
-      "base": #16e4be
+      "base": #19dbc5
     )
   )
 );

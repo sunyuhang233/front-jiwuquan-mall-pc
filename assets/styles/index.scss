@@ -58,7 +58,7 @@ html {
 }
 html.dark {
   // background-color: #171717;
-  background: radial-gradient(ellipse 80% 50% at 50% -15%, rgba(148, 150, 255, 0.16), rgb(22, 22, 22)) no-repeat;
+  background: radial-gradient(ellipse 80% 50% at 50% -15%, #00000009, var(--el-bg-color-page)) no-repeat;
 }
 
 // 全局滚动条

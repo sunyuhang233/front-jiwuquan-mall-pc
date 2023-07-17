@@ -8,19 +8,15 @@
 		<!-- 问候语 -->
 		<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
 			<p text-lg py-4 tracking-1 opacity-80>
-				<ClientOnly>
-					{{ useNowDateText(new Date()) }}好，
-					<span class="mark1 animatejs"
-						>{{ state?.userInfo?.nickname || "你还未登录" }} ！</span
-					>
-				</ClientOnly>
+				{{ useNowDateText(new Date()) }}好，
+				<span class="mark1 animatejs"
+					>{{ state?.userInfo?.nickname || "你还未登录" }} ！</span
+				>
 			</p>
 			<h2 text-2xl tracking-1>欢迎来到<span class="mark3 animate">极物圈社区 </span>🎉</h2>
 		</div>
 		<!-- 搜索 -->
-		<div class="animate__animated animate__pulse" animate-delay-500 p-2>
-			<IndexSearch />
-		</div>
+		<IndexSearch />
 	</div>
 </template>
 <script lang="ts" setup>

@@ -52,99 +52,99 @@ defineComponent({
 </script>
 <template>
 	<div class="swiper">
-			<el-carousel
-				ref="swiper"
-				indicator-position="none"
-				@change="changeSwiper"
-				rounded-4px
-				cursor-pointer
-				:interval="6000"
-				arrow="hover"
-				h-400px
-				height="100%"
-				trigger="click"
+		<el-carousel
+			ref="swiper"
+			indicator-position="none"
+			@change="changeSwiper"
+			rounded-4px
+			cursor-pointer
+			:interval="6000"
+			arrow="hover"
+			h-400px
+			height="100%"
+			trigger="click"
+		>
+			<!-- 轮播图项 -->
+			<el-carousel-item
+				v-for="(p, i) in images"
+				:key="p"
+				:name="p"
+				class="swiper-item"
+				style="width: 100%"
 			>
-				<!-- 轮播图项 -->
-				<el-carousel-item
-					v-for="(p, i) in images"
-					:key="p"
-					:name="p"
-					class="swiper-item"
-					style="width: 100%"
-				>
-					<el-image
-						:preview-teleported="true"
-						:preview-src-list="getImagesPreview"
-						:initial-index="+i"
-						:src="BaseUrlImg + p"
-						:alt="goodsName || 'Design By Kiwi23333'"
-						class="e-img"
-						style="width: 100%; height: 100%"
-						fit="scale-down"
-					>
-						<template #error>
-							<div class="image-slot" flex-row-c-c>
-								<ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
-							</div>
-						</template>
-					</el-image>
-				</el-carousel-item>
-			</el-carousel>
-			<!-- 预览列表 -->
-			<div class="scale-imgs" mt-4 flex-row-c-c>
-				<ElIconArrowLeftBold
-					@click="prevSwiper"
-					class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
-				/>
 				<el-image
-					@mouseenter="setActiveItem(p)"
-					:class="{ active: activeSmall === p }"
-					v-for="(p, i) in images"
-					:key="i"
+					:preview-teleported="true"
+					:preview-src-list="getImagesPreview"
+					:initial-index="+i"
 					:src="BaseUrlImg + p"
-					:alt="goodsName || 'Design by Kiwi2333'"
-					class="scale-img"
-					style="
-						max-width: 6em;
-						max-height: 4em;
-						margin: 0 0.4em;
-						padding: 0;
-						border-radius: 4px;
-					"
-					fit="contain"
-					transition-300
-					hover:scale-110
+					:alt="goodsName || 'Design By Kiwi23333'"
+					class="e-img"
+					style="width: 100%; height: 100%"
+					fit="scale-down"
 				>
 					<template #error>
 						<div class="image-slot" flex-row-c-c>
-							<ElIconPicture style="opacity: 0.8" />
+							<ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
 						</div>
 					</template>
 				</el-image>
-				<ElIconArrowRightBold
-					@click="nextSwiper"
-					class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
-				/>
-			</div>
-			<!-- 打开视频 -->
-			<small
-				@click="isOpenVideo = true"
-				v-if="video"
-				cursor-pointer
-				mx-a
-				mt-2
-				leading-1.2em
-				bg-gray-200
-				dark:bg-dark-200
-				shadow-md
-				p-2
-				transition-200
+			</el-carousel-item>
+		</el-carousel>
+		<!-- 预览列表 -->
+		<div class="scale-imgs" mt-4 flex-row-c-c>
+			<ElIconArrowLeftBold
+				@click="prevSwiper"
+				class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
+			/>
+			<el-image
+				@mouseenter="setActiveItem(p)"
+				:class="{ active: activeSmall === p }"
+				v-for="(p, i) in images"
+				:key="i"
+				:src="BaseUrlImg + p"
+				:alt="goodsName || 'Design by Kiwi2333'"
+				class="scale-img"
+				style="
+					max-width: 6em;
+					max-height: 4em;
+					margin: 0 0.4em;
+					padding: 0;
+					border-radius: 4px;
+				"
+				fit="contain"
+				transition-300
 				hover:scale-110
-				flex-row-c-c
-				w-6em
-				rounded-2em
-				><i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
 			>
+				<template #error>
+					<div class="image-slot" flex-row-c-c>
+						<ElIconPicture style="opacity: 0.8" />
+					</div>
+				</template>
+			</el-image>
+			<ElIconArrowRightBold
+				@click="nextSwiper"
+				class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
+			/>
+		</div>
+		<!-- 打开视频 -->
+		<small
+			@click="isOpenVideo = true"
+			v-if="video"
+			cursor-pointer
+			mx-a
+			mt-2
+			leading-1.2em
+			bg-gray-200
+			dark:bg-dark-200
+			shadow-md
+			p-2
+			transition-200
+			hover:scale-110
+			flex-row-c-c
+			w-6em
+			rounded-2em
+			><i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
+		>
 		<Teleport to="body">
 			<transition name="fade">
 				<div class="mock" v-if="isOpenVideo" @click.self="isOpenVideo = false">

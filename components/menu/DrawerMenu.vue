@@ -6,44 +6,41 @@ const isFold = useStorage<boolean>("jiwu_isFold", true);
 const route = useRoute();
 </script>
 <template>
-	<ClientOnly>
-		<!-- 菜单 -->
-		<div class="menu-list w-200px" :class="{ 'is-fold': isFold }">
-			<el-menu
-				style="width: 100%"
-				:router="true"
-				:default-active="route.path"
-				bg=" dark:dark-600"
-			>
-				<!-- 首页 -->
-				<el-menu-item index="/">
-					<ElIconHomeFilled />
-					<div class="title" mx-4 hidden sm:inline-block>首&emsp;页</div>
-				</el-menu-item>
-				<!-- 社区 -->
-				<el-menu-item index="/community">
-					<ElIconSwitchFilled />
-					<div class="title" mx-4 hidden sm:inline-block>社&emsp;区</div>
-				</el-menu-item>
-				<!-- 圈子 -->
-				<!-- <el-menu-item index="/quanzi">
-					<ElIconGoodsFilled />
-					<div class="title" mx-4 hidden sm:inline-block>极物圈</div>
-				</el-menu-item> -->
-				<el-menu-item index="/setting">
-					<ElIconSetting />
-					<div class="title" mx-4 hidden sm:inline-block>设&emsp;置</div>
-				</el-menu-item>
-			</el-menu>
+	<!-- 菜单 -->
+	<div class="group menu-list w-200px" :class="{ 'is-fold': isFold }">
+		<el-menu
+			style="width: 100%"
+			:router="true"
+			:default-active="route.path"
+			bg=" dark:dark-600"
+		>
+			<!-- 首页 -->
+			<el-menu-item index="/">
+				<ElIconHomeFilled />
+				<div class="title" mx-4 hidden sm:inline-block>首&emsp;页</div>
+			</el-menu-item>
+			<!-- 社区 -->
+			<el-menu-item index="/community">
+				<ElIconSwitchFilled />
+				<div class="title" mx-4 hidden sm:inline-block>社&emsp;区</div>
+			</el-menu-item>
+			<!-- 分类 -->
+			<el-menu-item index="/category">
+				<ElIconGoodsFilled />
+				<div class="title" mx-4 hidden sm:inline-block>分&emsp;类</div>
+			</el-menu-item>
+			<el-menu-item index="/setting">
+				<ElIconSetting />
+				<div class="title" mx-4 hidden sm:inline-block>设&emsp;置</div>
+			</el-menu-item>
+		</el-menu>
+		<ClientOnly>
 			<!-- 折叠按钮 -->
-			<div
-				class="collapse flex-row-c-c animate__animated animate__bounceIn"
-				@click="isFold = !isFold"
-			>
-				<ElIconArrowRightBold class="icon is-fold-btn" />
+			<div class="collapse flex-row-c-c opacity-50" @click="isFold = !isFold">
+				<i i-solar:hamburger-menu-linear class="is-fold-btn p-2 mx-0.3em"></i>
 			</div>
-		</div>
-	</ClientOnly>
+		</ClientOnly>
+	</div>
 </template>
 
 <style lang="scss" scoped>
@@ -88,24 +85,32 @@ const route = useRoute();
 			border-right: 3px solid var(--el-color-primary);
 		}
 	}
+
+	$fold-right: -1.8em;
+	&:hover {
+		.collapse {
+			right: $fold-right;
+			transform: scale(1);
+			opacity: 100;
+		}
+	}
 	// 折叠按钮
 	.collapse {
+		cursor: pointer;
 		position: absolute;
 		z-index: -1;
-		bottom: 1em;
-		right: -1.8em;
-		width: 2em;
-		height: 3.2em;
+		top: 0.4em;
+		right: 0;
+		height: 2.6em;
 		border-radius: 0 0.3em 0.3em 0;
 		background-color: var(--el-color-primary);
 		transition: $transition-delay;
 		animation-delay: $transition-delay;
 		color: white;
-		.icon {
-			transition: $transition-delay;
-		}
+		transform: scale(0.8);
 		&:hover {
-			right: -2em;
+			right: $fold-right;
+			transform: scale(1.1);
 		}
 	}
 
@@ -119,7 +124,6 @@ const route = useRoute();
 		}
 
 		.is-fold-btn {
-			transition: $transition-delay;
 			transform: rotate(-180deg);
 		}
 	}

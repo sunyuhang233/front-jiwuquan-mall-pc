@@ -9,6 +9,7 @@
 			v-model="word"
 			placeholder="开启搜索之旅✨"
 			class="v-input mx-1"
+			:required="true"
 		/>
 	</div>
 </template>
@@ -50,10 +51,20 @@ $input-width: min(22vw, 260px);
 		transition-timing-function: $animate-cubic-bount;
 		letter-spacing: 0.2em;
 		border-radius: 20px;
+		font-weight: 600;
 		height: 36px;
 		padding: 0 20px;
 		font-size: 14px;
-
+		input::placeholder {
+			transition: $transition-delay;
+			font-weight: 600;
+			color: var(--el-color-primary-light-5);
+		}
+		input:focus::placeholder {
+			color: transparent;
+		}
+		input:focus,
+		input:valid,
 		&.is-focus {
 			width: min(30vw, 360px);
 		}
@@ -62,19 +73,10 @@ $input-width: min(22vw, 260px);
 	:deep(.el-input__inner):focus {
 		width: min(30vw, 360px);
 	}
-
-	:deep(.el-input__inner):focus::placeholder {
-		color: var(--el-color-primary-light-7);
-	}
-
-	:deep(.el-input__inner)::placeholder {
-		transition: 0.3s;
-		font-size: 0.9em;
-		letter-spacing: 0.4em;
-	}
 }
-
-.dark :deep(.el-input__inner):focus::placeholder {
-	color: #fff;
+.dark :deep(.el-input__wrapper) {
+	input::placeholder {
+		color: #fff;
+	}
 }
 </style>

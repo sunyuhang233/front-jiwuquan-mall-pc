@@ -6,6 +6,7 @@
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
 				<img
 					w-42px
+					alt="Design By Kiwi23333"
 					object-contain
 					group-hover:opacity-85
 					transition-300
@@ -16,6 +17,7 @@
 				<img
 					w-42px
 					object-contain
+					alt="Design By Kiwi23333"
 					group-hover:opacity-85
 					transition-300
 					group-hover:filter-blur-2px
@@ -53,7 +55,7 @@ const { topClass } = defineProps<{
 }>();
 
 // 搜索
-let searchWord = ref<string>('');
+let searchWord = ref<string>("");
 // 登录表单
 const store = useUserStore();
 enum FormType {

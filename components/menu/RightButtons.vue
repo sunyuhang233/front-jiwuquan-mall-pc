@@ -2,7 +2,7 @@
 const user = useUserStore();
 const { menu } = defineProps({
 	menu: {
-		default: ['shopcart'],
+		default: ["shopcart"],
 		required: false,
 	},
 });
@@ -12,7 +12,7 @@ const toBack = () => {
 	if (route) {
 		router.back();
 	} else {
-		router.push('/');
+		router.push("/");
 	}
 };
 </script>
@@ -21,7 +21,7 @@ const toBack = () => {
 		<div class="btns">
 			<!-- 回到顶部 -->
 			<el-backtop
-				style="width: 52px; height: 52px;overflow: auto;"
+				style="width: 52px; height: 52px; overflow: auto"
 				class="animate-zoom-in-right animate-duration-500 cursor-pointer hover:scale-90 transition-300 rounded-10em shadow-[#0bdb85] shadow-opacity-60 shadow-md"
 			/>
 			<!-- 返回 -->
@@ -34,7 +34,7 @@ const toBack = () => {
 				animate-duration-600
 				hover:scale-90
 				transition-300
-				class="icon shadow-[#5d33f9] shadow-opacity-40 shadow-md"
+				class="icon shadow-[var(--el-color-primary)] shadow-opacity-40 shadow-md"
 				p-2
 				mt-3
 				rounded-4em

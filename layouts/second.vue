@@ -5,7 +5,7 @@
 		<!-- 左侧边导航 -->
 		<div class="flex-1 animate-fade-slice">
 			<!-- 内容 -->
-			<slot></slot>
+			<slot name="default"></slot>
 		</div>
 		<!-- 右下角功能区 -->
 		<ClientOnly>

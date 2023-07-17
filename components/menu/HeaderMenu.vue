@@ -10,6 +10,7 @@
 					group-hover:opacity-85
 					transition-300
 					group-hover:filter-blur-2px
+					alt="Design By Kiwi23333"
 					src="@/assets/images/logo/logo.png"
 					dark:hidden
 				/>
