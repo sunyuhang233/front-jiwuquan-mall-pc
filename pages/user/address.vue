@@ -239,7 +239,18 @@ const rules = reactive({
 </script>
 <template>
 	<NuxtLayout name="user" :menu="['back']" :footer="false">
-		<div class="py-5em px-9rem layout-default">
+		<div class="layout-default mt-2em mx-a">
+			<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
+				<p text-lg tracking-1 mb-4>
+					{{ useNowDateText(new Date()) }}好，
+					<ClientOnly>
+						<span class="mark1 animatejs"
+							>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
+						>
+					</ClientOnly>
+				</p>
+				<h2 text-2xl tracking-1>收货地址</h2>
+			</div>
 			<ClientOnly>
 				<div class="address-list" @keyup.esc="isEdit = false" v-if="user.isLogin">
 					<!-- 表单弹窗 -->
@@ -323,8 +334,7 @@ const rules = reactive({
 					</lazy-el-dialog>
 					<!-- 列表 -->
 					<div v-loading="isLoadingAll" class="address">
-						<div flex-row-bt-c border-default pb-4 border-0 border-b-2px mb-5>
-							<h3 inline-block>收货地址</h3>
+						<div flex-row-bt-c border-default border-0 border-b-2px>
 							<div class="cursor-pointer flex items-center justify-end ml-a">
 								<i
 									class="inline-block hover:rotate-180 hover:scale-120 transition-300 p-3 i-solar:refresh-circle-line-duotone bg-green-5 mr-4 hover:text-[var(--el-color-success)]"
@@ -352,20 +362,7 @@ const rules = reactive({
 									<!-- 添加按钮 -->
 									<div
 										:key="2030303"
-										mr-4
-										mt-4
-										select-none
-										hover:scale-98
-										cursor-pointer
-										flex-row-c-c
-										flex-col
-										class="add group"
-										w-260px
-										h-200px
-										border-default-dashed
-										border-3px
-										rounded-8px
-										transition-300
+										class="mr-4 mt-4 select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group w-260px h-200px border-default-dashed border-3px rounded-8px transition-300"
 										hover:border="3px solid dark-4"
 										dark:hover:border-gray-5
 										@click="showAdd"
@@ -393,24 +390,15 @@ const rules = reactive({
 												</div>
 												<el-button
 													type="info"
-													w-4em
 													size="small"
-													class="opacity-0 group-hover:opacity-90"
-													@click="showUpdate(p)"
+													class="ml-a mx-2 opacity-0 group-hover:opacity-90"
 													plain
+													@click="showUpdate(p)"
 													>修改</el-button
 												>
 												<span
-													hover:bg-red-6
-													hover:scale-110
-													i-solar:trash-bin-minimalistic-bold-duotone
-													p-3
-													p-2
-													dark:bg-light
+													class="hover:bg-red-6 hover:scale-110 i-solar:trash-bin-minimalistic-bold-duotone p-3 p-2 dark:bg-light transition-300 opacity-0 group-hover:opacity-80"
 													@click="deleteAddress(p.id)"
-													transition-300
-													opacity-0
-													group-hover:opacity-80
 												></span>
 											</template>
 										</CardAddressBox>
@@ -422,15 +410,15 @@ const rules = reactive({
 					<!-- 按钮 -->
 					<transition name="popup">
 						<div
-							class="fixed bottom-0 mt-4 p-4 flex-row-bt-c dark:bg-dark-5 shadow border-default w-900px z-1000 bg-light-1 dark:bg-dark-6 border-1px rounded-t-10px"
 							v-show="isEdit"
+							class="fixed bottom-1em w-70vw mx-a mt-4 p-4 flex-row-bt-c dark:bg-dark-5 shadow border-default z-20 bg-light-1 dark:bg-dark-6 border-1px rounded-t-10px"
 						>
 							<el-checkbox v-model="selectAll" label="全选" />
 							<el-button
 								type="danger"
 								size="large"
 								class="shadow-md border-default-dashed"
-								@click="deleteAddressByIds"
+								@click="selectAddress.length ? deleteAddressByIds() : ''"
 								:loading="isLoading"
 							>
 								删除选中

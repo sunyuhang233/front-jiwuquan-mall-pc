@@ -1,0 +1,29 @@
+<template>
+	<swiper
+		effect="cards"
+		:cardsEffect="{
+			slideShadows: false,
+			perSlideRotate: 0,
+		}"
+		:width="350"
+		:slidesPerView="1"
+		:autoplay="{ delay: 5000 }"
+		:grabCursor="true"
+		:mousewheel="true"
+		:loop="true"
+		:modules="[SwiperEffectCards, SwiperParallax, SwiperMousewheel]"
+	>
+		<slot>
+			<swiper-slide> <UserWalCard class="transition-300 hover:translate-x-2" /></swiper-slide>
+			<swiper-slide>
+				<UserWalWxCard class="transition-300 hover:translate-x-2"
+			/></swiper-slide>
+			<swiper-slide>
+				<UserWalAliCard class="transition-300 hover:translate-x-2"
+			/></swiper-slide>
+		</slot>
+	</swiper>
+</template>
+<script lang="ts" setup>
+const controlledSwiper = ref(null);
+</script>

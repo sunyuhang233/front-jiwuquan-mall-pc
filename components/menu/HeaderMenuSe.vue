@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" :class="topClass" flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
@@ -40,41 +40,27 @@
 			</NuxtLink>
 		</div>
 		<!-- 右侧 -->
-		<div class="right" flex-row-c-c hidden md:flex>
-			<ClientOnly>
+		<ClientOnly>
+			<div class="right" flex-row-c-c hidden md:flex>
 				<!-- 切换主题 -->
 				<BtnSwitch />
-			</ClientOnly>
-		</div>
+				<div v-if="user.isLogin">
+					<img
+						class="rounded-6em w-2em h-2em"
+						:src="BaseUrlImg + user.userInfo.avatar"
+						:alt="user.userInfo.nickname"
+					/>
+				</div>
+			</div>
+		</ClientOnly>
 	</div>
 </template>
 
 <script lang="ts" setup>
-const { topClass } = defineProps<{
-	topClass?: string;
-}>();
-
 // 搜索
 let searchWord = ref<string>("");
 // 登录表单
-const store = useUserStore();
-enum FormType {
-	LOGIN,
-	REGISTER,
-}
-// 表单
-const onLogin = (type: FormType) => {
-	if (type === FormType.LOGIN) {
-		// 登录
-		store.showLoginForm = true;
-		store.showRegisterForm = false;
-	} else {
-		// 注册
-		store.showLoginForm = false;
-		store.showRegisterForm = true;
-	}
-};
-const onSerch = (val: string) => {};
+const user = useUserStore();
 // 搜索
 </script>
 <style lang="scss" scoped>

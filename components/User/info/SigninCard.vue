@@ -1,23 +1,9 @@
 <script lang="ts" setup>
+import { getUserLeave } from "@/composables/utils";
+// 用户信息
 const user = useUserStore();
 const points = toRef<number>(user.userWallet.points || 0);
-const getLeave = computed(() => {
-	let leave = 0;
-	if (points.value > 0 && points.value < 3000) {
-		leave = 0;
-	} else if (points.value < 10000) {
-		leave = 1;
-	} else if (points.value < 20000) {
-		leave = 1;
-	} else if (points.value < 30000) {
-		leave = 3;
-	} else if (points.value < 40000) {
-		leave = 4;
-	} else if (points.value < 50000) {
-		leave = 5;
-	}
-	return leave;
-});
+const getLeave = getUserLeave(user.userWallet.points || 0);
 </script>
 <template>
 	<div class="py-8 px-10 rounded-4px min-w-360px max-w-500px v-card">
@@ -44,10 +30,8 @@ const getLeave = computed(() => {
 					>如何获取积分? <i p-2 ml-2 text-blueGray i-solar:dollar-linear></i
 				></small>
 			</template>
-			<template>
-				<li>1、通过钱包额度充值</li>
-				<li>2、通过每日签到</li>
-			</template>
+			<li>1、通过钱包额度充值</li>
+			<li>2、通过每日签到</li>
 		</el-popover>
 	</div>
 </template>

@@ -18,13 +18,13 @@ const user = useUserStore();
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']">
-			<div class="userinfo" v-show="user.isLogin">
+			<div v-show="user.isLogin">
 				<!-- 壁纸 -->
-				<UserBgToggle />
-				<div class="mx-4em">
+				<UserInfoBgToggle />
+				<div class="layout-default">
 					<div class="avatar-card flex flex-wrap">
 						<!-- 用户头像 -->
-						<div class="avatars relative -top-3.5em flex-1">
+						<div class="avatars relative -top-6em flex-1">
 							<UserInfoLine />
 							<div class="m-2">
 								<UserInfoTabs />
@@ -33,7 +33,7 @@ const user = useUserStore();
 						<!-- 右侧 -->
 						<div class="ml-2em mt-4">
 							<!-- 签到 -->
-							<UserSigninCard />
+							<UserInfoSigninCard />
 						</div>
 					</div>
 				</div>

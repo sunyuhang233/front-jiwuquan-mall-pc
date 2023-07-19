@@ -44,23 +44,27 @@ export interface WalletComboVO {
 
 
 /**
- * 充值套餐
+ * 用户充值
  * @param dto AddWalletDTO
  * @param token token
  * @returns AddWalletDTO
  */
 export function addUserWallet(dto: AddWalletDTO, token: string) {
-  return useHttp.get<Result<UserWalletVO>>(`/user/wallet`, {}, {
+  return useHttp.post<Result<UserWalletVO>>(`/user/wallet`, {}, {
+    body: {
+      ...dto
+    },
     headers: {
       "Authorization": token
-    }
+    },
+
   })
 }
 // 充值钱包
 export interface AddWalletDTO {
   type: RechangeType;// 0 任意额度 1 套餐
-  amount: number;
-  id: string;
+  amount?: number;
+  id?: string;
 }
 // 充值类型
 export enum RechangeType {

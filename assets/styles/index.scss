@@ -184,12 +184,12 @@ html.dark {
   border-radius: 4px;
   transition: box-shadow $transition-delay;
   box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 0px 4px 0px,
-    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    rgba(60, 64, 67, 0.14) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.1) 0px 1px 2px 1px;
   &:hover {
     box-shadow:
-      rgba(19, 19, 19, 0.2) 0px 0px 5px 0px,
-      rgba(19, 19, 19, 0.2) 0px 0px 1px 0px;
+      rgba(60, 64, 67, 0.14) 1px 1px 3px 0px,
+      rgba(60, 64, 67, 0.1) 1px 1px 3px 1px;
   }
   backdrop-filter: blur(2em);
 }
@@ -205,7 +205,7 @@ html.dark {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0.2em 1em;
+    margin: 0.8em;
     .el-button {
       width: auto;
       height: auto;

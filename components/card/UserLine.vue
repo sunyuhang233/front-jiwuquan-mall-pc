@@ -104,7 +104,7 @@ const toView = (path: string) => {
 								<span i-solar:user-bold style="width: 60%; height: 60%"></span>
 							</el-avatar>
 						</el-badge>
-						<div pl-2>
+						<div pl-2 class="hidden md:block">
 							<h4 tracking-1px w-7em class="overflow-hidden truncate ...">
 								{{ user.userInfo.nickname }}
 							</h4>
@@ -114,8 +114,7 @@ const toView = (path: string) => {
 								class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
 								>ID:{{ user.userInfo.id }}
 								<span
-									class="group-hover:opacity-80 opacity-0 transition-300"
-									p2
+									class="p2 group-hover:opacity-80 opacity-0 transition-300"
 									i-solar:copy-bold-duotone
 								></span>
 							</small>
@@ -156,72 +155,52 @@ const toView = (path: string) => {
 						<div class="bottom" flex-col>
 							<h3 class="title" py-1>{{ user.userInfo.nickname }}</h3>
 							<!-- 卡片集合 -->
-							<div flex flex-wrap mb-2>
+							<div mb-2 grid grid-cols-3 grid-gap-2 justify-around>
 								<!-- 收货地址 -->
-								<el-card
-									shadow="hover"
-									class="v-card"
-									@click="toView('/user/address')"
-								>
+								<div class="v-card" @click="toView('/user/address')">
 									<p
 										class="icon shopcart"
 										bg-lime-5
 										i-solar:compass-bold-duotone
 									></p>
 									<p mt-2>收货地址</p>
-								</el-card>
+								</div>
 								<!-- 钱包 -->
-								<el-card
-									shadow="hover"
-									class="v-card"
-									@click="toView('/user/wallet')"
-								>
+								<div class="v-card" @click="toView('/user/wallet')">
 									<p class="icon wallet" bg-red-5 i-solar:wallet-bold-duotone></p>
 									<p mt-2>钱 包</p>
-								</el-card>
+								</div>
 								<!-- 购物车 -->
-								<el-card shadow="hover" class="v-card" @click="toView('/shopcart')">
-									<p
-										class="icon shopcart"
-										bg-yellow-5
-										i-solar:cart-large-2-bold
-									></p>
+								<div class="v-card" @click="toView('/shopcart')">
+									<p class="icon shopcart" bg-red-5 i-solar:cart-large-2-bold></p>
 									<p mt-2>购物车</p>
-								</el-card>
-								<el-card
-									shadow="hover"
-									class="v-card"
-									@click="toView(`/user/bill`)"
-								>
+								</div>
+								<div class="v-card" @click="toView(`/user/wallet`)">
 									<p
 										class="icon myself"
-										bg-yellow-6
+										bg-yellow-5
 										i-solar:bill-list-bold-duotone
 									></p>
 									<p mt-2>账 单</p>
-								</el-card>
+								</div>
 								<!-- 订单 -->
-								<el-card shadow="hover" class="v-card" @click="toView(`/order`)">
+								<div class="v-card" @click="toView(`/order`)">
 									<p
 										class="icon myself"
 										bg-yellow-5
 										i-solar:clipboard-bold-duotone
 									></p>
 									<p mt-2>订 单</p>
-								</el-card>
+								</div>
 								<!-- 安全 -->
-								<el-card
-									shadow="hover"
-									class="v-card"
-									@click="toView(`/user/safe`)"
-								>
+								<div class="v-card" @click="toView(`/user/safe`)">
 									<p
 										class="icon myself"
 										bg-green-5
 										i-solar:danger-bold-duotone
 									></p>
 									<p mt-2>账号安全</p>
-								</el-card>
+								</div>
 							</div>
 							<!-- 退出登录| 我的主页 -->
 							<div class="btn" flex-row-bt-c pt-4>
@@ -332,7 +311,7 @@ const toView = (path: string) => {
 	border-top: 1px solid rgba(128, 128, 128, 0.12);
 }
 
-:deep(.el-card__body) {
+:deep(.div__body) {
 	padding: 0;
 	display: flex;
 	flex-direction: column;
@@ -350,16 +329,24 @@ const toView = (path: string) => {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 6em;
-	height: 6em;
 	border-radius: 6px;
 	cursor: pointer;
-	margin: 0.2em;
-}
-
-.icon {
-	cursor: pointer;
-	width: 3em;
-	height: 3em;
+	padding: 0.6em;
+	box-shadow: none;
+	transition: $transition-delay;
+	&:hover {
+		opacity: 0.9;
+		background-color: var(--el-color-primary);
+		color: #fff;
+		svg {
+			fill: #fff;
+			color: #fff;
+		}
+	}
+	.icon {
+		cursor: pointer;
+		width: 3em;
+		height: 3em;
+	}
 }
 </style>

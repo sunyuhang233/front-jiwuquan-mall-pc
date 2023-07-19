@@ -11,16 +11,19 @@ import {
 
 export default defineConfig({
   shortcuts: [
+    ['v-btn', ' border-0 rounded-4px'],
+
+
     // 颜色
     ['text-color', 'text-dark dark:text-white'],
     ['bg-color', 'bg-white dark:bg-dark'],
     // 布局
-    ['flex-row-c-c', 'flex flex-justify-center flex-items-center'],
-    ['flex-row-bt-c', 'flex flex-justify-between flex-items-center'],
+    ['flex-row-c-c', 'flex flex-row flex-justify-center flex-items-center'],
+    ['flex-row-bt-c', 'flex flex-row flex-justify-between flex-items-center'],
     ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
     ['border-default-dashed', 'hover:shadow-sm border-2px  border-default border-dashed'],
-    ['layout-default', 'mx-auto pt-8 pb-6 w-1400px overflow-hidden transition-300'],
-    ['layout-default-se', 'mx-auto pt-8 pb-6 w-1000px overflow-hidden transition-300'],
+    ['layout-default', 'mx-auto pt-8 pb-6 w-80vw md:w-1400px  transition-300'],
+    ['layout-default-se', 'mx-auto pt-8 pb-6 w-80vw md:w-1000px  transition-300'],
   ],
   theme: {
     // ...

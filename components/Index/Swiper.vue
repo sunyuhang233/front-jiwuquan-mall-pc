@@ -59,19 +59,17 @@ const getEndDay = computed(() => {
 		:interval="6000"
 		arrow="hover"
 		my-4
-		md:my-0
 		mx-auto
-		md:mx-none
-		w-250px
+		w-465px
 		md:w="620px"
-		h-280px
+		h-300px
 		md:h="420px"
 		height="100%"
 		class="w-4/5 swpier"
 		trigger="click"
 	>
 		<!-- 骨架屏 -->
-		<el-skeleton animated :loading="isLoading" class="ske">
+		<el-skeleton animated :loading="isLoading" class="ske w-">
 			<template #template>
 				<el-skeleton-item p-4 variant="image" class="sk-imgs" p-2 />
 				<div p-4 flex-col style="height: 100%" justify-around>

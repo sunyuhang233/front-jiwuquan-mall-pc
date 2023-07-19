@@ -68,23 +68,21 @@ export const useUserStore = defineStore(
      * @param token token
      */
     const onUserLogin = async (token: string, saveLocal?: boolean) => {
-      await useAsyncData(async () => {
-        // 用户信息
-        const store = useUserStore();
-        let res = await getUserInfo(token);
-        if (res.code === StatusCode.SUCCESS) {
-          store.$patch({
-            userInfo: {
-              ...res.data,
-            },
-          });
-        } else {
-          onUserExit(token);
-          return;
-        }
-        // 钱包
-        loadUserWallet(token)
-      });
+      // 用户信息
+      const store = useUserStore();
+      let res = await getUserInfo(token);
+      if (res.code === StatusCode.SUCCESS) {
+        store.$patch({
+          userInfo: {
+            ...res.data,
+          },
+        });
+      } else {
+        onUserExit(token);
+        return;
+      }
+      // 钱包
+      loadUserWallet(token)
     };
 
     /**

@@ -25,17 +25,19 @@ const reLoadUserWallet = async () => {
 		w-340px
 		h-200px
 		p-4
+		overflow-hidden
 		justify-between
+		relative
 		element-loading-background="rgba(0, 0, 0, 0.6)"
 		bg="#2d2a3b"
-		class="dark:opacity-90 group v-card relative overflow-hidden border-default border-2px shadow-sm rounded-4 text-white"
+		class="group v-card shadow-sm rounded-4 dark:bg-#2d2a3b text-white"
 	>
 		<!-- 顶部 -->
 		<div flex-row-bt-c>
 			<small opacity-90 font-600>
 				<i i-solar:banknote-2-bold-duotone mr-2 p-3 bg-white />
-				极物圈</small
-			>
+				极物圈
+			</small>
 			<img
 				src="@/assets/images/logo/logo.png"
 				alt="LOGO Design By Kiwi23333"
@@ -59,4 +61,18 @@ const reLoadUserWallet = async () => {
 		<small block opacity-70>更新于：{{ user.userWallet.updateTime }}</small>
 	</div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.v-card::after {
+	content: "";
+	width: 90%;
+	height: 60%;
+	transform: rotate(45deg) translate(0%, 130%);
+	border-radius: 60%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	filter: blur(30px);
+	background-image: linear-gradient(to right, #5983ff, #ff5aa2 50%, #ff8f67 50%);
+}
+</style>

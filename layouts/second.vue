@@ -1,5 +1,5 @@
 <template>
-	<div class="second" min-h-100vh flex flex-col justify-between>
+	<div class="min-h-100vh flex flex-col justify-between">
 		<!-- 顶部导航 -->
 		<MenuHeaderMenu />
 		<!-- 左侧边导航 -->

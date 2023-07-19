@@ -52,12 +52,11 @@ export default defineNuxtConfig({
   imports: {
     dirs: [
       // Scan top-level modules
-      'utils',
       'composables',
       'composables/utils/**',
       'composables/store/**',
-      'types',
       'types/*/.ts',
+      'types/**',
     ]
   },
 
@@ -96,7 +95,7 @@ export default defineNuxtConfig({
 
   // pinia持久化到会话存储
   piniaPersistedstate: {
-    storage: "cookies",
+    storage: "localStorage",
   },
 
   // nitro

@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" :class="topClass" flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
@@ -43,13 +43,13 @@
 			<InputSearch v-model="searchWord" :onSerch="onSerch" />
 		</div>
 		<!-- 右侧 -->
-		<div class="right" flex-row-c-c hidden md:flex>
-			<ClientOnly>
+		<ClientOnly>
+			<div class="right" flex-row-c-c>
 				<!-- 消息 -->
-				<BtnBell v-if="store.isLogin" />
+				<BtnBell v-if="store.isLogin" class="hidden md:block" />
 				<!--  -->
 				<NuxtLink to="/shopcart" v-if="store.isLogin">
-					<i i-solar:cart-large-2-linear p-3 ml-2></i>
+					<i i-solar:cart-large-2-linear p-3 ml-2 hidden md:block></i>
 				</NuxtLink>
 				<!-- 切换主题 -->
 				<BtnSwitch />
@@ -76,16 +76,12 @@
 				<div class="box" v-else>
 					<CardUserLine :user-info="store.userInfo" />
 				</div>
-			</ClientOnly>
-		</div>
+			</div>
+		</ClientOnly>
 	</div>
 </template>
 
 <script lang="ts" setup>
-const { topClass } = defineProps<{
-	topClass?: string;
-}>();
-
 // 搜索
 let searchWord = ref<string>("");
 // 登录表单

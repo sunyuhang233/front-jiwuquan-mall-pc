@@ -1,6 +1,6 @@
 <template>
 	<ElButton @click="toggle" class="btn" mx-3 round>
-		<span>{{ isDark ? '切换日间' : '切换夜间' }}</span>
+		<span>{{ isDark ? "切换日间" : "切换夜间" }}</span>
 		<!-- <OtherMoonSun /> -->
 		<img
 			src="@/assets/images/icon/sun.svg"
@@ -22,10 +22,10 @@ const mode = useColorMode();
 
 const isDark = computed({
 	get(): boolean {
-		return mode.value === 'dark';
+		return mode.value === "dark";
 	},
 	set(): void {
-		mode.preference = isDark.value ? 'light' : 'dark';
+		mode.preference = isDark.value ? "light" : "dark";
 	},
 });
 
@@ -34,7 +34,7 @@ let toggle = (event: MouseEvent) => {
 	let isAppearanceTransition =
 		// @ts-ignore
 		document.startViewTransition &&
-		!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		!window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 	if (!isAppearanceTransition || !event) {
 		isDark.value = !isDark.value;
 		return null;
@@ -42,10 +42,7 @@ let toggle = (event: MouseEvent) => {
 	// 画圆圈
 	const x = event.clientX;
 	const y = event.clientY;
-	const endRadius = Math.hypot(
-		Math.floor(Math.max(x, innerWidth - x)),
-		Math.floor(Math.max(y, innerHeight - y))
-	);
+	const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 	// @ts-expect-error: Transition API
 	const transition = document.startViewTransition(() => {
 		isDark.value = !isDark.value;
@@ -63,10 +60,10 @@ let toggle = (event: MouseEvent) => {
 			},
 			{
 				duration: 400,
-				easing: 'ease-in',
+				easing: "ease-in",
 				pseudoElement: isDark.value
-					? '::view-transition-new(root)'
-					: '::view-transition-old(root)',
+					? "::view-transition-new(root)"
+					: "::view-transition-old(root)",
 			}
 		);
 	});

@@ -1,5 +1,5 @@
 @forward "element-plus/theme-chalk/src/common/var.scss" with (
-  // "../../../element-plus/theme-chalk/src/common/var.scss"
+  //  node_modules/element-plus/theme-chalk/src/common/var.scss"
   $border-radius: ("base": 6px, "small": 12px, "round": 20px, "circle": 100%),
   $colors: (
     "white": #f9fafb,
@@ -66,5 +66,15 @@
       "close-size": 16px,
       "close-icon-color": getCssVar("text-color-placeholder"),
       "close-hover-color": getCssVar("text-color-secondary")
-    )
+    ),
+  $messagebox: (
+    "title-color": getCssVar("text-color-primary"),
+    "width": 400px,
+    "border-radius": 12px,
+    "font-size": getCssVar("font-size-large"),
+    "content-font-size": getCssVar("font-size-base"),
+    "content-color": getCssVar("text-color-regular"),
+    "error-font-size": 14px,
+    "padding-primary": 1rem
+  )
 );

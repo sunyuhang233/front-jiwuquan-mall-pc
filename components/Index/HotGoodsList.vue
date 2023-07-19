@@ -1,15 +1,7 @@
 <template>
 	<div
-		class="hot-list"
-		min-h-420px
-		h-420px
-		p-4
-		mx-a
-		md:ma-0
-		rounded-4px
-		min-w-420px
-		border="1px solid gray-200"
-		dark:border="1px solid dark-200"
+		min-w-465px
+		class="hot-list dark:bg-dark-5 backdrop-blur-20px border-default shadow min-h-420px h-420px p-4 mx-a md:ma-0 rounded-4px overflow-visible"
 	>
 		<h3 px-1 pb-4>
 			热门商品
@@ -40,7 +32,7 @@
 			>
 				<NuxtLink
 					:to="`/goods/detail/${p.id}`"
-					class="mt-2 animate__animated animate__fadeIn"
+					class="mt-2 w-1/1 animate__animated animate__fadeIn"
 					v-for="(p, i) in hotGoodsList"
 					:key="p.id"
 				>
@@ -73,8 +65,8 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import { getGoodsListByPage } from '@/composables/api/goods';
-import { GoodsVO } from '~/types/goods';
+import { getGoodsListByPage } from "@/composables/api/goods";
+import { GoodsVO } from "~/types/goods";
 // 分页器
 const page = ref<number>(1);
 const size = ref<number>(6);
@@ -97,7 +89,7 @@ const searchPage = reactive(
 );
 const hotGoodsList = ref<GoodsVO[]>([]);
 data?.records.forEach((p: GoodsVO) => {
-	p.images = typeof p.images === 'string' ? p.images.split(',') : [];
+	p.images = typeof p.images === "string" ? p.images.split(",") : [];
 	hotGoodsList.value.push(p);
 });
 isLoading.value = false;
@@ -119,15 +111,5 @@ isLoading.value = false;
 			opacity: 1;
 		}
 	}
-}
-
-.dark .hot-list {
-	background-color: rgba(17, 17, 17, 0.712);
-}
-
-.hot-list {
-	background-color: #ffffff;
-	position: relative;
-	backdrop-filter: blur(20px);
 }
 </style>

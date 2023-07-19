@@ -19,8 +19,8 @@ app.hook("app:mounted", () => {
 });
 </script>
 <template>
+	<FormUserDialog />
 	<div>
-		<FormUserDialog />
 		<NuxtPage />
 	</div>
 </template>

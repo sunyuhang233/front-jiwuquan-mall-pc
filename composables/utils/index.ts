@@ -9,6 +9,41 @@ export function useCheckXXSText(text: string): string {
     .replace(/\>/g, "&gt;");
   return text;
 }
+/**
+ * 通过积分 计算等级
+ * @param ponits 积分
+ * @returns 
+ */
+export const getUserLeave = (ponits: number = 0): number => {
+  let leave = 0;
+  if (ponits > 0 && ponits < 3000) {
+    leave = 0;
+  } else if (ponits < 10000) {
+    leave = 1;
+  } else if (ponits < 20000) {
+    leave = 1;
+  } else if (ponits < 30000) {
+    leave = 3;
+  } else if (ponits < 40000) {
+    leave = 4;
+  } else if (ponits < 50000) {
+    leave = 5;
+  } else {
+    leave = 6;
+  }
+  return leave;
+};
+/**
+ * 根据所给日期获取当月的第一天和最后一天
+ * @param date 
+ * @returns 
+ */
+export const getMonthStartEnd = (date: Date = new Date()): Date[] => {
+  let monthStart = new Date(date.getFullYear(), date.getMonth(), 1); // 获取本月第一天的日期时间
+  let monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59); // 获取本月最后一天的日期时间（时间为23:59:59）
+  return [monthStart, monthEnd]
+}
+
 
 /**
  * 获取本地位置

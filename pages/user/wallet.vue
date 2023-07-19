@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { getBillsPage, type BillsInfoVO } from "@/composables/api/user/bills";
 const user = useUserStore();
 useHead({
 	title: "我的钱包 - 个人中心",
@@ -14,31 +15,86 @@ definePageMeta({
 	pageTransition: false,
 	layoutTransition: false,
 });
+
+// 账单数据分页
+const isLoading = ref<boolean>(false);
+const page = ref<number>(0);
+const size = ref<number>(10);
+// const billsPage = ref<IPage<BillsInfoVO>>();
+const billsPage = useAsyncData(
+	"jiwuquan_billsPage",
+	async () => {
+		const { data, code } = await getBillsPage(page.value, size.value, {}, user.getToken);
+		if (code === StatusCode.SUCCESS) {
+			return data;
+		} else {
+			return null;
+		}
+	},
+	{
+		lazy: true,
+	}
+).data;
+
+console.log(billsPage);
 </script>
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']" :footer="false">
-			<div class="wallet-page flex p-4em" v-if="user.isLogin">
-				<div class="wallet-card">
-					<UserWalletCard />
+			<div class="layout-default mt-2em" v-if="user.isLogin">
+				<!-- 标题 -->
+				<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
+					<p text-lg tracking-1 mb-4>
+						{{ useNowDateText(new Date()) }}好，
+						<ClientOnly>
+							<span class="mark1 animatejs"
+								>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
+							>
+						</ClientOnly>
+					</p>
+					<h2 text-2xl tracking-1>你的钱包账单</h2>
 				</div>
+				<!-------------1------------>
+				<div class="grid-content">
+					<div
+						style="grid-template-columns: 3fr 4fr"
+						grid
+						grid-gap-3
+						grid-content-between
+					>
+						<!-- 钱包 -->
+						<div class="flex py-4 items-center w-450px relative overflow-x-hidden">
+							<UserWalSwiperCarts />
+						</div>
+						<!-- 统计卡片 -->
+						<div class="total-list">
+							<UserWalTotalList class="px-2 w-full grid grid-cols-2 grid-gap-4" />
+						</div>
+						<!-- 套餐 -->
+						<div class="combo">
+							<UserWalCombo />
+						</div>
+						<!-- 统计表 -->
+						<div class="table"></div>
+					</div>
+					<!-- 日历 -->
+					<div>
+						<h3>账单</h3>
+					</div>
+				</div>
+				<!-------------2------------>
 			</div>
 		</NuxtLayout>
 	</div>
 </template>
 <style scoped lang="scss">
-.v-card {
-	&::after {
-		content: "";
-		width: 90%;
-		height: 60%;
-		transform: rotate(45deg) translate(0%, 130%);
-		border-radius: 60%;
-		position: absolute;
-		top: 0;
-		z-index: -1;
-		filter: blur(30px);
-		background-image: linear-gradient(to right, #5983ff, #ff5aa2 50%, #ff8f67 50%);
-	}
+.grid-content {
+	display: grid;
+	grid-template-columns: 7fr 3fr;
+	grid-template-rows: 1fr;
+	grid-column-gap: 1rem;
+	grid-row-gap: 2rem;
+	justify-items: stretch;
+	align-items: stretch;
 }
 </style>
