@@ -182,20 +182,12 @@ html.dark {
 .v-card {
   background-color: #ffffff93;
   border-radius: 4px;
-  transition: box-shadow $transition-delay;
-  box-shadow:
-    rgba(60, 64, 67, 0.14) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.1) 0px 1px 2px 1px;
-  &:hover {
-    box-shadow:
-      rgba(60, 64, 67, 0.14) 1px 1px 3px 0px,
-      rgba(60, 64, 67, 0.1) 1px 1px 3px 1px;
-  }
+  transition: all $transition-delay;
   backdrop-filter: blur(2em);
 }
 .dark .v-card {
   background-color: rgba(37, 37, 37, 0.144);
-  border: 1px solid #424242a1;
+  // border: 1px solid #424242a1;
 }
 
 // element-plus
@@ -205,9 +197,9 @@ html.dark {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0.8em;
+    margin: 0.6em;
     .el-button {
-      width: auto;
+      min-width: 40%;
       height: auto;
     }
   }
@@ -220,6 +212,10 @@ html.dark {
   .el-message-box__content {
     margin: 0.4em 1em;
   }
+  .el-message-box__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
 }
 
 // 单选钮
@@ -228,7 +224,6 @@ html.dark {
   .el-radio__inner {
     border-radius: 4px;
     transform: scale(1.1);
-    margin-left: 2px;
   }
 }
 // 按钮

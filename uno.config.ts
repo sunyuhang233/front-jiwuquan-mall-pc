@@ -11,9 +11,8 @@ import {
 
 export default defineConfig({
   shortcuts: [
-    ['v-btn', ' border-0 rounded-4px'],
-
-
+    ['v-btn', 'border-0 rounded-4px'],
+    ['v-btn-primary', 'border-0 rounded-4px bg-[var(--el-color-primary)] text-white'],
     // 颜色
     ['text-color', 'text-dark dark:text-white'],
     ['bg-color', 'bg-white dark:bg-dark'],
@@ -22,7 +21,7 @@ export default defineConfig({
     ['flex-row-bt-c', 'flex flex-row flex-justify-between flex-items-center'],
     ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
     ['border-default-dashed', 'hover:shadow-sm border-2px  border-default border-dashed'],
-    ['layout-default', 'mx-auto pt-8 pb-6 w-80vw md:w-1400px  transition-300'],
+    ['layout-default', 'mx-2em lg:mx-a pt-8 pb-6 w-80vw md:w-1400px  transition-300'],
     ['layout-default-se', 'mx-auto pt-8 pb-6 w-80vw md:w-1000px  transition-300'],
   ],
   theme: {

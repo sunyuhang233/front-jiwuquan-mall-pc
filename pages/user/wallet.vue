@@ -15,28 +15,6 @@ definePageMeta({
 	pageTransition: false,
 	layoutTransition: false,
 });
-
-// 账单数据分页
-const isLoading = ref<boolean>(false);
-const page = ref<number>(0);
-const size = ref<number>(10);
-// const billsPage = ref<IPage<BillsInfoVO>>();
-const billsPage = useAsyncData(
-	"jiwuquan_billsPage",
-	async () => {
-		const { data, code } = await getBillsPage(page.value, size.value, {}, user.getToken);
-		if (code === StatusCode.SUCCESS) {
-			return data;
-		} else {
-			return null;
-		}
-	},
-	{
-		lazy: true,
-	}
-).data;
-
-console.log(billsPage);
 </script>
 <template>
 	<div>
@@ -48,27 +26,23 @@ console.log(billsPage);
 						{{ useNowDateText(new Date()) }}好，
 						<ClientOnly>
 							<span class="mark1 animatejs"
-								>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
-							>
+								>{{ user?.userInfo?.nickname || "你还未登录" }}
+							</span>
 						</ClientOnly>
 					</p>
 					<h2 text-2xl tracking-1>你的钱包账单</h2>
 				</div>
-				<!-------------1------------>
+				<!-- 下方 -->
 				<div class="grid-content">
-					<div
-						style="grid-template-columns: 3fr 4fr"
-						grid
-						grid-gap-3
-						grid-content-between
-					>
+					<!-------------1------------>
+					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-start>
 						<!-- 钱包 -->
-						<div class="flex py-4 items-center w-450px relative overflow-x-hidden">
+						<div class="flex py-10 w-400px items-center relative overflow-x-hidden">
 							<UserWalSwiperCarts />
 						</div>
 						<!-- 统计卡片 -->
-						<div class="total-list">
-							<UserWalTotalList class="px-2 w-full grid grid-cols-2 grid-gap-4" />
+						<div class="total-list min-w-500px">
+							<UserWalTotalList class="w-full grid grid-cols-2 grid-gap-8" />
 						</div>
 						<!-- 套餐 -->
 						<div class="combo">
@@ -77,12 +51,12 @@ console.log(billsPage);
 						<!-- 统计表 -->
 						<div class="table"></div>
 					</div>
-					<!-- 日历 -->
+					<!-------------2------------>
 					<div>
-						<h3>账单</h3>
+						<!-- 账单和日历 -->
+						<UserWalBillsTab />
 					</div>
 				</div>
-				<!-------------2------------>
 			</div>
 		</NuxtLayout>
 	</div>
@@ -90,10 +64,8 @@ console.log(billsPage);
 <style scoped lang="scss">
 .grid-content {
 	display: grid;
-	grid-template-columns: 7fr 3fr;
-	grid-template-rows: 1fr;
-	grid-column-gap: 1rem;
-	grid-row-gap: 2rem;
+	grid-template-columns: 8fr 3fr;
+	grid-column-gap: 2.4rem;
 	justify-items: stretch;
 	align-items: stretch;
 }

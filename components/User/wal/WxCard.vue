@@ -5,8 +5,8 @@ const user = useUserStore();
 	<div
 		flex
 		flex-col
-		w-340px
-		h-200px
+		w-320px
+		h-180px
 		p-4
 		justify-between
 		element-loading-background="rgba(0, 0, 0, 0.6)"
@@ -14,7 +14,7 @@ const user = useUserStore();
 	>
 		<!-- 顶部 -->
 		<div flex-row-bt-c>
-			<small opacity-90 font-600 flex-row-c-c>
+			<small opacity-90 font-600 flex-row-c>
 				<i i-solar:dollar-outline mr-1 p-2.4 bg-white />
 				微信支付</small
 			>

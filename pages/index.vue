@@ -15,9 +15,7 @@ useHead({
 			<IndexTopMenu min-h-160px w-full />
 			<div flex flex-col md:flex-row pt-4 w-full>
 				<!-- 轮播图 -->
-				<div class="flex-1" flex-row-c-c>
-					<IndexSwiper />
-				</div>
+				<IndexSwiperList />
 				<!-- 热门商品 -->
 				<IndexHotGoodsList />
 			</div>

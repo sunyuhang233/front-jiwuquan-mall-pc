@@ -106,8 +106,8 @@ const pointsData = ref({
 });
 </script>
 <template>
-	<div class="cards">
-		<ClientOnly>
+	<KeepAlive>
+		<div class="cards">
 			<UserWalTotalCard
 				class="w-full hover:scale-104 transition-200 cursor-pointer"
 				v-for="p in list"
@@ -123,15 +123,15 @@ const pointsData = ref({
 					<el-popover :width="160" trigger="hover">
 						<template #reference>
 							<small cursor-pointer mt-2 text-blueGray underline
-								>如何获取积分? <i p-2 ml-2 text-blueGray i-solar:dollar-linear></i
-							></small>
+								>如何获取积分?
+							</small>
 						</template>
 						<li>1、通过钱包额度充值</li>
 						<li>2、通过每日签到</li>
 					</el-popover>
 				</template>
 			</UserWalTotalCard>
-		</ClientOnly>
-	</div>
+		</div>
+	</KeepAlive>
 </template>
 <style scoped lang="scss"></style>

@@ -1,22 +1,33 @@
 <script lang="ts" setup>
-import { Sort, isTrue } from "@/types/result";
+import { useStorage } from "@vueuse/core";
+import { isTrue } from "@/types/result";
 const r = useRoute();
-const showResult = ref<boolean>(false);
+const showResult = ref<boolean>(true);
 const isLoading = ref<boolean>(false);
 const onSearch = () => {
 	if (isLoading.value) {
 		return ElMessage.warning("搜索太频繁了");
+	} else if (!keyWord.value) {
+		return ElMessage.warning("请输入关键词");
 	}
+	// 搜索记录
+	if (!searchHistoryList.value.includes(keyWord.value) && searchHistoryList.value.length <= 6) {
+		searchHistoryList.value.unshift(keyWord.value.trim());
+	} else {
+		searchHistoryList.value.pop();
+	}
+	// 关键字
+	dto.name = keyWord.value;
 	isLoading.value = true;
-
 	setTimeout(() => {
 		isLoading.value = false;
-		showResult.value = false;
+		showResult.value = true;
 	}, 600);
 };
 
 const dto = reactive<GoodsPageDTO>({
-	cid: r.query?.cid as string,
+	name: r.query?.name?.toString(),
+	cid: r.query?.cid?.toString(),
 	isPostage: undefined,
 	priceSort: undefined,
 	viewsSort: undefined,
@@ -24,7 +35,7 @@ const dto = reactive<GoodsPageDTO>({
 	isNew: undefined,
 });
 
-const keyWord = ref<string>("");
+const keyWord = ref<string>(r.query?.name?.toString() || "");
 
 interface GoodsPageDTO {
 	cid?: string;
@@ -53,11 +64,11 @@ const isPostage = computed({
 		dto.isPostage = +val || undefined;
 	},
 });
-
 /**
  * 重置
  */
 const reset = () => {
+	showResult.value = false;
 	dto.cid = undefined;
 	dto.name = undefined;
 	dto.isPostage = undefined;
@@ -65,11 +76,26 @@ const reset = () => {
 	dto.viewsSort = undefined;
 	dto.saleSort = undefined;
 	dto.isNew = undefined;
+	keyWord.value = "";
+};
+
+let searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
+const handleClose = (tag: string) => {
+	searchHistoryList.value.splice(searchHistoryList.value.indexOf(tag), 1);
+};
+/**
+ * 点击历史标签
+ */
+const clickTag = (val: string, i: number) => {
+	searchHistoryList.value.splice(i, 1);
+	searchHistoryList.value.push(val);
+	keyWord.value = val;
+	onSearch();
 };
 </script>
 <template>
 	<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
-		<div layout-default-se w-840px flex flex-col items-center>
+		<div layout-default-se w-1100px min-h-80vh flex flex-col justify-start>
 			<!-- 搜索栏目 -->
 			<div class="flex-row-c-c w-1/1">
 				<ElInput
@@ -83,7 +109,7 @@ const reset = () => {
 					:prefix-icon="ElIconSearch"
 					minlength="2"
 					maxlength="30"
-					v-model.lazy="keyWord"
+					v-model.trim="keyWord"
 					:onSearch="onSearch"
 					:placeholder="'搜索关键字或商品'"
 					@keyup.enter="onSearch"
@@ -96,17 +122,16 @@ const reset = () => {
 					size="large"
 					>搜 索</el-button
 				>
-				{{ dto.name }}
 			</div>
 			<!-- 筛选 -->
-			<div class="flex pt-4 opacity-80" v-show="showResult">
+			<div class="flex pt-4 opacity-80">
 				<el-checkbox
-					class="border bg-white dark:bg-dark-6"
+					class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
 					v-model="isNew"
 					label="新品"
 				></el-checkbox>
 				<el-checkbox
-					class="border bg-white dark:bg-dark-6"
+					class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
 					v-model="isPostage"
 					label="免运费"
 				></el-checkbox>
@@ -119,7 +144,6 @@ const reset = () => {
 					<el-option label="销量升序" :value="0" />
 					<el-option label="销量降序" :value="1" />
 				</el-select>
-
 				<el-select
 					v-model="dto.priceSort"
 					size="default"
@@ -129,7 +153,6 @@ const reset = () => {
 					<el-option label="价格升序" :value="0" />
 					<el-option label="价格降序" :value="1" />
 				</el-select>
-
 				<el-select
 					v-model="dto.viewsSort"
 					size="default"
@@ -141,14 +164,35 @@ const reset = () => {
 				</el-select>
 				<el-button @click="reset" class="ml-6">重置</el-button>
 			</div>
-			<!-- <p opacity-80  mt-2>{{ `搜索结果` }}</p> -->
-			<ListGoodsList ref="GoodsList" class="list min-h-60vh w-1/1" :dto="dto" />
+			<ClientOnly>
+				<!-- 搜索历史记录 -->
+				<div class="cursor-pointer py-1 flex items-center flex-nowrap overflow-hidden">
+					<ElTag
+						size="large"
+						v-for="(p, i) in searchHistoryList"
+						:key="p + i"
+						closable
+						@close="handleClose(p)"
+						@click="clickTag(p, i)"
+						class="mr-1 mt-2 transition-300"
+					>
+						<span pr-0.3em>{{ p }}</span>
+					</ElTag>
+				</div>
+			</ClientOnly>
+			<p opacity-80 mt-4 v-show="showResult">{{ `搜索结果` }}</p>
+			<div v-if="showResult">
+				<ListGoodsList :class="'grid grid-cols-3 grid-gap-5'" :timer="false" :dto="dto" />
+			</div>
+			<div v-show="!showResult" min-h-80vh>
+				<el-empty :image-size="180" class="mt-10em" description="期待你的搜索 ✨" />
+			</div>
 		</div>
 	</NuxtLayout>
 </template>
 <style scoped lang="scss">
 :deep(.el-checkbox__inner) {
 	border-radius: 4px;
-	scale: 1.2;
+	scale: 1;
 }
 </style>

@@ -15,13 +15,16 @@ export interface LineWalletDataType {
 }
 </script>
 <template>
-	<div class="v-card p-4 flex-row-bt-c rounded-14px" :class="props.data.class">
+	<div
+		class="v-card shadow-sm hover:shadow p-6 flex-row-bt-c rounded-14px"
+		:class="props.data.class"
+	>
 		<!-- 左边 -->
 		<div class="flex flex-col justify-between">
 			<!-- 标题 -->
 			<small opacity-80 font-600 mb-3>{{ props.data.title }}</small>
 			<!-- 额度 -->
-			<h2>
+			<h2 class="w-full truncate text-ellipsis">
 				<span>{{ props.data.pre }}</span>
 				<span
 					v-incre-up="props.data.amount"

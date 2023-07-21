@@ -44,13 +44,8 @@
 			<div class="right" flex-row-c-c hidden md:flex>
 				<!-- 切换主题 -->
 				<BtnSwitch />
-				<div v-if="user.isLogin">
-					<img
-						class="rounded-6em w-2em h-2em"
-						:src="BaseUrlImg + user.userInfo.avatar"
-						:alt="user.userInfo.nickname"
-					/>
-				</div>
+				<!-- 头像简约 -->
+				<CardUserLineSe />
 			</div>
 		</ClientOnly>
 	</div>

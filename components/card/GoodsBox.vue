@@ -11,7 +11,7 @@ const getDiscount = computed<number>(() => {
 </script>
 <template>
 	<div
-		class="w-260px h-230px border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow group"
+		class="w-full h-180px md:w-260px md:h-230px border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow group"
 	>
 		<!-- 商品图片  -->
 		<ClientOnly>

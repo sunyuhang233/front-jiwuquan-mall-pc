@@ -50,10 +50,6 @@ const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
 };
 // 退出登录
 const exitLogin = () => {
-	const cWidth = document.body.clientWidth || document.documentElement.clientWidth; //页面可视区域宽度
-	const iWidth = window.innerWidth; //浏览器窗口大小
-	const init = document.body.style.paddingRight;
-	document.body.style.paddingRight = `${iWidth - cWidth}px`;
 	ElMessageBox.confirm("是否确认退出登录？", "退出登录", {
 		confirmButtonText: "确认退出",
 		cancelButtonText: "取消",
@@ -65,13 +61,9 @@ const exitLogin = () => {
 			user.$reset();
 			useOrderStore().$reset();
 			useShopStore().$reset();
-			// useAddressStore().$reset();
-			document.body.style.paddingRight = init + "px";
 			ElMessage.success("退出成功！");
 		})
-		.catch(() => {
-			document.body.style.paddingRight = init + "px";
-		});
+		.catch(() => {});
 };
 // 跳转
 const router = useRouter();

@@ -239,14 +239,14 @@ const rules = reactive({
 </script>
 <template>
 	<NuxtLayout name="user" :menu="['back']" :footer="false">
-		<div class="layout-default mt-2em mx-a">
+		<div class="layout-default mx-a mt-2em">
 			<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
 				<p text-lg tracking-1 mb-4>
 					{{ useNowDateText(new Date()) }}好，
 					<ClientOnly>
 						<span class="mark1 animatejs"
-							>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
-						>
+							>{{ user?.userInfo?.nickname || "你还未登录" }}
+						</span>
 					</ClientOnly>
 				</p>
 				<h2 text-2xl tracking-1>收货地址</h2>
@@ -451,6 +451,5 @@ const rules = reactive({
 :deep(.el-checkbox__inner) {
 	border-radius: 4px;
 	transform: scale(1.1);
-	margin-left: 2px;
 }
 </style>

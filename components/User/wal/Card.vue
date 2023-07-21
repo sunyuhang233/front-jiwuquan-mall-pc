@@ -22,8 +22,8 @@ const reLoadUserWallet = async () => {
 		v-loading="isWalletLoading"
 		flex
 		flex-col
-		w-340px
-		h-200px
+		w-320px
+		h-180px
 		p-4
 		overflow-hidden
 		justify-between

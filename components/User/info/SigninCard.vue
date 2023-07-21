@@ -16,7 +16,7 @@ const getLeave = getUserLeave(user.userWallet.points || 0);
 			<!-- 等级 -->
 			<div flex flex-col w-6em>
 				<small pb-3>等级：lv.{{ getLeave }}</small>
-				<el-progress :percentage="getLeave * 10" :show-text="false" striped />
+				<el-progress :percentage="(getLeave / 6) * 100" :show-text="false" striped />
 			</div>
 		</div>
 		<!-- 签到按钮 -->

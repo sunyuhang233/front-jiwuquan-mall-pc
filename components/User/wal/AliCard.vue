@@ -5,8 +5,8 @@ const user = useUserStore();
 	<div
 		flex
 		flex-col
-		w-340px
-		h-200px
+		w-320px
+		h-180px
 		p-4
 		justify-between
 		element-loading-background="rgba(0, 0, 0, 0.6)"

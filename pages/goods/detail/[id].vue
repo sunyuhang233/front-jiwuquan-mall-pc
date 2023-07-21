@@ -117,7 +117,7 @@ definePageMeta({
 						<i i-solar:bomb-emoji-outline bg-lime p-4 mr-2></i> 猜你喜欢
 					</h2>
 					<ListGoodsList
-						class="w-1/1"
+						:class="'grid grid-cols-2 grid-gap-10'"
 						:dto="{ name: goodsInfo?.name[Math.floor(Math.random())] }"
 						:limit="10"
 					/>

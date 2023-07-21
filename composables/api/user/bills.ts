@@ -61,9 +61,30 @@ export interface BillsTotalVO {
 // 账单参数
 export interface BillsTotaDTO {
   /** 收支类型 0支出，1收入 */
-  type?: number;
+  type?: BillsType;
   /** 货币类型 0金钱，1积分 */
-  currencyType: number;
+  currencyType: CurrencyType;
   endTime?: string;
   startTime?: string;
 }
+/**
+ * 账单类型
+ */
+export enum BillsType {
+  /** 支出 */
+  OUT = 0,
+  /** 收入 */
+  IN = 1,
+}
+
+/** 
+ * 货币类型 
+ * 0金钱
+ * 1积分
+ *  */
+export enum CurrencyType {
+  /** 0：金钱 */
+  BALANCE = 0,
+  /** 1：积分 */
+  POINT = 1,
+} 

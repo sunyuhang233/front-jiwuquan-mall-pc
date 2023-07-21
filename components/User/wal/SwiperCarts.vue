@@ -5,7 +5,7 @@
 			slideShadows: false,
 			perSlideRotate: 0,
 		}"
-		:width="350"
+		:width="width"
 		:slidesPerView="1"
 		:autoplay="{ delay: 5000 }"
 		:grabCursor="true"
@@ -25,5 +25,11 @@
 	</swiper>
 </template>
 <script lang="ts" setup>
-const controlledSwiper = ref(null);
+const { width } = defineProps({
+	width: {
+		required: false,
+		default: 350,
+		type: Number,
+	},
+});
 </script>

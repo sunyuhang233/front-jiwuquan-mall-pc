@@ -5,18 +5,27 @@ import { IPage } from "~/types";
 import { GoodsVO } from "~/types/goods";
 
 // props
-const props = defineProps<{
+type Props = {
 	dto: GoodsPageDTO;
+	/**列表布局class */
+	class?: string;
 	limit?: number;
 	load?: boolean;
-}>();
+	timer?: boolean;
+};
+const props = withDefaults(defineProps<Props>(), {
+	timer: () => true,
+	dto: () => {
+		return {};
+	},
+});
 
 const isLoading = ref<boolean>(false);
 // 商品列表
 const goodsList = ref<GoodsVO[]>([]);
 // 分页器
 const page = ref<number>(0);
-const size = ref<number>(props.limit || 10);
+const size = ref<number>(props.limit || 8);
 // 查询页信息
 let pageInfo = reactive<IPage<GoodsVO>>({
 	records: [],
@@ -26,19 +35,15 @@ let pageInfo = reactive<IPage<GoodsVO>>({
 	current: -1,
 });
 const isNot = ref<boolean>(false);
-const isNoMore = computed<boolean>({
-	get() {
-		return goodsList.value.length === pageInfo?.total;
-	},
-	set(val: boolean) {},
+const isNoMore = computed<boolean>(() => {
+	return goodsList.value.length === pageInfo?.total;
 });
 
 const loadGoodsPage = async () => {
 	if (isLoading.value) return;
 	isLoading.value = true;
 	page.value++;
-	const { data } = await getGoodsListByPage(page.value, size.value, props.dto);
-
+	const { data } = await getGoodsListByPage(page.value, size.value, props?.dto);
 	// 没有更多
 	if (isNoMore.value || data?.total === -1) {
 		return (isLoading.value = false);
@@ -48,24 +53,32 @@ const loadGoodsPage = async () => {
 	let timer: NodeJS.Timeout | null;
 	if (!data?.records || data?.records.length === 0) {
 		isNot.value = true;
-		return (isLoading.value = false);
+		isLoading.value = false;
+		return;
 	} else {
 		isNot.value = false;
 	}
-	for await (const p of data.records) {
-		await new Promise((resolve) => {
-			timer = setTimeout(() => {
-				p.images = typeof p.images === "string" ? p.images.split(",") : [];
-				goodsList.value.push(p);
-				clearTimeout(timer ?? undefined);
-				timer = null;
-				isLoading.value = false;
-				return resolve(true);
-			}, 50);
-		});
+	if (props.timer) {
+		for await (const p of data.records) {
+			await new Promise((resolve) => {
+				timer = setTimeout(() => {
+					p.images = typeof p.images === "string" ? p.images.split(",") : [];
+					goodsList.value.push(p);
+					clearTimeout(timer ?? undefined);
+					timer = null;
+					return resolve(true);
+				}, 20);
+			});
+		}
+	} else {
+		for (const p of data.records) {
+			p.images = typeof p.images === "string" ? p.images.split(",") : [];
+			goodsList.value.push(p);
+			timer = null;
+		}
 	}
+	isLoading.value = false;
 };
-loadGoodsPage(); // 加载一次
 const clearResult = () => {
 	goodsList.value.splice(0);
 	pageInfo = reactive({
@@ -75,6 +88,7 @@ const clearResult = () => {
 		size: -1,
 		current: -1,
 	});
+	isNot.value = false;
 };
 const router = useRouter();
 const toGoodsView = (id: string) => {
@@ -83,12 +97,18 @@ const toGoodsView = (id: string) => {
 	});
 };
 // 条件筛选
+const timer = ref<any>(null);
 const dto = toReactive(props.dto);
 watch(
 	dto,
 	() => {
+		if (timer.value) return;
 		clearResult();
 		loadGoodsPage();
+		timer.value = setTimeout(() => {
+			clearTimeout(timer);
+			timer.value = null;
+		}, 400);
 	},
 	{ deep: true, immediate: true }
 );
@@ -101,20 +121,21 @@ defineExpose({
 });
 </script>
 <template>
-	<div class="goods-list min-h-80vh" style="overflow: auto">
+	<div class="goods-list min-h-80vh relative" style="overflow: auto">
 		<ClientOnly>
 			<transition-group
 				tag="div"
 				name="fade-list"
 				v-infinite-scroll="loadGoodsPage"
-				:infinite-scroll-disabled="isNoMore || !isLoading || props.limit"
-				:infinite-scroll-delay="300"
-				class="flex flex-wrap relative overflow-x-hidden"
+				:infinite-scroll-delay="600"
+				:infinite-scroll-distance="50"
+				class="relative overflow-x-hidden flex flex-wrap"
+				:class="props.class !== null ? props.class : 'flex flex-wrap'"
 			>
 				<!-- 商品卡片 -->
 				<CardGoodsBox
 					@click="toGoodsView(p.id)"
-					class="mr-5 mt-8 transition-300"
+					class="mt-4 transition-300"
 					element-loading-background="transparent"
 					:goods="p"
 					:key="p.id"
