@@ -356,7 +356,7 @@ const rules = reactive({
 							<el-checkbox-group v-model="selectAddress">
 								<TransitionGroup
 									tag="div"
-									name="fade-list"
+									name="item-list"
 									class="flex flex-wrap relative"
 								>
 									<!-- 添加按钮 -->

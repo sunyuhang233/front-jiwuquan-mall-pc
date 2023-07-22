@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { getBillsPage, type BillsInfoVO } from "@/composables/api/user/bills";
 const user = useUserStore();
 useHead({
 	title: "我的钱包 - 个人中心",
@@ -19,17 +18,9 @@ definePageMeta({
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']" :footer="false">
-			<div class="layout-default mt-2em" v-if="user.isLogin">
+			<div class="layout-default" v-if="user.isLogin">
 				<!-- 标题 -->
 				<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
-					<p text-lg tracking-1 mb-4>
-						{{ useNowDateText(new Date()) }}好，
-						<ClientOnly>
-							<span class="mark1 animatejs"
-								>{{ user?.userInfo?.nickname || "你还未登录" }}
-							</span>
-						</ClientOnly>
-					</p>
 					<h2 text-2xl tracking-1>你的钱包账单</h2>
 				</div>
 				<!-- 下方 -->

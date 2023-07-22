@@ -9,15 +9,15 @@
 				relative
 			>
 				<!-- 登录 -->
-				<transition name="fade-list">
+				<transition name="item-list">
 					<FormLoginForm v-show="user.showLoginForm" />
 				</transition>
 				<!-- 注册 -->
-				<transition name="fade-list">
+				<transition name="item-list">
 					<FormRegisterForm v-if="user.showRegisterForm" />
 				</transition>
 				<!-- 找回密码 -->
-				<transition name="fade-list">
+				<transition name="item-list">
 					<FormRegisterForm v-if="user.showUpdatePwd" />
 				</transition>
 			</div>

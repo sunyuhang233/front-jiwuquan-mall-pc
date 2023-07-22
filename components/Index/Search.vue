@@ -19,7 +19,7 @@ const searchPageList = reactive<GoodsVO[]>([]);
 // 分页器
 const isLoading = ref<boolean>(false);
 const page = ref<number>(1);
-const size = ref<number>(6);
+const size = ref<number>(1);
 const noMore = computed(() => searchPage.total > 0 && searchPageList.length === searchPage.total);
 // 搜索历史 本地存储
 let searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
@@ -237,7 +237,7 @@ const clickTag = (val: string, i: number) => {
 				v-loading="isLoading"
 				element-loading-background="transparent"
 			>
-				<transition-group tag="div" name="fade-list" class="relative">
+				<transition-group tag="div" name="item-list" class="relative">
 					<!-- 跳转详情页 -->
 					<NuxtLink
 						:to="`/goods/detail/${p.id}`"
@@ -259,20 +259,8 @@ const clickTag = (val: string, i: number) => {
 					description="没有找到商品"
 					v-show="searchPageList.length <= 0"
 				/>
-				<p
-					@click="onLoadMore"
-					v-if="searchPageList.length < searchPage.total"
-					py-2
-					opacity-80
-					text-center
-					tracking-2px
-					cursor-pointer
-					:v-loading="true"
-				>
-					加载更多
-				</p>
-				<p v-show="noMore" py-2 opacity-80 text-center tracking-2px>没有更多了</p>
 			</ElScrollbar>
+			<p v-show="noMore" py-4 mb-4 opacity-80 text-center tracking-2px>没有更多了</p>
 		</template>
 	</el-popover>
 </template>

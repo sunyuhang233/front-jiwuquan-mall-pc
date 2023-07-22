@@ -69,7 +69,7 @@ import { getGoodsListByPage } from "@/composables/api/goods";
 import { GoodsVO } from "~/types/goods";
 // 分页器
 const page = ref<number>(1);
-const size = ref<number>(6);
+const size = ref<number>(10);
 
 // 骨架屏
 const isLoading = ref<boolean>(true);

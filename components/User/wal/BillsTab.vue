@@ -1,18 +1,26 @@
 <script lang="ts" setup>
 import { BillsInfoVO, getBillsPage } from "@/composables/api/user/bills";
 import type { CalendarDateType, CalendarInstance } from "element-plus";
+import { IPage } from "types";
 // 数据
 const user = useUserStore();
 const selectDay = ref<Date>(new Date());
-const isNowDay = ref<boolean>(false); // 是否本月
 const selectDayFormat = computed(() => {
 	return useDateFormat(selectDay.value, "YYYY年M月DD日").value;
 });
 // 选中的月份开始和结束时间
 const monthStartEndStr = computed((): string[] => {
 	return getMonthStartEnd(selectDay.value).map(
-		(p) => useDateFormat(p, "YYYY-MM-DD hh:mm:ss").value
+		(p) => useDateFormat(p, "YYYY-MM-DD HH:mm:ss").value
 	);
+});
+const dayStartEndStr = computed((): string[] => {
+	const date = new Date(selectDay.value.getTime());
+	date.setHours(0, 0, 0, 0);
+	return [
+		useDateFormat(date, "YYYY-MM-DD HH:mm:ss").value,
+		useDateFormat(date.setDate(date.getDate() + 1), "YYYY-MM-DD HH:mm:ss").value,
+	];
 });
 
 // 实例
@@ -21,61 +29,58 @@ const selectDate = (val: CalendarDateType) => {
 	if (!calendar.value) return;
 	calendar.value.selectDate(val);
 };
+// 筛选
+const opt = reactive({
+	isNowDay: false,
+});
+
 // 账单数据分页
 const isLoading = ref<boolean>(false);
-const page = ref<number>(-1);
+const page = ref<number>(0);
 const size = ref<number>(6);
 const billsList = ref<BillsInfoVO[]>([]);
-const billsPage = useAsyncData(
-	"jiwuquan_billsPage",
-	async () => {
-		return await getBillsPageApi();
-	},
-	{
-		lazy: true,
-	}
-).data;
+const billsPage = ref<IPage<BillsInfoVO>>({
+	records: [],
+	total: -1,
+	pages: -1,
+	size: -1,
+	current: -1,
+});
+
+const dto = computed(() => {
+	return opt.isNowDay
+		? { startTime: dayStartEndStr.value[0], endTime: dayStartEndStr.value[1] }
+		: { startTime: monthStartEndStr.value[0], endTime: monthStartEndStr.value[1] };
+});
 /**
  * 请求api
  */
 const getBillsPageApi = async () => {
+	if (noMore.value) {
+		return;
+	}
 	isLoading.value = true;
 	// 1、页数+1
 	page.value++;
-	const dto = isNowDay
-		? {
-				startTime: useDateFormat(selectDay.value, "YYYY-MM-DD hh:mm:ss").value,
-				endTime: useDateFormat(
-					selectDay.value.getTime() + 36000 * 24,
-					"YYYY-MM-DD hh:mm:ss"
-				).value,
-		  }
-		: { startTime: monthStartEndStr.value[0], endTime: monthStartEndStr.value[1] };
 	// 2、请求
-	const { data, code } = await getBillsPage(page.value, size.value, { ...dto }, user.getToken);
+	const { data, code } = await getBillsPage(
+		page.value,
+		size.value,
+		{ ...dto.value },
+		user.getToken
+	);
 	setTimeout(() => {
 		isLoading.value = false;
-	}, 500);
-
+	}, 400);
 	// 3、结果
 	if (code === StatusCode.SUCCESS) {
-		if (data.records.length > 0) {
-			billsList.value.push(...data.records);
-		}
-		return data;
-	} else {
-		return {
-			records: [],
-			total: -1,
-			pages: -1,
-			size: -1,
-			current: -1,
-		};
+		billsPage.value = { ...data };
+		billsList.value.push(...data.records);
 	}
 };
 // 重新加载
 const reloadBills = () => {
-	billsList.value = [];
+	billsList.value.splice(0);
 	billsPage.value = {
 		records: [],
 		total: -1,
@@ -84,20 +89,32 @@ const reloadBills = () => {
 		current: -1,
 	};
 	size.value = 6;
-	page.value = -1;
+	page.value = 0;
 	getBillsPageApi();
 };
-const noMore = computed(() => billsList.value.length >= (billsPage.value?.total || 0));
+const noMore = computed(() => {
+	return billsPage.value.total === 0 || billsList.value.length === billsPage.value.total;
+});
 watch(selectDay, (val) => {
 	if (isLoading.value) {
 		return;
-	} else {
-		reloadBills();
 	}
+	page.value = -1;
+	reloadBills();
 });
+watch(
+	opt,
+	() => {
+		if (isLoading.value) {
+			return;
+		}
+		page.value = -1;
+		reloadBills();
+	},
+	{ deep: true }
+);
 </script>
 <template>
-	{{ billsList.length }}
 	<div class="shadow p-5 bg-light-3 dark:bg-dark-3 border-none grid grid-cols-1 rounded-14px">
 		<div class="top">
 			<!-- 头部 -->
@@ -127,29 +144,48 @@ watch(selectDay, (val) => {
 			</div>
 		</div>
 		<!-- 账单列表 -->
-		<div clas="bottom  overflow-hidden" v-loading="isLoading">
-			<div class="my-4 text-center opacity-90" v-show="!isNowDay">
+		<div clas="bottom  overflow-hidden">
+			<div class="mt-4 text-center opacity-90" v-show="!opt.isNowDay">
 				{{ selectDay.getMonth() + 1 }}月的账单
 			</div>
-			<div class="my-4 text-center opacity-90" v-show="isNowDay">
+			<div class="mt-4 text-center opacity-90" v-show="opt.isNowDay">
 				{{ selectDayFormat }}的账单
 			</div>
 			<div class="bills-list relative mt-2 bg-white v-card rounded-14px p-3">
-				<div class="btns">
-					<el-checkbox-button v-model="isNowDay" :label="isNowDay ? '按日' : '按月'" />
+				<div class="btns pb-2">
+					<!-- <el-checkbox  :label="opt.isNowDay ? '按日' : '按月'" /> -->
+					<span
+						@click="opt.isNowDay = true"
+						class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
+						:class="{ 'text-[var(--el-color-primary)]': opt.isNowDay }"
+						>按日</span
+					>
+					<span
+						@click="opt.isNowDay = false"
+						class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
+						:class="{ 'text-[var(--el-color-primary)]': !opt.isNowDay }"
+						>按月</span
+					>
+					<small inline-block float-right pr-3 v-show="billsPage.total > 0"
+						>共{{ billsPage.total }}条</small
+					>
 				</div>
 				<!-- 滚动 -->
-				<el-scrollbar
-					height="20rem"
-					v-infinite-scroll="getBillsPageApi"
-					:infinite-scroll-delay="400"
-				>
-					<transition-group name="fade-list">
+				<el-scrollbar height="16rem" wrap-class="overflow-x-hidden">
+					<div
+						v-infinite-scroll="getBillsPageApi"
+						:infinite-scroll-immediate="true"
+						:infinite-scroll-delay="200"
+						:infinite-scroll-distance="30"
+					>
 						<UserWalBillsCard v-for="p in billsList" :key="p.id" :data="p" />
-					</transition-group>
-					<small class="block opacity-80 text-center my-2 w-full select-none">
-						{{ noMore ? "没有更多数据了" : "加载中..." }}
-					</small>
+						<small
+							class="block opacity-80 text-center my-4 w-full select-none"
+							:class="{ 'animate-state': isLoading }"
+						>
+							{{ noMore ? "没有更多数据了" : "加载中..." }}
+						</small>
+					</div>
 				</el-scrollbar>
 			</div>
 		</div>
@@ -222,8 +258,5 @@ watch(selectDay, (val) => {
 
 :deep(.el-checkbox) {
 	transform: scale(1.1);
-}
-:deep(.el-scrollbar) {
-	height: auto;
 }
 </style>

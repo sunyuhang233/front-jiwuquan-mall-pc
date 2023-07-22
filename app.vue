@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { appName } from "@/constants/index";
-
+const user = useUserStore();
 useHead({
 	title: appName,
 });
 // 1、确认是否登录
-const app = useNuxtApp();
-app.hook("app:mounted", () => {
-	const user = useUserStore();
-	useAsyncData(async () => {
-		if (user.isLogin) {
-			await user.onCheckLogin();
-			await useShopStore().loadShopcartList();
-		} else {
-			user.onUserExit();
-		}
-	});
+const isLogin = computed(() => user.isLogin);
+watch(isLogin, (val) => {
+	if (val && user.token) {
+		user.onUserLogin(user.token);
+	} else {
+		user.$reset();
+	}
 });
 </script>
 <template>

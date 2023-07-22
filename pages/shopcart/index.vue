@@ -195,7 +195,7 @@ const getAllPrice = computed(() => {
 				>
 					<!-- 购物车项 -->
 					<el-checkbox-group v-model="selectIds" size="large" class="relative">
-						<transition-group tag="div" name="fade-list">
+						<transition-group tag="div" name="item-list">
 							<li v-for="p in shop.shopcartList" :key="p.id">
 								<CardShopLine :shop-cart="p">
 									<template #btn>

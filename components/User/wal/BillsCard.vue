@@ -32,12 +32,12 @@ const getTypeIcon = computed(() => {
 				</strong>
 				<small>{{ data.createTime }}</small>
 			</div>
-			<small
-				:class="data.currencyType === CurrencyType.BALANCE ? 'text-red-6' : 'text-green-5'"
-				>{{
-					data.currencyType === CurrencyType.BALANCE
-						? `-￥${data.amount}`
-						: `${data.amount}积分`
+			<small :class="data.type === BillsType.OUT ? 'text-red-6' : 'text-green-5'">
+				{{
+					(data.type === BillsType.OUT ? "-" : "+") +
+					(data.currencyType === CurrencyType.BALANCE
+						? `￥${data.amount}`
+						: `${data.amount}积分`)
 				}}</small
 			>
 		</div>

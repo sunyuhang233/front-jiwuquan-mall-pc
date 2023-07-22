@@ -39,9 +39,11 @@ export const getUserLeave = (ponits: number = 0): number => {
  * @returns 
  */
 export const getMonthStartEnd = (date: Date = new Date()): Date[] => {
-  let monthStart = new Date(date.getFullYear(), date.getMonth(), 1); // 获取本月第一天的日期时间
-  let monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59); // 获取本月最后一天的日期时间（时间为23:59:59）
-  return [monthStart, monthEnd]
+  return [new Date(date.getFullYear(), date.getMonth(), 0), new Date(date.getFullYear(), date.getMonth() + 1, 0)]
+}
+
+export const getDayStartEnd = (date: Date = new Date()): Date[] => {
+  return [new Date(date.getFullYear(), date.getMonth(), date.getDay()), new Date(date.getFullYear(), date.getMonth(), date.getDay() + 1)]
 }
 
 

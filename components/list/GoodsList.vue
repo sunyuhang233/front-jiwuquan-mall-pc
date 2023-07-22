@@ -25,7 +25,7 @@ const isLoading = ref<boolean>(false);
 const goodsList = ref<GoodsVO[]>([]);
 // 分页器
 const page = ref<number>(0);
-const size = ref<number>(props.limit || 8);
+const size = ref<number>(props.limit || 10);
 // 查询页信息
 let pageInfo = reactive<IPage<GoodsVO>>({
 	records: [],
@@ -125,11 +125,11 @@ defineExpose({
 		<ClientOnly>
 			<transition-group
 				tag="div"
-				name="fade-list"
+				name="item-list"
 				v-infinite-scroll="loadGoodsPage"
 				:infinite-scroll-delay="600"
 				:infinite-scroll-distance="50"
-				class="relative overflow-x-hidden flex flex-wrap"
+				class="overflow-x-hidden flex flex-wrap"
 				:class="props.class !== null ? props.class : 'flex flex-wrap'"
 			>
 				<!-- 商品卡片 -->
