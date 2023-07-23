@@ -36,6 +36,7 @@ const opt = reactive({
 
 // 账单数据分页
 const isLoading = ref<boolean>(false);
+const isRefresh = ref<boolean>(false);
 const page = ref<number>(0);
 const size = ref<number>(6);
 const billsList = ref<BillsInfoVO[]>([]);
@@ -69,9 +70,7 @@ const getBillsPageApi = async () => {
 		{ ...dto.value },
 		user.getToken
 	);
-	setTimeout(() => {
-		isLoading.value = false;
-	}, 400);
+	isLoading.value = false;
 	// 3、结果
 	if (code === StatusCode.SUCCESS) {
 		billsPage.value = { ...data };
@@ -79,7 +78,8 @@ const getBillsPageApi = async () => {
 	}
 };
 // 重新加载
-const reloadBills = () => {
+const reloadBills = async () => {
+	isRefresh.value = true;
 	billsList.value.splice(0);
 	billsPage.value = {
 		records: [],
@@ -90,7 +90,8 @@ const reloadBills = () => {
 	};
 	size.value = 6;
 	page.value = 0;
-	getBillsPageApi();
+	await getBillsPageApi();
+	isRefresh.value = false;
 };
 const noMore = computed(() => {
 	return billsPage.value.total === 0 || billsList.value.length === billsPage.value.total;
@@ -115,15 +116,19 @@ watch(
 );
 </script>
 <template>
-	<div class="shadow p-5 bg-light-3 dark:bg-dark-3 border-none grid grid-cols-1 rounded-14px">
+	<div
+		class="bills-tabs shadow p-5 bg-light-3 dark:bg-dark-3 border-none grid grid-cols-1 rounded-14px"
+	>
 		<div class="top">
 			<!-- 头部 -->
-			<h3 class="mb-3" text-center>
-				<i i-solar:calendar-broken p-2.6 mr-2></i>
+			<h3 class="mb-4" text-center>
+				<i i-solar:calendar-broken p-2 mr-2></i>
 				账单日历
 			</h3>
 			<!-- 日历 -->
-			<div class="select-none caledar shadow-sm dark:shadow-md rounded-12px">
+			<div
+				class="select-none caledar shadow-sm dark:shadow dark:bg-dark-5 dark:opacity-90 rounded-12px"
+			>
 				<el-calendar v-model="selectDay" ref="calendar">
 					<template #header="{ date }">
 						<div class="flex-row-bt-c w-full cursor-pointer">
@@ -144,7 +149,7 @@ watch(
 			</div>
 		</div>
 		<!-- 账单列表 -->
-		<div clas="bottom  overflow-hidden">
+		<div clas="bottom  overflow-hidden" v-loading="isRefresh">
 			<div class="mt-4 text-center opacity-90" v-show="!opt.isNowDay">
 				{{ selectDay.getMonth() + 1 }}月的账单
 			</div>

@@ -20,44 +20,6 @@ const shop = useShopStore();
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
 const isShow = ref<boolean>(false);
-// 查询页信息
-const isNoMore = computed<boolean>(() => shop.shopcartList.length === shop.pageInfo?.total);
-/**
- * 加载购物车
- */
-async function loadShopcartList() {
-	if (!user.isLogin || isLoading.value) return;
-
-	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) return;
-
-	isLoading.value = true;
-	shop.page++;
-	const { data } = await getUserShopCartPage(shop.page, shop.size, user.getToken);
-	// 没有更多
-	if (isNoMore.value || data?.total === -1) return (isLoading.value = false);
-
-	// 展示结果
-	shop.pageInfo = toReactive({ ...data });
-	let timer: NodeJS.Timeout | null;
-	if (!data?.records) return;
-	for await (const p of data.records) {
-		await new Promise((resolve) => {
-			timer = setTimeout(() => {
-				shop.shopcartList.push(p);
-				clearTimeout(timer ?? undefined);
-				timer = null;
-				isLoading.value = false;
-				return resolve(true);
-			}, 50);
-		});
-	}
-}
-
-// useAsyncData(async () => {
-// 	if (shop.shopcartList.length === 0) {
-// 		return loadShopcartList();
-// 	}
-// });
 
 // 没有更多
 const notMore = computed(() => {
@@ -187,7 +149,7 @@ const getAllPrice = computed(() => {
 					购物车
 				</h2>
 				<div
-					v-infinite-scroll="loadShopcartList"
+					v-infinite-scroll="shop.loadShopcartList"
 					mb-2
 					:infinite-scroll-delay="1000"
 					:infinite-scroll-disabled="notMore"

@@ -145,10 +145,10 @@ defineExpose({
 				</CardGoodsBox>
 			</transition-group>
 		</ClientOnly>
-		<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNoMore">
+		<p class="w-1/1 py-4" text-blueGray tracking-1 text-center v-show="isNoMore">
 			暂无更多商品
 		</p>
-		<p class="w-1/1 pt-2" text-blueGray tracking-1 text-center v-show="isNot">暂无商品</p>
+		<p class="w-1/1 py-4" text-blueGray tracking-1 text-center v-show="isNot">暂无商品</p>
 		<div class="loading w-1/1" v-loading="isLoading" p-5em></div>
 	</div>
 </template>

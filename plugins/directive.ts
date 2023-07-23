@@ -1,3 +1,4 @@
+// @ts-ignore
 import { gsap } from "gsap"
 import { DirectiveBinding } from "nuxt/dist/app/compat/capi"
 

@@ -40,9 +40,14 @@ export interface BillsInfoVO {
   createTime: string;
 }
 
-
+/**
+ * 获取账单统计（详细）
+ * @param dto 
+ * @param token 
+ * @returns 
+ */
 export function getBillsTotal(dto: BillsTotaDTO, token: string) {
-  return useHttp.post<Result<BillsTotalVO>>(`/user/bills/total`, {}, {
+  return useHttp.post<Result<BillsTotalVO>>(`/user/bills/total/detail`, {}, {
     headers: {
       "Authorization": token
     },
@@ -51,6 +56,73 @@ export function getBillsTotal(dto: BillsTotaDTO, token: string) {
     }
   })
 }
+
+
+enum BillsTypeText {
+  SHOP_IN = "退款收入",
+  SHOP_OUT = "购物消费",
+  POINT_IN = "积分收入",
+  SHOP_POINT_IN = "积分消费"
+}
+
+/**
+ * 获取账单统计（时间）
+ * @param dto 
+ * @param token 
+ * @returns 
+ */
+export function getBillsTotalTable(dto: BillsTimeTotalDTO, token: string) {
+  return useHttp.post<Result<BillsTimeTotalVO[]>>(`/user/bills/total`, {}, {
+    headers: {
+      "Authorization": token
+    },
+    body: {
+      ...dto
+    }
+  })
+}
+/**
+ * BillsTimeTotalDTO
+ */
+export interface BillsTimeTotalDTO {
+  currencyType?: CurrencyType | null;
+  timeType: TimeType;
+  type?: number | null;
+}
+/**
+* 时间类型
+*/
+export enum TimeType {
+  Day = "DAY",
+  Month = "MONTH",
+  Year = "YEAR",
+}
+
+/**
+ * 账单统计（总的每年每月每日）
+ *
+ * BillsTimeTotalVO
+ */
+export interface BillsTimeTotalVO {
+  /**
+   * 货币类型 0：余额，1：积分
+   */
+  currencyType?: CurrencyType;
+  /**
+   * 0：支出，1：收入
+   */
+  type?: BillsType;
+  /**
+   * 时间
+   * 时间文本
+   */
+  time?: string;
+  /**
+   * 总计
+   */
+  total?: number;
+}
+
 /**
  * 统计数据接口
  */

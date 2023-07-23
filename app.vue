@@ -1,28 +1,33 @@
 <script setup lang="ts">
 import { appName } from "@/constants/index";
-
 useHead({
 	title: appName,
 });
 // 1、确认是否登录
-const app = useNuxtApp();
-app.hook("app:mounted", () => {
-	const user = useUserStore();
-	useAsyncData(async () => {
-		if (user.isLogin) {
+const user = useUserStore();
+const shop = useShopStore();
+const isLogin = computed(() => user.isLogin);
+// 退出登录时候
+watch(
+	isLogin,
+	async (val) => {
+		if (val && user.getToken != "") {
+			// 获取用户信息
 			await user.onCheckLogin();
-			await useShopStore().loadShopcartList();
-		} else {
-			user.onUserExit();
+			// 获取用户购物车
+			await shop.reLoadShopcartList();
 		}
-	});
-});
+	},
+	{
+		immediate: true,
+	}
+);
+// 不能有根节点
+// https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
 	<FormUserDialog />
-	<div>
-		<NuxtPage />
-	</div>
+	<NuxtPage />
 </template>
 
 <style>

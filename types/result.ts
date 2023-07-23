@@ -1,6 +1,6 @@
 // 返回值定义
 export interface Result<T> {
-[x: string]: any;
+  [x: string]: any;
   code: StatusCode;
   message: string;
   data: T;

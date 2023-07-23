@@ -39,7 +39,7 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 					user.getToken
 				);
 				if (data.code === StatusCode.SUCCESS) {
-					shop.isRefalsh = true;
+					shop.reLoadShopcartList()
 					ElMessage.success('添加成功！');
 				} else {
 					ElMessage.error('添加失败，请稍后再试！');

@@ -58,9 +58,9 @@ const exitLogin = () => {
 		.then((e) => {
 			// 退出登录
 			user.onUserExit(user.token);
-			user.$reset();
-			useOrderStore().$reset();
-			useShopStore().$reset();
+			user?.$reset();
+			useOrderStore()?.$reset();
+			useShopStore()?.$reset();
 			ElMessage.success("退出成功！");
 		})
 		.catch(() => {});

@@ -26,9 +26,12 @@ definePageMeta({
 				<!-- 下方 -->
 				<div class="grid-content">
 					<!-------------1------------>
-					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-start>
+					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-center>
 						<!-- 钱包 -->
-						<div class="flex py-10 w-400px items-center relative overflow-x-hidden">
+						<div
+							class="flex flex-col justify-center w-400px relative overflow-x-hidden"
+						>
+							<h3>钱包</h3>
 							<UserWalSwiperCarts />
 						</div>
 						<!-- 统计卡片 -->
@@ -40,7 +43,9 @@ definePageMeta({
 							<UserWalCombo />
 						</div>
 						<!-- 统计表 -->
-						<div class="table"></div>
+						<div class="table">
+							<UserWalTable />
+						</div>
 					</div>
 					<!-------------2------------>
 					<div>

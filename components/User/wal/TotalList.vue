@@ -5,7 +5,7 @@ import { LineWalletDataType } from "./TotalCard.vue";
 const user = useUserStore();
 const isLoading = ref<boolean>(true);
 // 账单统计
-const totalData = ref<TotalVO>({ totalIn: 0, totalOut: 0, monthTotal: 0 });
+const totalData = reactive<TotalVO>({ totalIn: 0, totalOut: 0, monthTotal: 0 });
 
 interface TotalVO extends BillsTotalVO {
 	monthTotal?: number;
@@ -20,8 +20,8 @@ const getAllTotals = async () => {
 		user.getToken
 	);
 	if (code === StatusCode.SUCCESS) {
-		totalData.value.totalIn = data.totalIn;
-		totalData.value.totalOut = data.totalOut;
+		if (data?.totalIn) totalData.totalIn = data?.totalIn;
+		if (data?.totalOut) totalData.totalOut = data?.totalOut;
 	}
 };
 
@@ -38,7 +38,9 @@ const getMonthTotals = async () => {
 	);
 	if (code === StatusCode.SUCCESS) {
 		// 本月支出
-		totalData.value.monthTotal = data.totalOut;
+		if (data?.totalOut) {
+			totalData.monthTotal = data?.totalOut;
+		}
 	}
 };
 const reloadData = async () => {
@@ -62,8 +64,8 @@ const list = ref<LineWalletDataType[]>([
 	{
 		title: "总 支 出",
 		name: `支出`,
-		amount: computed(() => totalData.value.totalOut),
-		percentage: computed(() => ((totalData.value.totalOut || 0) / 10000) * 100),
+		amount: computed(() => totalData.totalOut),
+		percentage: computed(() => ((totalData.totalOut || 0) / 10000) * 100),
 		isIncreAnimate: true,
 		isInt: false,
 		lightColor: "var(--el-color-error)",
@@ -73,8 +75,8 @@ const list = ref<LineWalletDataType[]>([
 	{
 		title: "总 收 入",
 		name: "收入",
-		amount: computed(() => totalData.value.totalIn),
-		percentage: computed(() => ((totalData.value.totalIn || 0) / 10000) * 100),
+		amount: computed(() => totalData.totalIn),
+		percentage: computed(() => ((totalData.totalIn || 0) / 10000) * 100),
 		isIncreAnimate: true,
 		isInt: false,
 		lightColor: "var(--el-color-info)",
@@ -83,7 +85,7 @@ const list = ref<LineWalletDataType[]>([
 	{
 		title: "本月消费",
 		name: `${monthTime[0].getMonth() + 1}月`,
-		amount: computed(() => totalData.value.monthTotal),
+		amount: computed(() => totalData.monthTotal),
 		percentage: (monthTime[0].getMonth() + 1) / 12,
 		isIncreAnimate: true,
 		isInt: false,
@@ -95,7 +97,7 @@ const pointsData = ref({
 	name: computed(() => {
 		return getUserLeave(user.userWallet.points) + "级";
 	}),
-	amount: user.userWallet.points || 0,
+	amount: computed(() => user.userWallet.points || 0),
 	percentage: computed(() => {
 		return (getUserLeave(user.userWallet.points) / 6) * 100;
 	}),

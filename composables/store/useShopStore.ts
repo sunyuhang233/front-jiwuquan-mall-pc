@@ -2,36 +2,69 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ShopcartVO, deleteShopcart, getUserShopCartPage } from '../api/shopcart';
 import { IPage } from '~/types';
 export const useShopStore = defineStore('shop', () => {
-
   // 购物车列表
   const shopcartList = ref<ShopcartVO[]>([]);
-  // 刷新购物车
-  const isRefalsh = ref<boolean>(false);
-
-  watch(isRefalsh, (val: boolean) => {
-    if (val) {
-      addShopcartAction()
-    }
+  // 没有更多
+  const notMore = computed(() => {
+    return (
+      pageInfo.value.pages > 0 &&
+      pageInfo.value.current >= pageInfo.value.pages
+    );
   });
+
+  /**
+   * 加载购物车
+   */
+  const loadShopcartList = async () => {
+    const user = useUserStore()
+    if (isLoading.value || notMore.value) return;
+    page.value++
+    isLoading.value = true;
+    const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
+    if (data) {
+      pageInfo.value = toReactive({ ...data });
+      shopcartList.value.push(...data.records);
+      isLoading.value = false;
+      return true;
+    }
+  };
+  /**
+   * 重新加载
+   */
+  const reLoadShopcartList = async () => {
+    shopcartList.value.splice(0)
+    page.value = 0
+    size.value = 10
+    pageInfo.value = {
+      records: [],
+      total: 0,
+      pages: 0,
+      size: size.value,
+      current: 0,
+    }
+    await loadShopcartList()
+  }
+
+
 
   // 分页器
   const isLoading = ref<boolean>(false);
   const page = ref<number>(0);
-  const size = ref<number>(8);
+  const size = ref<number>(10);
   // 查询页信息
-  let pageInfo = reactive<IPage<ShopcartVO>>({
+  const pageInfo = ref<IPage<ShopcartVO>>({
     records: [],
-    total: -1,
-    pages: -1,
-    size: -1,
-    current: -1,
+    total: 0,
+    pages: 0,
+    size: size.value,
+    current: 1,
   });
 
 
   /**
    * 添加触发-重新加载
    */
-  const addShopcartAction = (skuId?: string) => {
+  const addShopcartAction = async (skuId?: string) => {
     let id = "";
     let index = -1;
     for (let i = 0; i < shopcartList.value.length; i++) {
@@ -42,20 +75,10 @@ export const useShopStore = defineStore('shop', () => {
         break;
       }
     }
-    if (id !== '' && index !== -1) {
+    if (id && index !== -1) {
       shopcartList.value[index].quantity++
     } else {
-      shopcartList.value.splice(0)
-      page.value = 0
-      size.value = 0
-      pageInfo = toReactive({
-        records: [],
-        total: -1,
-        pages: -1,
-        size: -1,
-        current: -1,
-      })
-      loadShopcartList()
+      await reLoadShopcartList()
     }
   }
 
@@ -77,7 +100,7 @@ export const useShopStore = defineStore('shop', () => {
         break;
       }
     }
-    return Promise.resolve(true);
+    return true;
   }
 
   /**
@@ -93,40 +116,23 @@ export const useShopStore = defineStore('shop', () => {
     return true;
   }
 
-  /**
-   * 加载购物车
-   */
-  const loadShopcartList = async () => {
-    const user = useUserStore()
-    if (!user.isLogin) return;
-    if (pageInfo.pages > 0 && shopcartList.value.length < pageInfo.total) {
-      return;
-    }
-    isLoading.value = true
-    page.value = 1;
-    size.value = 8;
-    const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
-    pageInfo = reactive(data);
-    if (data?.records?.length <= 0) return;
-    shopcartList.value.push(...data.records);
-    isRefalsh.value = false;
-    isLoading.value = false
-  };
 
 
 
   return {
     // state
-    isRefalsh,
     shopcartList,
     pageInfo,
     page,
     size,
+    isLoading,
     // actions 
     deleteShopCartById,
     deleteBatchShopCart,
-    loadShopcartList
+    loadShopcartList,
+    reLoadShopcartList,
     // getter 
+    notMore
   }
 })
 

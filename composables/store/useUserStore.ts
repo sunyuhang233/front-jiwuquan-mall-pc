@@ -49,19 +49,15 @@ export const useUserStore = defineStore(
           showLoginForm.value = true;
           showLoginForm.value;
           return "";
+        } else {
+          return token.value;
         }
-        return token.value;
       },
       set(value) {
         token.value = value;
       },
     });
 
-    watch(token, (val) => {
-      if (val !== "") {
-        onUserLogin(val);
-      }
-    });
 
     /**
      * 用户登录
@@ -102,7 +98,6 @@ export const useUserStore = defineStore(
         return false
       }
     }
-
     /**
      * 用户确认状态
      * @param token token
@@ -110,7 +105,7 @@ export const useUserStore = defineStore(
     const onCheckLogin = () => {
       if (token.value) {
         return onUserLogin(token.value);
-      }
+      } else { }
     };
     /**
      * 退出登录
@@ -118,48 +113,50 @@ export const useUserStore = defineStore(
      */
     async function onUserExit(t?: string) {
       if (t) {
+        clearUserStore()
         const data = await toLogout(t);
       }
-      clearUserStore();
-      useNuxtApp().hook("app:mounted", () => {
-        useShopStore().$reset();
-        useAddressStore().$reset();
-        useOrderStore().$reset();
-      });
     }
+    /**
+     * 清空store缓存
+     */
     function clearUserStore() {
-      // localStorage.removeItem("user");
-      // sessionStorage.removeItem("user");
-      useUserStore().$patch({
-        token: "",
-        isLogin: false,
-        userWallet: {
-          userId: "",
-          balance: 0,
-          recharge: 0,
-          spend: 0,
-          points: 0,
-          updateTime: "",
-          createTime: "",
-        },
-        userInfo: {
-          id: "",
-          username: "",
-          email: "",
-          phone: "",
-          nickname: "",
-          gender: Gender.BOY,
-          avatar: "",
-          birthday: "",
-          createTime: "",
-          updateTime: "",
-          slogan: "",
-          lastLoginTime: "",
-          status: UserStatus.FALESE,
-          isEmailVerified: 0,
-          isPhoneVerified: 0,
-        },
-      });
+      useAsyncData(async () => {
+        localStorage.removeItem("user");
+        useUserStore()?.$patch({
+          token: "",
+          isLogin: false,
+          userWallet: {
+            userId: "",
+            balance: 0,
+            recharge: 0,
+            spend: 0,
+            points: 0,
+            updateTime: "",
+            createTime: "",
+          },
+          userInfo: {
+            id: "",
+            username: "",
+            email: "",
+            phone: "",
+            nickname: "",
+            gender: Gender.BOY,
+            avatar: "",
+            birthday: "",
+            createTime: "",
+            updateTime: "",
+            slogan: "",
+            lastLoginTime: "",
+            status: UserStatus.FALESE,
+            isEmailVerified: 0,
+            isPhoneVerified: 0,
+          },
+        });
+        useShopStore()?.$reset();
+        useAddressStore()?.$reset();
+        useOrderStore()?.$reset();
+      })
     }
     return {
       // state

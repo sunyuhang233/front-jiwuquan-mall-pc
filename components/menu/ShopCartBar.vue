@@ -4,39 +4,10 @@ import { PushOrdersItemDTO } from "~/composables/api/orders";
 import currency from "currency.js";
 const shop = useShopStore();
 const user = useUserStore();
-const isLoading = ref<boolean>(false);
 const isShow = ref<boolean>(false);
-// 查询页信息
-const isNoMore = computed<boolean>(() => shop.shopcartList.length === shop.pageInfo?.total);
-/**
- * 加载购物车
- */
-const loadShopcartList = async () => {
-	if (!user.isLogin || isLoading.value) return;
-	if (shop.pageInfo.pages > 0 && shop.shopcartList.length < shop.pageInfo.total) {
-		return;
-	}
-	isLoading.value = true;
-	shop.page++;
-	const { data } = await getUserShopCartPage(shop.page, shop.size, user.getToken);
-	// 没有更多
-	if (isNoMore.value || data?.total === -1) {
-		return (isLoading.value = false);
-	}
-	// 展示结果
-	shop.pageInfo = toReactive({ ...data });
-	data.records.forEach((p) => {
-		shop.shopcartList.push(p);
-	});
-};
-
-// 没有更多
-const notMore = computed(() => {
-	return (
-		shop.shopcartList.length >= shop.pageInfo.total ||
-		shop.pageInfo.current === shop.pageInfo.pages
-	);
-});
+if (user.isLogin) {
+	shop.loadShopcartList();
+}
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
@@ -209,13 +180,13 @@ const toOrderPage = (ids: string[]) => {
 								>
 								购物车
 							</h2>
-							<el-scrollbar height="500px" mb-2>
-								<ul
+							<el-scrollbar v-if="user.isLogin" height="500px" mb-2>
+								<div
 									class="overflow-auto"
-									v-infinite-scroll="loadShopcartList"
-									:infinite-scroll-delay="1000"
-									:infinite-scroll-disabled="notMore"
-									style="overflow: auto"
+									v-infinite-scroll="shop.loadShopcartList"
+									:infinite-scroll-delay="500"
+									:infinite-scroll-distance="30"
+									:infinite-scroll-disabled="shop.notMore"
 								>
 									<!-- 购物车项 -->
 									<el-checkbox-group v-model="selectIds" size="large">
@@ -230,7 +201,7 @@ const toOrderPage = (ids: string[]) => {
 											</CardShopLine>
 										</li>
 									</el-checkbox-group>
-								</ul>
+								</div>
 							</el-scrollbar>
 
 							<!-- 下方按钮 -->
@@ -251,7 +222,7 @@ const toOrderPage = (ids: string[]) => {
 									size="large"
 									label="全 选"
 								/>
-								<div flex-row-bt-c>
+								<div flex-row-bt-c truncate>
 									<h3 class="mx-4">
 										<small>总计：￥</small>
 										<span text-red-5 v-incre-up="getAllPrice"></span>

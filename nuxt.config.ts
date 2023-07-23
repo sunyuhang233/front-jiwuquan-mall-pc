@@ -1,8 +1,24 @@
 // import { BaseUrl } from './composables/utils/useFetchUtil'
-import { pwa } from './config/pwa'
+// import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+  build: {
+    transpile: [/echarts/],
+  },
+  // 模块
+  modules: [
+    // 基础
+    '@unocss/nuxt',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    // UI
+    '@element-plus/nuxt',
+    'nuxt-swiper',
+    // 工具
+    '@vueuse/nuxt',
+  ],
   alias: {
     // 配置@使用静态资源
     assets: '/<rootDir>/assets',
@@ -30,17 +46,6 @@ export default defineNuxtConfig({
     },
   },
 
-  // 模块
-  modules: [
-    '@vueuse/nuxt',
-    '@unocss/nuxt',
-    '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
-    '@element-plus/nuxt',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    'nuxt-swiper',
-  ],
   experimental: {
     payloadExtraction: false,
     inlineSSRStyles: false,
@@ -123,7 +128,7 @@ export default defineNuxtConfig({
     themes: ['dark'],
   },
   // 断网启动
-  pwa,
+  // pwa
   // nuxt开发者工具
   devtools: {
     enabled: false,
