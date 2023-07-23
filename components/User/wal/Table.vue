@@ -5,19 +5,21 @@ import {
 	BillsType,
 	BillsTimeTotalVO,
 	BillsTimeTotalDTO,
+	CurrencyType,
 } from "@/composables/api/user/bills";
 // @ts-ignore 引入 vue-echarts 组件
 import VChart, { THEME_KEY } from "vue-echarts";
-provide(THEME_KEY, useDark().value ? "dark" : "light");
+provide(THEME_KEY, useColorMode());
 const user = useUserStore();
-const selectTime = ref<TimeType>(TimeType.Day);
 const isLoading = ref<boolean>(false);
 // 参数
 const dto = reactive<BillsTimeTotalDTO>({
-	currencyType: null,
-	type: null,
+	currencyType: CurrencyType.BALANCE,
+	// type: null,
 	timeType: TimeType.Day,
 });
+// 排序
+const selectTime = ref<TimeType>(TimeType.Day);
 // 获取统计信息
 const tableData = ref<BillsTimeTotalVO[]>([]);
 const inData = computed(() => tableData.value.filter((p) => p.type === BillsType.IN));
@@ -30,59 +32,54 @@ const timeTypeList = ref([
 ]);
 // echarts配置 图表数据
 const option = ref({
+	color: ["#0bdb85", "#fc3030"],
 	title: {
 		text: "账单统计",
+		textStyle: {
+			fontFamily: "Alimama",
+		},
 	},
-	tooltip: {
-		trigger: "axis",
+	tooltip: { trigger: "axis" },
+	toolbox: {
+		feature: {
+			saveAsImage: {},
+		},
 	},
 	xAxis: {
 		boundaryGap: false,
 		type: "category",
-		data: computed(() => tableData.value.map((p) => p.time)),
+		data: computed(() => [...new Set(tableData.value.map((p) => p.time))]),
 	},
 	yAxis: {
+		name: "金额（￥）",
 		type: "value",
 	},
-	label: {
-		// 高亮样式。
-		emphasis: {
-			itemStyle: {
-				// 高亮时点的颜色。
-				color: "blue",
-			},
-			label: {
-				show: true,
-				// 高亮时标签的文字。
-				formatter: "This is a emphasis label.",
-			},
-		},
-	},
+	backgroundColor: "transparent",
+	dataZoom: { type: "inside" },
 	grid: {
-		left: "2%",
-		right: "2%",
-		bottom: "2%",
-		containLabel: true,
+		top: "14%",
+		left: "9%",
+		right: "9%",
+		bottom: "9%",
+		containLabel: false,
 	},
 	legend: {
 		data: ["收入", "支出"],
 	},
 	series: [
 		{
-			title: "收入",
 			name: "收入",
 			data: computed(() => inData.value.map((p) => p.total)),
 			type: "line",
 			smooth: true,
-			stack: "Total",
+			stack: "x",
 		},
 		{
 			name: "支出",
-			title: "支出",
 			data: computed(() => outData.value.map((p) => p.total)),
 			type: "line",
 			smooth: true,
-			stack: "Total",
+			stack: "x",
 		},
 	],
 });
@@ -99,18 +96,21 @@ const onReload = async () => {
 onReload();
 </script>
 <template>
-	<div class="relative w-full" v-loading="isLoading">
+	<div
+		class="relative rounded-14px transition-300 bg-white dark:bg-dark-3 shadow w-full p-5 pt-6"
+		v-loading="isLoading"
+	>
 		<!-- 排序 -->
-		<div class="absolute right-0 z-1">
+		<div class="absolute right-4.6em mt-0.2em z-1">
 			<el-select
 				@change="onReload"
-				v-model="selectTime"
-				:placeholder="selectTime || '按日'"
+				v-model="dto.timeType"
+				:placeholder="dto.timeType || '按日'"
 				size="small"
-				class="w-6em opacity-90"
+				class="w-6em opacity-90 select"
 			>
 				<el-option
-					v-for="(p, i) in timeTypeList"
+					v-for="p in timeTypeList"
 					:key="p.value"
 					:label="p.label"
 					:value="p.value"
@@ -119,8 +119,17 @@ onReload();
 		</div>
 		<ClientOnly fallback-tag="div">
 			<!-- 表格 -->
-			<VChart class="w-550px h-450px flex-row-c-c" :option="option" />
+			<VChart class="w-500px h-390px flex-row-c-c" :option="option" />
 		</ClientOnly>
 	</div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.select {
+	:deep(.el-input__wrapper) {
+		box-shadow: none;
+		.el-input__inner {
+			color: var(--el-menu-text-color);
+		}
+	}
+}
+</style>

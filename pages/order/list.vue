@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { getGoodsSkuByIds } from '~/composables/api/goods/sku';
-import { PushOrdersItemDTO } from '~/composables/api/orders';
-import { appName } from '~/constants';
+import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
+import { PushOrdersItemDTO } from "~/composables/api/orders";
+import { appName } from "~/constants";
 const route = useRoute();
 // 1、订单子项
 // @ts-ignore
@@ -12,27 +12,25 @@ orderItems.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
 const skuList = await getGoodsSkuByIds(skuIdList);
-// 定义当前页面
-// definePageMeta({
-// 	middleware: ["auth"],
-// });
 useHead({
-	title: appName + ' - 订单',
+	title: appName + " - 订单",
 	meta: [
 		{
-			name: 'description',
-			content: '极物圈-我的订单',
+			name: "description",
+			content: "极物圈-我的订单",
 		},
 	],
 });
 </script>
 <template>
-	<NuxtLayout>
-		<div layout-default w-700px>
-			<div class="top" border-default border-0 border-b="2px">
-				<h3 mb-4>dd</h3>
-			</div> 
-		</div>
-	</NuxtLayout>
+	<div>
+		<NuxtLayout>
+			<div layout-default w-700px>
+				<div class="top" border-default border-0 border-b="2px">
+					<h3 mb-4>dd</h3>
+				</div>
+			</div>
+		</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss"></style>

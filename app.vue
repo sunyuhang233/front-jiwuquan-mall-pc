@@ -26,8 +26,10 @@ watch(
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
-	<FormUserDialog />
-	<NuxtPage />
+	<div>
+		<FormUserDialog />
+		<NuxtPage />
+	</div>
 </template>
 
 <style>

@@ -65,14 +65,11 @@ export default defineNuxtConfig({
     ]
   },
 
-  // 主题
-  colorMode: {
-    classSuffix: '',
-  },
 
   // css
   css: [
     'nprogress/nprogress.css',
+    '~/assets/styles/init.scss',
     '~/assets/styles/index.scss',
     '~/assets/styles/animate.scss',
     'animate.css',
@@ -93,9 +90,9 @@ export default defineNuxtConfig({
   },
   // pinia
   pinia: {
-    autoImports: [
-      'defineStore', // import { defineStore } from 'pinia',
-    ],
+    // autoImports: [
+    //   'defineStore', // import { defineStore } from 'pinia',
+    // ],
   },
 
   // pinia持久化到会话存储

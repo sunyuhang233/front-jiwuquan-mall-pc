@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部header -->
-	<div class="nav un-select" flex-row-bt-c py-4 px-6 text-m dark:text="light">
+	<div class="nav select-none" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
 		<div class="left" flex-row-c-c group>
 			<NuxtLink mx-2 to="/" flex-row-c-c class="group">

@@ -15,10 +15,7 @@ export interface LineWalletDataType {
 }
 </script>
 <template>
-	<div
-		class="v-card shadow-sm hover:shadow p-6 flex-row-bt-c rounded-14px"
-		:class="props.data.class"
-	>
+	<div class="v-card p-6 flex-row-bt-c rounded-14px" :class="props.data.class">
 		<!-- 左边 -->
 		<div class="flex flex-col justify-between">
 			<!-- 标题 -->

@@ -94,101 +94,107 @@ const clickTag = (val: string, i: number) => {
 };
 </script>
 <template>
-	<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
-		<div layout-default-se w-1100px min-h-80vh flex flex-col justify-start>
-			<!-- 搜索栏目 -->
-			<div class="flex-row-c-c w-1/1">
-				<ElInput
-					clearable
-					ref="searchInpRef"
-					input-style="border-radius:20px;height:52px;font-size:1em;"
-					type="text"
-					size="large"
-					class="shadow-sm"
-					autocomplete="off"
-					:prefix-icon="ElIconSearch"
-					minlength="2"
-					maxlength="30"
-					v-model.trim="keyWord"
-					:onSearch="onSearch"
-					:placeholder="'搜索关键字或商品'"
-					@keyup.enter="onSearch"
-				/>
-				<el-button
-					@click="onSearch"
-					type="info"
-					shadow-md
-					style="width: 10em; height: 50px; font-size: 1em; margin-left: 1em"
-					size="large"
-					>搜 索</el-button
-				>
-			</div>
-			<!-- 筛选 -->
-			<div class="flex pt-4 opacity-80">
-				<el-checkbox
-					class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
-					v-model="isNew"
-					label="新品"
-				></el-checkbox>
-				<el-checkbox
-					class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
-					v-model="isPostage"
-					label="免运费"
-				></el-checkbox>
-				<el-select
-					v-model="dto.saleSort"
-					size="default"
-					class="ml-6 w-120px"
-					placeholder="销量排序"
-				>
-					<el-option label="销量升序" :value="0" />
-					<el-option label="销量降序" :value="1" />
-				</el-select>
-				<el-select
-					v-model="dto.priceSort"
-					size="default"
-					class="ml-6 w-120px"
-					placeholder="价格排序"
-				>
-					<el-option label="价格升序" :value="0" />
-					<el-option label="价格降序" :value="1" />
-				</el-select>
-				<el-select
-					v-model="dto.viewsSort"
-					size="default"
-					class="ml-6 w-120px"
-					placeholder="浏览量排序"
-				>
-					<el-option label="浏览量升序" :value="0" />
-					<el-option label="浏览量降序" :value="1" />
-				</el-select>
-				<el-button @click="reset" class="ml-6">重置</el-button>
-			</div>
-			<ClientOnly>
-				<!-- 搜索历史记录 -->
-				<div class="cursor-pointer py-1 flex items-center flex-nowrap overflow-hidden">
-					<ElTag
+	<div>
+		<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
+			<div layout-default-se w-1100px min-h-80vh flex flex-col justify-start>
+				<!-- 搜索栏目 -->
+				<div class="flex-row-c-c w-1/1">
+					<ElInput
+						clearable
+						ref="searchInpRef"
+						input-style="border-radius:20px;height:52px;font-size:1em;"
+						type="text"
 						size="large"
-						v-for="(p, i) in searchHistoryList"
-						:key="p + i"
-						closable
-						@close="handleClose(p)"
-						@click="clickTag(p, i)"
-						class="mr-1 mt-2 transition-300"
+						class="shadow-sm"
+						autocomplete="off"
+						:prefix-icon="ElIconSearch"
+						minlength="2"
+						maxlength="30"
+						v-model.trim="keyWord"
+						:onSearch="onSearch"
+						:placeholder="'搜索关键字或商品'"
+						@keyup.enter="onSearch"
+					/>
+					<el-button
+						@click="onSearch"
+						type="info"
+						shadow-md
+						style="width: 10em; height: 50px; font-size: 1em; margin-left: 1em"
+						size="large"
+						>搜 索</el-button
 					>
-						<span pr-0.3em>{{ p }}</span>
-					</ElTag>
 				</div>
-			</ClientOnly>
-			<p opacity-80 mt-4 v-show="showResult">{{ `搜索结果` }}</p>
-			<div v-if="showResult">
-				<ListGoodsList :class="'grid grid-cols-3 grid-gap-5'" :timer="false" :dto="dto" />
+				<!-- 筛选 -->
+				<div class="flex pt-4 opacity-80">
+					<el-checkbox
+						class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
+						v-model="isNew"
+						label="新品"
+					></el-checkbox>
+					<el-checkbox
+						class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
+						v-model="isPostage"
+						label="免运费"
+					></el-checkbox>
+					<el-select
+						v-model="dto.saleSort"
+						size="default"
+						class="ml-6 w-120px"
+						placeholder="销量排序"
+					>
+						<el-option label="销量升序" :value="0" />
+						<el-option label="销量降序" :value="1" />
+					</el-select>
+					<el-select
+						v-model="dto.priceSort"
+						size="default"
+						class="ml-6 w-120px"
+						placeholder="价格排序"
+					>
+						<el-option label="价格升序" :value="0" />
+						<el-option label="价格降序" :value="1" />
+					</el-select>
+					<el-select
+						v-model="dto.viewsSort"
+						size="default"
+						class="ml-6 w-120px"
+						placeholder="浏览量排序"
+					>
+						<el-option label="浏览量升序" :value="0" />
+						<el-option label="浏览量降序" :value="1" />
+					</el-select>
+					<el-button @click="reset" class="ml-6">重置</el-button>
+				</div>
+				<ClientOnly>
+					<!-- 搜索历史记录 -->
+					<div class="cursor-pointer py-1 flex items-center flex-nowrap overflow-hidden">
+						<ElTag
+							size="large"
+							v-for="(p, i) in searchHistoryList"
+							:key="p + i"
+							closable
+							@close="handleClose(p)"
+							@click="clickTag(p, i)"
+							class="mr-1 mt-2 transition-300"
+						>
+							<span pr-0.3em>{{ p }}</span>
+						</ElTag>
+					</div>
+				</ClientOnly>
+				<p opacity-80 mt-4 v-show="showResult">{{ `搜索结果` }}</p>
+				<div v-if="showResult">
+					<ListGoodsList
+						:class="'grid grid-cols-3 grid-gap-5'"
+						:timer="false"
+						:dto="dto"
+					/>
+				</div>
+				<div v-show="!showResult" min-h-80vh>
+					<el-empty :image-size="180" class="mt-10em" description="期待你的搜索 ✨" />
+				</div>
 			</div>
-			<div v-show="!showResult" min-h-80vh>
-				<el-empty :image-size="180" class="mt-10em" description="期待你的搜索 ✨" />
-			</div>
-		</div>
-	</NuxtLayout>
+		</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss">
 :deep(.el-checkbox__inner) {

@@ -91,7 +91,9 @@ const reloadBills = async () => {
 	size.value = 6;
 	page.value = 0;
 	await getBillsPageApi();
-	isRefresh.value = false;
+	setTimeout(() => {
+		isRefresh.value = false;
+	}, 400);
 };
 const noMore = computed(() => {
 	return billsPage.value.total === 0 || billsList.value.length === billsPage.value.total;
@@ -121,10 +123,7 @@ watch(
 	>
 		<div class="top">
 			<!-- 头部 -->
-			<h3 class="mb-4" text-center>
-				<i i-solar:calendar-broken p-2 mr-2></i>
-				账单日历
-			</h3>
+
 			<!-- 日历 -->
 			<div
 				class="select-none caledar shadow-sm dark:shadow dark:bg-dark-5 dark:opacity-90 rounded-12px"
@@ -150,33 +149,34 @@ watch(
 		</div>
 		<!-- 账单列表 -->
 		<div clas="bottom  overflow-hidden" v-loading="isRefresh">
-			<div class="mt-4 text-center opacity-90" v-show="!opt.isNowDay">
+			<div class="mt-3 mb-2 text-center opacity-90" v-show="!opt.isNowDay">
 				{{ selectDay.getMonth() + 1 }}月的账单
 			</div>
-			<div class="mt-4 text-center opacity-90" v-show="opt.isNowDay">
+			<div class="mt-3 mb-2 text-center opacity-90" v-show="opt.isNowDay">
 				{{ selectDayFormat }}的账单
 			</div>
-			<div class="bills-list relative mt-2 bg-white v-card rounded-14px p-3">
+			<div class="bills-list relative mt-2 bg-white v-card rounded-14px px-4 p-5">
+				<!-- 按钮 -->
 				<div class="btns pb-2">
-					<!-- <el-checkbox  :label="opt.isNowDay ? '按日' : '按月'" /> -->
-					<span
+					<small inline-block float-right pr-3 v-show="billsPage.total > 0">
+						共{{ billsPage.total }}条
+					</small>
+					<small
 						@click="opt.isNowDay = true"
 						class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
 						:class="{ 'text-[var(--el-color-primary)]': opt.isNowDay }"
-						>按日</span
 					>
-					<span
+						按日
+					</small>
+					<small
 						@click="opt.isNowDay = false"
 						class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
 						:class="{ 'text-[var(--el-color-primary)]': !opt.isNowDay }"
-						>按月</span
-					>
-					<small inline-block float-right pr-3 v-show="billsPage.total > 0"
-						>共{{ billsPage.total }}条</small
-					>
+						>按月
+					</small>
 				</div>
-				<!-- 滚动 -->
-				<el-scrollbar height="16rem" wrap-class="overflow-x-hidden">
+				<!-- 滚动内容 -->
+				<el-scrollbar height="18rem" wrap-class="overflow-x-hidden">
 					<div
 						v-infinite-scroll="getBillsPageApi"
 						:infinite-scroll-immediate="true"

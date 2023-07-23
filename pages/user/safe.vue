@@ -9,13 +9,15 @@ useHead({
 		},
 	],
 });
-// 页面 
+// 页面
 definePageMeta({
 	pageTransition: false,
-	layoutTransition: false
+	layoutTransition: false,
 });
 </script>
 <template>
-	<NuxtLayout name="user" :menu="['back']" :footer="false"> </NuxtLayout>
+	<div>
+		<NuxtLayout name="user" :menu="['back']" :footer="false"> </NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss"></style>

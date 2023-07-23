@@ -11,10 +11,12 @@ useHead({
 });
 </script>
 <template>
-	<NuxtLayout :left-menu="false" :menu="['shopcart','back']">
-		<template>
-			{{ route.query.eid }}
-		</template>
-	</NuxtLayout>
+	<div>
+		<NuxtLayout :left-menu="false" :menu="['shopcart', 'back']">
+			<template>
+				{{ route.query.eid }}
+			</template>
+		</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss"></style>

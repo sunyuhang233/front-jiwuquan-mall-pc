@@ -111,7 +111,7 @@ const toUserRechange = async (dto: AddWalletDTO): Promise<boolean> => {
 		<div class="grid grid-cols-3 grid-gap-3 mr-2">
 			<!-- 数据 -->
 			<div
-				py-4
+				min-h-120px
 				flex-row-c-c
 				flex-col
 				cursor-pointer
@@ -142,11 +142,7 @@ const toUserRechange = async (dto: AddWalletDTO): Promise<boolean> => {
 			</div>
 		</div>
 		<!-- 输入框充值 -->
-		<h3 mt-6>
-			<i p-3 mr-2 i-solar:bag-4-broken />
-			自定义充值
-			<small>（单位：￥）</small>
-		</h3>
+		<small class="block mx-1 mt-4 opacity-90">自定义充值（单位：￥）</small>
 		<div class="mt-4 flex items-center">
 			<el-input-number
 				class="mr-4"

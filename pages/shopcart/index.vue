@@ -118,119 +118,126 @@ const getAllPrice = computed(() => {
 </script>
 
 <template>
-	<NuxtLayout :menu="['back']" :footer="false">
-		<ClientOnly>
-			<div
-				v-if="user.isLogin"
-				class="shopcart-list"
-				relative
-				mx-a
-				mt-2em
-				min-h-95vh
-				w-700px
-				rounded-t-10px
-				bg-white
-				p-20px
-				shadow-md
-				border-default
-				dark:bg-dark
-			>
-				<h2 mb-2 border-0 border-b-1 pb-4 text-center tracking-0.1em border-default>
-					<small
-						style="font-size: 0.8em; padding-top: 0.2em; position: absolute; right: 1em"
-						cursor-pointer
-						select-none
-						:plain="!isEdit"
-						class="transition-300"
-						text-green-5
-						@click="isEdit = !isEdit"
-						>{{ !isEdit ? "管理" : "取消" }}</small
-					>
-					购物车
-				</h2>
+	<div>
+		<NuxtLayout :menu="['back']" :footer="false">
+			<ClientOnly>
 				<div
-					v-infinite-scroll="shop.loadShopcartList"
-					mb-2
-					:infinite-scroll-delay="1000"
-					:infinite-scroll-disabled="notMore"
-					style="overflow: auto"
+					v-if="user.isLogin"
+					class="shopcart-list"
+					relative
+					mx-a
+					mt-2em
+					min-h-95vh
+					w-700px
+					rounded-t-10px
+					bg-white
+					p-20px
+					shadow-md
+					border-default
+					dark:bg-dark
 				>
-					<!-- 购物车项 -->
-					<el-checkbox-group v-model="selectIds" size="large" class="relative">
-						<transition-group tag="div" name="item-list">
-							<li v-for="p in shop.shopcartList" :key="p.id">
-								<CardShopLine :shop-cart="p">
-									<template #btn>
-										<el-checkbox :label="p.id" :disabled="!p.stock" />
-									</template>
-								</CardShopLine>
-							</li>
-						</transition-group>
-					</el-checkbox-group>
-				</div>
-				<!-- 下方按钮 -->
-				<div
-					class="drop-blur-20px animate-fade-in-up animate-duration-300 bg btns fixed bottom-4 z-999 my-4 mb-0 mt-4em"
-				>
-					<!-- 价格 -->
-					<div class="" flex-row-bt-c w-660px p-2 px-4>
-						<span float-left p-1>共计 {{ getAllNums }} 件</span>
-						<div flex ml-a items-end>
-							<span p-1>总计：￥</span>
-							<h2 v-incre-up="getAllPrice" text-red-5 />
-						</div>
-						<small claas="" v-show="getAllPostate > 0"
-							>（运费：{{ getAllPostate.toFixed(2) }}￥）</small
+					<h2 mb-2 border-0 border-b-1 pb-4 text-center tracking-0.1em border-default>
+						<small
+							style="
+								font-size: 0.8em;
+								padding-top: 0.2em;
+								position: absolute;
+								right: 1em;
+							"
+							cursor-pointer
+							select-none
+							:plain="!isEdit"
+							class="transition-300"
+							text-green-5
+							@click="isEdit = !isEdit"
+							>{{ !isEdit ? "管理" : "取消" }}</small
 						>
-					</div>
+						购物车
+					</h2>
 					<div
-						class="bottom drop-blur-2em h-4em w-660px flex items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+						v-infinite-scroll="shop.loadShopcartList"
+						mb-2
+						:infinite-scroll-delay="1000"
+						:infinite-scroll-disabled="notMore"
+						style="overflow: auto"
 					>
-						<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
-						<div flex>
-							<el-button
-								v-if="isEdit && selectIds.length"
-								class="fadeInOut flex-1"
-								style="padding: 0em 1em"
-								type="danger"
-								plain
-								:disabled="selectIds.length === 0 && !isEdit"
-								round
-								@click="deleteBatchShopcart('批量删除')"
+						<!-- 购物车项 -->
+						<el-checkbox-group v-model="selectIds" size="large" class="relative">
+							<transition-group tag="div" name="item-list">
+								<li v-for="p in shop.shopcartList" :key="p.id">
+									<CardShopLine :shop-cart="p">
+										<template #btn>
+											<el-checkbox :label="p.id" :disabled="!p.stock" />
+										</template>
+									</CardShopLine>
+								</li>
+							</transition-group>
+						</el-checkbox-group>
+					</div>
+					<!-- 下方按钮 -->
+					<div
+						class="drop-blur-20px animate-fade-in-up animate-duration-300 bg btns fixed bottom-4 z-999 my-4 mb-0 mt-4em"
+					>
+						<!-- 价格 -->
+						<div class="" flex-row-bt-c w-660px p-2 px-4>
+							<span float-left p-1>共计 {{ getAllNums }} 件</span>
+							<div flex ml-a items-end>
+								<span p-1>总计：￥</span>
+								<h2 v-incre-up="getAllPrice" text-red-5 />
+							</div>
+							<small claas="" v-show="getAllPostate > 0"
+								>（运费：{{ getAllPostate.toFixed(2) }}￥）</small
 							>
-								批量删除
-								<i i-solar:trash-bin-trash-broken mr-1 />
-							</el-button>
-							<el-button
-								v-if="isEdit"
-								class="fadeInOut flex-1"
-								style="padding: 0em 1em"
-								type="danger"
-								plain
-								:disabled="!isEdit"
-								round
-								@click="clearShopcart"
-							>
-								<i i-solar:trash-bin-trash-broken mr-1 />
-								清空
-							</el-button>
-							<el-button
-								class="fadeInOut flex-1"
-								style="padding: 0em 2em"
-								type="info"
-								round
-								:disabled="selectIds.length === 0"
-								tracking-0.1em
-								@click="toOrderPage(selectIds)"
-							>
-								去结算
-							</el-button>
+						</div>
+						<div
+							class="bottom drop-blur-2em h-4em w-660px flex items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+						>
+							<el-checkbox v-model="isSelectAll" size="large" label="全 选" />
+							<div flex>
+								<el-button
+									v-if="isEdit && selectIds.length"
+									class="fadeInOut flex-1"
+									style="padding: 0em 1em"
+									type="danger"
+									plain
+									:disabled="selectIds.length === 0 && !isEdit"
+									round
+									@click="deleteBatchShopcart('批量删除')"
+								>
+									批量删除
+									<i i-solar:trash-bin-trash-broken mr-1 />
+								</el-button>
+								<el-button
+									v-if="isEdit"
+									class="fadeInOut flex-1"
+									style="padding: 0em 1em"
+									type="danger"
+									plain
+									:disabled="!isEdit"
+									round
+									@click="clearShopcart"
+								>
+									<i i-solar:trash-bin-trash-broken mr-1 />
+									清空
+								</el-button>
+								<el-button
+									class="fadeInOut flex-1"
+									style="padding: 0em 2em"
+									type="info"
+									round
+									:disabled="selectIds.length === 0"
+									tracking-0.1em
+									@click="toOrderPage(selectIds)"
+								>
+									去结算
+								</el-button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</ClientOnly>
-	</NuxtLayout>
+			</ClientOnly>
+		</NuxtLayout>
+	</div>
 </template>
 
 <style scoped lang="scss">

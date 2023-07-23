@@ -108,32 +108,28 @@ const pointsData = ref({
 });
 </script>
 <template>
-	<KeepAlive>
-		<div class="cards">
-			<UserWalTotalCard
-				class="w-full hover:scale-104 transition-200 cursor-pointer"
-				v-for="p in list"
-				:key="p.title"
-				:data="p"
-			/>
-			<!-- 积分 -->
-			<UserWalTotalCard
-				class="w-full hover:scale-104 transition-200 cursor-pointer"
-				:data="pointsData"
-			>
-				<template #default>
-					<el-popover :width="160" trigger="hover">
-						<template #reference>
-							<small cursor-pointer mt-2 text-blueGray underline
-								>如何获取积分?
-							</small>
-						</template>
-						<li>1、通过钱包额度充值</li>
-						<li>2、通过每日签到</li>
-					</el-popover>
-				</template>
-			</UserWalTotalCard>
-		</div>
-	</KeepAlive>
+	<div class="cards">
+		<UserWalTotalCard
+			class="w-full shadow dark:bg-dark-3 hover:scale-104 transition-200 cursor-pointer"
+			v-for="p in list"
+			:key="p.title"
+			:data="p"
+		/>
+		<!-- 积分 -->
+		<UserWalTotalCard
+			class="w-full shadow dark:bg-dark-3 hover:scale-104 transition-200 cursor-pointer"
+			:data="pointsData"
+		>
+			<template #default>
+				<el-popover :width="160" trigger="hover">
+					<template #reference>
+						<small cursor-pointer mt-2 text-blueGray underline>如何获取积分? </small>
+					</template>
+					<li>1、通过钱包额度充值</li>
+					<li>2、通过每日签到</li>
+				</el-popover>
+			</template>
+		</UserWalTotalCard>
+	</div>
 </template>
 <style scoped lang="scss"></style>

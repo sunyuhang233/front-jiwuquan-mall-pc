@@ -20,22 +20,21 @@ definePageMeta({
 		<NuxtLayout name="user" :menu="['back']" :footer="false">
 			<div class="layout-default" v-if="user.isLogin">
 				<!-- 标题 -->
-				<div class="title animate__animated animate__fadeInDown" mt-3 mb-8>
+				<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
 					<h2 text-2xl tracking-1>你的钱包账单</h2>
 				</div>
 				<!-- 下方 -->
 				<div class="grid-content">
 					<!-------------1------------>
-					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-center>
+					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-stretch>
 						<!-- 钱包 -->
 						<div
-							class="flex flex-col justify-center w-400px relative overflow-x-hidden"
+							class="flex min-h-290px flex-col justify-center w-400px relative overflow-x-hidden"
 						>
-							<h3>钱包</h3>
 							<UserWalSwiperCarts />
 						</div>
 						<!-- 统计卡片 -->
-						<div class="total-list min-w-500px">
+						<div class="total-list">
 							<UserWalTotalList class="w-full grid grid-cols-2 grid-gap-8" />
 						</div>
 						<!-- 套餐 -->
@@ -48,10 +47,8 @@ definePageMeta({
 						</div>
 					</div>
 					<!-------------2------------>
-					<div>
-						<!-- 账单和日历 -->
-						<UserWalBillsTab />
-					</div>
+					<!-- 账单和日历 -->
+					<UserWalBillsTab />
 				</div>
 			</div>
 		</NuxtLayout>

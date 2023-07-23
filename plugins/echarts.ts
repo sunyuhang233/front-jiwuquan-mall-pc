@@ -1,6 +1,5 @@
 import * as echarts from 'echarts/core';
 // @ts-ignore 引入 vue-echarts 组件
-import VChart, { THEME_KEY } from "vue-echarts";
 import {
   BarChart,
   LineChart
@@ -8,8 +7,10 @@ import {
 import {
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
   LegendComponent,// 头部标签
   GridComponent,
+  DataZoomComponent,
   DatasetComponent,// 数据集组件
   TransformComponent // 内置数据转换器组件 (filter, sort)
 } from 'echarts/components';
@@ -45,19 +46,16 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   echarts.use([
     TitleComponent,
     TooltipComponent,
+    ToolboxComponent,
+    DataZoomComponent,
     GridComponent,
     DatasetComponent,
     TransformComponent,
     BarChart,
     LineChart,
-    LabelLayout, LegendComponent,
+    LabelLayout,
+    LegendComponent,
     UniversalTransition,
     SVGRenderer
   ]);
-  nuxtApp.vueApp.component(VChart)
-  return {
-    provide: {
-      echarts
-    }
-  }
 })
