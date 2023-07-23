@@ -15,6 +15,7 @@ export const useShopStore = defineStore('shop', () => {
   });
 
   // 分页器
+  const isLoading = ref<boolean>(false);
   const page = ref<number>(0);
   const size = ref<number>(8);
   // 查询页信息
@@ -101,6 +102,7 @@ export const useShopStore = defineStore('shop', () => {
     if (pageInfo.pages > 0 && shopcartList.value.length < pageInfo.total) {
       return;
     }
+    isLoading.value = true
     page.value = 1;
     size.value = 8;
     const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
@@ -108,6 +110,7 @@ export const useShopStore = defineStore('shop', () => {
     if (data?.records?.length <= 0) return;
     shopcartList.value.push(...data.records);
     isRefalsh.value = false;
+    isLoading.value = false
   };
 
 

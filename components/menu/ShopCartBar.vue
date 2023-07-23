@@ -209,8 +209,9 @@ const toOrderPage = (ids: string[]) => {
 								>
 								购物车
 							</h2>
-							<el-scrollbar height="500px" class="overflow-auto" mb-2>
+							<el-scrollbar height="500px" mb-2>
 								<ul
+									class="overflow-auto"
 									v-infinite-scroll="loadShopcartList"
 									:infinite-scroll-delay="1000"
 									:infinite-scroll-disabled="notMore"

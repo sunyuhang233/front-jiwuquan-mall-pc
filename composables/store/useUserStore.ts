@@ -57,28 +57,30 @@ export const useUserStore = defineStore(
       },
     });
 
+    watch(token, (val) => {
+      if (val !== "") {
+        onUserLogin(val);
+      }
+    });
+
     /**
      * 用户登录
      * @param token token
      */
     const onUserLogin = async (token: string, saveLocal?: boolean) => {
       // 用户信息
-      const user = useUserStore();
-      const shop = useShopStore();
+      const store = useUserStore();
       let res = await getUserInfo(token);
       if (res.code === StatusCode.SUCCESS) {
-        user.$patch({
+        store.$patch({
           userInfo: {
             ...res.data,
           },
         });
-
       } else {
         onUserExit(token);
         return;
       }
-      // 购物车
-      shop.loadShopcartList();
       // 钱包
       loadUserWallet(token)
     };
