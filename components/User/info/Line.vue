@@ -53,9 +53,9 @@ const genderList = ref<string[]>(["男", "女", "保密"]);
 // 用户基本信息
 const userCopy = reactive<UpdateInfo>({
 	nickname: user.userInfo.nickname,
-	slogan: user.userInfo.slogan || "",
+	slogan: user.userInfo.slogan,
 	gender: user.userInfo.gender || Gender.DEFAULT,
-	birthday: user.userInfo.birthday || "",
+	birthday: user.userInfo.birthday,
 });
 // 是否开启slogan编辑
 const isEditSlogan = ref<boolean>(false);

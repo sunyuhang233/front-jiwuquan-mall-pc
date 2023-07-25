@@ -4,7 +4,7 @@ import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
   build: {
-    transpile: [/echarts/],
+    transpile: ['resize-detector', /echarts/, 'vue-echarts'],
   },
   // 模块
   modules: [
@@ -19,10 +19,10 @@ export default defineNuxtConfig({
     // 工具
     '@vueuse/nuxt',
   ],
-  alias: {
-    // 配置@使用静态资源
-    assets: '/<rootDir>/assets',
-  },
+  // alias: {
+  //   // 配置@使用静态资源
+  //   assets: '/<rootDir>/assets',
+  // },
   // 全局变量
   runtimeConfig: {
   },
@@ -90,9 +90,9 @@ export default defineNuxtConfig({
   },
   // pinia
   pinia: {
-    // autoImports: [
-    //   'defineStore', // import { defineStore } from 'pinia',
-    // ],
+    autoImports: [
+      'defineStore', // import { defineStore } from 'pinia',
+    ],
   },
 
   // pinia持久化到会话存储
@@ -102,6 +102,7 @@ export default defineNuxtConfig({
 
   // nitro
   nitro: {
+    baseURL: "/api",
     esbuild: {
       options: {
         target: 'esnext',
