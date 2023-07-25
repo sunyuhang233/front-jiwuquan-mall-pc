@@ -74,7 +74,7 @@ const onSubmitBuy = (formRef: FormInstance | undefined) => {
 					order.pushOrderItems.splice(0);
 					order.pushOrderItems.push(...dto);
 					fullscreenLoading.value = false;
-					router.push({
+					navigateTo({
 						path: '/order/pay',
 					});
 				}, 1000);

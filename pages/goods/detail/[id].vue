@@ -52,17 +52,13 @@ const setActive = (name: string) => {
 };
 
 // 定义当前页面
-useHead({
+useSeoMeta({
 	title: "极物 " + goodsInfo.value?.name,
-	meta: [
-		{
-			name: "description",
-			content: goodsInfo.value?.name + " " + goodsInfo.value?.description,
-		},
-	],
+	description: () => `${goodsInfo.value?.name}+${goodsInfo.value?.description}`,
 });
+
 definePageMeta({
-	key: (route) => route.fullPath,
+	key: (route) => route.path,
 });
 </script>
 <template>

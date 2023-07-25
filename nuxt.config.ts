@@ -1,10 +1,10 @@
-// import { BaseUrl } from './composables/utils/useFetchUtil'
-// import { pwa } from './config/pwa'
+import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+  ssr: true,
   build: {
-    transpile: ['resize-detector', /echarts/, 'vue-echarts'],
+    transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
   },
   // 模块
   modules: [
@@ -18,18 +18,16 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     // 工具
     '@vueuse/nuxt',
+    // pwa
+    '@vite-pwa/nuxt',
   ],
-  // alias: {
-  //   // 配置@使用静态资源
-  //   assets: '/<rootDir>/assets',
-  // },
   // 全局变量
   runtimeConfig: {
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
-    // pageTransition: { name: 'page', mode: 'out-in' },
-    // layoutTransition: { name: 'layout', mode: 'out-in' },
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
       viewport: 'width=device-width,initial-scale=1',
       // 网站头部信息
@@ -64,8 +62,6 @@ export default defineNuxtConfig({
       'types/**',
     ]
   },
-
-
   // css
   css: [
     'nprogress/nprogress.css',
@@ -100,6 +96,10 @@ export default defineNuxtConfig({
     storage: "localStorage",
   },
 
+  // alias: {
+  //   // 配置@使用静态资源
+  //   assets: '/<rootDir>/assets',
+  // },
   // nitro
   nitro: {
     baseURL: "/api",
@@ -126,9 +126,9 @@ export default defineNuxtConfig({
     themes: ['dark'],
   },
   // 断网启动
-  // pwa
+  pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: false,
+    enabled: true,
   }
 })

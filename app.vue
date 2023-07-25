@@ -22,10 +22,13 @@ watch(
 		immediate: true,
 	}
 );
+
+const logSomeError = () => {};
 // 不能有根节点
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
+	<NuxtErrorBoundary @error="logSomeError" />
 	<FormUserDialog />
 	<NuxtPage />
 </template>

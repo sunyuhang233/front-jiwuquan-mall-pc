@@ -7,30 +7,22 @@ export const pwa: ModuleOptions = {
   registerType: 'autoUpdate',
   scope,
   base: scope,
+  // https://developer.mozilla.org/zh-CN/docs/Web/Manifest#lang
   manifest: {
     id: scope,
     scope,
+    start_url: ".",
+    display: "standalone",
     name: appName,
     short_name: appName,
     description: appDescription,
-    theme_color: '#ffffff',
+    theme_color: '#000000',
     icons: [
       {
         src: 'logo.png',
-        sizes: '192x192',
+        sizes: '436x436',
         type: 'image/png',
-      },
-      {
-        src: 'logo.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        src: 'logo.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any maskable',
-      },
+      }
     ],
   },
   workbox: {
@@ -39,34 +31,6 @@ export const pwa: ModuleOptions = {
     navigateFallback: '/',
     cleanupOutdatedCaches: true,
     runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts.googleapis.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
-      {
-        urlPattern: /^https:\/\/fonts.gstatic.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'gstatic-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
     ],
   },
   registerWebManifestInRouteRules: true,
@@ -75,4 +39,13 @@ export const pwa: ModuleOptions = {
     enabled: process.env.VITE_PLUGIN_PWA === 'true',
     navigateFallback: scope,
   },
+  related_applications: [
+    {
+      platform: "web"
+    },
+    {
+      platform: "play",
+      url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+    }
+  ]
 }

@@ -18,15 +18,8 @@
 						size="large"
 						class="first"
 						@click="toView(p)"
-						inline-block
-						mr-2
-						style="
-							position: relative;
-							display: inline-block;
-							width: 9em;
-							height: 4.6em;
-							line-height: 100%;
-						"
+						inline-flex
+						style="position: relative; width: 9em; height: 4.6em; line-height: 100%"
 						flex-row-c-c
 					>
 						<img
@@ -81,7 +74,7 @@ const categoryList = data.value?.data || [];
 const router = useRouter();
 // 跳转对应分类
 const toView = (item: CategoryVO) => {
-	router.push({
+	navigateTo({
 		path: "/search",
 		query: {
 			cname: item.name,

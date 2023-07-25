@@ -11,7 +11,7 @@ const getLeave = getUserLeave(user.userWallet.points || 0);
 			<!-- 积分 -->
 			<strong class="opacity-90 hover:scale-110 transition-300 cursor-pointer flex-row-c-c">
 				<small text-1em mr-4>积分</small>
-				<h2 inline-block v-incre-up-int="points"></h2>
+				<h2 inline v-incre-up-int="points"></h2>
 			</strong>
 			<!-- 等级 -->
 			<div flex flex-col w-6em>

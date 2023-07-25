@@ -29,7 +29,13 @@ export interface GoodsSkuVO {
  * @returns 
  */
 export function getGoodsSkuByIds(ids: string[]) {
-	return useHttp.post<Result<GoodsSkuVO[]>>(  `/goods/sku`,{
-		ids:[...ids]
+	return useHttp.post<Result<GoodsSkuVO[]>>(`/goods/sku`, {
+		ids: [...ids]
+	});
+}
+
+export function getGoodsSkuByIdsLazy(ids: string[]) {
+	return useFetchUtil.post<Result<GoodsSkuVO[]>>(`/goods/sku`, {
+		ids: [...ids]
 	});
 }

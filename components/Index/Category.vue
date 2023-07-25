@@ -11,7 +11,7 @@
           <i i-solar:bag-3-bold bg-yellow-4 p-3 ml-2></i>
         </h3>
         <p my-4 type="warning" v-for="(p) in categoryList" :key="p.id">
-        <h4 class="first" @click="toView(p)" inline-block mr-2 style="line-height: 100%;">{{ p.name }}</h4>
+        <h4 class="first" @click="toView(p)" block mr-2 style="line-height: 100%;">{{ p.name }}</h4>
         <el-button @click="toView(k)" type="primary" plain v-for="(k) in p?.children" :key="k.id"
           style="margin: 0.2em 0.5em 0.2em 0; padding: 0 0.8em; cursor: pointer;">
           {{ k.name }}
@@ -34,7 +34,7 @@ isLoading.value=false
 // 跳转查询分类
 const router = useRouter()
 const toView = (item: CategoryVO) => {
-  router.push({
+  navigateTo({
     path: '/search',
     query: {
       cid: item.id

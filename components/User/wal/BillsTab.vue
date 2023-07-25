@@ -158,7 +158,7 @@ watch(
 			<div class="bills-list relative mt-2 bg-white v-card rounded-14px px-4 p-5">
 				<!-- 按钮 -->
 				<div class="btns pb-2">
-					<small inline-block float-right pr-3 v-show="billsPage.total > 0">
+					<small inline float-right pr-2 v-show="billsPage.total > 0">
 						共{{ billsPage.total }}条
 					</small>
 					<small

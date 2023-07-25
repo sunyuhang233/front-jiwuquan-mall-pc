@@ -240,8 +240,8 @@ const rules = reactive({
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']" :footer="false">
-			<div class="layout-default mx-a mt-2em">
-				<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
+			<div class="layout-default mx-a px-2em">
+				<div class="title animate__animated animate__fadeInDown" my-3>
 					<h2 tracking-1>收货地址</h2>
 				</div>
 				<ClientOnly>

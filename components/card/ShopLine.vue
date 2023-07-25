@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
-import { ShopcartVO, updateShopcart } from '~/composables/api/shopcart';
-import { GoodsSkuVO, getGoodsSkuByGid } from '~/composables/api/goods/sku';
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
+import { ShopcartVO, updateShopcart } from "~/composables/api/shopcart";
+import { GoodsSkuVO, getGoodsSkuByGid } from "~/composables/api/goods/sku";
 const { shopCart } = defineProps<{
 	shopCart: ShopcartVO;
 }>();
@@ -23,7 +23,7 @@ watch(
 );
 
 const changeUpdateShopcart = async (skuId: string, quantity: number) => {
-	if (isUpdateLoading.value || !quantity ) return;
+	if (isUpdateLoading.value || !quantity) return;
 	isUpdateLoading.value = true;
 	const data = await updateShopcart(
 		selectShopcartId.value,
@@ -35,7 +35,7 @@ const changeUpdateShopcart = async (skuId: string, quantity: number) => {
 	);
 	if (data.code != StatusCode.SUCCESS) {
 		ElMessage.closeAll();
-		ElMessage.error('修改失败，稍后重试！');
+		ElMessage.error("修改失败，稍后重试！");
 	} else {
 		shopCart.skuId = skuId;
 		shopCart.quantity = quantity;
@@ -58,17 +58,17 @@ const loadGoodSkuList = async (val: boolean) => {
 };
 // 计算规格全部属性
 const getSkuProps = (goodsSku: GoodsSkuVO) => {
-	return (goodsSku.size || '') + ' ' + (goodsSku.color || '') + ' ' + (goodsSku.combo || '');
+	return (goodsSku.size || "") + " " + (goodsSku.color || "") + " " + (goodsSku.combo || "");
 };
 
 const propsText = ref<string>(
-	(shopCart.size || '') + ' ' + (shopCart.color || '') + ' ' + (shopCart.combo || '')
+	(shopCart.size || "") + " " + (shopCart.color || "") + " " + (shopCart.combo || "")
 );
 
 // 用户
 const getProps = computed({
 	get() {
-		return (shopCart.size || '') + ' ' + (shopCart.color || '') + ' ' + (shopCart.combo || '');
+		return (shopCart.size || "") + " " + (shopCart.color || "") + " " + (shopCart.combo || "");
 	},
 	set(skuId: string) {
 		const p = toRaw(skuList.value.find((p) => p.id === skuId));
@@ -88,22 +88,22 @@ const getProps = computed({
 // 删除单个
 const deleteShopCart = () => {
 	ElMessageBox({
-		title: '删除提示',
-		message: '确定要删除吗？',
-		type: 'warning',
+		title: "删除提示",
+		message: "确定要删除吗？",
+		type: "warning",
 		showClose: false,
-		customClass: 'text-center',
+		customClass: "text-center",
 		showCancelButton: true,
-		cancelButtonText: '取 消',
-		confirmButtonText: '删 除',
+		cancelButtonText: "取 消",
+		confirmButtonText: "删 除",
 	})
 		.then(async (res) => {
-			if (res === 'confirm') {
+			if (res === "confirm") {
 				const flag = await shop.deleteShopCartById(shopCart.id);
 				if (flag) {
-					ElMessage.success('删除成功！');
+					ElMessage.success("删除成功！");
 				} else {
-					ElMessage.error('删除错误，请稍后再试试看！');
+					ElMessage.error("删除错误，请稍后再试试看！");
 				}
 			}
 		})
@@ -114,7 +114,7 @@ const deleteShopCart = () => {
 const router = useRouter();
 const toGoodsView = (gid: string) => {
 	setTimeout(() => {
-		router.push({
+		navigateTo({
 			path: `/goods/detail/${gid}`,
 		});
 	}, 300);

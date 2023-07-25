@@ -1,13 +1,8 @@
 <script lang="ts" setup>
 const route = useRoute();
-useHead({
-	title: "活动详情",
-	meta: [
-		{
-			name: "description",
-			content: "极物圈-活动详情",
-		},
-	],
+useSeoMeta({
+	title: "极物 " + "",
+	description: () => "",
 });
 </script>
 <template>

@@ -48,7 +48,9 @@ definePageMeta({
 					</div>
 					<!-------------2------------>
 					<!-- 账单和日历 -->
-					<UserWalBillsTab />
+					<div min-w-400px>
+						<UserWalBillsTab />
+					</div>
 				</div>
 			</div>
 		</NuxtLayout>

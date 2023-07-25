@@ -17,7 +17,25 @@ definePageMeta({
 </script>
 <template>
 	<div>
-		<NuxtLayout name="user" :menu="['back']" :footer="false"> </NuxtLayout>
+		<NuxtLayout name="user" :menu="['back']" :footer="false">
+			<div class="layout-default flex flex-col mx-a px-2em">
+				<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
+					<h2 tracking-1>账户与安全</h2>
+				</div>
+				<!-- 登录设备 -->
+				<div class="grid md:grid-cols-2 grid-gap-3em">
+					<div class="card">
+						<strong block opacity-70 my-4>登录设备</strong>
+						<div class="v-card p-5 shadow-sm rounded-14px"></div>
+					</div>
+					<!-- 修改信息 -->
+					<div class="card">
+						<strong block opacity-70 my-4>修改信息</strong>
+						<div class="v-card p-5 shadow-sm rounded-14px"></div>
+					</div>
+				</div>
+			</div>
+		</NuxtLayout>
 	</div>
 </template>
 <style scoped lang="scss"></style>

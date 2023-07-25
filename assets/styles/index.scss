@@ -82,11 +82,10 @@
   background-color: #ffffff93;
   border-radius: 4px;
   transition: all $transition-delay;
-  backdrop-filter: blur(2em);
+  backdrop-filter: blur(20px);
 }
 .dark .v-card {
   background-color: rgba(37, 37, 37, 0.12);
-  // border: 1px solid #424242a1;
 }
 
 // element-plus

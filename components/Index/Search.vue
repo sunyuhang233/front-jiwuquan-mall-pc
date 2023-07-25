@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { getGoodsListByPage } from "@/composables/api/goods";
 import { useStorage } from "@vueuse/core";
-import { kebabCase } from "vant/lib/utils";
 import { IPage } from "~/types";
 import { GoodsVO } from "~/types/goods";
 // 搜索相关
@@ -115,11 +114,6 @@ const clearSearch = (e: any) => {
 const handleClose = (tag: string) => {
 	searchHistoryList.value.splice(searchHistoryList.value.indexOf(tag), 1);
 };
-const app = useNuxtApp();
-let searchInpRef = {};
-app.hook("app:mounted", () => {
-	searchInpRef = ref("searchInpRef"); // dom
-});
 /**
  * 点击历史标签
  */
@@ -151,7 +145,6 @@ const clickTag = (val: string, i: number) => {
 				<div class="v-input" flex-row-c-c pb-2>
 					<ElInput
 						@click="isShowResult = true"
-						ref="searchInpRef"
 						@focus="isShowResult = true"
 						class="mr-1 lg:mr-2"
 						type="text"
@@ -178,8 +171,8 @@ const clickTag = (val: string, i: number) => {
 						搜索
 					</ElButton>
 				</div>
+				<!-- 搜索历史记录 -->
 				<ClientOnly>
-					<!-- 搜索历史记录 -->
 					<div
 						v-show="!isShowResult"
 						class="tags animate__animated animate__headShake"
@@ -210,58 +203,56 @@ const clickTag = (val: string, i: number) => {
 			</div>
 		</template>
 		<!-- 2、搜索结果（商品goods） -->
-		<template #default>
-			<!-- 标题 -->
-			<span v-show="searchPageList.length > 0" px-2 py-4 pb-8>
-				{{ ` 搜索到 ${searchPage.total} 条数据` }}
-			</span>
-			<ElIconCloseBold
-				width="1.6em"
-				absolute
-				right-1em
-				top-1em
-				cursor-pointer
-				style="color: var(--el-color-primary)"
-				shadow
-				shadow-inset
-				rounded-4px
-				active:transform-scale-80
-				transition-300
-				@click="clearSearch"
+		<!-- 标题 -->
+		<span v-show="searchPageList.length > 0" px-2 py-4 pb-8>
+			{{ ` 搜索到 ${searchPage.total} 条数据` }}
+		</span>
+		<ElIconCloseBold
+			width="1.6em"
+			absolute
+			right-1em
+			top-1em
+			cursor-pointer
+			style="color: var(--el-color-primary)"
+			shadow
+			shadow-inset
+			rounded-4px
+			active:transform-scale-80
+			transition-300
+			@click="clearSearch"
+		/>
+		<ElScrollbar
+			@scroll="onLoadMore"
+			overflow-hidden
+			pt-3
+			flex-col
+			v-loading="isLoading"
+			element-loading-background="transparent"
+		>
+			<transition-group tag="div" name="item-list" class="relative">
+				<!-- 跳转详情页 -->
+				<NuxtLink
+					:to="`/goods/detail/${p.id}`"
+					class="mt-2 animate__animated animate__fadeIn"
+					v-for="(p, i) in searchPageList"
+					:key="p.id"
+				>
+					<!-- 商品卡片 -->
+					<CardGoodsLine :goods="p" :key="p.id" />
+					<ElDivider
+						dark:opacity-50
+						v-if="i !== searchPageList.length - 1"
+						style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
+					/> </NuxtLink
+			></transition-group>
+			<ElEmpty
+				mt-10
+				:image-size="80"
+				description="没有找到商品"
+				v-show="searchPageList.length <= 0"
 			/>
-			<ElScrollbar
-				@scroll="onLoadMore"
-				overflow-hidden
-				pt-3
-				flex-col
-				v-loading="isLoading"
-				element-loading-background="transparent"
-			>
-				<transition-group tag="div" name="item-list" class="relative">
-					<!-- 跳转详情页 -->
-					<NuxtLink
-						:to="`/goods/detail/${p.id}`"
-						class="mt-2 animate__animated animate__fadeIn"
-						v-for="(p, i) in searchPageList"
-						:key="p.id"
-					>
-						<!-- 商品卡片 -->
-						<CardGoodsLine :goods="p" :key="p.id" />
-						<ElDivider
-							dark:opacity-50
-							v-if="i !== searchPageList.length - 1"
-							style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
-						/> </NuxtLink
-				></transition-group>
-				<ElEmpty
-					mt-10
-					:image-size="80"
-					description="没有找到商品"
-					v-show="searchPageList.length <= 0"
-				/>
-			</ElScrollbar>
-			<p v-show="noMore" py-4 mb-4 opacity-80 text-center tracking-2px>没有更多了</p>
-		</template>
+		</ElScrollbar>
+		<p v-show="noMore" py-4 mb-4 opacity-80 text-center tracking-2px>没有更多了</p>
 	</el-popover>
 </template>
 

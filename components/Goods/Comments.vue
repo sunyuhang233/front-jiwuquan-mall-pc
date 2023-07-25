@@ -70,7 +70,7 @@ const clearResult = () => {
 };
 
 const toCommentDetailView = (commentId: string) => {
-	router.push({
+	navigateTo({
 		path: `/goods/comment/${commentId}`,
 	});
 };

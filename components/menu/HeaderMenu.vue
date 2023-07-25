@@ -35,7 +35,7 @@
 					left-9
 					style="color: var(--el-text-color-primary)"
 				></span>
-				<span tracking-2 m-4 font-700 text-xl hidden md:inline-block>极物圈</span>
+				<span tracking-2 m-4 font-700 text-xl hidden md:inline>极物圈</span>
 			</NuxtLink>
 		</div>
 		<!-- 搜索框 -->

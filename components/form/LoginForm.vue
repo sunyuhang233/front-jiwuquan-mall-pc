@@ -332,7 +332,7 @@ const onLogin = async (type: LoginType) => {
 <style scoped lang="scss">
 .form {
 	width: 400px;
-	display: inline-block;
+	display: block;
 	padding: 2.5em 3em 2em 3em;
 	background-color: #ffffff;
 	border-radius: var(--el-border-radius-base);

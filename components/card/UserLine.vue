@@ -65,10 +65,8 @@ const exitLogin = () => {
 		})
 		.catch(() => {});
 };
-// 跳转
-const router = useRouter();
 const toView = (path: string) => {
-	router.push({ path });
+	navigateTo({ path });
 };
 </script>
 <template>

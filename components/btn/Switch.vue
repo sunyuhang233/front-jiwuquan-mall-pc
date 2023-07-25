@@ -19,16 +19,15 @@
 <script lang="ts" setup>
 // 切换动画
 const mode = useColorMode();
-
-const isDark = computed({
-	get(): boolean {
-		return mode.value === "dark";
-	},
-	set(): void {
-		mode.preference = isDark.value ? "light" : "dark";
-	},
+const isDark = useDark();
+// 节流watch
+watchDebounced(isDark, (value) => {
+	mode.preference = value ? "dark" : "light";
 });
-
+/**
+ * 切换主题
+ * @param event
+ */
 let toggle = (event: MouseEvent) => {
 	// @ts-ignore
 	let isAppearanceTransition =

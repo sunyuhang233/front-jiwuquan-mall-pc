@@ -33,7 +33,7 @@ const word = computed({
 });
 
 const onSearch = () => {
-	router.push({
+	navigateTo({
 		path: `/search`,
 		query: {
 			name: word.value.trim(),

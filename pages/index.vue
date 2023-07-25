@@ -10,24 +10,26 @@ useHead({
 });
 </script>
 <template>
-	<NuxtLayout>
-		<div class="layout-default" flex flex-col>
-			<IndexTopMenu min-h-160px w-full />
-			<div flex flex-col md:flex-row pt-4 w-full>
-				<!-- 轮播图 -->
-				<IndexSwiperList />
-				<!-- 热门商品 -->
-				<IndexHotGoodsList />
+	<div>
+		<NuxtLayout name="default">
+			<div class="layout-default" flex flex-col>
+				<IndexTopMenu w-full />
+				<div flex flex-col md:flex-row pt-4 w-full>
+					<!-- 轮播图 -->
+					<IndexSwiperList />
+					<!-- 热门商品 -->
+					<IndexHotGoodsList />
+				</div>
 			</div>
-		</div>
-		<div class="bottom" overflowx-hidden>
-			<div layout-default mt-6>
-				<!-- 热门商品分类 -->
-				<IndexCategoryLine />
-				<!-- 商品列表tabs -->
-				<IndexGoodsTabs class="mt-6" />
+			<div class="bottom" overflowx-hidden>
+				<div layout-default mt-6>
+					<!-- 热门商品分类 -->
+					<IndexCategoryLine />
+					<!-- 商品列表tabs -->
+					<IndexGoodsTabs class="mt-6" />
+				</div>
 			</div>
-		</div>
-	</NuxtLayout>
+		</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="scss"></style>

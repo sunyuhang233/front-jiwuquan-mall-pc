@@ -12,7 +12,7 @@ const toBack = () => {
 	if (route) {
 		router.back();
 	} else {
-		router.push("/");
+		navigateTo("/");
 	}
 };
 </script>

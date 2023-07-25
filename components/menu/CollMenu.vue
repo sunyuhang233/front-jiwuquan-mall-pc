@@ -27,41 +27,32 @@ const route = useRoute();
 				<div class="border-0 border-default border-b-1px w-5/6 mx-a my-4"></div>
 				<!-- 个人信息 -->
 				<el-menu-item index="/user/info">
-					<i class="i-solar:user-broken" v-show="route.fullPath !== '/user/info'"></i>
-					<i
-						class="i-solar:user-bold-duotone"
-						v-show="route.fullPath === '/user/info'"
-					></i>
+					<i class="i-solar:user-broken" v-show="route.path !== '/user/info'"></i>
+					<i class="i-solar:user-bold-duotone" v-show="route.path === '/user/info'"></i>
 					<span class="min-w-10em title ml-3">个人信息</span>
 				</el-menu-item>
 				<!-- 钱包 -->
 				<el-menu-item index="/user/wallet">
-					<i class="i-solar:wallet-broken" v-show="route.fullPath !== '/user/wallet'"></i>
+					<i class="i-solar:wallet-broken" v-show="route.path !== '/user/wallet'"></i>
 					<i
 						class="i-solar:wallet-bold-duotone"
-						v-show="route.fullPath === '/user/wallet'"
+						v-show="route.path === '/user/wallet'"
 					></i>
 					<span class="title ml-3">钱包</span>
 				</el-menu-item>
 				<!-- 收货地址 -->
 				<el-menu-item index="/user/address">
-					<i
-						class="i-solar:compass-broken"
-						v-show="route.fullPath !== '/user/address'"
-					></i>
+					<i class="i-solar:compass-broken" v-show="route.path !== '/user/address'"></i>
 					<i
 						class="i-solar:compass-bold-duotone"
-						v-show="route.fullPath === '/user/address'"
+						v-show="route.path === '/user/address'"
 					></i>
 					<span class="title ml-3">收货地址</span>
 				</el-menu-item>
 				<!-- 账号与安全 -->
 				<el-menu-item index="/user/safe" class="group">
-					<i class="i-solar:danger-broken" v-show="route.fullPath !== '/user/safe'"></i>
-					<i
-						class="i-solar:danger-bold-duotone"
-						v-show="route.fullPath === '/user/safe'"
-					></i>
+					<i class="i-solar:danger-broken" v-show="route.path !== '/user/safe'"></i>
+					<i class="i-solar:danger-bold-duotone" v-show="route.path === '/user/safe'"></i>
 					<span class="title ml-3">账号与安全</span>
 				</el-menu-item>
 				<!-- 回到首页 -->

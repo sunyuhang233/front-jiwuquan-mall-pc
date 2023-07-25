@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
+import { getGoodsSkuByIdsLazy } from "~/composables/api/goods/sku";
 import { PushOrdersItemDTO } from "~/composables/api/orders";
 import { appName } from "~/constants";
 const route = useRoute();
@@ -11,7 +11,7 @@ const skuIdList: string[] = [];
 orderItems.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
-const skuList = await getGoodsSkuByIds(skuIdList);
+const skuList = await getGoodsSkuByIdsLazy(skuIdList);
 useHead({
 	title: appName + " - 订单",
 	meta: [

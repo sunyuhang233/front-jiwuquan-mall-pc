@@ -9,11 +9,9 @@ import { IPage } from "~/types";
  * @returns 
  */
 export function getGoodsListByPageLazy(page: number, size: number, dto: GoodsPageDTO) {
-  return useFetch<Result<IPage<GoodsVO>>>(() => BaseUrl + `/goods/list/${page}/${size}`, {
-    method: "POST",
-    body: { ...dto }
-  })
+  return useFetchUtil.post<Result<IPage<GoodsVO>>>(BaseUrl + `/goods/list/${page}/${size}`, { ...dto })
 }
+getGoodsListByPageLazy
 // 客户端请求
 export function getGoodsListByPage(page: number, size: number, dto: GoodsPageDTO) {
   return useHttp.post<Result<IPage<GoodsVO>>>(`/goods/list/${page}/${size}`,

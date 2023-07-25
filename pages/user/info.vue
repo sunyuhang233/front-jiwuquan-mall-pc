@@ -21,17 +21,17 @@ const user = useUserStore();
 			<div v-show="user.isLogin">
 				<!-- 壁纸 -->
 				<UserInfoBgToggle />
-				<div class="layout-default">
-					<div class="avatar-card flex flex-wrap">
+				<div class="layout-default flex mx-a px-2em">
+					<div class="flex-1 flex flex-wrap">
 						<!-- 用户头像 -->
-						<div class="avatars relative -top-6em flex-1">
+						<div class="avatars relative -top-6em flex-1 pr-4">
 							<UserInfoLine />
 							<div class="m-2">
 								<UserInfoTabs />
 							</div>
 						</div>
 						<!-- 右侧 -->
-						<div class="ml-2em mt-4">
+						<div class="v-card shadow-sm">
 							<!-- 签到 -->
 							<UserInfoSigninCard />
 						</div>

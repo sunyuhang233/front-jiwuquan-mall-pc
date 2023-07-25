@@ -16,7 +16,7 @@ const user = useUserStore();
 		<div flex-row-bt-c>
 			<small opacity-90 font-600 flex-row-c-c>
 				<small
-					class="bg-light color-#1374f7 font-700 inline-block w-1.8em float-left mr-2 h-1.8em leading-1.8em text-center rounded-4em"
+					class="bg-light color-#1374f7 font-700 inline w-1.8em float-left mr-2 h-1.8em leading-1.8em text-center rounded-4em"
 					>支</small
 				>
 				支付宝</small
@@ -47,7 +47,7 @@ const user = useUserStore();
 					opacity-0
 					transition-300
 					group-hover:opacity-100
-					class="inline-block hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-0.8em h-0.8em"
+					class="inline hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-0.8em h-0.8em"
 				/>
 			</h2> -->
 			<small>暂未开启</small>

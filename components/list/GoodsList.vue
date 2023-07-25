@@ -92,7 +92,7 @@ const clearResult = () => {
 };
 const router = useRouter();
 const toGoodsView = (id: string) => {
-	router.push({
+	navigateTo({
 		path: `/goods/detail/${id}`,
 	});
 };

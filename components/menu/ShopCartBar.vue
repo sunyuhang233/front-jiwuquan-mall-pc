@@ -90,10 +90,10 @@ const toOrderPage = (ids: string[]) => {
 		order.$patch({
 			pushOrderItems: dtoList,
 		});
-		router.push({
+		navigateTo({
 			path: "/order/pay",
 		});
-	}, 1000);
+	}, 800);
 };
 </script>
 <template>
