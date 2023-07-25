@@ -2,8 +2,8 @@
 	<!-- 顶部header -->
 	<div class="nav select-none" flex-row-bt-c py-4 px-6 text-m dark:text="light">
 		<!-- 左侧 -->
-		<div class="left" flex-row-c-c group>
-			<NuxtLink mx-2 to="/" flex-row-c-c class="group">
+		<div class="left group" flex-row-c-c>
+			<NuxtLink mx-2 to="/" flex-row-c-c>
 				<img
 					w-42px
 					object-contain
@@ -35,8 +35,19 @@
 					left-9
 					style="color: var(--el-text-color-primary)"
 				></span>
-				<span tracking-2 m-4 font-700 text-xl hidden md:inline>极物圈</span>
 			</NuxtLink>
+			<span class="tracking-2 mx-4 font-700 text-xl hidden md:inline">极物圈</span>
+			<a class="group" target="_blank" href="https://github.com/KiWi233333">
+				<img
+					dark:filter-invert-100
+					ml-4
+					w-5rem
+					opacity-0
+					transition-300
+					group-hover:opacity-100
+					src="@/assets/images/logo/kiwi_strong.svg"
+				/>
+			</a>
 		</div>
 		<!-- 搜索框 -->
 		<div class="animate__animated input-search">

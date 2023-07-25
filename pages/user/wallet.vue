@@ -18,41 +18,48 @@ definePageMeta({
 <template>
 	<div>
 		<NuxtLayout name="user" :menu="['back']" :footer="false">
-			<div class="layout-default" v-if="user.isLogin">
-				<!-- 标题 -->
-				<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
-					<h2 text-2xl tracking-1>你的钱包账单</h2>
-				</div>
-				<!-- 下方 -->
-				<div class="grid-content">
-					<!-------------1------------>
-					<div style="grid-template-columns: 2fr 4fr" grid grid-gap-10 grid-items-stretch>
-						<!-- 钱包 -->
+			<ClientOnly>
+				<div class="layout-default" v-if="user.isLogin">
+					<!-- 标题 -->
+					<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
+						<h2 text-2xl tracking-1>你的钱包账单</h2>
+					</div>
+					<!-- 下方 -->
+					<div class="grid-content">
+						<!-------------1------------>
 						<div
-							class="flex min-h-290px flex-col justify-center w-400px relative overflow-x-hidden"
+							style="grid-template-columns: 2fr 4fr"
+							grid
+							grid-gap-10
+							grid-items-stretch
 						>
-							<UserWalSwiperCarts />
+							<!-- 钱包 -->
+							<div
+								class="flex min-h-290px flex-col justify-center w-400px relative overflow-x-hidden"
+							>
+								<UserWalSwiperCarts />
+							</div>
+							<!-- 统计卡片 -->
+							<div class="total-list">
+								<UserWalTotalList class="w-full grid grid-cols-2 grid-gap-8" />
+							</div>
+							<!-- 套餐 -->
+							<div class="combo">
+								<UserWalCombo />
+							</div>
+							<!-- 统计表 -->
+							<div class="table">
+								<UserWalTable />
+							</div>
 						</div>
-						<!-- 统计卡片 -->
-						<div class="total-list">
-							<UserWalTotalList class="w-full grid grid-cols-2 grid-gap-8" />
+						<!-------------2------------>
+						<!-- 账单和日历 -->
+						<div min-w-400px>
+							<UserWalBillsTab />
 						</div>
-						<!-- 套餐 -->
-						<div class="combo">
-							<UserWalCombo />
-						</div>
-						<!-- 统计表 -->
-						<div class="table">
-							<UserWalTable />
-						</div>
-					</div>
-					<!-------------2------------>
-					<!-- 账单和日历 -->
-					<div min-w-400px>
-						<UserWalBillsTab />
 					</div>
 				</div>
-			</div>
+			</ClientOnly>
 		</NuxtLayout>
 	</div>
 </template>

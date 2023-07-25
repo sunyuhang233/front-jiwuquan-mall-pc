@@ -31,15 +31,15 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 	formRef
 		?.validate(async (valid) => {
 			if (valid && user.getToken) {
-				const data = await addShopcart(
-					{
-						skuId: form.skuId,
-						quantity: form.quantity,
-					},
-					user.getToken
-				);
-				if (data.code === StatusCode.SUCCESS) {
-					shop.reLoadShopcartList()
+				// const data = await addShopcart(
+				// 	{
+				// 		skuId: form.skuId,
+				// 		quantity: form.quantity,
+				// 	},
+				// 	user.getToken
+				// );
+				// if (data.code === StatusCode.SUCCESS) {
+				if (await shop.addShopcartAction(form.skuId)) {
 					ElMessage.success('添加成功！');
 				} else {
 					ElMessage.error('添加失败，请稍后再试！');
@@ -103,7 +103,7 @@ interface formDTO {
 	size?: string;
 	color?: string;
 	combo?: string;
-}  
+}
 // 尺寸
 const sizeList = ref<
 	{
@@ -215,13 +215,7 @@ const setActiveItem = (image: string) => {
 				<div class="top opacity-90" flex-row-bt-c mt-2>
 					<!-- 商品标签 -->
 					<div class="left">
-						<el-tag
-							class="mr-2 mb-2"
-							effect="dark"
-							type="danger"
-							v-if="goodsInfo?.isNew"
-							>新品</el-tag
-						>
+						<el-tag class="mr-2 mb-2 " effect="dark" type="danger" v-if="goodsInfo?.isNew">新品</el-tag>
 						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
 							goodsInfo?.postage ? goodsInfo?.postage + '元运费' : '免运费'
 						}}</el-tag>
@@ -240,15 +234,10 @@ const setActiveItem = (image: string) => {
 					<div flex-row-bt-c mb-4>
 						<small opacity-90 float-left>销售价（元）：</small>
 						<div class="righjt">
-							<span font-700 text-1.4em text-red-5
-								>￥
+							<span font-700 text-1.4em text-red-5>￥
 								<span v-incre-up="goodsInfo?.price.toFixed(2)"></span>
 							</span>
-							<small
-								style="text-decoration: line-through; opacity: 0.9"
-								text-bluegray-3
-								text-0.6em
-								>￥
+							<small style="text-decoration: line-through; opacity: 0.9" text-bluegray-3 text-0.6em>￥
 								<span v-incre-up="goodsInfo?.costPrice.toFixed(2)"></span>
 							</small>
 						</div>
@@ -261,16 +250,12 @@ const setActiveItem = (image: string) => {
 								<small text-red-5 pl-2>请选择规格</small>
 							</template>
 							<el-radio-group v-model="form.size">
-								<el-radio-button
-									:label="p.name"
-									v-for="p in sizeList"
-									:key="p.name"
-								/>
+								<el-radio-button :label="p.name" v-for="p in sizeList" :key="p.name" />
 							</el-radio-group>
 						</el-form-item>
 					</div>
 					<!-- 颜色 -->
-					<div class="card" v-if="colorList.length" pb-3>
+					<div class="card" v-if="colorList.length">
 						<small>颜 色</small>
 						<el-form-item prop="color" mt-1 required>
 							<template #error>
@@ -278,24 +263,13 @@ const setActiveItem = (image: string) => {
 							</template>
 							<el-radio-group v-model="form.color" size="large">
 								<!-- cts -->
-								<el-radio-button
-									v-for="p in colorList"
-									:key="p.name"
-									:label="p.name"
-									style="height: auto; border-radius: 6px"
-									@click="setActiveItem(p.image)"
-									class="flex flex-col color-group mr-4"
-								>
-									<img
-										class="sku-img"
-										:src="BaseUrlImg + p.image"
-						:alt="p.name || 'Design By Kiwi23333'"
-										rounded-4px
-										overflow-hidden
-										z-0
-									/>
+								<el-radio :border="true" v-for="p in colorList" :key="p.name" :label="p.name"
+									style="height: 4em; border-radius: 4px;margin: 0 0.4rem 0.4rem 0;" @click="setActiveItem(p.image)"
+									class="flex flex-col color-group">
+									<img class="sku-img" :src="BaseUrlImg + p.image" :alt="p.name || 'Design By Kiwi23333'" rounded-4px
+										overflow-hidden z-0 />
 									<div text-center py-2 px-4 z-5 class="tip">{{ p.name }}</div>
-								</el-radio-button>
+								</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</div>
@@ -307,11 +281,7 @@ const setActiveItem = (image: string) => {
 								<small text-red-5 pl-2>请选择套餐</small>
 							</template>
 							<el-radio-group v-model="form.combo">
-								<el-radio-button
-									:label="p.name"
-									v-for="p in comboList"
-									:key="p.name"
-								/>
+								<el-radio-button :label="p.name" v-for="p in comboList" :key="p.name" />
 							</el-radio-group>
 						</el-form-item>
 					</div>
@@ -320,15 +290,8 @@ const setActiveItem = (image: string) => {
 				<div class="card">
 					<small>数 量</small>
 					<el-form-item prop="quantity" mt-2 required>
-						<el-input-number
-							:disabled="getStock === 0"
-							:min="1"
-							:max="getStock !== 0 ? 99 : 1"
-							v-model="form.quantity"
-						/>
-						<small v-show="isAllCheckSku"
-							>（库存剩余：<span text-red-5>{{ getStock }} </span>件）</small
-						>
+						<el-input-number :disabled="getStock === 0" :min="1" :max="getStock !== 0 ? 99 : 1" v-model="form.quantity" />
+						<small v-show="isAllCheckSku">（库存剩余：<span text-red-5>{{ getStock }} </span>件）</small>
 						<small v-show="!isAllCheckSku">（总库存剩余：{{ getMaxStock }} 件）</small>
 					</el-form-item>
 				</div>
@@ -337,9 +300,7 @@ const setActiveItem = (image: string) => {
 				<el-form-item>
 					<div class="w-1/1 flex justify-between py-3 relative">
 						<!-- 加入 -->
-						<el-button
-							size="large"
-							style="
+						<el-button size="large" style="
 								flex: 1;
 								transition: 300ms;
 								font-size: 1.2em;
@@ -347,16 +308,10 @@ const setActiveItem = (image: string) => {
 								letter-spacing: 0.1em;
 								margin-right: 0.6em;
 								font-weight: 700;
-							"
-							shadow
-							plain
-							@click="onSubmitShopCart(FormRef)"
-							>加入购物车
+							" shadow plain @click="onSubmitShopCart(FormRef)">加入购物车
 						</el-button>
 						<!-- 立即购买 -->
-						<el-button
-							size="large"
-							style="
+						<el-button size="large" style="
 								flex: 1;
 								margin-right: 0.6em;
 								transition: 300ms;
@@ -364,29 +319,12 @@ const setActiveItem = (image: string) => {
 								font-weight: 600;
 								padding: 0.8em 1em;
 								letter-spacing: 0.1em; 
-							"
-							shadow-md
-							@click="onSubmitBuy(FormRef)"
-							type="info"
-							v-loading.fullscreen.lock="fullscreenLoading"
-							>立即购买
+							" shadow-md @click="onSubmitBuy(FormRef)" type="info" v-loading.fullscreen.lock="fullscreenLoading">立即购买
 						</el-button>
-						<p
-							border-default-dashed
-							border-2px
-							border-border-dark-300
-							shadow-md
-							rounded="t-6px"
-							bg-white
-							dark:bg-dark-6
-							p-2
-							text-red-5
-							flex-row-c-c
-							class="all-price -translate-1/1"
-							:class="{ active: isAllCheckSku }"
-						>
+						<p border-default-dashed border-2px border-border-dark-300 shadow-md rounded="t-6px" bg-white dark:bg-dark-6
+							p-2 text-red-5 flex-row-c-c class="all-price -translate-1/1" :class="{ active: isAllCheckSku }">
 							<small block>￥</small>
-							<h3 v-incre-up="allPrice"></h3>
+						<h3 v-incre-up="allPrice"></h3>
 						</p>
 					</div>
 				</el-form-item>
@@ -400,7 +338,13 @@ const setActiveItem = (image: string) => {
 		padding-left: 0.1em;
 	}
 }
+
 .color-group {
+	:deep(.el-radio__input) {
+		opacity: 0;
+
+	}
+
 	.sku-img {
 		position: absolute;
 		left: 0;
@@ -420,15 +364,16 @@ const setActiveItem = (image: string) => {
 		color: #fff;
 		text-shadow: 1px 1px #464646;
 	}
+
 	.is-checked .tip,
 	&:hover .tip {
-		transform: translateY(120%);
 		color: var(--el-color-primary);
 		text-shadow: 1px 1px #96969696;
 	}
 }
+
 :deep(.el-input-number) {
-	width: 8.6em;
+	width: 7.5em;
 }
 
 .all-price {
@@ -440,8 +385,9 @@ const setActiveItem = (image: string) => {
 	opacity: 0;
 	transform: translateY(0%);
 	transition: $transition-delay;
+
 	&.active {
-	opacity: 1;
+		opacity: 1;
 		transform: translateY(-80%);
 	}
 }

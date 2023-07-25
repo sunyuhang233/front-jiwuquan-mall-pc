@@ -75,8 +75,9 @@ export const useShopStore = defineStore('shop', () => {
         break;
       }
     }
-    if (id && index !== -1) {
+    if (index !== -1 && id !== "") {
       shopcartList.value[index].quantity++
+      return true
     } else {
       await reLoadShopcartList()
     }
@@ -131,6 +132,7 @@ export const useShopStore = defineStore('shop', () => {
     deleteBatchShopCart,
     loadShopcartList,
     reLoadShopcartList,
+    addShopcartAction,
     // getter 
     notMore
   }

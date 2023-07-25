@@ -6,15 +6,28 @@ import { Result, isTrue } from "@/types/result";
  * @returns 
  */
 export function getLoginDeviceList(token: string) {
-  return useHttp.get<Result<DeviceInfo[]>>("/user/info/device", {}, { headers: { "Authorization": token } });
+  return useHttp.get<Result<DeviceInfo[]>>("/user/device", {}, { headers: { "Authorization": token } });
+}
+
+
+/**
+ * 用户下线
+ * @param userAgent 
+ * @param token 
+ * @returns 
+ */
+export function toUserOffline(userAgent: string[], token: string) {
+  return useHttp.deleted<Result<string>>("/user/device", { userAgent }, { headers: { "Authorization": token } });
 }
 
 // 设备信息
 export interface DeviceInfo {
   ip: string;
-  operatingSystem: string;
-  browser: string;
   id: number;
+  isLocal: isTrue;
+  browser: string;
+  userAgentString: string;
+  operatingSystem: string;
   browserVersion: BrowserVersion;
 }
 // 浏览器信息

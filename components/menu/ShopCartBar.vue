@@ -71,7 +71,6 @@ const getAllPrice = computed(() => {
 });
 // 全屏
 const fullscreenLoading = ref<boolean>(false);
-const router = useRouter();
 const order = useOrderStore();
 // 前往订单页面付款
 const toOrderPage = (ids: string[]) => {

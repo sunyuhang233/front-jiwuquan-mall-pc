@@ -230,13 +230,14 @@
 .item-list-move,
 .item-list-enter-active,
 .item-list-leave-active {
-  transition: all 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.4s $animate-cubic;
 }
 
 .item-list-enter-from,
 .item-list-leave-to {
   opacity: 0;
-  transform: scaleY(0.01) translate(1em, 0);
+  filter: blur(0.6em);
+  transform: scaleY(0.01);
 }
 
 .item-list-leave-active {
@@ -244,9 +245,10 @@
 }
 
 // group动画
+.item-list-move,
 .group-list-enter-active,
 .group-list-leave-active {
-  transition: all 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.4s $animate-cubic-bount;
 }
 
 .group-list-enter-from,
@@ -260,9 +262,10 @@
 }
 
 // fade动画
+.item-list-move,
 .fade-bt-list-enter-active,
 .fade-bt-list-leave-active {
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.3s $animate-cubic-bount;
 }
 
 .fade-bt-list-enter-from,
