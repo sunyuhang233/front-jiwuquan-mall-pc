@@ -8,6 +8,7 @@ export const BaseUrl = getBaseUrl();
 export const BaseUrlImg = BaseUrl + "/res/image/";
 export const BaseUrlVideo = BaseUrl + "/res/video/";
 export const BaseUrlFile = BaseUrl + "/res/file/";
+export const AuthKey = "Authorization";
 
 export interface Result<T> {
   msg: string;

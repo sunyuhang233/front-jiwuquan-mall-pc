@@ -5,12 +5,14 @@
 		/>
 		<!-- 问候语 -->
 		<div class="select-none title animate__animated animate__fadeInDown" mt-3 mb-8>
-			<p class="text-lg py-4 tracking-1 opacity-80">
-				{{ useNowDateText(new Date()) }}好，
-				<span class="mark1 animatejs"
-					>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
-				>
-			</p>
+			<ClientOnly>
+				<p class="text-lg py-4 tracking-1 opacity-80">
+					{{ useNowDateText(new Date()) }}好，
+					<span class="mark1 animatejs"
+						>{{ user?.userInfo?.nickname || "你还未登录" }} ！</span
+					>
+				</p>
+			</ClientOnly>
 			<h2 text-2xl tracking-1>欢迎来到<span class="mark3 animate">极物圈社区 </span>🎉</h2>
 		</div>
 		<!-- 搜索 -->

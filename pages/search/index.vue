@@ -182,9 +182,10 @@ const clickTag = (val: string, i: number) => {
 					</div>
 				</ClientOnly>
 				<p opacity-80 mt-4 v-show="showResult">{{ `搜索结果` }}</p>
+				<!-- 搜索记录 -->
 				<div v-if="showResult">
 					<ListGoodsList
-						:class="'grid grid-cols-3 grid-gap-5'"
+						:class="'grid grid-cols-4 grid-gap-5'"
 						:timer="false"
 						:dto="dto"
 					/>

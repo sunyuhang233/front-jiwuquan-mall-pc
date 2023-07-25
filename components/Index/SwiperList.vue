@@ -51,11 +51,6 @@ const getEndDay = computed(() => {
 		return +((end - newDate) / (1 * 24 * 60 * 60 * 1000)).toFixed(0);
 	};
 });
-// 控制器
-// const contraller = ref(null);
-// const setControlledSwiper = (swiper: any) => {
-// 	contraller.value = swiper;
-// };
 </script>
 <template>
 	<div

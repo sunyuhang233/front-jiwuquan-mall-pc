@@ -11,6 +11,7 @@ export function getLoginDeviceList(token: string) {
 
 // 设备信息
 export interface DeviceInfo {
+  ip: string;
   operatingSystem: string;
   browser: string;
   id: number;

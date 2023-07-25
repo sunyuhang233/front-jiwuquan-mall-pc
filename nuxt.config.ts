@@ -58,6 +58,7 @@ export default defineNuxtConfig({
       'composables',
       'composables/utils/**',
       'composables/store/**',
+      'composables/api/*/',
       'types/*/.ts',
       'types/**',
     ]

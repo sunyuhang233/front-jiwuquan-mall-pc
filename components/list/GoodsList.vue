@@ -129,7 +129,7 @@ defineExpose({
 				v-infinite-scroll="loadGoodsPage"
 				:infinite-scroll-delay="600"
 				:infinite-scroll-distance="50"
-				class="overflow-x-hidden flex flex-wrap"
+				class="overflow-x-hidden"
 				:class="props.class !== null ? props.class : 'flex flex-wrap'"
 			>
 				<!-- 商品卡片 -->
