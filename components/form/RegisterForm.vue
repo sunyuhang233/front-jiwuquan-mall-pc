@@ -1,14 +1,13 @@
 <template>
 	<!-- 注册 -->
 	<el-form
-		@validate="console.clear()"
 		v-loading="isLoading"
 		:element-loading-text="loadingText"
 		label-position="top"
 		hide-required-asterisk
 		:rules="rules"
 		:model="formUser"
-		@submit.prevent="onRegister(registerType)"
+		ref="formRef"
 		class="form animate__animated"
 	>
 		<h2 mb-5 mt-4 tracking-0.2em>开启你的专属圈子✨</h2>
@@ -57,7 +56,7 @@
 				<template #append>
 					<el-button
 						type="primary"
-						@click="getLoginCode(registerType)"
+						@click="getRegCode(registerType)"
 						:disabled="emailCodeStorage > 0"
 						>{{
 							emailCodeStorage > 0 ? `${emailCodeStorage}s后重新发送` : "获取验证码"
@@ -82,7 +81,7 @@
 				<template #append>
 					<el-button
 						type="primary"
-						@click="getLoginCode(registerType)"
+						@click="getRegCode(registerType)"
 						:disabled="phoneCodeStorage > 0"
 						>{{
 							phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : "获取验证码"
@@ -111,12 +110,19 @@
 			/>
 		</el-form-item>
 		<el-form-item mt-1em>
-			<el-input type="submit" flex-1 size="large" class="submit" value="注 册" />
+			<el-button
+				type="info"
+				class="submit w-full"
+				style="padding: 20px"
+				@click="onRegister(formRef)"
+				>注 册</el-button
+			>
 		</el-form-item>
 	</el-form>
 </template>
 <script lang="ts" setup>
 import { FormRules } from "element-plus";
+import { FormInstance } from "vant";
 import { toRegister, DeviceType, getRegisterCode, toLoginByPwd } from "~/composables/api/user";
 import { checkUsernameExists } from "~/composables/api/user/info";
 import { Result } from "~/types/result";
@@ -127,6 +133,7 @@ const registerType = ref<number>(RegisterType.PHONE);
 // 请求加载
 const isLoading = ref<boolean>(false);
 const loadingText = ref<string>("");
+const formRef = ref();
 // 表单
 const formUser = reactive({
 	username: "", // 用户名
@@ -154,7 +161,12 @@ const rules = reactive<FormRules>({
 	],
 	password: [
 		{ required: true, message: "密码不能为空！", trigger: "blur" },
-		{ min: 6, max: 30, message: "密码长度为6-20！", trigger: "change" },
+		{ min: 6, max: 20, message: "密码长度为6-20字符！", trigger: "change" },
+		{
+			pattern: /^\w{6,20}$/,
+			message: "密码字母数字下划线组成",
+			trigger: "change",
+		},
 	],
 	code: [
 		{
@@ -192,7 +204,8 @@ const phoneCodeStorage = ref<number>(0);
  * 获取验证码
  * @param type
  */
-const getLoginCode = async (type: RegisterType) => {
+const getRegCode = async (type: RegisterType) => {
+	if (isLoading.value) return;
 	let data;
 	// 获取邮箱验证码
 	if (type === RegisterType.EMAIL) {
@@ -266,16 +279,26 @@ const store = useUserStore();
  * 注册
  * @param type 注册类型
  */
-const onRegister = async (type: RegisterType) => {
-	let data: Result<string>;
-	switch (type) {
+const onRegister = async (formEl: FormInstance) => {
+	if (!formEl) return;
+	// @ts-ignore
+	await formEl.validate((valid) => {
+		isLoading.value = true;
+		if (valid) {
+			onRegisterHandle();
+		}
+	});
+};
+const onRegisterHandle = async () => {
+	let data: Result<string> = { code: 20001, message: "注册失败，请稍后重试！", data: "" };
+	switch (registerType.value) {
 		case RegisterType.PHONE:
 			data = await toRegister({
 				username: formUser.username,
 				phone: formUser.phone,
 				password: formUser.password,
 				code: formUser.code,
-				type: type,
+				type: registerType.value,
 			});
 			break;
 		case RegisterType.EMAIL:
@@ -284,7 +307,7 @@ const onRegister = async (type: RegisterType) => {
 				password: formUser.password,
 				code: formUser.code,
 				email: formUser.email,
-				type: type,
+				type: registerType.value,
 			});
 			break;
 	}
@@ -337,6 +360,7 @@ const onRegister = async (type: RegisterType) => {
 		}
 	}
 };
+
 /**
  * 验证是否存在该用户
  */

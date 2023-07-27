@@ -10,7 +10,8 @@
 		"typecheck": "vue-tsc --noEmit",
 		"lint": "eslint .",
 		"pre": "nuxi prepare",
-		"generate": "nuxi generate",
+		"preview": "nuxi preview",
+		"generate": "nuxi generate GenerateOutput",
 		"start:generate": "npx serve .output/public"
 	},
 	"devDependencies": {

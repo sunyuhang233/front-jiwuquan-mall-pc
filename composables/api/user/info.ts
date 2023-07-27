@@ -134,7 +134,7 @@ export interface UpdatePhone {
  */
 export function getUpdateNewCode(key: string, type: DeviceType, token: string): Promise<Result<string>> {
   return useHttp.get<Result<string>>(
-    `/user/code/${key}`,
+    `/user/info/code/${key}`,
     { type },
     {
       headers: {

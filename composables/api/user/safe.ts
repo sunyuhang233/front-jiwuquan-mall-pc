@@ -36,3 +36,38 @@ export interface BrowserVersion {
   majorVersion: string;
   minorVersion: string;
 }
+
+
+export function getDeviceIpInfo(ip: string) {
+  return useHttp.get<Result<IpInfo>>(`http://47.115.226.150:9091/ip/info?ip=${ip}`);
+}
+
+
+export interface DeviceIpInfo {
+  ip: string;
+  id: number;
+  isLocal: isTrue;
+  browser: string;
+  userAgentString: string;
+  operatingSystem: string;
+  browserVersion: BrowserVersion;
+  region?: string;
+  ioCount?: number;
+  took?: number;
+  country?: string;
+  province?: string;
+  city?: string;
+  operator?: string;
+  other?: string;
+}
+
+export interface IpInfo {
+  region: string;
+  ioCount: number;
+  took: number;
+  country: string;
+  province: string;
+  city: string;
+  operator: string;
+  other: string;
+}

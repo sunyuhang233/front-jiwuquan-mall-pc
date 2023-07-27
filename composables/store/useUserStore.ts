@@ -98,6 +98,26 @@ export const useUserStore = defineStore(
         return false
       }
     }
+
+    /**
+     * 加载用户信息
+     * @param token 用户token
+     * @returns 
+     */
+    const loadUserInfo = async (token: string): Promise<boolean> => {
+      const user = await getUserInfo(token);
+      if (user.code === StatusCode.SUCCESS) {
+        useUserStore().$patch({
+          userInfo: {
+            ...user.data,
+          },
+        });
+        return true
+      } else {
+        return false
+      }
+    }
+
     /**
      * 用户确认状态
      * @param token token
@@ -173,6 +193,7 @@ export const useUserStore = defineStore(
       onUserExit,
       clearUserStore,
       loadUserWallet,
+      loadUserInfo,
       // getter
       getToken,
     };

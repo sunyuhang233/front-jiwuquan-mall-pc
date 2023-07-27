@@ -1,26 +1,40 @@
 <script lang="ts" setup>
-import { getLoginDeviceList, toUserOffline, DeviceInfo } from "@/composables/api/user/safe";
+import { getLoginDeviceList, DeviceIpInfo, toUserOffline } from "@/composables/api/user/safe";
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
+
+const deviceList = ref<DeviceIpInfo[]>([]);
 // 信息
-const fetchData = useAsyncData(
-	async () => {
-		const { data } = await getLoginDeviceList(user.getToken);
-		data.sort((a, b) => b.isLocal - a.isLocal);
-		return data;
-	},
-	{
-		lazy: true,
+const getDeviceList = async () => {
+	const { data } = await getLoginDeviceList(user.getToken);
+	let result: DeviceIpInfo[] = data.sort((a, b) => b.isLocal - a.isLocal);
+	let getList = [];
+	for (const p of result) {
+		getList.push(getDeviceIpInfo(p.ip));
 	}
-);
+	// 获取地址
+	const ProList = await Promise.all(getList);
+	ProList.forEach((p, i) => {
+		result[i] = {
+			...p.data,
+			...result[i],
+		};
+	});
+	deviceList.value.push(...result);
+	return true;
+};
+useAsyncData(async () => {
+	await getDeviceList();
+});
 // 刷新
 const reload = async () => {
 	if (isLoading.value) return;
+	deviceList.value.splice(0);
 	isLoading.value = true;
-	await fetchData.refresh();
+	const flag = await getDeviceList();
 	setTimeout(() => {
 		isLoading.value = false;
-		ElMessage.success("刷新成功🎉！");
+		ElMessage.success(flag ? "刷新成功🎉！" : "刷新失败，请稍后重试！");
 	}, 500);
 };
 
@@ -33,14 +47,12 @@ const exitLogin = (ua?: string) => {
 	})
 		.then(async (action) => {
 			if (action === "confirm") {
-				let arr = ua
-					? [ua]
-					: (fetchData.data.value?.map((p) => p.userAgentString) as string[]);
+				let arr = ua ? [ua] : (deviceList.value?.map((p) => p.userAgentString) as string[]);
 				const { code, message } = await toUserOffline(arr, user.getToken);
 				if (code === StatusCode.SUCCESS) {
-					if (fetchData.data.value) {
-						for (let i = 0; i < fetchData.data.value.length; i++) {
-							fetchData.data.value.splice(i, 1);
+					if (deviceList.value) {
+						for (let i = 0; i < deviceList.value.length; i++) {
+							deviceList.value.splice(i, 1);
 						}
 					}
 					ElMessage.success("下线成功！");
@@ -51,10 +63,9 @@ const exitLogin = (ua?: string) => {
 		})
 		.catch(() => {});
 };
-console.log(fetchData.data);
 </script>
 <template>
-	<div class="card group" v-loading.fullscreen="isLoading">
+	<div class="group">
 		<strong block opacity-70 my-4>
 			<i p-2.5 mr-2 i-solar:devices-outline />
 			登录设备
@@ -66,10 +77,18 @@ console.log(fetchData.data);
 				class="px-3 float-right hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)]"
 			/>
 		</strong>
-		<div class="v-card p-5 shadow-sm border-default rounded-14px">
+		<div
+			class="v-card h-full overflow-hidden group p-5 shadow-sm select-none border-default rounded-14px"
+			v-loading="isLoading"
+		>
 			<!-- 列表 -->
 			<transition-group name="item-list" tag="div" class="grid grid-cols-3 grid-gap-3">
-				<UserSafeDeviceCard :data="p" v-for="p in fetchData.data.value" :key="p.id">
+				<UserSafeDeviceCard
+					class="cursor-pointer hover:border-[var(--el-color-info)]"
+					:data="p"
+					v-for="p in deviceList"
+					:key="p.id"
+				>
 					<div></div>
 					<el-button
 						@click="exitLogin(p.userAgentString)"

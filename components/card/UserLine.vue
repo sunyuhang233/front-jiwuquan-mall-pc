@@ -65,9 +65,39 @@ const exitLogin = () => {
 		})
 		.catch(() => {});
 };
-const toView = (path: string) => {
-	navigateTo({ path });
-};
+
+const menuList = ref([
+	{
+		name: "收货地址",
+		path: "/user/address",
+		className: "bg-lime-5 i-solar:compass-bold-duotone",
+	},
+	{
+		name: "钱 包",
+		path: "/user/wallet",
+		className: "bg-red-5 i-solar:wallet-bold-duotone",
+	},
+	{
+		name: "购物车",
+		path: "/shopcart",
+		className: "bg-red-5 i-solar:cart-large-2-bold",
+	},
+	{
+		name: "账 单",
+		path: "/user/wallet",
+		className: "bg-yellow-5 i-solar:bill-list-bold-duotone",
+	},
+	{
+		name: "订 单",
+		path: "/order",
+		className: "bg-yellow-5 i-solar:clipboard-bold-duotone",
+	},
+	{
+		name: "账户安全",
+		path: "/user/safe",
+		className: "bg-green-5 i-solar:danger-bold-duotone",
+	},
+]);
 </script>
 <template>
 	<div class="user-card" flex-row-c-c cursor-pointer>
@@ -146,51 +176,18 @@ const toView = (path: string) => {
 							<h3 class="title" py-1>{{ user.userInfo.nickname }}</h3>
 							<!-- 卡片集合 -->
 							<div mb-2 grid grid-cols-3 grid-gap-2 justify-around>
-								<!-- 收货地址 -->
-								<div class="v-card" @click="toView('/user/address')">
+								<NuxtLink
+									v-for="p in menuList"
+									:key="p.path"
+									class="v-card group"
+									:to="p.path"
+								>
 									<p
-										class="icon shopcart"
-										bg-lime-5
-										i-solar:compass-bold-duotone
+										class="icon transition-200 group-hover:bg-light"
+										:class="p.className"
 									></p>
-									<p mt-2>收货地址</p>
-								</div>
-								<!-- 钱包 -->
-								<div class="v-card" @click="toView('/user/wallet')">
-									<p class="icon wallet" bg-red-5 i-solar:wallet-bold-duotone></p>
-									<p mt-2>钱 包</p>
-								</div>
-								<!-- 购物车 -->
-								<div class="v-card" @click="toView('/shopcart')">
-									<p class="icon shopcart" bg-red-5 i-solar:cart-large-2-bold></p>
-									<p mt-2>购物车</p>
-								</div>
-								<div class="v-card" @click="toView(`/user/wallet`)">
-									<p
-										class="icon myself"
-										bg-yellow-5
-										i-solar:bill-list-bold-duotone
-									></p>
-									<p mt-2>账 单</p>
-								</div>
-								<!-- 订单 -->
-								<div class="v-card" @click="toView(`/order`)">
-									<p
-										class="icon myself"
-										bg-yellow-5
-										i-solar:clipboard-bold-duotone
-									></p>
-									<p mt-2>订 单</p>
-								</div>
-								<!-- 安全 -->
-								<div class="v-card" @click="toView(`/user/safe`)">
-									<p
-										class="icon myself"
-										bg-green-5
-										i-solar:danger-bold-duotone
-									></p>
-									<p mt-2>账号安全</p>
-								</div>
+									<p mt-2>{{ p.name }}</p>
+								</NuxtLink>
 							</div>
 							<!-- 退出登录| 我的主页 -->
 							<div class="btn" flex-row-bt-c pt-4>

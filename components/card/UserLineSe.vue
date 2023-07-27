@@ -27,7 +27,11 @@ const exitLogin = () => {
 				<template #reference>
 					<img
 						class="rounded-6em w-2em h-2em"
-						:src="BaseUrlImg + user.userInfo.avatar"
+						:src="
+							user.userInfo.avatar
+								? BaseUrlImg + user.userInfo.avatar
+								: BaseUrlImg + 'default.png'
+						"
 						:alt="user.userInfo.nickname"
 					/>
 				</template>

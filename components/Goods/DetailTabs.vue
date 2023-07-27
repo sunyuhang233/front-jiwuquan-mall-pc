@@ -29,6 +29,7 @@
 			<!-- imgs -->
 			<div class="imgs rounded-4px overflow-hidden" flex flex-col>
 				<el-image
+					lazy
 					style="width: 100%; margin-bottom: 0.3em"
 					:src="BaseUrlImg + p"
 					v-for="(p, i) in goodsInfo?.images"
@@ -39,8 +40,8 @@
 		</el-tab-pane>
 		<!-- 评价 -->
 		<el-tab-pane
-			name="omments"
 			lazy
+			name="omments"
 			class="animate__animated animate__fadeIn mt-2"
 			:label="'评 价'"
 		>

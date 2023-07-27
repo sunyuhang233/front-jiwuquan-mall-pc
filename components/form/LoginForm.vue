@@ -3,10 +3,10 @@
 	<el-form
 		v-loading="isLoading"
 		label-position="top"
+		ref="formRef"
 		hide-required-asterisk
 		:rules="rules"
 		:model="userForm"
-		@submit.prevent="onLogin(loginType)"
 		class="form animate__animated"
 	>
 		<h2 mb-5 mt-4 tracking-0.2em>欢迎来到极物圈!</h2>
@@ -47,6 +47,7 @@
 			<el-form-item v-if="loginType === LoginType.EMAIL" prop="email" class="animated">
 				<el-input
 					type="email"
+					@keyup.enter="onLogin(formRef)"
 					prefix-icon="Message"
 					v-model.trim="userForm.email"
 					size="large"
@@ -76,6 +77,7 @@
 				<el-input
 					prefix-icon="Iphone"
 					v-model.trim="userForm.phone"
+					@keyup.enter="onLogin(formRef)"
 					size="large"
 					type="tel"
 					placeholder="请输入手机号"
@@ -102,6 +104,7 @@
 		>
 			<el-input
 				prefix-icon="ChatDotSquare"
+				@keyup.enter="onLogin(formRef)"
 				v-model.trim="userForm.code"
 				size="large"
 				placeholder="请输入验证码"
@@ -112,6 +115,7 @@
 			<el-input
 				prefix-icon="user"
 				v-model.trim="userForm.username"
+				@keyup.enter="onLogin(formRef)"
 				size="large"
 				placeholder="请输入用户名、手机号或邮箱"
 			/>
@@ -124,6 +128,7 @@
 			class="animated"
 		>
 			<el-input
+				@keyup.enter="onLogin(formRef)"
 				prefix-icon="Lock"
 				v-model.trim="userForm.password"
 				size="large"
@@ -132,14 +137,20 @@
 			/>
 		</el-form-item>
 		<el-form-item mt-1em>
-			<el-input type="submit" flex-1 size="large" class="submit" value="登 录"
-				>登 录</el-input
+			<el-button
+				@keyup.enter="onLogin(formRef)"
+				type="primary"
+				class="submit w-full"
+				style="padding: 20px"
+				@click="onLogin(formRef)"
+				>登 录</el-button
 			>
 		</el-form-item>
 	</el-form>
 </template>
 <script lang="ts" setup>
 import { FormRules } from "element-plus";
+import { FormInstance } from "vant";
 import {
 	getLoginCodeByType,
 	toLoginByPwd,
@@ -166,7 +177,12 @@ const rules = reactive<FormRules>({
 	],
 	password: [
 		{ required: true, message: "密码不能为空！", trigger: "blur" },
-		{ min: 6, max: 30, message: "密码长度不正确！", trigger: "blur" },
+		{ min: 6, max: 20, message: "密码长度6-20位！", trigger: "blur" },
+		{
+			pattern: /^\w{6,20}$/,
+			message: "密码字母数字下划线组成",
+			trigger: "change",
+		},
 	],
 	code: [
 		{
@@ -281,52 +297,61 @@ const toRegister = () => {
 	store.showRegisterForm = true;
 };
 
+const formRef = ref();
 /**
  * 登录
  * @param type
  */
-const onLogin = async (type: LoginType) => {
-	let res = null;
-	switch (type) {
-		case LoginType.PWD:
-			res = await toLoginByPwd(userForm.username, userForm.password);
-			break;
-		case LoginType.PHONE:
-			res = await toLoginByPhone(userForm.phone, userForm.code);
-			break;
-		case LoginType.EMAIL:
-			res = await toLoginByEmail(userForm.email, userForm.code);
-			break;
-	}
-	//
-	if (res.code === 20000) {
-		// 登录成功
-		if (res.data != "") {
-			ElMessage.success({
-				message: "登录成功！",
-				duration: 2000,
-			});
-			store.onUserLogin(res.data, autoLogin.value);
-			store.$patch({
-				token: res.data,
-				showLoginForm: false,
-				showRegisterForm: false,
-				isLogin: true,
-			});
+const onLogin = async (formEl: FormInstance | undefined) => {
+	if (!formEl || isLoading.value) return;
+	// @ts-ignore
+	formEl.validate(async (valid) => {
+		if (!valid) return;
+		isLoading.value = true;
+		let res = { code: 20001, data: "", message: "登录失败！" };
+		switch (loginType.value) {
+			case LoginType.PWD:
+				res = await toLoginByPwd(userForm.username, userForm.password);
+				break;
+			case LoginType.PHONE:
+				res = await toLoginByPhone(userForm.phone, userForm.code);
+				break;
+			case LoginType.EMAIL:
+				res = await toLoginByEmail(userForm.email, userForm.code);
+				break;
 		}
-		// 登录失败
-		else {
-			ElMessage.error({
-				message: res.message,
-				duration: 5000,
-			});
-			// store
-			store.$patch({
-				token: "",
-				isLogin: false,
-			});
+		if (res.code === 20000) {
+			// 登录成功
+			if (res.data != "") {
+				ElMessage.success({
+					message: "登录成功！",
+					duration: 2000,
+				});
+				store.onUserLogin(res.data, autoLogin.value);
+				store.$patch({
+					token: res.data,
+					showLoginForm: false,
+					showRegisterForm: false,
+					isLogin: true,
+				});
+			}
+			// 登录失败
+			else {
+				ElMessage.error({
+					message: res.message,
+					duration: 5000,
+				});
+				// store
+				store.$patch({
+					token: "",
+					isLogin: false,
+				});
+			}
 		}
-	}
+		setTimeout(() => {
+			isLoading.value = false;
+		}, 300);
+	});
 };
 </script>
 <style scoped lang="scss">

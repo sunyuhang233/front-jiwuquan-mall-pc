@@ -107,7 +107,7 @@ const getEndDay = computed(() => {
 			>
 				<ClientOnly>
 					<!-- 图片 -->
-					<el-image
+					<lazy-el-image
 						:class="!isLoading ? ' animate__blurIn' : ''"
 						:src="BaseUrlImg + p.images"
 						:alt="p.details"
@@ -120,7 +120,7 @@ const getEndDay = computed(() => {
 								<ElIconPicture w-sm p-30 pt-20 opacity-80 flex-row-c-c />
 							</div>
 						</template>
-					</el-image>
+					</lazy-el-image>
 				</ClientOnly>
 				<!-- 文本 -->
 				<section

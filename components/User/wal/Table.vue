@@ -11,15 +11,12 @@ import {
 import VChart, { THEME_KEY } from "vue-echarts";
 provide(THEME_KEY, useColorMode());
 const user = useUserStore();
-const isLoading = ref<boolean>(false);
 // 参数
 const dto = reactive<BillsTimeTotalDTO>({
 	currencyType: CurrencyType.BALANCE,
 	// type: null,
 	timeType: TimeType.Day,
 });
-// 排序
-const selectTime = ref<TimeType>(TimeType.Day);
 // 获取统计信息
 const tableData = ref<BillsTimeTotalVO[]>([]);
 const inData = computed(() => tableData.value.filter((p) => p.type === BillsType.IN));
@@ -83,22 +80,31 @@ const option = ref({
 		},
 	],
 });
+
+// 加载
+const isLoading = ref<boolean>(false);
+
 /**
  * 重新加载
  */
 const onReload = async () => {
+	isLoading.value = true;
 	tableData.value.splice(0);
 	const { data, code } = await getBillsTotalTable({ ...dto }, user.getToken);
-	if (code === StatusCode.SUCCESS) {
-		tableData.value.push(...data);
-	}
+	// 懒加载
+	let timer = setTimeout(() => {
+		isLoading.value = false;
+		if (code === StatusCode.SUCCESS) {
+			tableData.value.push(...data);
+		}
+		clearTimeout(timer);
+	}, 300);
 };
 onReload();
 </script>
 <template>
 	<div
 		class="relative rounded-14px transition-300 bg-white dark:bg-dark-3 shadow w-full p-5 pt-6"
-		v-loading="isLoading"
 	>
 		<!-- 排序 -->
 		<div class="absolute right-4.6em mt-0.2em z-1">
@@ -119,7 +125,7 @@ onReload();
 		</div>
 		<ClientOnly fallback-tag="div">
 			<!-- 表格 -->
-			<VChart class="w-500px h-390px flex-row-c-c" :option="option" />
+			<VChart class="w-500px h-390px flex-row-c-c" v-loading="isLoading" :option="option" />
 		</ClientOnly>
 	</div>
 </template>
