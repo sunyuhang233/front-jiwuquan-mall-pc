@@ -23,9 +23,9 @@ export interface ShopcartVO {
 	name: string;
 	skuId: string;
 	goodsId: string;
-	size: string;
-	color: string;
-	combo: string;
+	size?: string;
+	color?: string;
+	combo?: string;
 	stock: number;
 	price: number;
 	costPrice: number;

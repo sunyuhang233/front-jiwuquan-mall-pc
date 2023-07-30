@@ -22,7 +22,7 @@ const getImagesPreview = computed(() => {
 });
 // 轮播图
 const swiper = ref();
-const activeSmall = ref<string>(images[0]);
+const activeSmall = ref<string>(images[0] || "");
 const setActiveItem = (name: string) => {
 	swiper.value?.setActiveItem(name);
 	activeSmall.value = name;
@@ -143,7 +143,8 @@ defineComponent({
 			flex-row-c-c
 			w-6em
 			rounded-2em
-			><i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
+		>
+			<i i-solar:clapperboard-play-bold p-2.4 mr-1></i> 视频</small
 		>
 		<Teleport to="body">
 			<transition name="fade">

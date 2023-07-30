@@ -38,7 +38,7 @@ const route = useRoute();
 						class="i-solar:wallet-bold-duotone"
 						v-show="route.path === '/user/wallet'"
 					></i>
-					<span class="title ml-3">钱包</span>
+					<span class="title ml-3">钱包账单</span>
 				</el-menu-item>
 				<!-- 收货地址 -->
 				<el-menu-item index="/user/address">

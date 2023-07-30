@@ -9,7 +9,7 @@ const { address } = defineProps<{
 		cursor-pointer
 		transition-300
 		mr-4
-		mt-4
+		mt-2
 		w-260px
 		h-200px
 		p-4

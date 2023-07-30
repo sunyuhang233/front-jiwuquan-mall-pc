@@ -74,7 +74,7 @@ const getProps = computed({
 	set(skuId: string) {
 		const p = toRaw(skuList.value.find((p) => p.id === skuId));
 		// 更新
-		if (p && p.size && p.color && p.combo) {
+		if (p) {
 			shopCart.size = p.size;
 			shopCart.color = p.color;
 			shopCart.combo = p.combo;

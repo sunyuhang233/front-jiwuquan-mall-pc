@@ -59,14 +59,14 @@ export function httpRequest<T = unknown>(
           msg = "关联的内容不存在！";
           break;
         case StatusCode.NULL_ERR:
-          msg = "错误，问题！";
+          msg = "请求失败，空值错误！";
           break;
         case StatusCode.TOKEN_ERR:
           msg = "身份验证失败！";
           store.showLoginForm = true
           break;
         case StatusCode.PARAM_ERR:
-          msg = "错误，参数错误！";
+          msg = "请求失败，参数错误！";
           break;
         case StatusCode.BUSY_ERR:
           msg = "服务器繁忙，请稍后重试！";
@@ -91,13 +91,10 @@ export function httpRequest<T = unknown>(
     onResponseError({ response }) {
       switch (response.status) {
         case 400:
-          msg = '请求参数缺失！';
+          msg = '请求参数错误，请稍后重试！';
           break
         case 401:
-          // store.$patch({
-          //   showLoginForm: true,
-          //   showRegisterForm: false,
-          // })
+          msg = '没有权限，拒绝访问！';
           break
         case 403:
           msg = '没有权限，拒绝访问！';

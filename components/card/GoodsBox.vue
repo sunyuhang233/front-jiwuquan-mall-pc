@@ -11,7 +11,8 @@ const getDiscount = computed<number>(() => {
 </script>
 <template>
 	<div
-		class="w-full h-180px md:w-260px md:h-230px border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow group"
+		class="w-full border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow-sm group"
+		style="aspect-ratio: 6/5"
 	>
 		<!-- 商品图片  -->
 		<ClientOnly>
@@ -42,7 +43,7 @@ const getDiscount = computed<number>(() => {
 				</small>
 			</div>
 		</ClientOnly>
-		<div class="flex flex-col h-1/3 py-3 justify-between">
+		<div class="flex relative flex-col h-1/3 py-3 justify-between">
 			<h4 class="w-1/1 truncate px-3">
 				{{ goods.name }}
 			</h4>
@@ -60,7 +61,6 @@ const getDiscount = computed<number>(() => {
 </template>
 <style scoped lang="scss">
 .texts {
-	position: relative;
 	line-height: 1.2em;
 	&:hover > * {
 		opacity: 0;
@@ -70,6 +70,7 @@ const getDiscount = computed<number>(() => {
 		background-color: $text-mark-color4;
 		position: absolute;
 		left: 0;
+		bottom: 0;
 		width: 100%;
 		height: 2em;
 		line-height: 2em;

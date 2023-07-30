@@ -1,7 +1,6 @@
 <template>
 	<div
-		min-w-465px
-		class="hot-list v-card dark:bg-dark-5 backdrop-blur-20px border-default shadow min-h-420px h-420px p-4 mx-a md:ma-0 rounded-4px overflow-visible"
+		class="hot-list v-card dark:bg-dark-5 backdrop-blur-20px border-default shadow-sm min-h-420px h-420px p-4 rounded-4px overflow-visible"
 	>
 		<h3 px-1 pb-4>
 			热门商品

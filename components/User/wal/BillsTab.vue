@@ -123,7 +123,6 @@ watch(
 	>
 		<div class="top">
 			<!-- 头部 -->
-
 			<!-- 日历 -->
 			<div
 				class="select-none caledar shadow-sm dark:shadow dark:bg-dark-5 dark:opacity-90 rounded-12px"
@@ -149,7 +148,7 @@ watch(
 		</div>
 		<!-- 账单列表 -->
 		<div clas="bottom  overflow-hidden" v-loading="isRefresh">
-			<div class="mt-3 mb-2 text-center opacity-90" v-show="!opt.isNowDay">
+			<div class="mt-3 mb-3 text-center opacity-90" v-show="!opt.isNowDay">
 				{{ selectDay.getMonth() + 1 }}月的账单
 			</div>
 			<div class="mt-3 mb-2 text-center opacity-90" v-show="opt.isNowDay">

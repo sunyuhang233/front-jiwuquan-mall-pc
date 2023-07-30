@@ -7,7 +7,7 @@ const route = useRoute();
 </script>
 <template>
 	<!-- 菜单 -->
-	<div class="group menu-list w-200px" :class="{ 'is-fold': isFold }">
+	<div class="group fixed md:sticky menu-list w-12vw md:w-200px" :class="{ 'is-fold': isFold }">
 		<el-menu
 			style="width: 100%"
 			:router="true"
@@ -17,27 +17,27 @@ const route = useRoute();
 			<!-- 首页 -->
 			<el-menu-item index="/">
 				<ElIconHomeFilled />
-				<div class="title" mx-4 hidden sm:block>首&emsp;页</div>
+				<div class="title" mx-4 hidden md:block>首&emsp;页</div>
 			</el-menu-item>
 			<!-- 社区 -->
 			<el-menu-item index="/community">
 				<ElIconSwitchFilled />
-				<div class="title" mx-4 hidden sm:block>社&emsp;区</div>
+				<div class="title" mx-4 hidden md:block>社&emsp;区</div>
 			</el-menu-item>
 			<!-- 分类 -->
 			<el-menu-item index="/category">
 				<ElIconGoodsFilled />
-				<div class="title" mx-4 hidden sm:block>分&emsp;类</div>
+				<div class="title" mx-4 hidden md:block>分&emsp;类</div>
 			</el-menu-item>
 			<el-menu-item index="/setting">
 				<ElIconSetting />
-				<div class="title" mx-4 hidden sm:block>设&emsp;置</div>
+				<div class="title" mx-4 hidden md:block>设&emsp;置</div>
 			</el-menu-item>
 		</el-menu>
 		<ClientOnly>
 			<!-- 折叠按钮 -->
 			<div class="collapse flex-row-c-c" @click="isFold = !isFold">
-				<i class="icon p-3.2 mx-0.3rem" i-solar:alt-arrow-right-bold></i>
+				<i class="icon p-3.2 mx-0.3rem" i-solar:alt-arrow-left-bold></i>
 			</div>
 		</ClientOnly>
 	</div>
@@ -45,7 +45,6 @@ const route = useRoute();
 
 <style lang="scss" scoped>
 .menu-list {
-	position: sticky;
 	top: $top-nav-height;
 	left: 0;
 	user-select: none;
@@ -104,7 +103,26 @@ const route = useRoute();
 	}
 }
 .is-fold {
-	transform: translateX(-100%);
+	width: 0;
+	margin: 0;
+	padding: 0;
+	:deep(.el-menu-item) {
+		width: 0;
+		margin: 0;
+		padding: 0;
+		opacity: 0.5;
+		&,
+		&.is-active {
+			width: 0;
+			margin: 0;
+			padding: 0;
+		}
+		.title {
+			width: 0;
+			margin: 0;
+			padding: 0;
+		}
+	}
 	.collapse {
 		.icon {
 			transform: rotate(180deg);

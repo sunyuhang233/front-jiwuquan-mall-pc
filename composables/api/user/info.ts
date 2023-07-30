@@ -14,13 +14,13 @@ export function getUserInfo(token: string) {
   })
 }
 export interface UserWallet {
-  userId?: string;
-  balance?: number;
-  recharge?: number;
-  spend?: number;
-  points?: number;
-  updateTime?: string;
-  createTime?: string;
+  userId: string;
+  balance: number;
+  recharge: number;
+  spend: number;
+  points: number;
+  updateTime: string;
+  createTime: string;
 }
 export interface UserInfoVO {
   id: string;
@@ -104,6 +104,29 @@ export interface UpdateInfo {
   slogan?: string
 }
 
+
+export interface UpdatePhone {
+  newPhone: string,
+  code: string
+}
+
+/**
+ * 获取更换手机号|邮箱验证码
+ * @param key 手机号|邮箱
+ * @param type 0|1 DeviceType
+ * @param token 
+ * @returns 
+ */
+export function getUpdateNewCode(key: string, type: DeviceType, token: string): Promise<Result<string>> {
+  return useHttp.get<Result<string>>(
+    `/user/info/code/${key}`,
+    { type },
+    {
+      headers: {
+        "Authorization": token
+      }
+    })
+}
 /**
  * 更换手机号
  * @param dto 手机号、验证码
@@ -120,28 +143,6 @@ export function updatePhone(dto: UpdatePhone, token: string): Promise<Result<str
       }
     })
 }
-export interface UpdatePhone {
-  newPhone: string,
-  code: string
-}
-
-/**
- * 获取更换手机号|邮箱验证码
- * @param key 手机号|邮箱
- * @param type 0|1
- * @param token 
- * @returns 
- */
-export function getUpdateNewCode(key: string, type: DeviceType, token: string): Promise<Result<string>> {
-  return useHttp.get<Result<string>>(
-    `/user/info/code/${key}`,
-    { type },
-    {
-      headers: {
-        "Authorization": token
-      }
-    })
-}
 
 /**
  * 更换邮箱
@@ -151,7 +152,7 @@ export function getUpdateNewCode(key: string, type: DeviceType, token: string): 
  */
 export function updateEmail(dto: UpdateEmail, token: string): Promise<Result<string>> {
   return useHttp.put<Result<string>>(
-    `/user/info`,
+    `/user/info/email`,
     { ...dto },
     {
       headers: {

@@ -1,6 +1,6 @@
 <template>
 	<ElButton @click="toggle" class="btn" mx-3 round>
-		<span>{{ isDark ? "切换日间" : "切换夜间" }}</span>
+		<span hidden md:inline>{{ isDark ? "切换日间" : "切换夜间" }}</span>
 		<!-- <OtherMoonSun /> -->
 		<img
 			src="@/assets/images/icon/sun.svg"

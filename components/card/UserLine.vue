@@ -103,7 +103,13 @@ const menuList = ref([
 	<div class="user-card" flex-row-c-c cursor-pointer>
 		<ClientOnly>
 			<!-- 头像弹窗 -->
-			<el-popover placement="bottom" :offset="20" :width="320" trigger="hover">
+			<el-popover
+				transition="popup"
+				placement="bottom"
+				:offset="20"
+				:width="320"
+				trigger="hover"
+			>
 				<template #reference>
 					<div flex-row-c-c>
 						<!-- 替换头像 -->

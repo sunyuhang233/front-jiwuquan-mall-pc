@@ -26,6 +26,7 @@ const close = () => {
 			></div>
 			<UserSafePwdForm v-if="modelValue.showUpdatePwd" @close="close()" />
 			<UserSafePhoneForm v-if="modelValue.showUpdatePhone" @close="close()" />
+			<UserSafeEmailForm v-if="modelValue.showUpdateEmail" @close="close()" />
 		</div>
 	</transition>
 </template>

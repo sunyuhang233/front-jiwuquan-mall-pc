@@ -22,7 +22,10 @@ definePageMeta({
 				<div class="layout-default" v-if="user.isLogin">
 					<!-- 标题 -->
 					<div class="title animate__animated animate__fadeInDown" mt-3 mb-6>
-						<h2 text-2xl tracking-1>你的钱包账单</h2>
+						<h2 text-2xl tracking-1 flex>
+							你的钱包
+							<el-text style="font-size: 1.04em" type="info">账单</el-text>
+						</h2>
 					</div>
 					<!-- 下方 -->
 					<div class="grid-content">

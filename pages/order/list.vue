@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getGoodsSkuByIdsLazy } from "~/composables/api/goods/sku";
+import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
 import { PushOrdersItemDTO } from "~/composables/api/orders";
 import { appName } from "~/constants";
 const route = useRoute();
@@ -11,7 +11,7 @@ const skuIdList: string[] = [];
 orderItems.forEach((p) => {
 	skuIdList.push(p.skuId);
 });
-const skuList = await getGoodsSkuByIdsLazy(skuIdList);
+const skuList = await getGoodsSkuByIds(skuIdList);
 useHead({
 	title: appName + " - 订单",
 	meta: [
@@ -27,7 +27,7 @@ useHead({
 		<NuxtLayout>
 			<div layout-default w-700px>
 				<div class="top" border-default border-0 border-b="2px">
-					<h3 mb-4>dd</h3>
+					<h3 mb-4>订单</h3>
 				</div>
 			</div>
 		</NuxtLayout>

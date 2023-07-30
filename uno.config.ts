@@ -21,8 +21,8 @@ export default defineConfig({
     ['flex-row-bt-c', 'flex flex-row flex-justify-between flex-items-center'],
     ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
     ['border-default-dashed', 'hover:shadow-sm border-2px  border-default border-dashed'],
-    ['layout-default', 'mx-2em lg:mx-a pt-8 pb-6 w-80vw md:w-1400px  transition-300'],
-    ['layout-default-se', 'mx-auto pt-8 pb-6 w-80vw md:w-1000px  transition-300'],
+    ['layout-default', 'mx-a sm:px-2rem md:px-0 py-6 w-80vw md:w-1400px '],
+    ['layout-default-se', 'mx-a sm:px-2rem md:px-0 py-6 w-80vw md:w-1000px  '],
   ],
   theme: {
     // ...

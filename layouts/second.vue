@@ -1,7 +1,7 @@
 <template>
 	<div class="min-h-100vh flex flex-col justify-between">
 		<!-- 顶部导航 -->
-		<MenuHeaderMenu />
+		<MenuHeaderMenu v-if="header" />
 		<!-- 左侧边导航 -->
 		<div class="flex-1 animate-fade-slice">
 			<!-- 内容 -->
@@ -18,6 +18,11 @@
 <script lang="ts" setup>
 const { footer, menu } = defineProps({
 	footer: {
+		type: Boolean,
+		default: true,
+		required: false,
+	},
+	header: {
 		type: Boolean,
 		default: true,
 		required: false,

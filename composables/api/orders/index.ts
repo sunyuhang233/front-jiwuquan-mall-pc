@@ -75,15 +75,26 @@ export interface OrdersPageDTO {
 
 // 订单状态参数
 export enum OrdersStatus {
-  UN_PAID = 0, // "待付款"
-  PAID = 1, // "已付款"
-  DELIVERED = 2, // "已发货"
-  RECEIVED = 3, // "已收货"
-  COMMENTED = 4, // "已评价"
-  CANCELED = 5, // "已取消"
-  DELAY_CANCELED = 6, // "已超时取消"
-  REFUND = 7, // "发起退款"
-  REFUND_SUCCESS = 8, // "退款成功并取消"
+  /** 未提交 */
+  READY = -1,
+  /** 待付款 */
+  UN_PAID = 0,
+  /** 已付款 */
+  PAID = 1,
+  /** 已发货 */
+  DELIVERED = 2,
+  /** 已收货 */
+  RECEIVED = 3,
+  /** 已评价 */
+  COMMENTED = 4,
+  /** 已取消 */
+  CANCELED = 5,
+  /** 已超时取消 */
+  DELAY_CANCELED = 6,
+  /** 发起退款 */
+  REFUND = 7,
+  /** 退款成功并取消 */
+  REFUND_SUCCESS = 8,
 }
 
 
@@ -127,9 +138,9 @@ export interface PushOrdersDTO {
 export interface PushOrdersItemDTO {
   skuId: string;
   quantity: number;
-  shopId?: any;
-  couponId?: any;
-  activityId?: any;
+  shopId?: string; // 店铺id
+  couponId?: string;// 优惠卷id
+  activityId?: string;// 活动id
 }
 
 /**

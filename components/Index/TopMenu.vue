@@ -16,7 +16,7 @@
 			<h2 text-2xl tracking-1>欢迎来到<span class="mark3 animate">极物圈社区 </span>🎉</h2>
 		</div>
 		<!-- 搜索 -->
-		<IndexSearch />
+		<IndexSearch class="min-h-6rem md:min-h-a w-full md:w-470px" />
 	</div>
 </template>
 <script lang="ts" setup>

@@ -2,7 +2,7 @@
 <template>
 	<div>
 		<NuxtLayout name="error">
-			<ElEmpty>
+			<ElEmpty description=" ">
 				<div flex-row-c-c flex-col>
 					<h3 mb-5>500, 服务器错误</h3>
 					<el-button plain type="primary" @click="clearError({ redirect: '/' })">

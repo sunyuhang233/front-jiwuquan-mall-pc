@@ -15,25 +15,9 @@
 .slideInOut-leave-active {
   animation: fadeInLeft $transition-delay $animate-cubic reverse;
 }
-// popover上下一次冒泡
-.popSliceUpDown-enter-active,
-.popSliceUpDown-leave-active {
-  transition: $transition-delay $animate-cubic;
-  transform-origin: center top;
-  transform: scale(1);
-}
-
-.popSliceUpDown-enter-from,
-.popSliceUpDown-leave-to {
-  overflow: hidden;
-  transform: scale(0.8);
-  opacity: 0;
-  transition: $transition-delay $animate-cubic;
-}
-
 // popup从大到小
-.popup-enter-active,
-.popup-leave-active {
+.popup-enter-to,
+.popup-leave-from {
   transition: calc($transition-delay / 2);
   transform: scale(1);
   opacity: 1;
@@ -47,20 +31,20 @@
 }
 
 // popover上下突出
-.popSlice-enter-active,
-.popSlice-leave-active {
-  transition: $transition-delay $animate-cubic;
-  transform-origin: right bottom;
-  transform: scale(1);
+.popY-enter-active,
+.popY-leave-active {
+  transition: all $transition-delay $animate-cubic;
+  transform: scaleY(1);
+  transform-origin: bottom;
 }
 
-.popSlice-enter-from,
-.popSlice-leave-to {
+.popY-enter-from,
+.popY-leave-to {
   overflow: hidden;
-  transform-origin: right bottom;
-  transform: scale(0.7);
+  transform: scaleY(0.6);
+  transform-origin: bottom;
   opacity: 0;
-  transition: $transition-delay $animate-cubic;
+  transition: all $transition-delay $animate-cubic;
 }
 
 // fade-in-out
@@ -70,6 +54,7 @@
 .fadeInOut-leave-active {
   animation: 0.2s fadeIn reverse;
 }
+
 @keyframes fade-in-out {
   0% {
     position: absolute;

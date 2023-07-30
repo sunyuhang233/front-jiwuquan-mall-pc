@@ -2,9 +2,9 @@
 import { GoodsInfoVO } from '~/composables/api/goods';
 import { GoodsSkuVO } from '~/composables/api/goods/sku';
 import type { FormInstance } from 'element-plus';
-import { addShopcart } from '~/composables/api/shopcart';
 import { PushOrdersItemDTO } from '~/composables/api/orders';
 import currency from 'currency.js';
+import { gsap } from 'gsap';
 const user = useUserStore();
 const shop = useShopStore();
 
@@ -27,20 +27,14 @@ const FormRef = ref<FormInstance>();
  * 添加到购物车
  * @param formRef
  */
-const onSubmitShopCart = (formRef: FormInstance | undefined) => {
+const onSubmitShopCart = (formRef: FormInstance | undefined,event:MouseEvent) => {
 	formRef
 		?.validate(async (valid) => {
 			if (valid && user.getToken) {
-				// const data = await addShopcart(
-				// 	{
-				// 		skuId: form.skuId,
-				// 		quantity: form.quantity,
-				// 	},
-				// 	user.getToken
-				// );
-				// if (data.code === StatusCode.SUCCESS) {
 				if (await shop.addShopcartAction(form.skuId)) {
 					ElMessage.success('添加成功！');
+					startDotAnimate(event)
+
 				} else {
 					ElMessage.error('添加失败，请稍后再试！');
 				}
@@ -53,7 +47,19 @@ const onSubmitShopCart = (formRef: FormInstance | undefined) => {
 			return false;
 		});
 };
-
+// 小球动画
+const isAimate= ref<boolean>(false)
+const startDotAnimate = (event:MouseEvent) => {
+	const target = event.target as HTMLElement;
+	if (isAimate.value|| target.getBoundingClientRect===undefined) return
+	isAimate.value= true
+	const {bottom,right} = target.getBoundingClientRect()
+	console.dir(bottom,right);
+	gsap.to(target,{
+		bottom:0,
+	})
+	isAimate.value= false
+}
 /**
  * 立即购买
  */
@@ -209,17 +215,17 @@ const setActiveItem = (image: string) => {
 </script>
 <template>
 	<ClientOnly>
-		<el-card class="sku-card relative -z-1" px-8 pt-8>
+		<div class="v-card shadow rounded-6px relative -z-1" p-8 pb-2>
 			<el-form ref="FormRef" :model="form" label-position="top" class="group">
 				<!-- 顶部 -->
 				<div class="top opacity-90" flex-row-bt-c mt-2>
 					<!-- 商品标签 -->
 					<div class="left">
-						<el-tag class="mr-2 mb-2 " effect="dark" type="danger" v-if="goodsInfo?.isNew">新品</el-tag>
-						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
+						<el-tag  class="mr-2"  effect="dark" type="danger" v-if="goodsInfo?.isNew">新品</el-tag>
+						<el-tag class="mr-2" effect="light" type="info">{{
 							goodsInfo?.postage ? goodsInfo?.postage + '元运费' : '免运费'
 						}}</el-tag>
-						<el-tag class="mr-2 mb-2" effect="light" type="info">{{
+						<el-tag class="mr-2" effect="light" type="info">{{
 							goodsInfo?.refundTime ? goodsInfo?.refundTime + '日无理由退货' : ''
 						}}</el-tag>
 					</div>
@@ -298,7 +304,7 @@ const setActiveItem = (image: string) => {
 
 				<!-- 购物车|立即购买 -->
 				<el-form-item>
-					<div class="w-1/1 flex justify-between py-3 relative">
+					<div class="w-1/1 flex justify-between py-3 relative mt-2">
 						<!-- 加入 -->
 						<el-button size="large" style="
 								flex: 1;
@@ -308,7 +314,7 @@ const setActiveItem = (image: string) => {
 								letter-spacing: 0.1em;
 								margin-right: 0.6em;
 								font-weight: 700;
-							" shadow plain @click="onSubmitShopCart(FormRef)">加入购物车
+							" shadow plain @click="onSubmitShopCart(FormRef,$event)">加入购物车
 						</el-button>
 						<!-- 立即购买 -->
 						<el-button size="large" style="
@@ -329,7 +335,7 @@ const setActiveItem = (image: string) => {
 					</div>
 				</el-form-item>
 			</el-form>
-		</el-card>
+		</div>
 	</ClientOnly>
 </template>
 <style scoped lang="scss">

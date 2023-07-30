@@ -47,7 +47,7 @@
 			<el-form-item v-if="loginType === LoginType.EMAIL" prop="email" class="animated">
 				<el-input
 					type="email"
-					@keyup.enter="onLogin(formRef)"
+					@keyup.enter="getLoginCode(loginType)"
 					prefix-icon="Message"
 					v-model.trim="userForm.email"
 					size="large"
@@ -77,7 +77,7 @@
 				<el-input
 					prefix-icon="Iphone"
 					v-model.trim="userForm.phone"
-					@keyup.enter="onLogin(formRef)"
+					@keyup.enter="getLoginCode(loginType)"
 					size="large"
 					type="tel"
 					placeholder="请输入手机号"
@@ -149,8 +149,6 @@
 	</el-form>
 </template>
 <script lang="ts" setup>
-import { FormRules } from "element-plus";
-import { FormInstance } from "vant";
 import {
 	getLoginCodeByType,
 	toLoginByPwd,
@@ -170,7 +168,7 @@ const userForm = reactive({
 	email: "", // 邮箱
 	code: "", // 验证码
 });
-const rules = reactive<FormRules>({
+const rules = reactive({
 	username: [
 		{ required: true, message: "该项不能为空！", trigger: "blur" },
 		{ min: 6, max: 30, message: "长度在6-30个字符！", trigger: "blur" },
@@ -247,6 +245,7 @@ const getLoginCode = async (type: LoginType) => {
 	else if (type === LoginType.PHONE) {
 		if (userForm.phone.trim() === "") return;
 		if (!checkPhone(userForm.phone)) {
+			isLoading.value = false;
 			return ElMessage.error("手机号格式不正确！");
 		}
 		isLoading.value = true;
@@ -255,10 +254,12 @@ const getLoginCode = async (type: LoginType) => {
 			// 开启定时器
 			useInterval(phoneTimer, phoneCodeStorage, 60, -1);
 			ElMessage.success({
-				message: `手机验证码为：${data.data}`,
+				message: data.message,
 				duration: 5000,
 			});
-			userForm.code = data.data;
+			// userForm.code = data.data;
+		} else {
+			ElMessage.error(data.message);
 		}
 	}
 	// 关闭加载
@@ -302,7 +303,7 @@ const formRef = ref();
  * 登录
  * @param type
  */
-const onLogin = async (formEl: FormInstance | undefined) => {
+const onLogin = async (formEl: any | undefined) => {
 	if (!formEl || isLoading.value) return;
 	// @ts-ignore
 	formEl.validate(async (valid) => {

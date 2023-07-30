@@ -126,141 +126,141 @@ const clickTag = (val: string, i: number) => {
 </script>
 
 <template>
-	<!-- 下拉框 -->
-	<el-popover
-		width="470px"
-		popper-class="popover"
-		transition="popSliceUpDown"
-		:placement="'bottom-end'"
-		:show-after="200"
-		:hide-after="0"
-		trigger="click"
-		:visible="isShowResult"
-		popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px; height:395px; padding: 1.2em 1.2em;"
-		tabindex="0"
-	>
-		<template #reference>
-			<div class="content" relative>
-				<!-- 搜索 -->
-				<div class="v-input" flex-row-c-c pb-2>
-					<ElInput
-						@click="isShowResult = true"
-						@focus="isShowResult = true"
-						class="mr-1 lg:mr-2"
-						type="text"
-						size="large"
-						clearable
-						autocomplete="off"
-						:prefix-icon="ElIconSearch"
-						minlength="2"
-						maxlength="30"
-						v-model.trim="searchKeyWords"
-						:onSearch="onSearch"
-						:placeholder="'搜索商品'"
-						@blur="clearSearch"
-						@keyup.esc="clearSearch"
-						@keyup.enter="onSearch"
-					/>
-					<ElButton
-						type="primary"
-						w-66px
-						@click="onSearch"
-						style="transition: 0.2s"
-						:loading="isLoading"
-					>
-						搜索
-					</ElButton>
-				</div>
-				<!-- 搜索历史记录 -->
-				<ClientOnly>
-					<div
-						v-show="!isShowResult"
-						class="tags animate__animated animate__headShake"
-						z-0
-						top-40px
-						absolute
-						top-0
-						cursor-pointer
-						py-1
-						flex
-						items-center
-						flex-nowrap
-						overflow-hidden
-					>
-						<ElTag
-							size="large"
-							v-for="(p, i) in searchHistoryList"
-							:key="p + i"
-							closable
-							@close="handleClose(p)"
-							@click="clickTag(p, i)"
-							class="mr-1 mt-2 transition-300"
-						>
-							<span pr-0.3em>{{ p }}</span>
-						</ElTag>
-					</div>
-				</ClientOnly>
-			</div>
-		</template>
-		<!-- 2、搜索结果（商品goods） -->
-		<!-- 标题 -->
-		<span v-show="searchPageList.length > 0" px-2 py-4 pb-8>
-			{{ ` 搜索到 ${searchPage.total} 条数据` }}
-		</span>
-		<ElIconCloseBold
-			width="1.6em"
-			absolute
-			right-1em
-			top-1em
-			cursor-pointer
-			style="color: var(--el-color-primary)"
-			shadow
-			shadow-inset
-			rounded-4px
-			active:transform-scale-80
-			transition-300
-			@click="clearSearch"
-		/>
-		<ElScrollbar
-			@scroll="onLoadMore"
-			overflow-hidden
-			pt-3
-			flex-col
-			v-loading="isLoading"
-			element-loading-background="transparent"
+	<div>
+		<!-- 下拉框 -->
+		<el-popover
+			width="470px"
+			popper-class="popover"
+			transition="fade"
+			:placement="'bottom-end'"
+			:show-after="200"
+			:hide-after="0"
+			trigger="click"
+			:visible="isShowResult"
+			popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:4px; height:395px; padding: 1.2em 1.2em;"
+			tabindex="0"
 		>
-			<transition-group tag="div" name="item-list" class="relative">
-				<!-- 跳转详情页 -->
-				<NuxtLink
-					:to="`/goods/detail/${p.id}`"
-					class="mt-2 animate__animated animate__fadeIn"
-					v-for="(p, i) in searchPageList"
-					:key="p.id"
-				>
-					<!-- 商品卡片 -->
-					<CardGoodsLine :goods="p" :key="p.id" />
-					<ElDivider
-						dark:opacity-50
-						v-if="i !== searchPageList.length - 1"
-						style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
-					/> </NuxtLink
-			></transition-group>
-			<ElEmpty
-				mt-10
-				:image-size="80"
-				description="没有找到商品"
-				v-show="searchPageList.length <= 0"
+			<template #reference>
+				<div class="content" relative>
+					<!-- 搜索 -->
+					<div class="v-input" flex-row-c-c pb-2>
+						<ElInput
+							@click="isShowResult = true"
+							@focus="isShowResult = true"
+							class="mr-2"
+							type="text"
+							size="large"
+							clearable
+							autocomplete="off"
+							:prefix-icon="ElIconSearch"
+							minlength="2"
+							maxlength="30"
+							v-model.trim="searchKeyWords"
+							:onSearch="onSearch"
+							:placeholder="'搜索商品'"
+							@blur="clearSearch"
+							@keyup.esc="clearSearch"
+							@keyup.enter="onSearch"
+						/>
+						<ElButton
+							type="primary"
+							w-66px
+							@click="onSearch"
+							style="transition: 0.2s"
+							:loading="isLoading"
+						>
+							搜索
+						</ElButton>
+					</div>
+					<!-- 搜索历史记录 -->
+					<ClientOnly>
+						<div
+							v-show="!isShowResult"
+							class="tags animate__animated animate__headShake"
+							z-0
+							top-40px
+							absolute
+							top-0
+							cursor-pointer
+							py-1
+							flex
+							items-center
+							flex-nowrap
+							overflow-hidden
+						>
+							<ElTag
+								size="large"
+								v-for="(p, i) in searchHistoryList"
+								:key="p + i"
+								closable
+								@close="handleClose(p)"
+								@click="clickTag(p, i)"
+								class="mr-1 mt-2 transition-300"
+							>
+								<span pr-0.3em>{{ p }}</span>
+							</ElTag>
+						</div>
+					</ClientOnly>
+				</div>
+			</template>
+			<!-- 2、搜索结果（商品goods） -->
+			<!-- 标题 -->
+			<span v-show="searchPageList.length > 0" px-2 py-4 pb-8>
+				{{ ` 搜索到 ${searchPage.total} 条数据` }}
+			</span>
+			<ElIconCloseBold
+				width="1.6em"
+				absolute
+				right-1em
+				top-1em
+				cursor-pointer
+				style="color: var(--el-color-primary)"
+				shadow
+				shadow-inset
+				rounded-4px
+				active:transform-scale-80
+				transition-300
+				@click="clearSearch"
 			/>
-		</ElScrollbar>
-		<p v-show="noMore" py-4 mb-4 opacity-80 text-center tracking-2px>没有更多了</p>
-	</el-popover>
+			<ElScrollbar
+				@scroll="onLoadMore"
+				overflow-hidden
+				pt-3
+				flex-col
+				v-loading="isLoading"
+				element-loading-background="transparent"
+			>
+				<transition-group tag="div" name="item-list" class="relative">
+					<!-- 跳转详情页 -->
+					<NuxtLink
+						:to="`/goods/detail/${p.id}`"
+						class="mt-2 animate__animated animate__fadeIn"
+						v-for="(p, i) in searchPageList"
+						:key="p.id"
+					>
+						<!-- 商品卡片 -->
+						<CardGoodsLine :goods="p" :key="p.id" />
+						<ElDivider
+							dark:opacity-50
+							v-if="i !== searchPageList.length - 1"
+							style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
+						/> </NuxtLink
+				></transition-group>
+				<ElEmpty
+					mt-10
+					:image-size="80"
+					description="没有找到商品"
+					v-show="searchPageList.length <= 0"
+				/>
+			</ElScrollbar>
+			<p v-show="noMore" py-4 mb-4 opacity-80 text-center tracking-2px>没有更多了</p>
+		</el-popover>
+	</div>
 </template>
 
 <!-- 样式scss -->
 <style scoped lang="scss">
-$height: 40px;
-$input-width: 395px;
-
+$height: 2.6rem;
 .v-input {
 	:deep(.el-button) {
 		padding: 0 30px;
@@ -270,19 +270,13 @@ $input-width: 395px;
 	}
 
 	:deep(.el-input__wrapper) {
-		width: $input-width;
 		height: $height;
 		transition: $transition-delay;
 		letter-spacing: 0.2em;
 
 		&.is-focus {
 			backdrop-filter: blur(20px);
-			width: 395px;
 		}
-	}
-
-	:deep(inp.el-input__inner):focus {
-		width: 395px;
 	}
 }
 

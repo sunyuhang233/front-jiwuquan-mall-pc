@@ -18,4 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook("app:error", () => {
     NProgress.done()
   })
+  nuxtApp.hook("vue:error", () => {
+    NProgress.done()
+  })
 })

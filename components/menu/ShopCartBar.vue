@@ -105,12 +105,12 @@ const toOrderPage = (ids: string[]) => {
 					shadow-lg
 					:visible="isShow"
 					@keyup.esc="isShow = false"
-					width="530px"
+					width="520px"
 					popper-class="popover"
-					transition="popSlice"
+					transition="popY"
 					:hide-after="0"
 					popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
-    min-height:380px; padding: 1.2em 1em;"
+    min-height:380px; padding: 1.2em 1em; right: 0;"
 					tabindex="0"
 				>
 					<template #reference>
@@ -153,7 +153,6 @@ const toOrderPage = (ids: string[]) => {
 									>立即登录</el-button
 								>
 							</div>
-							<!-- 全局 -->
 							<h2
 								mb-2
 								text-center
@@ -179,7 +178,7 @@ const toOrderPage = (ids: string[]) => {
 								>
 								购物车
 							</h2>
-							<el-scrollbar v-if="user.isLogin" height="500px" mb-2>
+							<el-scrollbar v-if="user.isLogin" height="50vh" mb-2>
 								<div
 									class="overflow-auto"
 									v-infinite-scroll="shop.loadShopcartList"

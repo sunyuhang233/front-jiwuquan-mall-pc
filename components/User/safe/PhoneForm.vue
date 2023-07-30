@@ -12,12 +12,13 @@
 		<h2 mb-6 mt-4 text-center tracking-0.2em>
 			{{ user.userInfo.isPhoneVerified ? "更换" : "绑定" }}手机号
 		</h2>
-		<el-form-item type="newPhone" label="" prop="newPhone" class="animated">
+		<el-form-item label="" prop="newPhone" class="animated">
 			<el-input
 				prefix-icon="Iphone"
 				v-model.trim="form.newPhone"
 				@keyup.enter="getPhoneCode"
 				size="default"
+				clearable
 				type="tel"
 				placeholder="请输入新手机号"
 			>
@@ -26,10 +27,9 @@
 						type="primary"
 						@click="getPhoneCode"
 						:disabled="phoneCodeStorage > 0"
-						>{{
-							phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : "获取验证码"
-						}}</el-button
 					>
+						{{ phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : "获取验证码" }}
+					</el-button>
 				</template>
 			</el-input>
 		</el-form-item>
@@ -68,15 +68,14 @@ const phoneCodeStorage = ref<number>(0);
 const formRef = ref();
 // 表单
 const form = reactive({
+	newPhone: user.userInfo.phone || "",
 	code: "",
-	newPhone: "",
 });
 const rules = reactive({
 	newPhone: [
 		{ required: true, message: "手机号不能为空！", trigger: "blur" },
 		{
-			pattern:
-				/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/,
+			pattern: /^1(3\d|4[57]|5[0-35-9]|6[56]|7[013678]|8\d|9[89])\d{8}$/g,
 			message: "手机号格式不正确！",
 			trigger: "change",
 		},
@@ -91,7 +90,7 @@ const rules = reactive({
 });
 
 /**
- * 修改密码
+ * 修改手机号
  * @param type
  */
 const onUpdatePhone = async (formEl: FormInstance | undefined) => {
@@ -100,7 +99,7 @@ const onUpdatePhone = async (formEl: FormInstance | undefined) => {
 	await formEl.validate((valid) => {
 		if (valid) {
 			isLoading.value = true;
-			ElMessageBox.confirm("是否确认修改密码?", "修改密码", {
+			ElMessageBox.confirm("是否确认修改?", "修改手机号", {
 				confirmButtonText: "确认修改",
 				cancelButtonText: "取消",
 			}).then((action) => {
@@ -115,37 +114,35 @@ const toUpdate = async () => {
 	let res = await updatePhone({ newPhone: form.newPhone, code: form.code }, user.getToken);
 	if (res.code === StatusCode.SUCCESS) {
 		// 修改成功
-		if (res.data != "") {
-			ElMessage.success({
-				message: "修改成功，下次登录请用新密码！",
-				duration: 2000,
-			});
-		}
-		// 修改失败
-		else {
-			ElMessage.error({
-				message: res.message,
-				duration: 4000,
-			});
-		}
+		ElMessage.success({
+			message: "修改手机号成功！",
+			duration: 2000,
+		});
+		user.userInfo.phone = form.newPhone;
 		emits("close");
 		setTimeout(() => {
 			isLoading.value = false;
 		}, 300);
+	} else {
+		ElMessage.error(res.message || "修改失败，请稍后重试！");
 	}
 };
-
 // 获取验证码
 let timer: NodeJS.Timer | undefined;
 const getPhoneCode = async () => {
 	if (phoneCodeStorage.value > 0) return;
 	if (!form.newPhone) return ElMessage.warning("新手机号不能为空");
-
+	if (!checkPhone(form.newPhone)) {
+		return ElMessage.error("新手机号格式不正确!");
+	}
+	if (user.userInfo.phone === form.newPhone.trim()) {
+		return ElMessage.error("新旧手机号不能一致!");
+	}
 	// 1、请求
 	const { code } = await getUpdateNewCode(form.newPhone, DeviceType.PHONE, user.getToken);
 	if (code === StatusCode.SUCCESS) {
 		phoneCodeStorage.value = 60;
-		ElMessage.success("发送验证码成功！");
+		ElMessage.success("发送成功，请查看手机短信！");
 		timer = setInterval(() => {
 			phoneCodeStorage.value--;
 			clearInterval(timer);

@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { getEventsLists } from "~/composables/api/event";
 import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
-
 // 活动事件列表
 const eventList = reactive<EventVO[]>([]);
-const isLoading = ref<boolean>(true);
 // 请求
 const { data, refresh } = await getEventsLists();
 if (data.value && data.value.code === StatusCode.SUCCESS) {
@@ -13,11 +11,6 @@ if (data.value && data.value.code === StatusCode.SUCCESS) {
 	res.forEach((p) => {
 		eventList.push(p);
 	});
-	if (eventList.length === data.value.data.length) {
-		setTimeout(() => {
-			isLoading.value = false;
-		}, 30);
-	}
 } else {
 	// 失败重新请求
 	setTimeout(() => {
@@ -53,17 +46,7 @@ const getEndDay = computed(() => {
 });
 </script>
 <template>
-	<div
-		rounded-6px
-		overflow-hidden
-		cursor-pointer
-		mr-a
-		w-465px
-		md:w="620px"
-		h-300px
-		md:h="420px"
-		class="swpier"
-	>
+	<div rounded-6px overflow-hidden cursor-pointer class="swpier">
 		<swiper
 			:grabCursor="true"
 			class="w-full h-full transition-1000"
@@ -108,7 +91,6 @@ const getEndDay = computed(() => {
 				<ClientOnly>
 					<!-- 图片 -->
 					<lazy-el-image
-						:class="!isLoading ? ' animate__blurIn' : ''"
 						:src="BaseUrlImg + p.images"
 						:alt="p.details"
 						class="e-img"
