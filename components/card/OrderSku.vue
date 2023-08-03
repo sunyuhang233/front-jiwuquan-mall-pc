@@ -81,13 +81,7 @@ const getTotalPrice = computed(() => {
 					hover:transform-scale-110
 					transition-300
 					:src="BaseUrlImg + data.image"
-					style="
-						width: 100%;
-						height: 100%;
-						aspect-ratio: 1/1;
-						border: 1px solid #8d8d8d;
-						border-radius: 4px;
-					"
+					style="width: 100%; height: 100%; aspect-ratio: 1/1; border-radius: 4px"
 					fit="cover"
 				/>
 			</div>
