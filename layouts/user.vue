@@ -1,11 +1,11 @@
 <template>
-	<div class="min-h-100vh flex flex-col justify-between">
+	<div class="min-h-100vh flex flex-col">
 		<!-- 头部 -->
 		<MenuHeaderMenuSe />
 		<div class="flex">
 			<ClientOnly>
 				<!-- 左侧边导航 -->
-				<MenuCollMenu />
+				<MenuCollMenu v-if="leftMenu" />
 			</ClientOnly>
 			<!-- 内容 -->
 			<ClientOnly>

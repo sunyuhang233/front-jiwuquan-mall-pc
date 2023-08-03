@@ -60,6 +60,7 @@ const startDotAnimate = (event:MouseEvent) => {
 	})
 	isAimate.value= false
 }
+ const order = useOrderStore();
 /**
  * 立即购买
  */
@@ -75,17 +76,19 @@ const onSubmitBuy = (formRef: FormInstance | undefined) => {
 				];
 				fullscreenLoading.value = true;
 				// 提交订单
-				const order = useOrderStore();
-				setTimeout(() => {
-					order.pushOrderItems.splice(0);
-					order.pushOrderItems.push(...dto);
+				setTimeout(() => { 
+					order.clearOrderItems();
+					order.$patch({
+						pushOrderItems:[...dto],
+					});
 					fullscreenLoading.value = false;
 					navigateTo({
-						path: '/order/pay',
+						path: '/order/detail',
 					});
 				}, 1000);
 			} else {
 				ElMessage.closeAll();
+				fullscreenLoading.value = false;
 				return false;
 			}
 		})
@@ -236,7 +239,7 @@ const setActiveItem = (image: string) => {
 				</div>
 				<div class="sku-list" tracking-0.1em flex flex-col leading-1.4em pt-6>
 					<!-- 顶部 -->
-					<h2 leading-1.2em mb-4>{{ goodsInfo?.name }}</h2>
+					<h3 leading-1.2em mb-4>{{ goodsInfo?.name }}</h3>
 					<div flex-row-bt-c mb-4>
 						<small opacity-90 float-left>销售价（元）：</small>
 						<div class="righjt">

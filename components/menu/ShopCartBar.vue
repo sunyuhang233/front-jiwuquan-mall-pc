@@ -85,12 +85,13 @@ const toOrderPage = (ids: string[]) => {
 	fullscreenLoading.value = true;
 	// 提交订单
 	setTimeout(() => {
-		fullscreenLoading.value = false;
+		order.clearOrderItems();
 		order.$patch({
 			pushOrderItems: dtoList,
 		});
+		fullscreenLoading.value = false;
 		navigateTo({
-			path: "/order/pay",
+			path: "/order/detail",
 		});
 	}, 800);
 };
@@ -107,7 +108,7 @@ const toOrderPage = (ids: string[]) => {
 					@keyup.esc="isShow = false"
 					width="520px"
 					popper-class="popover"
-					transition="popY"
+					transition="fade"
 					:hide-after="0"
 					popper-style="box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
     min-height:380px; padding: 1.2em 1em; right: 0;"

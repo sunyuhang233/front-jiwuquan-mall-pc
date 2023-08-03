@@ -16,13 +16,16 @@ export default defineConfig({
     // 颜色
     ['text-color', 'text-dark dark:text-white'],
     ['bg-color', 'bg-white dark:bg-dark'],
+    // 边框
+    ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
+    ['border-default-dashed', 'hover:shadow-sm border-2px  border-default border-dashed'],
+    ['border-default-hover', `transition-300 hover:shadow hover:border-solid hover:border-[var(--el-color-primary)]  border-default-dashed
+    `],
     // 布局
     ['flex-row-c-c', 'flex flex-row flex-justify-center flex-items-center'],
     ['flex-row-bt-c', 'flex flex-row flex-justify-between flex-items-center'],
-    ['border-default', 'border-1px border-solid border-gray-200 dark:border-dark-300'],
-    ['border-default-dashed', 'hover:shadow-sm border-2px  border-default border-dashed'],
-    ['layout-default', 'mx-a sm:px-2rem md:px-0 py-6 w-80vw md:w-1400px '],
-    ['layout-default-se', 'mx-a sm:px-2rem md:px-0 py-6 w-80vw md:w-1000px  '],
+    ['layout-default', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1400px '],
+    ['layout-default-se', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1000px  '],
   ],
   theme: {
     // ...

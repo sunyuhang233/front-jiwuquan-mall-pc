@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-100vh flex flex-col justify-between">
+	<div class="min-h-100vh flex flex-col">
 		<!-- 顶部导航 -->
 		<MenuHeaderMenu v-if="header" />
 		<!-- 左侧边导航 -->

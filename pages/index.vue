@@ -15,11 +15,13 @@ useHead({
 			<div class="layout-default">
 				<div flex flex-col>
 					<IndexTopMenu w-full />
-					<div flex flex-col md:flex-row pt-4 w-full>
+					<div flex flex-col md:flex-row w-full>
 						<!-- 轮播图 -->
-						<IndexSwiperList mb-6 w-full md:mr-a md:w="620px" h-300px md:h="420px" />
+						<IndexSwiperList
+							class="my-6 w-full md:mr-a md:w-620px h-300px md:h-420px"
+						/>
 						<!-- 热门商品 -->
-						<IndexHotGoodsList mx-0 md:m-0 />
+						<IndexHotGoodsList my-6 mx-0 />
 					</div>
 				</div>
 				<div class="bottom" overflowx-hidden>

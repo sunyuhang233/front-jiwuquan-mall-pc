@@ -10,7 +10,7 @@ const { address } = defineProps<{
 		transition-300
 		mr-3
 		mt-2
-		w-260px
+		w-240px
 		min-h-160px
 		p-3.4
 		relative

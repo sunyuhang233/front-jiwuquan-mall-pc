@@ -3,7 +3,7 @@ import { StatusCode } from "~/types/result";
 import { getBaseUrl } from "./toggleDev";
 
 type Methods = "GET" | "POST" | "DELETE" | "PUT";
-export const BaseUrl = getBaseUrl();
+export const BaseUrl = getBaseUrl;
 // 图片
 export const BaseUrlImg = BaseUrl + "/res/image/";
 export const BaseUrlVideo = BaseUrl + "/res/video/";

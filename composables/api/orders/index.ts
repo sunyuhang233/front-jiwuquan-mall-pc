@@ -6,28 +6,47 @@ import { IPage } from "~/types";
  * @param page 
  * @param size 
  * @param dto 
+ * @param token
  * @returns 
  */
-export function getOrderPageByDTO(status: OrdersStatus, page: number, size: number, dto: OrdersPageDTO) {
-  return useHttp.post<Result<IPage<OrderInfoVO>>>(`/orders/${status}/${page}/${size}`)
+export function getOrderPageByDTO(status: OrdersStatus, page: number, size: number, dto: OrdersPageDTO, token: string) {
+  return useHttp.post<Result<IPage<OrderInfoVO>>>(`/orders/${status}/${page}/${size}`, {
+    ...dto
+  }, {
+    headers: {
+      "Authorization": token
+    }
+  })
 }
 
 /**
  * 获取全部订单(分页)
  * @param page 
  * @param size 
- * @param dto 
+ * @param token
  * @returns 
  */
-export function getAllOrderPage(page: number, size: number, dto: OrdersPageDTO) {
-  return useHttp.post<Result<IPage<OrderInfoVO>>>(`/orders/${page}/${size}`)
+export function getAllOrderPage(page: number, size: number, dto: OrdersPageDTO, token: string) {
+  return useHttp.post<Result<IPage<OrderInfoVO>>>(`/orders/${page}/${size}`, {
+    ...dto
+  }, {
+    headers: {
+      "Authorization": token
+    }
+  })
 }
 // 订单列表信息
 export interface OrderInfoVO {
   id: string;
   userId: string;
-  userAddress?: any;
   status: number;
+  name: string;
+  province: string;
+  city: string;
+  county: string;
+  address: string;
+  postalCode: string;
+  phone: string;
   remark: string;
   spendPrice: number;
   totalPrice: number;
@@ -36,12 +55,25 @@ export interface OrderInfoVO {
   updateTime: string;
   ordersItems: OrdersItemVO[];
 }
+// 订单子项
+export interface OrdersItemVO {
+  skuId: string;
+  quantity: number;
+  reducePrice: number;
+  finalPrice: number;
+  activityId?: string;
+  shopId?: string;
+  address?: string;
+  goods: Good;
+  goodsSku: GoodsSkuVO;
+}
 interface Good {
   id: string;
   name: string;
   description: string;
   postage: number;
 }
+
 interface GoodsSkuVO {
   id: string;
   image: string;
@@ -52,25 +84,13 @@ interface GoodsSkuVO {
   price: number;
   costPrice: number;
 }
-// 订单子项
-export interface OrdersItemVO {
-  skuId: string;
-  quantity: number;
-  reducePrice: number;
-  finalPrice: number;
-  activityId?: any;
-  shopId?: any;
-  address?: any;
-  goods: Good;
-  goodsSku: GoodsSkuVO;
-}
 // 订单分页参数
 export interface OrdersPageDTO {
-  id: string,
-  name: string,
-  shopId: string,
-  startTime: string,
-  endTime: string
+  id?: string,
+  name?: string,
+  shopId?: string,
+  startTime?: string,
+  endTime?: string
 }
 
 // 订单状态参数
@@ -104,8 +124,12 @@ export enum OrdersStatus {
  * @param id 订单id
  * @returns 
  */
-export function getOrdersInfoById(id: string) {
-  return useHttp.get<Result<OrderInfoVO>>(`/orders/${id}`)
+export function getOrdersInfoById(id: string, token: string) {
+  return useHttp.get<Result<OrderInfoVO>>(`/orders/${id}`, {}, {
+    headers: {
+      "Authorization": token
+    }
+  })
 }
 
 
@@ -117,8 +141,8 @@ export function getOrdersInfoById(id: string) {
  * @param token 
  * @returns 
  */
-export function addOrdersByDto(addressId: string, items: PushOrdersItemDTO[], remark: string, token: string) {
-  return useHttp.post<Result<string>>(`/orders/`, {
+export function pushOrdersItems(addressId: string, items: PushOrdersItemDTO[], remark: string, token: string) {
+  return useHttp.post<Result<UnpaidOrderVO>>(`/orders/`, {
     addressId,
     items: [...items],
     remark
@@ -127,6 +151,11 @@ export function addOrdersByDto(addressId: string, items: PushOrdersItemDTO[], re
       "Authorization": token
     }
   })
+}
+export interface UnpaidOrderVO {
+  orderId?: string,
+  reducePrice?: number,
+  finalPrice?: number,
 }
 // 添加订单类型
 export interface PushOrdersDTO {
@@ -145,13 +174,14 @@ export interface PushOrdersItemDTO {
 
 /**
  * 修改订单
+ * @param orderId 
  * @param addressId 
  * @param remark 
  * @param token 
  * @returns 
  */
-export function updateOrders(addressId: string, remark: string, token: string) {
-  return useHttp.put<Result<string>>(`/orders/`, {
+export function updateOrders(orderId: string, addressId: string, remark: string, token: string) {
+  return useHttp.put<Result<string>>(`/orders/${orderId}`, {
     addressId,
     remark
   }, {
@@ -170,8 +200,8 @@ export function updateOrders(addressId: string, remark: string, token: string) {
  * @param token 
  * @returns 
  */
-export function payOrders(type: PayType, points: number, voucherId: string, token: string) {
-  return useHttp.put<Result<string>>(`/orders/pay/`, {
+export function payOrders(orderId: string, type: PayType, points: number, voucherId: string, token: string) {
+  return useHttp.put<Result<string>>(`/orders/pay/${orderId}`, {
     type,
     points,
     voucherId
@@ -250,7 +280,12 @@ export function checkDeliveryOrders(id: string, token: string) {
 
 
 
-
+/**
+ * 删除订单 
+ * @param id 订单id
+ * @param token 
+ * @returns 
+ */
 export function deleteOrders(id: string, token: string) {
   return useHttp.deleted<Result<string>>(`/orders/${id}`, {
   }, {

@@ -58,7 +58,8 @@ const getTotalPrice = computed(() => {
 	<div
 		v-loading="isUpdateLoading"
 		class="card group"
-		flex-row-bt-c
+		flex
+		justify-between
 		flex-wrap
 		cursor-pointer
 		p-0
@@ -66,13 +67,8 @@ const getTotalPrice = computed(() => {
 		text-0.6rem
 		md:text-1em
 		rounded-8px
-		transition-300
+		border-default-hover
 		border-2px
-		hover:shadow
-		hover:border="solid violet-6"
-		dark:hover:bg="dark-1"
-		border-dashed
-		border-default
 	>
 		<!-- 图片 -->
 		<ClientOnly>
@@ -87,13 +83,13 @@ const getTotalPrice = computed(() => {
 			</div>
 		</ClientOnly>
 		<!-- 商品名称|规格 -->
-		<div class="flex justify-between truncate flex-1 h-full">
+		<div class="flex py-2 justify-between overflow-hidden truncate flex-1">
 			<div class="h-full left px-4 group flex flex-col items-start justify-between">
-				<h3 class="max-w-1/1 md:max-w-16em overflow-hidden truncate">
+				<h4 class="max-w-1/1 md:max-w-16em overflow-hidden truncate">
 					{{ data.name }}
-				</h3>
+				</h4>
 				<!-- 中下 -->
-				<p font-700 color-red-6 my-3>
+				<p font-700 color-red-6 mt-1 mb-a>
 					￥{{ data.price?.toFixed(2) }}
 					<span color-coolgray text-0.6em style="text-decoration: line-through"
 						>￥{{ data.costPrice.toFixed(2) }}</span
@@ -142,7 +138,7 @@ const getTotalPrice = computed(() => {
 			</div>
 		</div>
 		<!-- 数量 -->
-		<div class="flex flex-col items-center mr-4 md:mr-0 md:w-1/10 relative">
+		<div class="flex-row-c-c flex-col mr-4 md:mr-0 md:w-1/10 relative">
 			<slot name="btn">
 				<!-- 数量 -->
 				<el-input-number

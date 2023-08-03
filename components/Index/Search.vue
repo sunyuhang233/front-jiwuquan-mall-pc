@@ -93,7 +93,7 @@ const onLoadMore = async () => {
 /**
  * 清除
  */
-const clearSearch = (e: any) => {
+const closeSearch = (e: any) => {
 	setTimeout(() => {
 		isShowResult.value = false;
 		searchKeyWords.value = "";
@@ -106,7 +106,18 @@ const clearSearch = (e: any) => {
 		});
 	}, 10);
 };
-
+watch(isShowResult, (val) => {
+	if (val) {
+		document.body.style.overflowY = "hidden";
+	} else {
+		document.body.style.overflowY = "auto";
+	}
+});
+useNuxtApp().hook("page:transition:finish", () => {
+	if (document) {
+		document.body.style.overflowY = "auto";
+	}
+});
 /**
  * 关闭历史标签
  * @param tag
@@ -141,11 +152,17 @@ const clickTag = (val: string, i: number) => {
 			tabindex="0"
 		>
 			<template #reference>
-				<div class="content" relative>
+				<div class="content z-1001" relative>
+					<transition name="fade">
+						<div
+							@click="closeSearch"
+							v-show="isShowResult"
+							class="fixed top-0 left-0 w-full h-100vh overflow-hidden bg-[ #7d7d7d] backdrop-blur-8px"
+						></div>
+					</transition>
 					<!-- 搜索 -->
 					<div class="v-input" flex-row-c-c pb-2>
 						<ElInput
-							@click="isShowResult = true"
 							@focus="isShowResult = true"
 							class="mr-2"
 							type="text"
@@ -158,15 +175,14 @@ const clickTag = (val: string, i: number) => {
 							v-model.trim="searchKeyWords"
 							:onSearch="onSearch"
 							:placeholder="'搜索商品'"
-							@blur="clearSearch"
-							@keyup.esc="clearSearch"
+							@keyup.esc="closeSearch"
 							@keyup.enter="onSearch"
 						/>
 						<ElButton
 							type="primary"
 							w-66px
 							@click="onSearch"
-							style="transition: 0.2s"
+							style="transition: 0.2s; position: relative"
 							:loading="isLoading"
 						>
 							搜索
@@ -220,13 +236,11 @@ const clickTag = (val: string, i: number) => {
 				rounded-4px
 				active:transform-scale-80
 				transition-300
-				@click="clearSearch"
+				@click="closeSearch"
 			/>
 			<ElScrollbar
 				@scroll="onLoadMore"
-				overflow-hidden
-				pt-3
-				flex-col
+				class="overflow-hidden pb-6 pt-2 pr-2 flex-col"
 				v-loading="isLoading"
 				element-loading-background="transparent"
 			>

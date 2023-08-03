@@ -40,7 +40,7 @@ const isNoMore = computed<boolean>(() => {
 });
 
 const loadGoodsPage = async () => {
-	if (isLoading.value) return;
+	if (isLoading.value || (props.limit && goodsList.value.length >= props.limit)) return;
 	isLoading.value = true;
 	page.value++;
 	const { data } = await getGoodsListByPage(page.value, size.value, props?.dto);

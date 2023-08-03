@@ -12,7 +12,7 @@ export function httpRequest<T = unknown>(
   let msg: string = "";
   const defaultOpts = {
     method,
-    baseURL: getBaseUrl(),
+    baseURL: getBaseUrl,
     headers: {} as { Authoriztion?: string },
     // 请求拦截器
     onRequest: (config) => {

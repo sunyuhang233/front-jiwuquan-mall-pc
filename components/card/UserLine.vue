@@ -89,7 +89,7 @@ const menuList = ref([
 	},
 	{
 		name: "订 单",
-		path: "/order",
+		path: "/order/list",
 		className: "bg-yellow-5 i-solar:clipboard-bold-duotone",
 	},
 	{
@@ -136,7 +136,7 @@ const menuList = ref([
 							</h4>
 							<small
 								opacity-80
-								v-copying="user.userInfo.id"
+								v-copying.toast="user.userInfo.id"
 								class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
 								>ID:{{ user.userInfo.id }}
 								<span
@@ -157,7 +157,7 @@ const menuList = ref([
 							ref="uploader"
 							style="width: 100%; height: 100%; border-radius: 50%"
 							drag
-							:action="getBaseUrl() + '/user/info/avatar'"
+							:action="getBaseUrl + '/user/info/avatar'"
 							:headers="{ Authorization: user.token }"
 							method="PUT"
 							:limit="1"

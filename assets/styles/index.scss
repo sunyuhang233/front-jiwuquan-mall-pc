@@ -95,9 +95,10 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin: 0.6em;
+    margin: 0.4em 0 0.8em 0;
     .el-button {
       min-width: 40%;
+      margin: 0 auto;
       height: auto;
     }
   }

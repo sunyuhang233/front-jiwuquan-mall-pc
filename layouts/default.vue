@@ -1,13 +1,14 @@
 <template>
-	<div class="min-h-100vh flex flex-col justify-between">
+	<div class="min-h-100vh flex flex-col">
+		<!-- 头部导航 -->
 		<MenuHeaderMenu />
 		<div class="flex">
-			<!-- 左侧边导航 -->
 			<ClientOnly>
+				<!-- 左侧边导航 -->
 				<MenuDrawerMenu v-if="leftMenu" />
 			</ClientOnly>
 			<!-- 内容 -->
-			<div class="flex-1">
+			<div class="flex-1 min-h-100vh">
 				<slot></slot>
 			</div>
 		</div>

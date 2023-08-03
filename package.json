@@ -11,7 +11,7 @@
 		"lint": "eslint .",
 		"pre": "nuxi prepare",
 		"preview": "nuxi preview",
-		"generate": "nuxi generate GenerateOutput",
+		"generate": "nuxi generate .generateOutput",
 		"start:generate": "npx serve .output/public"
 	},
 	"devDependencies": {

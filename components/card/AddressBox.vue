@@ -9,15 +9,15 @@ const { address } = defineProps<{
 		cursor-pointer
 		transition-300
 		mr-4
-		mt-2
-		w-260px
-		h-200px
+		mt-4
+		min-w-240px
+		min-h-180px
 		p-4
 		relative
 		border-default
 		border-2px
 		rounded-8px
-		hover:border="solid dark-4"
+		hover:border="solid [var(--el-color-primary)]"
 		dark:hover:border-gray-5
 		rounded-6px
 		class="group"

@@ -21,7 +21,7 @@ const toBack = () => {
 		<div class="btns">
 			<!-- 回到顶部 -->
 			<el-backtop
-				style="width: 52px; height: 52px; overflow: auto"
+				style="width: 3.25rem; height: 3.25rem; overflow: auto"
 				class="animate-zoom-in-right animate-duration-500 cursor-pointer hover:scale-90 transition-300 rounded-10em shadow-[#0bdb85] shadow-opacity-60 shadow-md"
 			/>
 			<!-- 返回 -->
@@ -45,10 +45,24 @@ const toBack = () => {
 			>
 				<ElIconArrowLeftBold style="width: 80%; height: 80%" text-light-600 />
 			</span>
+			<!-- 客服 -->
+			<div
+				w-3.25rem
+				h-3.25rem
+				flex-row-c-c
+				shadow-lg
+				p-3
+				transition-300
+				hover:scale-90
+				class="bg-[var(--el-color-info)] rounded-1/2 mt-3"
+				v-if="menu.includes('service') && user.isLogin"
+			>
+				<i w-full h-full i-solar:headphones-square-sound-broken bg-bluegray-2></i>
+			</div>
 			<!-- 购物车 -->
 			<div
-				animate-delay-400
-				animate-duration-600
+				animate-delay-300
+				animate-duration-500
 				class="shop-card mt-3 relative"
 				v-if="menu.includes('shopcart') && user.isLogin"
 			>

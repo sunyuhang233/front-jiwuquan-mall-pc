@@ -117,7 +117,7 @@ const showInvitation = () => {
 				class="avatar-uploader"
 				ref="uploader"
 				drag
-				:action="getBaseUrl() + '/user/info/avatar'"
+				:action="getBaseUrl + '/user/info/avatar'"
 				:headers="{ Authorization: user.token }"
 				method="PUT"
 				:limit="1"
@@ -194,7 +194,7 @@ const showInvitation = () => {
 				ID：{{ user.userInfo.id }}
 				<el-tooltip content="复制 ID" placement="bottom" popper-class="el-popper-init">
 					<span
-						v-copying="user.userInfo.id"
+						v-copying.toast="user.userInfo.id"
 						class="mx-2 cursor-pointer bg-blueGray hover:bg-[var(--el-color-success)] transition-300 p-2 i-solar:copy-broken"
 					></span>
 				</el-tooltip>

@@ -76,6 +76,7 @@ const getShopCartLength = computed(() => {
 
 	return count;
 });
+const order = useOrderStore();
 
 // 4、前往订单页面付款
 function toOrderPage(ids: string[]) {
@@ -86,12 +87,12 @@ function toOrderPage(ids: string[]) {
 			dtoList.push({ skuId, quantity });
 		}
 	});
-	const order = useOrderStore();
+	order.clearOrderItems();
 	order.$patch({
 		pushOrderItems: dtoList,
 	});
 	useRouter().push({
-		path: "/order/pay",
+		path: "/order/detail",
 	});
 }
 // 邮费

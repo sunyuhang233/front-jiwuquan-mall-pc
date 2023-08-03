@@ -328,7 +328,7 @@ const rules = reactive({
 							</el-form>
 						</lazy-el-dialog>
 						<!-- 列表 -->
-						<div v-loading="isLoadingAll" class="address">
+						<div v-loading.fullscreen="isLoadingAll" class="address">
 							<div flex-row-bt-c border-default border-0 border-b-2px>
 								<div class="cursor-pointer flex items-center justify-end ml-a">
 									<i
@@ -357,7 +357,9 @@ const rules = reactive({
 										<!-- 添加按钮 -->
 										<div
 											:key="2030303"
-											class="mr-4 mt-4 select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group w-260px h-200px border-default-dashed border-3px rounded-8px transition-300"
+											min-w-240px
+											min-h-180px
+											class="mr-4 mt-4 select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group border-default-dashed border-3px rounded-8px transition-300"
 											hover:border="3px solid dark-4"
 											dark:hover:border-gray-5
 											@click="showAdd"

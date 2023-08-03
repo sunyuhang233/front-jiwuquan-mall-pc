@@ -50,16 +50,19 @@ export default defineNuxtPlugin((nuxtApp) => {
    */
   nuxtApp.vueApp.directive("copying", {
     mounted(el, binding) {
+
       el.addEventListener("click", async function (e: Event) {
         e.stopPropagation()
         const res = await useAsyncCopyText(binding.value || el.innerHTML)
-        if (res) {
+        if (res && binding.modifiers.toast) {
           ElMessage.success({
             message: '成功复制至剪贴板！',
             grouping: true,
           })
         }
       }, { passive: true });
+
+
     }
   });
 
