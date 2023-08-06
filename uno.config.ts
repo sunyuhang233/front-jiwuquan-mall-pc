@@ -24,8 +24,10 @@ export default defineConfig({
     // 布局
     ['flex-row-c-c', 'flex flex-row flex-justify-center flex-items-center'],
     ['flex-row-bt-c', 'flex flex-row flex-justify-between flex-items-center'],
-    ['layout-default', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1400px '],
-    ['layout-default-se', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1000px  '],
+    ['layout-default', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1400px'],
+    ['layout-default-se', 'mx-a sm:px-2rem md:px-0 py-6 w-90vw md:w-1000px'],
+    ['absolute-center', 'absolute left-1/2 -translate-x-1/2'],
+    ['absolute-center-center', 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'],
   ],
   theme: {
     // ...

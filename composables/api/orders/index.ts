@@ -87,8 +87,6 @@ interface GoodsSkuVO {
 // 订单分页参数
 export interface OrdersPageDTO {
   id?: string,
-  name?: string,
-  shopId?: string,
   startTime?: string,
   endTime?: string
 }
@@ -254,14 +252,22 @@ export function refundOrders(id: string, token: string) {
  * @returns 
  */
 export function getDelivertOrders(id: string, token: string) {
-  return useHttp.get<Result<string>>(`/orders/delivery/${id}`, {
+  return useHttp.get<Result<DeliveryVO>>(`/orders/delivery/${id}`, {
   }, {
     headers: {
       "Authorization": token
     }
   })
 }
-
+export interface DeliveryVO {
+  id: string;
+  ordersId: string;
+  deliveryNum: string;
+  sendAddress: string;
+  deliverAddress: string;
+  createTime: string;
+  updateTime: string;
+}
 
 /**
  * 确认收货

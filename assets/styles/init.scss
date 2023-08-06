@@ -54,21 +54,21 @@ body {
   }
 }
 /* 屏幕分辨率放大为 150 */
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 120dpi) {
-  .layout-default,
-  .layout-default-se {
-    transform: scale(0.665, 0.665) !important; /* 缩放数值需要根据效果调试 */
-    transform-origin: left top !important;
-  }
-}
+// @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 120dpi) {
+//   .layout-default,
+//   .layout-default-se {
+//     transform: scale(0.665, 0.665) !important; /* 缩放数值需要根据效果调试 */
+//     transform-origin: left top !important;
+//   }
+// }
 /* 屏幕分辨率放大为 125 */
-@media (-webkit-min-device-pixel-ratio: 1.25) {
-  .layout-default,
-  .layout-default-se {
-    transform: scale(0.78, 0.78) !important;
-    transform-origin: center top !important;
-  }
-}
+// @media (-webkit-min-device-pixel-ratio: 1.25) {
+//   .layout-default,
+//   .layout-default-se {
+//     transform: scale(0.78, 0.78) !important;
+//     transform-origin: center top !important;
+//   }
+// }
 
 // 主题
 html {
@@ -77,7 +77,8 @@ html {
 }
 html.dark {
   // background-color: #171717;
-  background: radial-gradient(ellipse 80% 50% at 50% -15%, #00000009, var(--el-bg-color-page)) no-repeat;
+  // background: radial-gradient(ellipse 80% 50% at 50% -15%, #1a1b42af, var(--el-bg-color-page)) no-repeat;
+  background: radial-gradient(ellipse 80% 50% at 50% -22%, rgba(98, 97, 202, 0.2), transparent);
 }
 
 // 全局滚动条
@@ -107,4 +108,15 @@ html.dark {
 }
 .dark ::-webkit-scrollbar-thumb {
   background-color: rgb(85, 85, 85);
+}
+
+// 路由跳转导航条
+// 自定义进度条颜色
+#nprogress .bar {
+  background: $loading-color2 !important; //自定义颜色
+  height: 3px;
+}
+.dark #nprogress .bar {
+  height: 3px;
+  background: $loading-color-dark2 !important; //自定义颜色
 }

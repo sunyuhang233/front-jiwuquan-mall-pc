@@ -4,12 +4,12 @@ $top-nav-height: 66px;
 $transition-delay: 0.3s;
 
 $theme-bg-color: #111111;
-$theme-bg-color-75:#171717;
+$theme-bg-color-75: #171717;
 $theme-bg-color2: #f3f3f3;
 $theme-text-color: #f3f3f3;
 $theme-text-color2: #ffffff;
 
-$text-mark-color: #73FFA0;
+$text-mark-color: #73ffa0;
 $theme-font-color: #444444;
 $box-shadow-color: #eee;
 $text-mark-color2: #7c51fb;
@@ -22,11 +22,11 @@ $boder-color: #dfdfdf36;
 $border-radius-def: 4px;
 
 // 加载条颜色
-$loading-color:#5d33f6;
-$loading-color2: linear-gradient(to bottom, #8e2de2, #4a00e0); 
-$loading-color-dark:#7becd9;
-$loading-color-dark2:linear-gradient(to right, #4bf380, #71e9ed, #f64f59);;
+$loading-color: #5d33f6;
+$loading-color2: linear-gradient(to right, #4bf380, #71e9ed, #f64f59);
+$loading-color-dark: #7becd9;
+$loading-color-dark2: linear-gradient(to bottom, #9241d8, var(--el-color-primary));
 
 // 动画曲线
 $animate-cubic: cubic-bezier(0.61, 0.225, 0.195, 1.19);
-$animate-cubic-bount: cubic-bezier(1.000, -0.155, 0.165, 1.340);
+$animate-cubic-bount: cubic-bezier(1, -0.155, 0.165, 1.34);

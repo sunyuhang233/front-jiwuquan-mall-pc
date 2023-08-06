@@ -31,10 +31,11 @@ export const useOrderStore = defineStore('order', () => {
   // 下单对象数组
   const pushOrderItems = ref<PushOrdersItemDTO[]>([]);
 
-  // watch(orderId, async (val) => {
-  //   if (!val) return
-  //   await reloadOrderInfo()
-  // }, { immediate: true, deep: true })
+  // 主要：提交订单可按需修改
+  watch(orderId, async (val) => {
+    if (!val) return
+    await reloadOrderInfo()
+  }, { immediate: true, deep: true })
 
 
   /**
@@ -57,6 +58,9 @@ export const useOrderStore = defineStore('order', () => {
   }
 
 
+  /**
+   * 重置订单
+   */
   const clearOrderItems = () => {
     orderId.value = ""
     addressId.value = ""

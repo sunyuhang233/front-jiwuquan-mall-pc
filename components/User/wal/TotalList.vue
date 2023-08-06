@@ -8,128 +8,138 @@ const isLoading = ref<boolean>(true);
 const totalData = reactive<TotalVO>({ totalIn: 0, totalOut: 0, monthTotal: 0 });
 
 interface TotalVO extends BillsTotalVO {
-	monthTotal?: number;
+  monthTotal?: number;
 }
 const monthTime = getMonthStartEnd();
 // 获取总消费和总收入
 const getAllTotals = async () => {
-	const { data, code } = await getBillsTotal(
-		{
-			currencyType: 0,
-		},
-		user.getToken
-	);
-	if (code === StatusCode.SUCCESS) {
-		if (data?.totalIn) totalData.totalIn = data?.totalIn;
-		if (data?.totalOut) totalData.totalOut = data?.totalOut;
-	}
+  const { data, code } = await getBillsTotal(
+    {
+      currencyType: 0,
+    },
+    user.getToken
+  );
+  if (code === StatusCode.SUCCESS) {
+    if (data?.totalIn) totalData.totalIn = data?.totalIn;
+    if (data?.totalOut) totalData.totalOut = data?.totalOut;
+  }
 };
 
 // 获取月份的统计
 const getMonthTotals = async () => {
-	const { data, code } = await getBillsTotal(
-		{
-			type: 0,
-			currencyType: 0,
-			startTime: useDateFormat(monthTime[0], "YYYY-MM-DD hh:mm:ss").value,
-			endTime: useDateFormat(monthTime[1], "YYYY-MM-DD hh:mm:ss").value,
-		},
-		user.getToken
-	);
-	if (code === StatusCode.SUCCESS) {
-		// 本月支出
-		if (data?.totalOut) {
-			totalData.monthTotal = data?.totalOut;
-		}
-	}
+  const { data, code } = await getBillsTotal(
+    {
+      type: 0,
+      currencyType: 0,
+      startTime: useDateFormat(monthTime[0], "YYYY-MM-DD hh:mm:ss").value,
+      endTime: useDateFormat(monthTime[1], "YYYY-MM-DD hh:mm:ss").value,
+    },
+    user.getToken
+  );
+  if (code === StatusCode.SUCCESS) {
+    // 本月支出
+    if (data?.totalOut) {
+      totalData.monthTotal = data?.totalOut;
+    }
+  }
 };
 const reloadData = async () => {
-	isLoading.value = true;
-	await getAllTotals();
-	await getMonthTotals();
-	isLoading.value = false;
+  isLoading.value = true;
+  await getAllTotals();
+  await getMonthTotals();
+  isLoading.value = false;
 };
 await reloadData();
 // 监听重新查询
 watch(
-	user.userWallet,
-	async () => {
-		await reloadData();
-	},
-	{ deep: true, immediate: true }
+  user.userWallet,
+  async () => {
+    await reloadData();
+  },
+  { deep: true, immediate: true }
 );
 
 // 列表配置项
 const list = ref<LineWalletDataType[]>([
-	{
-		title: "总 支 出",
-		name: `支出`,
-		amount: computed(() => totalData.totalOut),
-		percentage: computed(() => ((totalData.totalOut || 0) / 10000) * 100),
-		isIncreAnimate: true,
-		isInt: false,
-		lightColor: "var(--el-color-error)",
-		class: "  dark:bg-#333333 dark:text-bluegray-2",
-	},
+  {
+    title: "总 支 出",
+    name: `支出`,
+    amount: computed(() => totalData.totalOut),
+    percentage: computed(() => ((totalData.totalOut || 0) / 10000) * 100),
+    isIncreAnimate: true,
+    isInt: false,
+    lightColor: "var(--el-color-error)",
+    class: "  dark:bg- dark:text-bluegray-2",
+  },
 
-	{
-		title: "总 收 入",
-		name: "收入",
-		amount: computed(() => totalData.totalIn),
-		percentage: computed(() => ((totalData.totalIn || 0) / 10000) * 100),
-		isIncreAnimate: true,
-		isInt: false,
-		lightColor: "var(--el-color-info)",
-		class: "  dark:bg-#333333 dark:text-bluegray-2",
-	},
-	{
-		title: "本月消费",
-		name: `${monthTime[0].getMonth() + 1}月`,
-		amount: computed(() => totalData.monthTotal),
-		percentage: (monthTime[0].getMonth() + 1) / 12,
-		isIncreAnimate: true,
-		isInt: false,
-		class: " dark:bg-#333333 dark:text-bluegray-2",
-	},
+  {
+    title: "总 收 入",
+    name: "收入",
+    amount: computed(() => totalData.totalIn),
+    percentage: computed(() => ((totalData.totalIn || 0) / 10000) * 100),
+    isIncreAnimate: true,
+    isInt: false,
+    lightColor: "var(--el-color-info)",
+    class: "   dark:text-bluegray-2",
+  },
+  {
+    title: "本月消费",
+    name: `${monthTime[0].getMonth() + 1}月`,
+    amount: computed(() => totalData.monthTotal),
+    percentage: (monthTime[0].getMonth() + 1) / 12,
+    isIncreAnimate: true,
+    isInt: false,
+    class: "  dark:text-bluegray-2",
+  },
 ]);
 const pointsData = ref({
-	title: "积分剩余",
-	name: computed(() => {
-		return getUserLeave(user.userWallet.points) + "级";
-	}),
-	amount: computed(() => user.userWallet.points || 0),
-	percentage: computed(() => {
-		return (getUserLeave(user.userWallet.points) / 6) * 100;
-	}),
-	isIncreAnimate: true,
-	isInt: true,
-	lightColor: "#facc15",
-	class: " dark:bg-#333333 dark:text-bluegray-2",
+  title: "积分剩余",
+  name: computed(() => {
+    return getUserLeave(user.userWallet.points) + "级";
+  }),
+  amount: computed(() => user.userWallet.points || 0),
+  percentage: computed(() => {
+    return (getUserLeave(user.userWallet.points) / 6) * 100;
+  }),
+  isIncreAnimate: true,
+  isInt: true,
+  lightColor: "#facc15",
+  class: "  dark:text-bluegray-2",
 });
 </script>
 <template>
-	<div class="cards">
-		<UserWalTotalCard
-			class="w-full shadow dark:bg-dark-3 hover:scale-104 transition-200 cursor-pointer"
-			v-for="p in list"
-			:key="p.title"
-			:data="p"
-		/>
-		<!-- 积分 -->
-		<UserWalTotalCard
-			class="w-full shadow dark:bg-dark-3 hover:scale-104 transition-200 cursor-pointer"
-			:data="pointsData"
-		>
-			<template #default>
-				<el-popover :width="160" trigger="hover">
-					<template #reference>
-						<small cursor-pointer mt-2 text-blueGray underline>如何获取积分? </small>
-					</template>
-					<li>1、通过钱包额度充值</li>
-					<li>2、通过每日签到</li>
-				</el-popover>
-			</template>
-		</UserWalTotalCard>
-	</div>
+  <div class="cards">
+    <UserWalTotalCard
+      class="w-full v-card shadow md:shadow-md hover:scale-104 transition-200 cursor-pointer"
+      v-for="p in list"
+      :key="p.title"
+      :data="p"
+    />
+    <!-- 积分 -->
+    <UserWalTotalCard
+      class="w-full shadow md:shadow-md hover:scale-104 transition-200 cursor-pointer"
+      :data="pointsData"
+    >
+      <template #default>
+        <el-popover
+          :width="160"
+          trigger="hover"
+        >
+          <template #reference>
+            <small
+              cursor-pointer
+              mt-2
+              text-blueGray
+              underline
+            >
+              如何获取积分?
+            </small>
+          </template>
+          <li>1、通过钱包额度充值</li>
+          <li>2、通过每日签到</li>
+        </el-popover>
+      </template>
+    </UserWalTotalCard>
+  </div>
 </template>
 <style scoped lang="scss"></style>

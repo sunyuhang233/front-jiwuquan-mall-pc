@@ -18,11 +18,11 @@ export function getBillsPage(page: number, size: number, dto: BillsDTO, token: s
 }
 // 分页筛选参数
 export interface BillsDTO {
-  currencyType?: number;
+  orderId?: string;
+  currencyType?: CurrencyType;
   endTime?: string;
   startTime?: string;
-  id?: string;
-  type?: number;
+  type?: BillsType;
 }
 /**
  * 账单详情VO

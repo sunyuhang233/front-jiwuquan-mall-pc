@@ -290,8 +290,8 @@ const toOrderPage = (ids: string[]) => {
 	transition: $transition-delay;
 	z-index: 999;
 	border-radius: 50%;
-	width: 50px;
-	height: 50px;
+	width: 100%;
+	height: 100%;
 
 	.icon {
 		width: 100%;
@@ -307,18 +307,15 @@ const toOrderPage = (ids: string[]) => {
 			background-color: var(--el-color-danger);
 			color: #fff;
 			border-radius: 50%;
-			font-size: 0.8em;
-			min-width: 2.2em;
-			min-height: 2.2em;
-			aspect-ratio: 1/1;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			line-height: 2em;
+			font-size: 0.4em;
+			width: 3.4em;
+			height: 3.4em;
+			text-align: center;
+			line-height: 3.4em;
 			text-align: center;
 			position: absolute;
-			right: -20%;
-			top: -20%;
+			right: -15%;
+			top: -15%;
 		}
 	}
 

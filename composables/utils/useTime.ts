@@ -1,7 +1,6 @@
 export const useNowDateText = (date: Date): string => {
   const hours = new Date().getHours();
   let res: string = ""
-
   if (hours > 0 && hours < 6) {
     res = "凌晨"
   } else if (hours < 12) {

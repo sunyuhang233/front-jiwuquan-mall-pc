@@ -230,7 +230,7 @@
 }
 
 // group动画
-.item-list-move,
+.group-list-move,
 .group-list-enter-active,
 .group-list-leave-active {
   transition: all 0.4s $animate-cubic-bount;
@@ -247,7 +247,7 @@
 }
 
 // fade动画
-.item-list-move,
+.fade-bt-move,
 .fade-bt-list-enter-active,
 .fade-bt-list-leave-active {
   transition: all 0.3s $animate-cubic-bount;
@@ -275,4 +275,27 @@
 .sliceX-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+// 图标动画
+// 购物车撞到背景
+.hover\:animate-shopcart:hover {
+  animation: shopcart 1s ease-in-out 1;
+}
+@keyframes shopcart {
+  0% {
+    transform: translateX(0%);
+  }
+  30% {
+    transform: translateX(20%) rotate(0deg);
+  }
+  40% {
+    transform: translate(22%) rotate(-15deg);
+  }
+  60% {
+    transform: translateX(-10%) rotate(0deg);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }

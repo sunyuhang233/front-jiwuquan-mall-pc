@@ -152,7 +152,7 @@ const clickTag = (val: string, i: number) => {
 			tabindex="0"
 		>
 			<template #reference>
-				<div class="content z-1001" relative>
+				<div class="content z-100" relative>
 					<transition name="fade">
 						<div
 							@click="closeSearch"

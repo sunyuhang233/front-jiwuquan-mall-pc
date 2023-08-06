@@ -41,7 +41,11 @@ export const getUserLeave = (ponits: number = 0): number => {
 export const getMonthStartEnd = (date: Date = new Date()): Date[] => {
   return [new Date(date.getFullYear(), date.getMonth(), 0), new Date(date.getFullYear(), date.getMonth() + 1, 0)]
 }
-
+/**
+ * 获取开始时间
+ * @param date 
+ * @returns 
+ */
 export const getDayStartEnd = (date: Date = new Date()): Date[] => {
   return [new Date(date.getFullYear(), date.getMonth(), date.getDay()), new Date(date.getFullYear(), date.getMonth(), date.getDay() + 1)]
 }
@@ -74,7 +78,11 @@ export const useGetPosition = () => {
   });
 };
 
-
+/**
+ * 复制文字
+ * @param text 复制的文本
+ * @returns 
+ */
 export function useCopyText(text: string) {
   // 动态创建 textarea 标签
   const textarea: HTMLTextAreaElement = document.createElement("textarea");
@@ -95,7 +103,7 @@ export function useCopyText(text: string) {
 }
 /**
  *
- * 复制文本
+ * 复制文本（异步）
  * @param text 复制的文本
  * @returns promise
  */

@@ -1,164 +1,194 @@
 <template>
-	<!-- 顶部header -->
-	<div class="nav select-none" flex-row-bt-c py-4 px-6 text-m dark:text="light">
-		<!-- 左侧 -->
-		<div class="left group" flex-row-c-c>
-			<NuxtLink mx-2 to="/" flex-row-c-c>
-				<img
-					w-42px
-					object-contain
-					group-hover:opacity-85
-					transition-300
-					group-hover:filter-blur-2px
-					alt="Design By Kiwi23333"
-					src="@/assets/images/logo/logo.png"
-					dark:hidden
-				/>
-				<img
-					w-42px
-					object-contain
-					group-hover:opacity-85
-					transition-300
-					group-hover:filter-blur-2px
-					src="@/assets/images/logo/logo_dark.png"
-					hidden
-					dark:block
-				/>
-				<span
-					transition-300
-					group-hover:block
-					hidden
-					w-32px
-					h-32px
-					i-solar:home-2-bold
-					absolute
-					left-9
-					style="color: var(--el-text-color-primary)"
-				></span>
-			</NuxtLink>
-			<span class="tracking-2 mx-4 font-700 text-xl hidden md:inline">极物圈</span>
-			<a class="group" target="_blank" href="https://github.com/KiWi233333">
-				<img
-					dark:filter-invert-100
-					ml-4
-					w-5rem
-					opacity-0
-					transition-300
-					group-hover:opacity-100
-					src="@/assets/images/logo/kiwi_strong.svg"
-				/>
-			</a>
-		</div>
-		<!-- 搜索框 -->
-		<div class="animate__animated input-search">
-			<InputSearch v-model="searchWord" :onSerch="onSerch" />
-		</div>
-		<!-- 右侧 -->
-		<ClientOnly>
-			<div class="right" flex-row-c-c>
-				<!-- 消息 -->
-				<BtnBell v-if="store.isLogin" class="hidden md:block" />
-				<!--  -->
-				<NuxtLink to="/shopcart" v-if="store.isLogin">
-					<i i-solar:cart-large-2-linear p-3 ml-2 hidden md:block></i>
-				</NuxtLink>
-				<!-- 切换主题 -->
-				<BtnSwitch />
-				<!-- 登陆注册 -->
-				<div class="box" v-if="!store.isLogin">
-					<ElButton
-						round
-						type="primary"
-						shadow-md
-						px-2cursor-pointer
-						@click="onLogin(FormType.LOGIN)"
-					>
-						登 录</ElButton
-					>
-					<ElButton
-						style="border-radius: 30px"
-						px-2
-						mx-1
-						cursor-pointer
-						@click="onLogin(FormType.REGISTER)"
-						>注 册
-					</ElButton>
-				</div>
-				<div class="box" v-else>
-					<CardUserLine :user-info="store.userInfo" />
-				</div>
-			</div>
-		</ClientOnly>
-	</div>
+  <!-- 顶部header -->
+  <div
+    class="nav select-none"
+    flex-row-bt-c
+    py-4
+    px-6
+    text-m
+    dark:text="light"
+  >
+    <!-- 左侧 -->
+    <div
+      class="left group"
+      flex-row-c-c
+    >
+      <NuxtLink
+        mx-2
+        to="/"
+        flex-row-c-c
+      >
+        <img
+          w-42px
+          object-contain
+          group-hover:opacity-85
+          transition-300
+          group-hover:filter-blur-2px
+          alt="Design By Kiwi23333"
+          src="@/assets/images/logo/logo.png"
+          dark:hidden
+        />
+        <img
+          w-42px
+          object-contain
+          group-hover:opacity-85
+          transition-300
+          group-hover:filter-blur-2px
+          src="@/assets/images/logo/logo_dark.png"
+          hidden
+          dark:block
+        />
+        <span
+          transition-300
+          group-hover:block
+          hidden
+          w-32px
+          h-32px
+          i-solar:home-2-bold
+          absolute
+          left-9
+          style="color: var(--el-text-color-primary)"
+        ></span>
+      </NuxtLink>
+      <span class="tracking-2 mx-4 font-700 text-xl hidden md:inline">极物圈</span>
+      <a
+        class="group"
+        target="_blank"
+        href="https://github.com/KiWi233333"
+      >
+        <img
+          dark:filter-invert-100
+          ml-4
+          w-5rem
+          opacity-0
+          transition-300
+          group-hover:opacity-100
+          src="@/assets/images/logo/kiwi_strong.svg"
+        />
+      </a>
+    </div>
+    <!-- 搜索框 -->
+    <div
+      class="fixed left-0 top-0 w-full h-[100vh] z-1 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
+      v-show="isShowSearch"
+      @click="isShowSearch = false"
+    ></div>
+    <div
+      class="z-2 absolute-center transition-300 translate-y-0 transition-ease-in-out"
+      :class="{ 'translate-y-10vw scale-120': isShowSearch }"
+    >
+      <InputSearch
+        @click="isShowSearch = true"
+        v-model="searchWord"
+        :onSerch="onSerch"
+        @close="isShowSearch = false"
+      />
+    </div>
+    <!-- 右侧 -->
+    <ClientOnly>
+      <div
+        class="right"
+        flex-row-c-c
+      >
+        <!-- 消息 -->
+        <BtnBell
+          v-if="store.isLogin"
+          class="hidden md:block mx-2"
+        />
+        <!-- 购物车 -->
+        <NuxtLink
+          to="/shopcart"
+          v-if="store.isLogin"
+          class="hover:animate-shopcart"
+        >
+          <i
+            class="p-3 mx-2 px-0.7em transition-100 hover:bg-[var(--el-color-danger)] hover:i-solar:cart-large-2-bold"
+            i-solar:cart-large-2-linear
+          />
+        </NuxtLink>
+        <!-- 切换主题 -->
+        <BtnSwitch />
+        <!-- 登陆注册 -->
+        <div
+          class="box"
+          v-if="!store.isLogin"
+        >
+          <ElButton
+            round
+            type="primary"
+            shadow-md
+            px-2cursor-pointer
+            @click="onLogin(FormType.LOGIN)"
+          >
+            登 录
+          </ElButton>
+          <ElButton
+            style="border-radius: 30px"
+            px-2
+            mx-1
+            cursor-pointer
+            @click="onLogin(FormType.REGISTER)"
+          >
+            注 册
+          </ElButton>
+        </div>
+        <div
+          class="box"
+          v-else
+        >
+          <CardUserLine :user-info="store.userInfo" />
+        </div>
+      </div>
+    </ClientOnly>
+  </div>
 </template>
 
 <script lang="ts" setup>
 // 搜索
+let isShowSearch = ref<boolean>(false);
 let searchWord = ref<string>("");
 // 登录表单
 const store = useUserStore();
 enum FormType {
-	LOGIN,
-	REGISTER,
+  LOGIN,
+  REGISTER,
 }
 // 表单
 const onLogin = (type: FormType) => {
-	if (type === FormType.LOGIN) {
-		// 登录
-		store.showLoginForm = true;
-		store.showRegisterForm = false;
-	} else {
-		// 注册
-		store.showLoginForm = false;
-		store.showRegisterForm = true;
-	}
+  if (type === FormType.LOGIN) {
+    // 登录
+    store.showLoginForm = true;
+    store.showRegisterForm = false;
+  } else {
+    // 注册
+    store.showLoginForm = false;
+    store.showRegisterForm = true;
+  }
 };
 const onSerch = (val: string) => {};
 // 搜索
 </script>
 <style lang="scss" scoped>
 .nav {
-	box-shadow: rgba(9, 30, 66, 0.1) 0px 4px 2px -2px;
-	position: sticky;
-	top: 0;
-	z-index: 999;
-	height: $top-nav-height;
-	background-size: 4px 4px;
-	backdrop-filter: saturate(50%) blur(6px);
-	background-image: radial-gradient(transparent 1px, var(--el-bg-color) 1px);
+  box-shadow: rgba(9, 30, 66, 0.1) 0px 4px 2px -2px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  height: $top-nav-height;
+  background-size: 4px 4px;
+  backdrop-filter: saturate(50%) blur(6px);
+  background-image: radial-gradient(transparent 1px, var(--el-bg-color) 1px);
 }
 
 .dark .nav {
-	background-image: radial-gradient(transparent 1px, var(--el-bg-color) 1px);
-	background-size: 4px 4px;
-	box-shadow: rgba(92, 97, 124, 0.02) 12px 12px 60px;
+  background-image: radial-gradient(transparent 1px, var(--el-bg-color) 1px);
+  background-size: 4px 4px;
+  box-shadow: rgba(92, 97, 124, 0.02) 12px 12px 60px;
 }
 
 .login:hover {
-	transition: $transition-delay;
-	border-color: var(--el-color-primary);
-	opacity: 0.8;
-}
-
-.input-search {
-	position: absolute;
-	left: 50%;
-	transform: translate(-50%, -130%);
-	transition: all 2 * $transition-delay $animate-cubic-bount;
-}
-
-.nav:focus,
-.nav:hover {
-	overflow: hidden;
-
-	.input-search {
-		animation-duration: 0.6s;
-		transform: translate(-50%, 0);
-	}
-
-	.input-search:focus {
-		animation-duration: 0.6s;
-		transform: translate(-50%, 0);
-	}
+  transition: $transition-delay;
+  border-color: var(--el-color-primary);
+  opacity: 0.8;
 }
 </style>

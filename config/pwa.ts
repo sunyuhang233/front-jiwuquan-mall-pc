@@ -2,7 +2,6 @@ import type { ModuleOptions } from '@vite-pwa/nuxt'
 import { appDescription, appName } from '../constants/index'
 
 const scope = '/'
-
 export const pwa: ModuleOptions = {
   registerType: 'autoUpdate',
   scope,
@@ -11,6 +10,7 @@ export const pwa: ModuleOptions = {
   manifest: {
     id: scope,
     scope,
+    background_color: "#fff",
     start_url: ".",
     display: "standalone",
     name: appName,
@@ -19,7 +19,7 @@ export const pwa: ModuleOptions = {
     theme_color: '#000000',
     icons: [
       {
-        src: 'logo.png',
+        src: './logo.png',
         sizes: '436x436',
         type: 'image/png',
       }
@@ -29,6 +29,7 @@ export const pwa: ModuleOptions = {
     globPatterns: ['**/*.{js,css,html,txt,png,ico,svg}'],
     navigateFallbackDenylist: [/^\/api\//],
     navigateFallback: '/',
+
     cleanupOutdatedCaches: true,
     runtimeCaching: [
     ],
@@ -39,13 +40,13 @@ export const pwa: ModuleOptions = {
     enabled: process.env.VITE_PLUGIN_PWA === 'true',
     navigateFallback: scope,
   },
-  related_applications: [
-    {
-      platform: "web"
-    },
-    {
-      platform: "play",
-      url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
-    }
-  ]
+  // related_applications: [
+  //   {
+  //     platform: "web"
+  //   },
+  //   {
+  //     platform: "play",
+  //     url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+  //   }
+  // ]
 }

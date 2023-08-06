@@ -6,17 +6,6 @@
   transform: translate(-50%, -50%);
 }
 
-// 路由跳转导航条
-// 自定义进度条颜色
-#nprogress .bar {
-  background: $loading-color2 !important; //自定义颜色
-  height: 3px;
-}
-.dark #nprogress .bar {
-  height: 3px;
-  background: $loading-color-dark2 !important; //自定义颜色
-}
-
 /**------------------------------element-plus---------------------------------------**/
 // 背景颜色
 .bg-mark {
@@ -82,10 +71,10 @@
   background-color: #ffffff93;
   border-radius: 4px;
   transition: all $transition-delay;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
 }
 .dark .v-card {
-  background-color: rgba(37, 37, 37, 0.12);
+  background: #161616;
 }
 
 // element-plus

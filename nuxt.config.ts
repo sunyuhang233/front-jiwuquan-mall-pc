@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     // pwa
     '@vite-pwa/nuxt',
+    // eslint
   ],
   // 全局变量
   runtimeConfig: {
@@ -96,7 +97,9 @@ export default defineNuxtConfig({
   piniaPersistedstate: {
     storage: "localStorage",
   },
-
+  colorMode: {
+    classSuffix: '',
+  },
   // alias: {
   //   // 配置@使用静态资源
   //   assets: '/<rootDir>/assets',
@@ -131,5 +134,9 @@ export default defineNuxtConfig({
   // nuxt开发者工具
   devtools: {
     enabled: true,
+  },
+  eslint: {
+    cache: true,
+    exclude: ['*.svg', '**/node_modules/**']
   }
 })
