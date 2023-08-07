@@ -40,7 +40,6 @@ const types = computed(() => {
           title: "修 改",
           type: "default",
           fn: () => {
-            emit("submit", "cancel", order);
             toDetail(order);
           },
         },
@@ -82,14 +81,14 @@ const types = computed(() => {
           title: "退 款",
           type: "default",
           fn: () => {
-            emit("submit", "pushRefund");
+            emit("submit", "pushRefund", order);
           },
         },
         {
           title: "确认收货",
           type: "info",
           fn: () => {
-            emit("submit", "checkDelivery");
+            emit("submit", "checkDelivery", order);
           },
         },
       ];
@@ -106,10 +105,10 @@ const types = computed(() => {
           },
         },
         {
-          title: "去评论",
+          title: "去评价",
           type: "info",
           fn: () => {
-            emit("submit", "toCommon", order);
+            toCommon();
           },
         },
       ];
@@ -221,6 +220,17 @@ const toDetail = (o: OrderInfoVO = order) => {
     window.open(`/order/detail?id=${o.id}`, "_blank");
   }, 100);
 };
+
+// 2、去评价
+const toCommon = () => {
+  if (order.status !== OrdersStatus.RECEIVED) return;
+  navigateTo({
+    path: "/order/comment",
+    query: {
+      id: order.id,
+    },
+  });
+};
 // 计算优惠价
 const getReduce = computed(() => {
   if (order.spendPrice) {
@@ -229,6 +239,11 @@ const getReduce = computed(() => {
     return null;
   }
 });
+
+const delayOrder = () => {
+  order.status = OrdersStatus.DELAY_CANCELED;
+  order.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
+};
 </script>
 <template>
   <div
@@ -248,7 +263,10 @@ const getReduce = computed(() => {
             items-center
             v-if="order.status === OrdersStatus.UN_PAID"
           >
-            <OrderDelayTimer :date="new Date(order.createTime)" />
+            <OrderDelayTimer
+              @delay="delayOrder"
+              :date="new Date(order.createTime)"
+            />
             ，
           </span>
           <span>{{ types.banner }}</span>
@@ -353,6 +371,7 @@ const getReduce = computed(() => {
         <i
           p-2
           bg-dark
+          dark:bg-light
           i-solar:headphones-square-sound-broken
         />
         <small class="mx-2 hover:underline hover:text-[var(--el-color-primary)]">客服</small>

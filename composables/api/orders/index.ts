@@ -93,6 +93,8 @@ export interface OrdersPageDTO {
 
 // 订单状态参数
 export enum OrdersStatus {
+  /** 已删除 */
+  DELETED = -2,
   /** 未提交 */
   READY = -1,
   /** 待付款 */
@@ -211,8 +213,12 @@ export function payOrders(orderId: string, type: PayType, points: number, vouche
 }
 
 export enum PayType {
-  WEALLET = 0,
+  WEALLET = "wellet",
+  WECHAT = "wechat",
+  ALIPAY = "alipay",
 }
+
+
 /**
  * 取消订单
  * @param id 
@@ -276,7 +282,7 @@ export interface DeliveryVO {
  * @returns 
  */
 export function checkDeliveryOrders(id: string, token: string) {
-  return useHttp.put<Result<string>>(`/orders/delivery/${id}`, {
+  return useHttp.put<Result<string>>(`/orders/delivered/${id}`, {
   }, {
     headers: {
       "Authorization": token

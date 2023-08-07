@@ -71,7 +71,7 @@
   background-color: #ffffff93;
   border-radius: 4px;
   transition: all $transition-delay;
-  backdrop-filter: blur(12px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .dark .v-card {
   background: #161616;

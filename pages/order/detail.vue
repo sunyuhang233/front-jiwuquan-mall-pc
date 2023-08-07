@@ -8,7 +8,6 @@ import {
   refundOrders,
   checkDeliveryOrders, // 确认收货
   deleteOrders, // 删除订单
-  toOrdersComment, // 去评论
   type PushOrdersItemDTO,
 } from "~/composables/api/orders";
 import { GoodsSkuMdVO, getGoodsSkuByIds } from "~/composables/api/goods/sku";
@@ -59,7 +58,7 @@ const ordersTitle = computed(() => {
       break;
     case OrdersStatus.RECEIVED:
       banner = "已确认收货，期待你的评价！";
-      submitText = "去评论";
+      submitText = "去评价";
       type = "info";
       btnType = "info";
       break;
@@ -170,24 +169,84 @@ const onSubmitOrders = async (status: OrdersStatus) => {
     case OrdersStatus.READY:
       await pushOrder();
       setTimeout(async () => {
-        await payOrder(PayType.WEALLET);
-      }, 800);
+        await payOrder(selectPayType.value);
+      }, 600);
       break;
     case OrdersStatus.UN_PAID:
-      await payOrder(PayType.WEALLET);
+      await payOrder(selectPayType.value);
       break;
     case OrdersStatus.PAID:
       toastOrder();
       break;
-    case OrdersStatus.REFUND_SUCCESS:
+    case OrdersStatus.DELIVERED:
+      checkDeliveryOrder();
+      break;
     case OrdersStatus.CANCELED:
     case OrdersStatus.DELAY_CANCELED:
     case OrdersStatus.COMMENTED:
     case OrdersStatus.REFUND_SUCCESS:
       await aginPushOrder(order.pushOrderItems);
       break;
+    case OrdersStatus.RECEIVED:
+      toCommon();
+      break;
   }
 };
+
+// 选择支付方式
+const selectPayType = ref<PayType>(PayType.WEALLET);
+const payTypeList = ref<PayTypeDTO[]>([
+  {
+    disable: false,
+    type: PayType.WEALLET,
+    icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
+    title: "钱包",
+  },
+  {
+    disable: true,
+    type: PayType.WECHAT,
+    icon: `<svg
+					t="1689749259928"
+					class="icon"
+					viewBox="0 0 1024 1024"
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					p-id="1522"
+				>
+					<path
+						class="fill-[#29bd29] dark-fill-##29bd29"
+						d="M683.058 364.695c11 0 22 1.016 32.943 1.976C686.564 230.064 538.896 128 370.681 128c-188.104 0.66-342.237 127.793-342.237 289.226 0 93.068 51.379 169.827 136.725 229.256L130.72 748.43l119.796-59.368c42.918 8.395 77.37 16.79 119.742 16.79 11 0 21.46-0.48 31.914-1.442a259.168 259.168 0 0 1-10.455-71.358c0.485-148.002 128.744-268.297 291.403-268.297l-0.06-0.06z m-184.113-91.992c25.99 0 42.913 16.79 42.913 42.575 0 25.188-16.923 42.579-42.913 42.579-25.45 0-51.38-16.85-51.38-42.58 0-25.784 25.93-42.574 51.38-42.574z m-239.544 85.154c-25.384 0-51.374-16.85-51.374-42.58 0-25.784 25.99-42.574 51.374-42.574 25.45 0 42.918 16.79 42.918 42.575 0 25.188-16.924 42.579-42.918 42.579z m736.155 271.655c0-135.647-136.725-246.527-290.983-246.527-162.655 0-290.918 110.88-290.918 246.527 0 136.128 128.263 246.587 290.918 246.587 33.972 0 68.423-8.395 102.818-16.85l93.809 50.973-25.93-84.677c68.907-51.93 120.286-119.815 120.286-196.033z m-385.275-42.58c-16.923 0-34.452-16.79-34.452-34.179 0-16.79 17.529-34.18 34.452-34.18 25.99 0 42.918 16.85 42.918 34.18 0 17.39-16.928 34.18-42.918 34.18z m188.165 0c-16.984 0-33.972-16.79-33.972-34.179 0-16.79 16.927-34.18 33.972-34.18 25.93 0 42.913 16.85 42.913 34.18 0 17.39-16.983 34.18-42.913 34.18z"
+						p-id="1523"
+					></path>
+				</svg>`,
+    title: "微信",
+  },
+  {
+    disable: true,
+    type: PayType.ALIPAY,
+    icon: `<svg
+					t="1689752384390"
+					class="icon"
+					viewBox="0 0 1024 1024"
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					p-id="2518"
+				>
+					<path
+						d="M230.771014 576.556522c-12.614493 9.646377-25.228986 23.744928-28.93913 42.295652-5.194203 24.486957-0.742029 55.652174 22.26087 80.13913 28.93913 28.93913 72.718841 37.101449 92.011594 38.585508 51.2 3.710145 106.110145-22.26087 147.663768-50.457971 16.324638-11.130435 43.77971-34.133333 70.492754-69.750725-59.362319-30.423188-133.565217-64.556522-212.22029-61.588406-41.553623 1.484058-70.492754 9.646377-91.269566 20.776812zM983.188406 712.347826c25.971014-61.588406 40.811594-129.113043 40.811594-200.347826 0-281.971014-230.028986-512-512-512S0 230.028986 0 512s230.028986 512 512 512c170.666667 0 321.298551-83.849275 414.794203-212.22029C838.492754 768.742029 693.797101 696.023188 604.011594 652.985507c-42.295652 48.973913-105.368116 97.205797-176.602898 117.982609-44.521739 13.356522-85.333333 18.550725-126.886957 9.646377-42.295652-8.904348-72.718841-28.197101-90.527536-47.489855-8.904348-10.388406-19.292754-22.26087-27.455073-37.843479 0.742029 0.742029 0.742029 2.226087 0.742029 2.968116 0 0-4.452174-7.42029-7.420289-19.292753-1.484058-5.936232-2.968116-11.872464-3.710145-17.808696-0.742029-4.452174-0.742029-8.904348 0-12.614493-0.742029-7.42029 0-15.582609 1.484058-23.744927 4.452174-20.776812 12.614493-43.77971 35.617391-65.298551 48.973913-48.231884 115.014493-50.457971 149.147826-50.457971 50.457971 0.742029 138.017391 22.26087 212.22029 48.973913 20.776812-43.77971 34.133333-89.785507 42.295652-121.692754H304.973913v-33.391304h158.052174v-66.782609H272.324638v-34.133333h190.701449v-66.782609c0-8.904348 2.226087-16.324638 16.324638-16.324637h74.944927v83.107246h207.026087v33.391304H554.295652v66.782609H719.768116S702.701449 494.933333 651.501449 586.202899c115.014493 40.811594 277.518841 104.626087 331.686957 126.144927z m0 0"
+						fill="#1374f7"
+						p-id="2519"
+					></path>
+				</svg>`,
+    title: "支付宝",
+  },
+]);
+export interface PayTypeDTO {
+  disable: boolean;
+  icon: string;
+  title: string;
+  type: PayType;
+}
 
 // 1）提交订单 READY -1
 const pushOrder = async () => {
@@ -236,11 +295,17 @@ const pushOrder = async () => {
 // 2）支付订单 UN_PAID 0
 const payOrder = async (payType: PayType) => {
   if (order.status !== OrdersStatus.UN_PAID) return;
+  const str =
+    payTypeList.value.map((p) => {
+      if (p.type === payType) {
+        return p.title;
+      }
+    }) || PayType.WEALLET;
+
   // 确认支付
-  const str = payType === PayType.WEALLET ? "钱包" : "其他";
   try {
     const action = await ElMessageBox.confirm(
-      `${str}确认支付 ￥${getFinalPrice.value}？`,
+      `使用${str[0]}支付 ￥${getFinalPrice.value}？`,
       "确认支付",
       {
         confirmButtonText: "支 付",
@@ -281,7 +346,6 @@ const payOrder = async (payType: PayType) => {
     isLoading.value = false;
   }
 };
-
 // 3）待发货（催发货）
 const toastOrder = () => {
   ElMessageBox.alert("我们已收到您的订单，将尽快处理并安排发货！", "提 醒", {
@@ -289,7 +353,6 @@ const toastOrder = () => {
     center: true,
   }).catch();
 };
-
 // 4）取消订单 CANCLEL
 const cancelOrder = async (orderId: string) => {
   if (order.status !== OrdersStatus.UN_PAID) return;
@@ -430,6 +493,43 @@ const pushRefundOrder = async (orderId: string) => {
     isLoading.value = false;
   }
 };
+// 7）确认收货 DELIVERED 2
+const checkDeliveryOrder = async () => {
+  if (order.status !== OrdersStatus.DELIVERED) return;
+  try {
+    const action = await ElMessageBox.confirm(`是否确认收货？`, "收货提示", {
+      center: true,
+      confirmButtonText: "确 认",
+      confirmButtonClass: "el-button--success border-default shadow-sm",
+      cancelButtonText: "取 消",
+    });
+    if (action === "confirm") {
+      isLoading.value = true;
+      // 发起收货
+      const { code } = await checkDeliveryOrders(order.orderInfo.id, user.getToken);
+      isLoading.value = false;
+      if (code === StatusCode.SUCCESS) {
+        order.orderInfo.updateTime = useDateFormat(
+          Date.now(),
+          "YYYY-MM-DD HH:mm:ss"
+        ).value.toString();
+        order.status = OrdersStatus.RECEIVED;
+        order.orderInfo.status = OrdersStatus.RECEIVED;
+        ElNotification.success({
+          title: "收货成功",
+          message: "收货确认成功！如有任何问题，请随时联系我们的客服。",
+        });
+      } else {
+        ElNotification.error({
+          title: "确认收货失败，请稍后再试！",
+        });
+      }
+    }
+  } catch (e) {
+  } finally {
+    isLoading.value = false;
+  }
+};
 // 8）再来一单
 const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
   if (!items || items.length === 0) return;
@@ -444,6 +544,62 @@ const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
   setTimeout(() => {
     isLoading.value = false;
   }, 500);
+};
+// 9）去评价
+const toCommon = () => {
+  if (order.status !== OrdersStatus.RECEIVED) return;
+  navigateTo({
+    path: "/order/comment",
+    query: {
+      id: order.orderInfo.id,
+    },
+  });
+};
+// 10）删除订单 REFUND_SUCCESS、CANCELED、DELAY_CANCELED、COMMENTED
+const deleteOrder = async (orderId: string) => {
+  if (
+    order.orderInfo.status !== OrdersStatus.REFUND_SUCCESS &&
+    order.orderInfo.status !== OrdersStatus.CANCELED &&
+    order.orderInfo.status !== OrdersStatus.DELAY_CANCELED &&
+    order.orderInfo.status !== OrdersStatus.COMMENTED
+  )
+    return;
+  try {
+    const action = await ElMessageBox.confirm(
+      `删除将永久移除该订单及其相关信息，是否确定删除？`,
+      "删除操作",
+      {
+        center: true,
+        confirmButtonText: "删 除",
+        confirmButtonClass: "el-button--danger border-default shadow-sm",
+        cancelButtonText: "取 消",
+      }
+    );
+    if (action === "confirm") {
+      isLoading.value = true;
+      // 发起退款
+      const { code } = await deleteOrders(orderId || order.orderInfo.id, user.getToken);
+      isLoading.value = false;
+      if (code === StatusCode.SUCCESS) {
+        // 删除
+        order.clearOrderItems();
+        order.status = OrdersStatus.DELETED;
+        order.orderInfo.status = OrdersStatus.DELETED;
+        ElNotification.success({
+          title: "删除提示",
+          message: "订单和相关信息删除成功！",
+        });
+      } else {
+        ElNotification.error({
+          title: "删除失败，请稍后再试！",
+        });
+      }
+    }
+  } catch (e) {
+    isLoading.value = false;
+  } finally {
+    isLoading.value = false;
+  }
 };
 //--------------------- 统计 计算 -----------------------
 // 商品总价 +++
@@ -473,7 +629,14 @@ const getFinalPrice = computed(() => {
     .add(getAllPostage.value)
     .subtract((selectPointsVal.value || 0) / 100);
 });
-
+// 计算优惠价
+const getReduce = computed(() => {
+  if (order.orderInfo.spendPrice) {
+    return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
+  } else {
+    return null;
+  }
+});
 // --------------------- 订单 ------------------------
 
 // 选择地址
@@ -552,6 +715,14 @@ const reload = async () => {
     isLoading.value = false;
   }, 300);
 };
+// 返回
+const toBack = () => {
+  if (history) {
+    history.length > 1 ? history.back() : navigateTo("/");
+  } else {
+    navigateTo("/");
+  }
+};
 </script>
 <template>
   <div>
@@ -560,7 +731,7 @@ const reload = async () => {
       :header="false"
       :left-menu="false"
       :footer="false"
-      :menu="['back']"
+      :menu="['back', 'home', 'service']"
     >
       <ClientOnly>
         <div
@@ -569,13 +740,15 @@ const reload = async () => {
           v-if="user.isLogin && order.pushOrderItems.length > 0"
         >
           <!--------------- 头部 ---------------->
-          <div class="group flex-row-bt-c mt-1rem mb-2rem">
+          <div class="group flex-row-bt-c mt-1rem mb-2rem select-none">
             <div class="flex items-center">
-              <el-image
-                src="/logo_title.png"
-                alt="Design by Kiwi2333 LOGO"
-                class="w-20vw md:w-10rem"
-              />
+              <NuxtLink to="/">
+                <el-image
+                  src="/logo_title.png"
+                  alt="Design by Kiwi2333 LOGO"
+                  class="w-20vw md:w-10rem"
+                />
+              </NuxtLink>
               <ElDivider
                 direction="vertical"
                 style="border-width: 2px; border-radius: 10px; margin: 0 1.4rem"
@@ -618,7 +791,7 @@ const reload = async () => {
             />
             <!-- 选择-收货地址 -->
             <div
-              class="w-full flex flex-col"
+              class="address-list w-full flex flex-col"
               v-if="isUpdate"
             >
               <h4
@@ -789,6 +962,51 @@ const reload = async () => {
               </small>
             </div>
           </section>
+          <!---------------- 付款方式 ---------------->
+          <section
+            class="v-card border-default"
+            v-if="order.orderInfo.status === OrdersStatus.UN_PAID"
+          >
+            <h4 tracking-0.2em>
+              付款方式
+              <ElDivider
+                style="margin: 0.7rem 0"
+                opacity-40
+              />
+              <el-radio-group
+                :disable="!isUpdate || !isEdit"
+                v-model="selectPayType"
+                class="w-full pay-type-list"
+                style="width: 100%"
+              >
+                <div
+                  class="w-full my-2.4 flex-row-bt-c"
+                  v-for="p in payTypeList"
+                  :key="p.type"
+                >
+                  <div class="left flex items-center">
+                    <span
+                      v-html="p.icon"
+                      class="w-2em mr-4 h-2em"
+                    ></span>
+                    <span>{{ p.title }}</span>
+                  </div>
+                  <el-radio
+                    :label="p.type"
+                    :disable="p.disable"
+                    v-if="!p.disable"
+                  />
+                  <small
+                    font-500
+                    opacity-60
+                    v-else
+                  >
+                    暂未开启
+                  </small>
+                </div>
+              </el-radio-group>
+            </h4>
+          </section>
           <!---------------- 订单-信息 ---------------->
           <section
             v-if="order.status !== OrdersStatus.READY"
@@ -896,7 +1114,7 @@ const reload = async () => {
             </small>
             <!-- 减少 v-if=">OrdersStatus.PAID" -->
             <small
-              v-if="order.status >= OrdersStatus.PAID"
+              v-if="getReduce"
               class="opacity-80 flex-row-bt-c w-full"
             >
               减少
@@ -919,11 +1137,7 @@ const reload = async () => {
               <h3 class="text-[var(--el-color-error)] flex">
                 ￥
                 <strong block>
-                  {{
-                    order.status >= OrdersStatus.PAID
-                      ? currency(order.orderInfo.spendPrice)
-                      : getFinalPrice
-                  }}
+                  {{ getReduce ? currency(order.orderInfo.spendPrice) : getFinalPrice }}
                 </strong>
               </h3>
             </div>
@@ -951,6 +1165,20 @@ const reload = async () => {
                 @click="cancelOrder(order.orderId)"
               >
                 取消订单
+              </el-button>
+              <!-- 删除订单 -->
+              <el-button
+                type="danger"
+                plain
+                v-if="
+                  order.orderInfo.status === OrdersStatus.REFUND_SUCCESS ||
+                  order.orderInfo.status === OrdersStatus.CANCELED ||
+                  order.orderInfo.status === OrdersStatus.DELAY_CANCELED ||
+                  order.orderInfo.status === OrdersStatus.COMMENTED
+                "
+                @click="deleteOrder(order.orderId)"
+              >
+                删除订单
               </el-button>
               <!-- 修改订单 -->
               <el-button
@@ -1003,10 +1231,15 @@ const reload = async () => {
           w-full
           v-else
         >
-          <el-empty description="参数错误">
-            <h3 my-4>401，参数错误</h3>
+          <el-empty description=" ">
+            <h4
+              font-500
+              mb4
+            >
+              订单已删除或不存在
+            </h4>
             <el-button
-              @click="$router.back()"
+              @click="toBack"
               type="primary"
             >
               返 回
@@ -1020,35 +1253,36 @@ const reload = async () => {
 <style scoped lang="scss">
 :deep(.el-radio-group) {
   font-size: medium;
-
-  .el-radio {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    .el-radio__input {
-      opacity: 0;
-    }
-    .el-radio__label {
-      display: none;
-    }
-    // 三角形
-    &:after {
-      content: "选中";
-      opacity: 0;
-      transition: 300;
-      width: 2em;
-      margin-left: 0.5em;
-      font-size: 1em;
-      background: var(--el-color-primary);
-      color: #fff;
-      width: 6em;
-      height: 4em;
-      line-height: 2.5em;
-      text-align: center;
-      transform: rotate(-45deg) translate(22%, 50%);
-    }
-    &.is-checked:after {
-      opacity: 100;
+  .address-list {
+    .el-radio {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      .el-radio__input {
+        opacity: 0;
+      }
+      .el-radio__label {
+        display: none;
+      }
+      // 三角形
+      &:after {
+        content: "选中";
+        opacity: 0;
+        transition: 300;
+        width: 2em;
+        margin-left: 0.5em;
+        font-size: 1em;
+        background: var(--el-color-primary);
+        color: #fff;
+        width: 6em;
+        height: 4em;
+        line-height: 2.5em;
+        text-align: center;
+        transform: rotate(-45deg) translate(22%, 50%);
+      }
+      &.is-checked:after {
+        opacity: 100;
+      }
     }
   }
 }
@@ -1115,6 +1349,14 @@ const reload = async () => {
     padding: 1.15em 1.15em;
     font-size: 1rem;
     letter-spacing: 0.1em;
+  }
+}
+
+.pay-type-list {
+  :deep(.el-radio) {
+    .el-radio__label {
+      display: none;
+    }
   }
 }
 </style>

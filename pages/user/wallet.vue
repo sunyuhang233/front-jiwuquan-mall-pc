@@ -72,7 +72,7 @@ definePageMeta({
               <UserWalTotalList
                 class="flex flex-wrap"
                 md:grid="
-                grid
+                ~
                 cols-2 gap-6 items-stretch"
               />
               <!-- 套餐 -->

@@ -128,14 +128,12 @@ onReload();
         />
       </el-select>
     </div>
-    <ClientOnly fallback-tag="div">
-      <!-- 表格 -->
-      <VChart
-        class="w-full h-full flex-row-c-c overflow-hidden rounded-12px"
-        v-loading="isLoading"
-        :option="option"
-      />
-    </ClientOnly>
+    <!-- 表格 -->
+    <VChart
+      class="w-full h-full flex-row-c-c overflow-hidden rounded-12px"
+      v-loading="isLoading"
+      :option="option"
+    />
   </div>
 </template>
 <style scoped lang="scss">

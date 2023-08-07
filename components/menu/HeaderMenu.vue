@@ -68,19 +68,26 @@
       </a>
     </div>
     <!-- 搜索框 -->
-    <div
-      class="fixed left-0 top-0 w-full h-[100vh] z-1 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
-      v-show="isShowSearch"
-      @click="isShowSearch = false"
-    ></div>
+    <transition name="fadeInOut">
+      <div
+        class="fixed left-0 top-0 w-full h-[100vh] z-1 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
+        v-show="isShowSearch"
+        @click="isShowSearch = false"
+      ></div>
+    </transition>
     <div
       class="z-2 absolute-center transition-300 translate-y-0 transition-ease-in-out"
-      :class="{ 'translate-y-10vw scale-120': isShowSearch }"
+      :class="{ 'translate-y-20vh scale-120': isShowSearch }"
     >
+      <h3
+        class="animate-fade-in text-center absolute-center -translate-y-2em font-500 text-light opacity-90"
+      >
+        搜 索
+      </h3>
       <InputSearch
-        @click="isShowSearch = true"
         v-model="searchWord"
         :onSerch="onSerch"
+        @open="isShowSearch = true"
         @close="isShowSearch = false"
       />
     </div>

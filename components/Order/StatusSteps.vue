@@ -6,37 +6,25 @@ const props = defineProps<{
   date: string;
   color: string;
 }>();
-const getColor = computed(() => {
-  let str: any = "";
-  // "success" | "error" | "wait" | "primary" | "process";
-  switch (props.color) {
-    case "success":
-      str = "success";
-      break;
-    case "primary":
-      str = "finish";
-      break;
-    case "danger":
-      str = "error";
-      break;
-    case "info":
-      str = "process";
-      break;
-  }
-  return str;
+// 获取颜色
+const getColorClass = computed(() => {
+  return `color:var(--el-color-${props.color})`;
 });
+const delayOrder = () => {
+  order.status = OrdersStatus.DELAY_CANCELED;
+  order.orderInfo.status = OrdersStatus.DELAY_CANCELED;
+  order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
+};
 </script>
 <template>
   <section class="mb-3 flex flex-col">
     <!-- 步骤条 -->
     <el-steps
       v-if="props.active > OrdersStatus.READY && props.active < OrdersStatus.CANCELED"
-      class="mt-4 cursor-pointer"
-      :class="`text-[var(--el-color-${props.color})]`"
+      class="mt-4"
+      :style="getColorClass"
       :active="props.active + 1"
       align-center
-      process-status="finish"
-      :finish-status="getColor"
     >
       <el-step
         title="提交订单"
@@ -50,7 +38,7 @@ const getColor = computed(() => {
             }"
             p-3.4
             i-solar:sale-broken
-          ></i>
+          />
         </template>
         <template #title>
           <strong
@@ -63,6 +51,7 @@ const getColor = computed(() => {
         </template>
         <template #description>
           <OrderDelayTimer
+            @delay="delayOrder"
             :date="new Date(props.date)"
             v-if="active === OrdersStatus.UN_PAID"
             class="font-600 text-[var(--el-color-danger)]"
@@ -77,7 +66,6 @@ const getColor = computed(() => {
       <el-step
         title="待收货"
         :icon="ElIconVan"
-        :description="active === OrdersStatus.DELIVERED ? '详细' : ''"
       />
       <el-step
         title="待评价"
@@ -114,7 +102,17 @@ const getColor = computed(() => {
         <small>{{ order.orderInfo.updateTime }}</small>
       </div>
     </section>
-    <!-- 8、退款成功 -->
+    <!-- 8、退款中 -->
+    <section
+      flex
+      flex-col
+      leading-1.6em
+      v-if="props.active === OrdersStatus.REFUND"
+    >
+      <h3 mb-2>退款中，请等待商家处理！</h3>
+      <small>最后更新：{{ order.orderInfo.updateTime }}</small>
+    </section>
+    <!-- 9、退款成功 -->
     <section
       flex
       flex-col
@@ -128,15 +126,30 @@ const getColor = computed(() => {
 </template>
 <style scoped lang="scss">
 :deep(.el-step) {
-  .is-success {
-    * {
-      font-weight: 400;
-    }
-    opacity: 0.8;
-  }
   .is-finish {
-    transform: scale(1.1);
-    font-weight: 600;
+    &,
+    * {
+      font-weight: 500;
+      color: inherit;
+      border-color: inherit;
+    }
+    opacity: 0.9;
+    .el-step__line {
+      border: 1px solid;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0.8;
+      background-color: transparent;
+    }
+  }
+  .is-process {
+    &,
+    * {
+      color: inherit;
+      border-color: inherit;
+      font-weight: 700;
+    }
+    transform: scale(1.06);
   }
 }
 </style>

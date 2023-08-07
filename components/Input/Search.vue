@@ -2,7 +2,8 @@
   <ElInput
     type="text"
     @keyup.enter="onSearch"
-    @focus="$emit('close')"
+    @focus="$emit('open')"
+    @blur="$emit('close')"
     @keyup.esc="$emit('close')"
     text-center
     clearable
@@ -41,7 +42,8 @@ const onSearch = () => {
 };
 </script>
 <style lang="scss" scoped>
-$input-width: 24vw;
+$input-width: min(30vw, 360px);
+$scle-input-width: min(68vw, 520px);
 .v-input {
   :deep(.el-input__wrapper) {
     width: $input-width;
@@ -64,12 +66,16 @@ $input-width: 24vw;
     input:focus,
     input:valid,
     &.is-focus {
-      width: 34vw;
+      width: $scle-input-width;
+    }
+    .el-input__suffix {
+      position: absolute;
+      right: 3%;
     }
   }
 
   :deep(.el-input__inner):focus {
-    width: 34vw;
+    width: $scle-input-width;
   }
 }
 .dark .v-input :deep(.el-input__wrapper) {

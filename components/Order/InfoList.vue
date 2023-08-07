@@ -103,6 +103,9 @@ const submit = (type: SubmitFnType, order: OrderInfoVO) => {
     case SubmitFnType.pushRefund:
       pushRefund(order);
       break;
+    case SubmitFnType.checkDelivery:
+      checkDelivery(order);
+      break;
     case SubmitFnType.toDelete:
       toDelete(order);
       break;
@@ -113,6 +116,7 @@ enum SubmitFnType {
   toastDelivery = "toastDelivery",
   pushRefund = "pushRefund",
   toDelete = "toDelete",
+  checkDelivery = "checkDelivery", // 确认收货
 }
 // 1、取消订单 CANCLEL
 const cancel = async (order: OrderInfoVO) => {
@@ -158,7 +162,6 @@ const cancel = async (order: OrderInfoVO) => {
     isUpdateLoading.value = false;
   }
 };
-
 // 2、待发货（催发货）
 const toastDelivery = () => {
   ElMessageBox.alert("我们已收到您的订单，将尽快处理并安排发货！", "提 醒", {
@@ -166,10 +169,10 @@ const toastDelivery = () => {
     center: true,
   }).catch();
 };
-
 // 3、删除订单订单 DELETE
 const toDelete = async (order: OrderInfoVO) => {
   if (
+    order.status !== OrdersStatus.REFUND_SUCCESS &&
     order.status !== OrdersStatus.CANCELED &&
     order.status !== OrdersStatus.DELAY_CANCELED &&
     order.status !== OrdersStatus.COMMENTED
@@ -264,7 +267,39 @@ const pushRefund = async (order: OrderInfoVO) => {
     isLoading.value = false;
   }
 };
-
+// 5）确认收货 DELIVERED
+const checkDelivery = async (order: OrderInfoVO) => {
+  if (order.status !== OrdersStatus.DELIVERED) return;
+  try {
+    const action = await ElMessageBox.confirm(`是否确认收货？`, "收货提示", {
+      center: true,
+      confirmButtonText: "确 认",
+      confirmButtonClass: "el-button--success border-default shadow-sm",
+      cancelButtonText: "取 消",
+    });
+    if (action === "confirm") {
+      isLoading.value = true;
+      // 发起收货
+      const { code } = await checkDeliveryOrders(order.id, user.getToken);
+      isLoading.value = false;
+      if (code === StatusCode.SUCCESS) {
+        order.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
+        order.status = OrdersStatus.RECEIVED;
+        ElNotification.success({
+          title: "收货成功",
+          message: "收货确认成功！如有任何问题，请随时联系我们的客服。",
+        });
+      } else {
+        ElNotification.error({
+          title: "确认收货失败，请稍后再试！",
+        });
+      }
+    }
+  } catch (e) {
+  } finally {
+    isLoading.value = false;
+  }
+};
 // 筛选
 const isShow = ref<boolean>(false);
 // 时间
@@ -293,7 +328,7 @@ watch(dto.value, () => {
     >
       <div class="mb-4 ml-a cursor-pointer flex justify-end">
         <div
-          class="flex-row-c-c w-0 transition-300 overflow-hidden truncate"
+          class="flex-row-c-c w-0em transition-300 overflow-hidden truncate"
           :class="{ 'w-23em': isShow }"
         >
           <small class="flex-1">筛选：</small>
@@ -314,7 +349,7 @@ watch(dto.value, () => {
           md:ml-2
           :type="isShow ? 'danger' : 'default'"
         >
-          {{ isShow ? "收起" : "展开" }}
+          {{ isShow ? "收起" : "筛选" }}
         </el-button>
       </div>
       <!-- 列表 -->

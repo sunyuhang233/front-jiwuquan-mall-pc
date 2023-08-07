@@ -33,13 +33,17 @@ const countdown = (
   requestAnimationFrame(update);
 };
 const text = ref<string>("");
+const emit = defineEmits(["delay"]);
 watchDebounced(
   () => date,
   (val) => {
     if (val && endDate.value && Date.now() < endDate.value) {
       countdown(endDate.value, (hours, minutes, seconds) => {
-        if (hours + minutes + seconds === 0) {
+        if (hours + minutes + seconds <= 0) {
           text.value = "订单超时，自动取消";
+          if (!isStop.value) {
+            emit("delay");
+          }
           isStop.value = true;
           return;
         }

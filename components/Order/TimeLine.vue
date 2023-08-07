@@ -49,9 +49,7 @@ defineExpose({
     <el-timeline>
       <el-timeline-item
         v-for="p in list"
-        :color="
-          p.active === list.length ? 'var(--el-color-primary)' : 'var(--el-color-primary-light-3)'
-        "
+        color="var(--el-color-success-light-3)"
         :key="p.active"
         :timestamp="p.time"
       >
@@ -59,7 +57,7 @@ defineExpose({
       </el-timeline-item>
       <el-timeline-item
         :timestamp="delivery.data.value?.createTime"
-        color="var(--el-color-primary)"
+        color="var(--el-color-success-light-3)"
         v-show="delivery.data.value"
       >
         <template #default>
@@ -67,7 +65,7 @@ defineExpose({
             <div class="el-timeline-item__content pb-1">
               已发货，
               <span
-                class="text-[var(--el-color-primary)] mr-2 select-none cursor-pointer hover:underline active:underline"
+                class="text-[var(--el-color-success)] mr-2 select-none cursor-pointer hover:underline active:underline"
                 v-copying.toast="delivery.data.value?.deliveryNum"
               >
                 {{ delivery.data.value?.deliveryNum }}
