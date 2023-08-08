@@ -11,7 +11,7 @@ export const pwa: ModuleOptions = {
     id: scope,
     scope,
     background_color: "#fff",
-    start_url: ".",
+    start_url: "/",
     display: "standalone",
     name: appName,
     short_name: appName,

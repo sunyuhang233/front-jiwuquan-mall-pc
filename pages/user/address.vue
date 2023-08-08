@@ -237,12 +237,26 @@ const rules = reactive({
       :menu="['back']"
       :footer="false"
     >
-      <div class="layout-default mx-a px-2em">
+      <div class="layout-default mx-a">
         <div
-          class="title animate__animated animate__fadeInDown"
+          class="flex-row-bt-c animate__animated animate__fadeInDown"
           my-3
         >
           <h2 tracking-1>收货地址</h2>
+          <div class="cursor-pointer flex items-center justify-end ml-a">
+            <i
+              class="inline-block hover:rotate-180 hover:scale-120 transition-300 p-3 i-solar:refresh-circle-line-duotone bg-green-5 mr-4 hover:text-[var(--el-color-success)]"
+              @click="refreshData"
+            ></i>
+            <el-text
+              plain
+              class="transition-300 select-none cursor-pointer hover:text-[var(--el-color-success)]"
+              @click="isEdit = !isEdit"
+              :type="isEdit ? 'danger' : 'info'"
+            >
+              {{ isEdit ? "取消" : "管理" }}
+            </el-text>
+          </div>
         </div>
         <ClientOnly>
           <div
@@ -358,27 +372,7 @@ const rules = reactive({
               v-loading.fullscreen="isLoadingAll"
               class="address"
             >
-              <div
-                flex-row-bt-c
-                border-default
-                border-0
-                border-b-2px
-              >
-                <div class="cursor-pointer flex items-center justify-end ml-a">
-                  <i
-                    class="inline-block hover:rotate-180 hover:scale-120 transition-300 p-3 i-solar:refresh-circle-line-duotone bg-green-5 mr-4 hover:text-[var(--el-color-success)]"
-                    @click="refreshData"
-                  ></i>
-                  <el-text
-                    plain
-                    class="transition-300 select-none cursor-pointer hover:text-[var(--el-color-success)]"
-                    @click="isEdit = !isEdit"
-                    :type="isEdit ? 'danger' : 'info'"
-                  >
-                    {{ isEdit ? "取消" : "管理" }}
-                  </el-text>
-                </div>
-              </div>
+              <ElDivider />
               <!-- 列表 -->
               <div
                 class="list"
@@ -390,51 +384,16 @@ const rules = reactive({
                   <transition-group
                     tag="div"
                     name="item-list"
-                    class="flex flex-wrap relative"
+                    class="relative"
+                    grid="~ cols-2 md:cols-5 gap-2 md:gap-4 "
                   >
-                    <!-- 地址项 -->
-                    <div
-                      v-for="p in address?.addressList"
-                      :key="p.id"
-                    >
-                      <CardAddressBox :address="p">
-                        <template #btns>
-                          <div
-                            class="check"
-                            v-show="isEdit"
-                            block
-                            flex-row-c-c
-                          >
-                            <el-checkbox
-                              w-4em
-                              :label="p.id"
-                            />
-                            <span class="-ml-2em opacity-80">选中</span>
-                          </div>
-                          <el-button
-                            type="info"
-                            size="small"
-                            class="ml-a mx-2 opacity-0 group-hover:opacity-90"
-                            plain
-                            @click="showUpdate(p)"
-                          >
-                            修改
-                          </el-button>
-                          <span
-                            class="hover:bg-red-6 hover:scale-110 i-solar:trash-bin-minimalistic-bold-duotone p-3 p-2 dark:bg-light transition-300 opacity-0 group-hover:opacity-80"
-                            @click="deleteAddress(p.id)"
-                          ></span>
-                        </template>
-                      </CardAddressBox>
-                    </div>
-
                     <!-- 添加按钮 -->
                     <div
                       :key="2030303"
-                      min-w-240px
+                      w-full
                       min-h-180px
-                      class="mr-4 mt-4 select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group border-default-dashed border-3px rounded-8px transition-300"
-                      hover:border="3px solid dark-4"
+                      class="select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group border-default-dashed border-2px rounded-8px transition-300"
+                      hover:border=" solid dark-4"
                       dark:hover:border-gray-5
                       @click="showAdd"
                     >
@@ -451,6 +410,39 @@ const rules = reactive({
                         添加新地址
                       </p>
                     </div>
+                    <!-- 地址项 -->
+                    <CardAddressBox
+                      v-for="p in address?.addressList"
+                      :key="p.id"
+                      :address="p"
+                      class="w-full md:min-w-240px"
+                    >
+                      <template #btns>
+                        <div
+                          class="flex-row-c-c"
+                          v-show="isEdit"
+                        >
+                          <el-checkbox
+                            w-4em
+                            :label="p.id"
+                          />
+                          <small class="-ml-2.6em opacity-80">选中</small>
+                        </div>
+                        <el-button
+                          type="info"
+                          size="small"
+                          class="ml-a mx-2 opacity-100 md:opacity-0 md:group-hover:opacity-90"
+                          plain
+                          @click="showUpdate(p)"
+                        >
+                          修改
+                        </el-button>
+                        <span
+                          class="hover:bg-red-6 hover:scale-110 i-solar:trash-bin-minimalistic-bold-duotone p-3 p-2 dark:bg-light transition-300 opacity-100 md:opacity-0 md:group-hover:opacity-80"
+                          @click="deleteAddress(p.id)"
+                        ></span>
+                      </template>
+                    </CardAddressBox>
                   </transition-group>
                 </el-checkbox-group>
               </div>

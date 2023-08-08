@@ -137,11 +137,12 @@ const clickTag = (val: string, i: number) => {
 </script>
 
 <template>
-  <div>
+  <div relative>
     <!-- 下拉框 -->
     <el-popover
-      width="470px"
+      width="100%"
       popper-class="popover"
+      :teleported="false"
       transition="fade"
       :placement="'bottom-end'"
       :show-after="200"

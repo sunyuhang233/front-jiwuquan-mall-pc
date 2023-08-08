@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveModuleName } from "typescript";
 import { getAllOrderPage, getOrderPageByDTO } from "~/composables/api/orders";
 import { OrderInfoVO, OrdersPageDTO, OrdersStatus } from "~/composables/api/orders";
 
@@ -87,7 +88,14 @@ function reload() {
     current: -1,
   };
   list.value.splice(0);
+  loadOrdersPage();
 }
+
+const reloadSearch = () => {
+  dto.value.startTime = undefined;
+  dto.value.endTime = undefined;
+  reload();
+};
 
 // 更新loading
 const isUpdateLoading = ref<boolean>(false);
@@ -305,15 +313,13 @@ const isShow = ref<boolean>(false);
 // 时间
 const selectDate = ref("");
 // 折叠收起
-const toggle = () => {
-  isShow.value = !isShow.value;
-  if (isShow.value) {
-  }
+const changeDate = () => {
+  const startTime = useDateFormat(selectDate.value[0], "YYYY-MM-DD HH:mm:ss").value.toString();
+  const endTime = useDateFormat(selectDate.value[1], "YYYY-MM-DD HH:mm:ss").value.toString();
+  dto.value.startTime = startTime;
+  dto.value.endTime = endTime;
+  reload();
 };
-
-watch(dto.value, () => {
-  if (!isLoading.value) reload();
-});
 </script>
 
 <template>
@@ -323,8 +329,8 @@ watch(dto.value, () => {
   >
     <div
       v-infinite-scroll="loadOrdersPage"
-      :infinite-scroll-delay="300"
-      :infinite-scroll-distance="100"
+      :infinite-scroll-delay="800"
+      :infinite-scroll-distance="0"
     >
       <div class="mb-4 ml-a cursor-pointer flex justify-end">
         <div
@@ -334,16 +340,27 @@ watch(dto.value, () => {
           <small class="flex-1">筛选：</small>
           <el-date-picker
             style="flex: 7"
+            format="YYYY-MM-DD HH:mm:ss"
             v-model="selectDate"
             type="datetimerange"
             size="small"
+            @change="changeDate"
             start-placeholder="起 始"
             :time-arrow-control="true"
             end-placeholder="结 束"
           />
+          <el-button
+            @click="reloadSearch"
+            size="small"
+            ml-1
+            md:ml-2
+          >
+            重置
+          </el-button>
         </div>
+
         <el-button
-          @click="toggle"
+          @click="isShow = !isShow"
           size="small"
           ml-1
           md:ml-2

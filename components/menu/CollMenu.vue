@@ -7,7 +7,7 @@ const route = useRoute();
 </script>
 <template>
   <div
-    class="menu -translate-x-64px md:translate-x-0px fixed md:sticky md:block z-999 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-1/1"
+    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-999 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-1/1"
   >
     <ClientOnly>
       <!-- 菜单 -->
@@ -184,6 +184,31 @@ const route = useRoute();
     .title {
       margin-left: 0.8em;
     }
+  }
+}
+
+.menu::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 150vw;
+  overflow: hidden;
+  height: 100vh;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-bg::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150vw;
+    overflow: hidden;
+    height: 100vh;
+    background-color: rgba(34, 34, 34, 0.3);
+    z-index: 0;
+    transition: $transition-delay;
   }
 }
 </style>

@@ -80,7 +80,8 @@
       :class="{ 'translate-y-20vh scale-120': isShowSearch }"
     >
       <h3
-        class="animate-fade-in text-center absolute-center -translate-y-2em font-500 text-light opacity-90"
+        class="opacity-0 transition-300 text-center transition-300 absolute-center -translate-y-2em font-500 text-light"
+        :class="{ 'opacity-90': isShowSearch }"
       >
         搜 索
       </h3>
@@ -106,7 +107,7 @@
         <NuxtLink
           to="/shopcart"
           v-if="store.isLogin"
-          class="hover:animate-shopcart"
+          class="hover:animate-[shopcart_1s_ease-in] hidden md:block"
         >
           <i
             class="p-3 mx-2 px-0.7em transition-100 hover:bg-[var(--el-color-danger)] hover:i-solar:cart-large-2-bold"

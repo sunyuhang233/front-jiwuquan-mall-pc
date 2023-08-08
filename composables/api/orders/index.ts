@@ -213,9 +213,9 @@ export function payOrders(orderId: string, type: PayType, points: number, vouche
 }
 
 export enum PayType {
-  WEALLET = "wellet",
-  WECHAT = "wechat",
-  ALIPAY = "alipay",
+  WEALLET = "WALLET",
+  WECHAT = "WECHAT",
+  ALIPAY = "ALIPAY",
 }
 
 

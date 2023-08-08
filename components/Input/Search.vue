@@ -42,7 +42,7 @@ const onSearch = () => {
 };
 </script>
 <style lang="scss" scoped>
-$input-width: min(30vw, 360px);
+$input-width: min(40vw, 360px);
 $scle-input-width: min(68vw, 520px);
 .v-input {
   :deep(.el-input__wrapper) {

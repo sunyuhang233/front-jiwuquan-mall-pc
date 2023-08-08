@@ -70,32 +70,35 @@ const menuList = ref([
   {
     name: "收货地址",
     path: "/user/address",
-    className: "bg-lime-5 i-solar:compass-bold-duotone hover:animate-spin",
+    className: "bg-lime-5 i-solar:compass-bold-duotone group-hover:animate-spin",
   },
   {
     name: "钱 包",
     path: "/user/wallet",
-    className: "bg-red-5 i-solar:wallet-bold-duotone  hover:animate-[heartBeat_1s_ease-in-out_1]",
+    className:
+      "bg-red-5 i-solar:wallet-bold-duotone  group-hover:animate-[heartBeat_1s_ease-in-out_1]",
   },
   {
     name: "购物车",
     path: "/shopcart",
-    className: "bg-red-5 i-solar:cart-large-2-bold-duotone hover:animate-shopcart",
+    className:
+      "bg-red-5 i-solar:cart-large-2-bold-duotone group-hover:animate-[shopcart_1s_ease-out]",
   },
   {
     name: "账 单",
     path: "/user/wallet",
-    className: "bg-yellow-5  i-solar:bill-list-bold-duotone hover:animate-[tada_1s_ease-in-out_1]",
+    className:
+      "bg-yellow-5  i-solar:bill-list-bold-duotone group-hover:animate-[tada_1s_ease-in-out_1]",
   },
   {
     name: "订 单",
     path: "/order/list",
-    className: "bg-yellow-5 i-solar:clipboard-bold-duotone hover:animate-[swing_1s_ease_1]",
+    className: "bg-yellow-5 i-solar:clipboard-bold-duotone group-hover:animate-[swing_1s_ease_1]",
   },
   {
     name: "账户安全",
     path: "/user/safe",
-    className: "bg-green-5 i-solar:danger-bold-duotone hover:rotate-360",
+    className: "bg-green-5 i-solar:danger-bold-duotone group-hover:rotate-360",
   },
 ]);
 </script>

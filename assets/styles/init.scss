@@ -81,6 +81,12 @@ html.dark {
   background: radial-gradient(ellipse 80% 50% at 50% -22%, rgba(98, 97, 202, 0.2), transparent);
 }
 
+*,
+.cursor-pointer {
+  // 移动端点击有蓝色底
+  -webkit-tap-highlight-color: transparent;
+}
+
 // 全局滚动条
 ::-webkit-scrollbar {
   width: 0.5vw;

@@ -2,7 +2,7 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: process.env.NODE_ENV !== "development",
   build: {
     transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
   },
@@ -133,10 +133,6 @@ export default defineNuxtConfig({
   pwa,
   // nuxt开发者工具
   devtools: {
-    enabled: true,
+    enabled: false,
   },
-  eslint: {
-    cache: true,
-    exclude: ['*.svg', '**/node_modules/**']
-  }
 })
