@@ -65,7 +65,7 @@ const exitLogin = (ua?: string) => {
 };
 </script>
 <template>
-  <div class="group">
+  <div class="group flex flex-col">
     <strong
       block
       opacity-70
@@ -83,34 +83,36 @@ const exitLogin = (ua?: string) => {
       />
     </strong>
     <div
-      class="v-card h-full overflow-hidden group p-5 shadow-sm select-none border-default rounded-14px"
+      class="v-card flex-1 overflow-hidden group p-4 shadow-sm select-none border-default rounded-14px"
       v-loading="isLoading"
     >
-      <!-- 列表 -->
-      <transition-group
-        name="item-list"
-        tag="div"
-        class="grid grid-cols-1 md:grid-cols-3 grid-gap-3"
-      >
-        <UserSafeDeviceCard
-          class="active:scale-97 cursor-pointer hover:border-[var(--el-color-info)]"
-          :data="p"
-          v-for="p in deviceList"
-          :key="p.id"
+      <el-scrollbar>
+        <!-- 列表 -->
+        <transition-group
+          name="item-list"
+          tag="div"
+          class="grid grid-cols-1 md:grid-cols-3 grid-gap-3"
         >
-          <div></div>
-          <el-button
-            @click="exitLogin(p.userAgentString)"
-            v-if="!p.isLocal"
-            size="small"
-            type="danger"
-            style="padding: 0 8px"
-            plain
+          <UserSafeDeviceCard
+            class="active:scale-97 cursor-pointer hover:border-[var(--el-color-info)]"
+            :data="p"
+            v-for="p in deviceList"
+            :key="p.id"
           >
-            下线
-          </el-button>
-        </UserSafeDeviceCard>
-      </transition-group>
+            <div></div>
+            <el-button
+              @click="exitLogin(p.userAgentString)"
+              v-if="!p.isLocal"
+              size="small"
+              type="danger"
+              style="padding: 0 8px"
+              plain
+            >
+              下线
+            </el-button>
+          </UserSafeDeviceCard>
+        </transition-group>
+      </el-scrollbar>
     </div>
   </div>
 </template>

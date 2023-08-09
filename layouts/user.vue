@@ -23,6 +23,7 @@
         <MenuCollMenu
           v-if="leftMenu"
           class="-translate-x-full transition-300"
+          @close="isShowMenu = false"
           :class="{ 'translate-x-0 menu-bg': isShowMenu }"
         />
       </ClientOnly>

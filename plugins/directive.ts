@@ -1,4 +1,5 @@
 // @ts-ignore
+import currency from "currency.js"
 import { gsap } from "gsap"
 import { DirectiveBinding } from "nuxt/dist/app/compat/capi"
 
@@ -99,7 +100,7 @@ function increNumber(el: Element, binding: DirectiveBinding<any>, isInt?: boolea
     var: targetValue,
     duration: duration,
     onUpdate: function () {
-      el.innerHTML = !isInt ? Math.ceil(counter.var).toFixed(2) : String(Math.ceil(counter.var));
+      el.innerHTML = !isInt ? currency(counter.var).toString() : String(Math.ceil(counter.var));
     }
   });
 }

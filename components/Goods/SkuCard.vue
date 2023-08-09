@@ -244,10 +244,10 @@ const setActiveItem = (image: string) => {
 						<small opacity-90 float-left>销售价（元）：</small>
 						<div class="righjt">
 							<span font-700 text-1.4em text-red-5>￥
-								<span v-incre-up="goodsInfo?.price.toFixed(2)"></span>
+								<span v-incre-up="goodsInfo?.price"></span>
 							</span>
 							<small style="text-decoration: line-through; opacity: 0.9" text-bluegray-3 text-0.6em>￥
-								<span v-incre-up="goodsInfo?.costPrice.toFixed(2)"></span>
+								<span v-incre-up="goodsInfo?.costPrice"></span>
 							</small>
 						</div>
 					</div>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import currency from "currency.js";
 import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 import { GoodsVO } from "~/types/goods";
 // 商品参数
@@ -6,7 +7,7 @@ const { goods } = defineProps<{
   goods: GoodsVO;
 }>();
 const getDiscount = computed<number>(() => {
-  return +((1 - goods.price / goods.costPrice) * 100).toFixed(0) ?? "";
+  return currency(1).subtract(currency(goods.price).divide(goods.costPrice)).intValue;
 });
 </script>
 <template>
@@ -16,8 +17,8 @@ const getDiscount = computed<number>(() => {
     md:aspect-ratio-1.2
   >
     <!-- 商品图片  -->
-    <ClientOnly>
-      <div class="img relative w-full h-2/3">
+    <div class="img relative w-full h-110px md:h-160px">
+      <ClientOnly>
         <ElImage
           hover:transform-scale-110
           transition-300
@@ -26,43 +27,42 @@ const getDiscount = computed<number>(() => {
           :alt="goods.name"
           fit="cover"
         />
-        <!-- 浏览量 -->
-        <small
-          class="view w-full py-1 px-3 flex-row-bt-c absolute left-0 bottom-0 z-1 color-light bg-[var(--el-bg-color-primary)] backdrop-blur-2em opacity-0 transition-300"
-          group-hover:opacity-80
+      </ClientOnly>
+      <!-- 浏览量 -->
+      <small
+        class="view w-full py-1 px-3 flex-row-bt-c absolute left-0 bottom-0 z-1 color-light bg-[var(--el-bg-color-primary)] backdrop-blur-2em opacity-0 transition-300"
+        group-hover:opacity-80
+      >
+        <div class="icon">
+          <i class="i-solar:eye-bold p-2 mr-1" />
+          {{ goods.views }}
+        </div>
+        <strong
+          class="dis tracking-0.1em bg-red-5 rounded-2em py-0.2em px-2"
+          v-if="+getDiscount"
         >
-          <div class="icon">
-            <i
-              i-solar:eye-bold
-              p-2
-              mr-1
-            ></i>
-            {{ goods.views }}
-          </div>
-          <strong
-            class="dis tracking-0.1em bg-red-5 rounded-2em py-0.2em px-2"
-            v-if="+getDiscount"
-          >
-            {{ `-${getDiscount}%` }}
-          </strong>
-        </small>
-      </div>
-    </ClientOnly>
-    <div class="flex relative flex-col h-1/3 py-3 justify-between">
-      <h4 class="w-full truncate px-3">
+          {{ `-${getDiscount}%` }}
+        </strong>
+      </small>
+    </div>
+    <!-- 商品名 -->
+    <div class="flex relative flex-col px-2 py-2 md:px-3 justify-around h-1/3 justify-between">
+      <h4 class="w-full truncate">
         {{ goods.name }}
       </h4>
       <p
         color-red-5
-        class="texts px-3"
+        class="texts"
       >
-        <strong pr-1>￥{{ goods.price?.toFixed(2) }}</strong>
+        <strong pr-1>￥{{ currency(goods.price) }}</strong>
         <small
+          hidden
+          md:inline
           color-coolgray
           text-0.6em
           style="text-decoration: line-through"
         >
-          ￥{{ goods.costPrice.toFixed(2) }}
+          ￥{{ currency(goods.costPrice) }}
         </small>
         <!-- 小标填充 -->
         <slot :goods="goods"></slot>

@@ -227,7 +227,7 @@ const getAllPrice = computed(() => {
                 claas=""
                 v-show="getAllPostate > 0"
               >
-                （运费：{{ getAllPostate.toFixed(2) }}￥）
+                （运费：{{ currency(getAllPostate) }}￥）
               </small>
             </div>
             <div

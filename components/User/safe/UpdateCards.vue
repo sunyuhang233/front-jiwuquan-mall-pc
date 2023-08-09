@@ -40,7 +40,7 @@ const form = ref({
 });
 </script>
 <template>
-  <div class="card">
+  <div class="card flex flex-col">
     <strong
       block
       opacity-70
@@ -57,9 +57,9 @@ const form = ref({
     <div
       v-loading="isLoading"
       class="v-card group overflow-hidden text-1em flex flex-col p-5 shadow-sm border-default rounded-14px"
+      flex-1
       flex
       flex-col
-      h-full
     >
       <div class="flex items-center">
         <el-avatar

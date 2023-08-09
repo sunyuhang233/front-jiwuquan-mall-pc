@@ -99,6 +99,10 @@ const route = useRoute();
         </el-menu-item>
       </el-menu>
     </ClientOnly>
+    <div
+      class="bg"
+      @click="$emit('close')"
+    ></div>
   </div>
 </template>
 
@@ -187,18 +191,8 @@ const route = useRoute();
   }
 }
 
-.menu::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 150vw;
-  overflow: hidden;
-  height: 100vh;
-}
-
 @media screen and (max-width: 768px) {
-  .menu-bg::before {
+  .menu-bg .bg {
     content: "";
     position: absolute;
     left: 0;
@@ -206,8 +200,8 @@ const route = useRoute();
     width: 150vw;
     overflow: hidden;
     height: 100vh;
-    background-color: rgba(34, 34, 34, 0.3);
-    z-index: 0;
+    background-color: rgba(51, 51, 51, 0.3);
+    z-index: -1;
     transition: $transition-delay;
   }
 }

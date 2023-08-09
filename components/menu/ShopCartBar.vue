@@ -147,10 +147,10 @@ const toOrderPage = (ids: string[]) => {
           ></i>
         </div>
       </template>
-      <!-- 2、 （商品goods） -->
       <template #default>
-        <div class="w-100% md:w-500px">
-          <!-- 登录 -->
+        <div>
+          <!-- 2、 商品goods -->
+          <!-- 未登录 -->
           <div
             class="tologin"
             flex-row-c-c
@@ -194,34 +194,34 @@ const toOrderPage = (ids: string[]) => {
             购物车
           </h2>
           <el-scrollbar
-            v-if="user.isLogin"
             height="50vh"
+            class="overflow-auto"
+            style="overflow: auto"
+            v-if="user.isLogin"
             mb-2
           >
-            <div
-              class="overflow-auto"
+            <!-- 购物车项 -->
+            <el-checkbox-group
+              v-model="selectIds"
               v-infinite-scroll="shop.loadShopcartList"
-              :infinite-scroll-delay="500"
-              :infinite-scroll-distance="30"
+              :infinite-scroll-delay="600"
+              :infinite-scroll-distance="40"
               :infinite-scroll-disabled="shop.notMore"
             >
-              <!-- 购物车项 -->
-              <el-checkbox-group v-model="selectIds">
-                <CardShopLine
-                  @click=""
-                  v-for="p in shop.shopcartList"
-                  :shop-cart="p"
-                  :key="p.id"
-                >
-                  <template #btn>
-                    <el-checkbox
-                      :label="p.id"
-                      :disabled="!p.stock"
-                    ></el-checkbox>
-                  </template>
-                </CardShopLine>
-              </el-checkbox-group>
-            </div>
+              <CardShopLine
+                @click=""
+                v-for="p in shop.shopcartList"
+                :shop-cart="p"
+                :key="p.id"
+              >
+                <template #btn>
+                  <el-checkbox
+                    :label="p.id"
+                    :disabled="!p.stock"
+                  />
+                </template>
+              </CardShopLine>
+            </el-checkbox-group>
           </el-scrollbar>
 
           <!-- 下方按钮 -->
@@ -352,10 +352,6 @@ const toOrderPage = (ids: string[]) => {
 
   :deep(.badge__content) {
     background-color: $loading-color;
-  }
-
-  .popover {
-    position: absolute;
   }
 }
 
