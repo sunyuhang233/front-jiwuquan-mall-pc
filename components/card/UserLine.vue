@@ -68,21 +68,26 @@ const exitLogin = () => {
 
 const menuList = ref([
   {
-    name: "收货地址",
-    path: "/user/address",
-    className: "bg-lime-5 i-solar:compass-bold-duotone group-hover:animate-spin",
+    name: "我的收藏",
+    path: "/user/collect",
+    className: "bg-yellow-5 i-solar:star-bold-duotone  group-hover:animate-[jello_1s_ease]",
   },
   {
     name: "钱 包",
     path: "/user/wallet",
     className:
-      "bg-red-5 i-solar:wallet-bold-duotone  group-hover:animate-[heartBeat_1s_ease-in-out_1]",
+      "bg-red-5 i-solar:wallet-bold-duotone  group-hover:animate-[rubberBand_1s_ease-in-out_1]",
   },
   {
     name: "购物车",
     path: "/shopcart",
     className:
       "bg-red-5 i-solar:cart-large-2-bold-duotone group-hover:animate-[shopcart_1s_ease-out]",
+  },
+  {
+    name: "收货地址",
+    path: "/user/address",
+    className: "bg-lime-5 i-solar:compass-bold-duotone group-hover:animate-spin",
   },
   {
     name: "账 单",

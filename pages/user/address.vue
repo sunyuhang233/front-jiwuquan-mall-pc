@@ -260,7 +260,7 @@ const rules = reactive({
         </div>
         <ClientOnly>
           <div
-            class="address-list"
+            class="address-list animate-[fade-in_.6s_ease]"
             @keyup.esc="isEdit = false"
             v-if="user.isLogin"
           >

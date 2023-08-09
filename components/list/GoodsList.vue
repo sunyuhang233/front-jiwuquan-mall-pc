@@ -125,7 +125,7 @@ defineExpose({
         <!-- 商品卡片 -->
         <CardGoodsBox
           @click="toGoodsView(p.id)"
-          class="mt-4/100 transition-300"
+          class="mt-4/100 hover:shadow-md shadow-[var(--el-color-primary)] transition-300"
           element-loading-background="transparent"
           :goods="p"
           :key="p.id"

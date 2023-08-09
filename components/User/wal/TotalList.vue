@@ -110,14 +110,14 @@ const pointsData = ref({
 <template>
   <div class="cards">
     <UserWalTotalCard
-      class="w-full v-card shadow md:shadow-md hover:scale-104 transition-200 cursor-pointer"
+      class="w-full v-card shadow-sm rounded-14px hover:scale-104 transition-200 cursor-pointer"
       v-for="p in list"
       :key="p.title"
       :data="p"
     />
     <!-- 积分 -->
     <UserWalTotalCard
-      class="w-full shadow md:shadow-md hover:scale-104 transition-200 cursor-pointer"
+      class="w-full rounded-14px shadow-sm hover:scale-104 transition-200 cursor-pointer"
       :data="pointsData"
     >
       <template #default>

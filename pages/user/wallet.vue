@@ -25,12 +25,12 @@ definePageMeta({
     >
       <ClientOnly>
         <div
-          class="layout-default py-0"
+          class="layout-default"
           v-if="user.isLogin"
         >
           <!-- 标题 -->
           <div
-            class="title animate__animated animate__fadeInDown w-full"
+            class="title animate-[fadeInDown_0.6s] w-full"
             pt-8
             pb-6
           >
@@ -50,27 +50,37 @@ definePageMeta({
             </span>
           </div>
           <!-- 下方 -->
-          <div class="grid-content flex flex-wrap md:grid">
+          <div
+            class="animate-[fade-in_.3s] grid grid-cols-1 md:grid-cols-[8fr_3fr] grid-gap-8"
+            grid-justify-items-stretch
+            grid-items-stretch
+          >
             <!-------------1------------>
             <div
-              style="grid-template-columns: 2fr 4fr"
-              flex
               w-full
-              flex-wrap
-              justify-center
-              md:grid
-              grid-gap-10
-              grid-items-stretch
+              grid="
+              ~
+              cols-1
+              items-stretch
+              gap-12"
+              md:grid="
+              ~
+              cols-[4fr_3fr]
+              gap-8
+              items-stretch
+              "
             >
               <!-- 钱包 -->
               <div
-                class="flex min-h-290px flex-col justify-center w-400px relative overflow-x-hidden"
+                class="z-0 overflow-x-hidden md:overflow-x-visible flex items-center relative w-full md:w-full md:max-w-380px"
               >
                 <UserWalSwiperCarts />
               </div>
               <!-- 统计卡片 -->
               <UserWalTotalList
-                class="flex flex-wrap"
+                grid="
+                ~
+                cols-1 gap-4 items-stretch"
                 md:grid="
                 ~
                 cols-2 gap-6 items-stretch"
@@ -78,7 +88,7 @@ definePageMeta({
               <!-- 套餐 -->
               <UserWalCombo class="w-full" />
               <!-- 统计表 -->
-              <UserWalTable class="h-500px md:h-full" />
+              <UserWalTable class="h-360px md:h-full" />
             </div>
             <!-------------2------------>
             <!-- 账单和日历 -->

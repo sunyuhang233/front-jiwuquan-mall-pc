@@ -86,7 +86,7 @@ const exitLogin = (ua?: string) => {
       class="v-card flex-1 overflow-hidden group p-4 shadow-sm select-none border-default rounded-14px"
       v-loading="isLoading"
     >
-      <el-scrollbar>
+      <el-scrollbar height="400px">
         <!-- 列表 -->
         <transition-group
           name="item-list"

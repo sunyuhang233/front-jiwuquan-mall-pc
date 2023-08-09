@@ -102,35 +102,36 @@ const onReload = async () => {
 onReload();
 </script>
 <template>
-  <div class="relative rounded-14px transition-300 v-card shadow w-full h-full p-6 pt-5">
-    <h3>
-      <i
-        i-solar:align-bottom-bold-duotone
-        p-3
-        mr-2
-      />
+  <div class="h-full w-full rounded-14px transition-300 v-card shadow flex flex-col p-5">
+    <h3
+      flex
+      mb-2
+      md:mb-0
+    >
+      <i class="i-solar:align-bottom-bold-duotone p-3 mr-2" />
       账单统计
+      <!-- 排序 -->
+      <div class="ml-a z-1">
+        <el-select
+          @change="onReload"
+          v-model="dto.timeType"
+          :placeholder="dto.timeType || '按日'"
+          size="small"
+          class="w-6em opacity-90 select"
+        >
+          <el-option
+            v-for="p in timeTypeList"
+            :key="p.value"
+            :label="p.label"
+            :value="p.value"
+          />
+        </el-select>
+      </div>
     </h3>
-    <!-- 排序 -->
-    <div class="absolute right-4.6em mt-0.8em z-1">
-      <el-select
-        @change="onReload"
-        v-model="dto.timeType"
-        :placeholder="dto.timeType || '按日'"
-        size="small"
-        class="w-6em opacity-90 select"
-      >
-        <el-option
-          v-for="p in timeTypeList"
-          :key="p.value"
-          :label="p.label"
-          :value="p.value"
-        />
-      </el-select>
-    </div>
+
     <!-- 表格 -->
     <VChart
-      class="w-full h-full flex-row-c-c overflow-hidden rounded-12px"
+      class="w-full flex-1 flex-row-c-c overflow-hidden rounded-12px"
       v-loading="isLoading"
       :option="option"
     />

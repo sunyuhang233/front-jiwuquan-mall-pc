@@ -50,6 +50,18 @@ const route = useRoute();
           ></i>
           <span class="min-w-10em title ml-3">个人信息</span>
         </el-menu-item>
+        <!-- 我的收藏 -->
+        <el-menu-item index="/user/collect">
+          <i
+            class="i-solar:star-broken"
+            v-show="route.path !== '/user/collect'"
+          ></i>
+          <i
+            class="i-solar:star-bold-duotone"
+            v-show="route.path === '/user/collect'"
+          ></i>
+          <span class="min-w-10em title ml-3">我的收藏</span>
+        </el-menu-item>
         <!-- 钱包 -->
         <el-menu-item index="/user/wallet">
           <i

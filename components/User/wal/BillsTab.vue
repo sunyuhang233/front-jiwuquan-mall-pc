@@ -163,13 +163,13 @@ watch(
       v-loading="isRefresh"
     >
       <div
-        class="text-center opacity-90"
+        class="my-2 text-center opacity-90"
         v-show="!opt.isNowDay"
       >
         {{ selectDay.getFullYear() }}年{{ selectDay.getMonth() + 1 }}月的账单
       </div>
       <div
-        class="mt-3 mb-2 text-center opacity-90"
+        class="my-2 text-center opacity-90"
         v-show="opt.isNowDay"
       >
         {{ selectDayFormat }}的账单

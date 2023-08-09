@@ -3,8 +3,8 @@
   <div
     class="nav select-none"
     flex-row-bt-c
-    py-4
-    px-6
+    p-4
+    md:px-6
     text-m
     dark:text="light"
   >
@@ -79,18 +79,15 @@
       class="z-2 absolute-center transition-300 translate-y-0 transition-ease-in-out"
       :class="{ 'translate-y-20vh scale-120': isShowSearch }"
     >
-      <h3
-        class="opacity-0 transition-300 text-center transition-300 absolute-center -translate-y-2em font-500 text-light"
-        :class="{ 'opacity-90': isShowSearch }"
-      >
-        搜 索
-      </h3>
       <InputSearch
         v-model="searchWord"
         :onSerch="onSerch"
         @open="isShowSearch = true"
         @close="isShowSearch = false"
       />
+      <h2 class="transition-300 text-center absolute-center -translate-y-3.2em font-500 text-light">
+        搜 索
+      </h2>
     </div>
     <!-- 右侧 -->
     <ClientOnly>

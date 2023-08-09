@@ -24,8 +24,6 @@ const comboList = useAsyncData(
   }
 ).data;
 const user = useUserStore();
-// 是否显示弹窗
-const isShow = ref<boolean>(false);
 // 是否loading
 const isLoading = ref<boolean>(false);
 
@@ -125,7 +123,6 @@ const toUserRechange = async (dto: AddWalletDTO): Promise<boolean> => {
     <div class="grid grid-cols-3 grid-gap-3 mr-2">
       <!-- 数据 -->
       <div
-        min-h-126px
         flex-row-c-c
         flex-col
         style="aspect-ratio: 1/1"
@@ -146,7 +143,9 @@ const toUserRechange = async (dto: AddWalletDTO): Promise<boolean> => {
       >
         <h3 text-center>￥{{ currency(p.amount).divide(p.discount).value }}</h3>
         <small class="opacity-70 text-0.8em line-through">原价￥{{ p.amount }}</small>
-        <small class="block opacity-80 text-center text-0.5em">赠送{{ p.points }}积分</small>
+        <small class="leading-1.5em block opacity-80 text-center text-0.5em">
+          赠送{{ p.points }}积分
+        </small>
       </div>
       <div
         class="flex-row-c-c cursor-pointer active:scale-95 dark-hover:bg-dark transition-300 border-default-dashed border-2px rounded-12px p-4 text-bluegray-700 dark:text-bluegray-200 leading-2.4em"
@@ -155,7 +154,7 @@ const toUserRechange = async (dto: AddWalletDTO): Promise<boolean> => {
       </div>
     </div>
     <!-- 输入框充值 -->
-    <small class="block mx-1 mt-8 opacity-90">自定义充值（单位：￥）</small>
+    <small class="block mx-1 mt-4 opacity-90">自定义充值（单位：￥）</small>
     <div class="mt-4 flex items-center">
       <el-input-number
         class="mr-4"

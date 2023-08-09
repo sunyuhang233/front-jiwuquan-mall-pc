@@ -33,7 +33,7 @@ definePageMeta({
           >
             <h2 tracking-1>账户与安全</h2>
           </div>
-          <div class="grid md:grid-cols-2 grid-gap-12">
+          <div class="flex flex-col-reverse md:grid md:grid-cols-2 grid-gap-6">
             <!-- 登录设备 -->
             <UserSafeDeviceList mt-4 />
             <!-- 修改信息 -->

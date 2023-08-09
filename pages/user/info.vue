@@ -24,7 +24,7 @@ const user = useUserStore();
       <div v-show="user.isLogin">
         <!-- 壁纸 -->
         <UserInfoBgToggle />
-        <div class="layout-default flex px-2em">
+        <div class="layout-default flex animate-[fade-in_.3s_ease]">
           <div class="flex-1 flex flex-wrap">
             <!-- 用户头像 -->
             <div class="avatars relative -top-6em flex-1 md:pr-4">
