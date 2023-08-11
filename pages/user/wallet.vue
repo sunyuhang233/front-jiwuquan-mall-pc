@@ -25,7 +25,7 @@ definePageMeta({
     >
       <ClientOnly>
         <div
-          class="layout-default"
+          class="layout-default py-0"
           v-if="user.isLogin"
         >
           <!-- 标题 -->

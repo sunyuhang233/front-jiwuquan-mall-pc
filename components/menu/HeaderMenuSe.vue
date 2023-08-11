@@ -1,6 +1,6 @@
 <template>
   <!-- 顶部header -->
-  <div
+  <header
     class="nav select-none"
     flex-row-bt-c
     py-4
@@ -77,7 +77,7 @@
         <CardUserLineSe />
       </div>
     </ClientOnly>
-  </div>
+  </header>
 </template>
 
 <script lang="ts" setup>

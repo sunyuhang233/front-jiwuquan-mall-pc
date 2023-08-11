@@ -15,12 +15,12 @@ const { address } = defineProps<{
     border-2px
     rounded-8px
     hover:border="solid [var(--el-color-primary)]"
-    dark:hover:border-gray-5
-    rounded-6px
-    class="group"
-    shadow-sm
     hover:shadow="
 		lg var(--el-color-primary)"
+    dark:hover:border-gray-5
+    shadow-sm
+    rounded-6px
+    class="group"
     :key="address.id"
     opacity-90
     flex

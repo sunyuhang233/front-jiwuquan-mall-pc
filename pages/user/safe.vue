@@ -25,7 +25,7 @@ definePageMeta({
       <ClientOnly>
         <div
           v-if="user.isLogin"
-          class="layout-default flex flex-col mx-a sm:px-2em"
+          class="layout-default flex flex-col"
         >
           <div
             class="title animate__animated animate__fadeInDown"

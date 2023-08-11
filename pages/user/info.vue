@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 useHead({
-  title: "信息 - 个人中心",
+  title: "详细 - 个人中心",
   meta: [
     {
       name: "description",

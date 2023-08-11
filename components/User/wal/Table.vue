@@ -131,7 +131,7 @@ onReload();
 
     <!-- 表格 -->
     <VChart
-      class="w-full flex-1 flex-row-c-c overflow-hidden rounded-12px"
+      class="w-full h-380px flex-row-c-c overflow-hidden rounded-12px"
       v-loading="isLoading"
       :option="option"
     />

@@ -1,6 +1,6 @@
 <template>
   <!-- 顶部header -->
-  <div
+  <header
     class="nav select-none"
     flex-row-bt-c
     p-4
@@ -145,7 +145,7 @@
         </div>
       </div>
     </ClientOnly>
-  </div>
+  </header>
 </template>
 
 <script lang="ts" setup>

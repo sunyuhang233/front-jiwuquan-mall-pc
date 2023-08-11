@@ -13,9 +13,9 @@ const noticeTip = ref<number>(0);
           <i
             p-3
             mx-1
-            class="transition-100 hover:bg-[var(--el-color-warning)] hover:i-solar:bell-bold"
-            i-solar:bell-outline
             px-0.7em
+            class="transition-100 hover:(bg-[var(--el-color-warning)] i-solar:bell-bold)"
+            i-solar:bell-outline
           />
         </el-badge>
       </template>

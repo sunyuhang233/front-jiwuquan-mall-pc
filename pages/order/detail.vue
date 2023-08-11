@@ -1277,6 +1277,7 @@ const toBack = () => {
         width: 6em;
         height: 4em;
         line-height: 2.5em;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
         text-align: center;
         transform: rotate(-45deg) translate(22%, 50%);
       }
