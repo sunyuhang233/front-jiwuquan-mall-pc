@@ -4,7 +4,7 @@
     <el-skeleton :rows="6" animated :loading="isLoading" :throttle="200"/>
     <ClientOnly>
     <!-- 滚动 -->
-    <el-scrollbar overflow-scroll p-4 border="1px dashed gray-200" dark:border="1px dashed dark-200" max-h-400px
+    <el-scrollbar :always="false" overflow-scroll p-4 border="1px dashed gray-200" dark:border="1px dashed dark-200" max-h-400px
       rounded-6px class="category animate-delay-100 animate__animated animate__fadeIn" tracking-0.1em w-360px min-h-380px
       flex="col wrap"> 
         <h3>商品分类

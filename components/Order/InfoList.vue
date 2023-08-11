@@ -325,6 +325,7 @@ const changeDate = () => {
 <template>
   <el-scrollbar
     height="70vh"
+    :always="false"
     style="overflow: auto"
   >
     <div
@@ -370,7 +371,11 @@ const changeDate = () => {
         </el-button>
       </div>
       <!-- 列表 -->
-      <transition-group name="fade">
+      <transition-group
+        name="fade-bt-list"
+        tag="div"
+        class="relative"
+      >
         <OrderInfoLine
           @submit="submit"
           v-for="p in list"

@@ -102,44 +102,68 @@ const batchCancelCollect = () => {
     },
   });
 };
+
+const reload = async () => {
+  isLoading.value = true;
+  await list.refresh();
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 300);
+};
 </script>
 <template>
   <div overflow-x-hidden>
-    <div class="mb-3 flex-row-c-c justify-end">
-      <div
-        class="flex w-0 transition-300 transition-width overflow-hidden"
-        :class="{ 'w-11em': isEdit }"
-      >
-        <el-checkbox
-          :border="true"
-          v-model="isSelectAll"
-          label="全选"
-          size="small"
-        />
-        <el-button
-          plain
-          type="danger"
-          :icon="ElIconDelete"
-          @click="batchCancelCollect"
-          class="ml-3"
-          size="small"
+    <!-- 顶部按钮 -->
+    <div class="mb-3 flex-row-bt-c">
+      <small opacity-60>操 作 ：</small>
+      <div class="btns flex">
+        <div
+          class="w-0 opacity-80 flex justify-between transition-300 transition-width truncate overflow-hidden"
+          :class="{ 'w-14.8em': isEdit }"
+          mr-2
         >
-          批量取消
+          <el-button
+            size="small"
+            @click="reload"
+          >
+            <i
+              class="hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-1em h-1em"
+              mr-2
+            />
+            刷新
+          </el-button>
+          <el-checkbox
+            :border="true"
+            v-model="isSelectAll"
+            label="全选"
+            size="small"
+          />
+          <el-button
+            plain
+            type="danger"
+            :icon="ElIconDelete"
+            @click="batchCancelCollect"
+            size="small"
+          >
+            批量取消
+          </el-button>
+        </div>
+        <el-button
+          @click="isEdit = !isEdit"
+          size="small"
+          plain
+          type="info"
+        >
+          {{ isEdit ? "取消" : "管理" }}
         </el-button>
       </div>
-      <el-button
-        @click="isEdit = !isEdit"
-        size="small"
-        plain
-        type="info"
-      >
-        {{ isEdit ? "取消" : "管理" }}
-      </el-button>
     </div>
+    <!-- 收藏列表 -->
     <el-scrollbar
       height="62vh"
       overflow-x-hidden
-      v-loading.fullscreen="isLoading"
+      v-loading="isLoading"
+      rounded-8px
     >
       <el-checkbox-group
         :disabled="!isEdit"
@@ -147,7 +171,7 @@ const batchCancelCollect = () => {
         overflow-x-hidden
       >
         <transition-group
-          name="group-list"
+          name="fade-lr-list"
           tag="div"
           grid="~ cols-2 md:cols-5 gap-6"
         >

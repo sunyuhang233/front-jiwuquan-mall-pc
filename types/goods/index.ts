@@ -3,15 +3,14 @@ import { isTrue } from "../result";
 
 // 简约商品视图对象
 export interface GoodsVO {
+  id: string,
   categoryId: string,
   city: string,
   costPrice: number,
   createTime: string,
   description: string,
   district: null,
-  id: string,
   images: string | string[],
-  isNew: isTrue,
   isShow: isTrue,
   name: string,
   postage: number,

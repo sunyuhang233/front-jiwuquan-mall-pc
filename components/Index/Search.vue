@@ -259,7 +259,7 @@ const clickTag = (val: string, i: number) => {
       >
         <transition-group
           tag="div"
-          name="item-list"
+          name="fade-bt-list"
           class="relative"
         >
           <!-- 跳转详情页 -->

@@ -194,6 +194,7 @@ const toOrderPage = (ids: string[]) => {
             购物车
           </h2>
           <el-scrollbar
+            :always="false"
             height="50vh"
             class="overflow-auto"
             style="overflow: auto"

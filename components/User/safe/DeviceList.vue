@@ -52,7 +52,10 @@ const exitLogin = (ua?: string) => {
         if (code === StatusCode.SUCCESS) {
           if (deviceList.value) {
             for (let i = 0; i < deviceList.value.length; i++) {
-              deviceList.value.splice(i, 1);
+              if (deviceList.value[i].userAgentString === ua) {
+                deviceList.value.splice(i, 1);
+                break;
+              }
             }
           }
           ElMessage.success("下线成功！");
@@ -89,9 +92,9 @@ const exitLogin = (ua?: string) => {
       <el-scrollbar height="400px">
         <!-- 列表 -->
         <transition-group
-          name="item-list"
+          name="fade-lr-list"
           tag="div"
-          class="grid grid-cols-1 md:grid-cols-3 grid-gap-3"
+          class="grid relative grid-cols-1 md:grid-cols-3 grid-gap-3"
         >
           <UserSafeDeviceCard
             class="active:scale-97 cursor-pointer hover:border-[var(--el-color-info)]"

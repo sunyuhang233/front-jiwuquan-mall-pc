@@ -122,3 +122,20 @@
 .el-popper-init {
   padding: 2px 4px;
 }
+
+//
+.vuepress-markdown-body.vuepress-markdown-body.vuepress-markdown-body {
+  border-radius: 8px;
+  padding: 1rem;
+  &,
+  * {
+    color: var(--el-color-white);
+  }
+}
+.dark .vuepress-markdown-body {
+  &,
+  * {
+    background-color: var(--el-color-black);
+    color: var(--el-color-white);
+  }
+}

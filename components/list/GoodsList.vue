@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { type GoodsPageDTO } from "@/composables/api/goods";
-import { getGoodsListByPage } from "@/composables/api/goods";
 import { GoodsVO } from "~/types/goods";
 
 // props
@@ -11,6 +10,7 @@ type Props = {
   limit?: number;
   load?: boolean;
   timer?: boolean;
+  transiton?: string;
 };
 const props = withDefaults(defineProps<Props>(), {
   timer: () => true,
@@ -77,6 +77,7 @@ const clearResult = () => {
   pageInfo.total = -1;
   pageInfo.pages = -1;
   pageInfo.current = -1;
+  page.value = 0;
 };
 const toGoodsView = (id: string) => {
   navigateTo({
@@ -84,20 +85,23 @@ const toGoodsView = (id: string) => {
   });
 };
 // 条件筛选
-const timer = ref<any>(null);
 const dto = toReactive(props.dto);
-watch(
+const timer = ref<any>(null);
+watchDebounced(
   dto,
-  () => {
+  async () => {
     if (timer.value) return;
     clearResult();
-    loadGoodsPage();
+    await loadGoodsPage();
+
     timer.value = setTimeout(() => {
       clearTimeout(timer);
       timer.value = null;
     }, 400);
   },
-  { deep: true, immediate: true }
+  {
+    immediate: true,
+  }
 );
 
 defineExpose({
@@ -109,36 +113,39 @@ defineExpose({
 </script>
 <template>
   <div
-    class="goods-list relative"
+    class="goods-list"
     style="overflow: auto"
   >
     <ClientOnly>
       <transition-group
         tag="div"
-        name="item-list"
+        :name="transiton || 'fade-lr-list'"
         v-infinite-scroll="loadGoodsPage"
         :infinite-scroll-delay="400"
         :infinite-scroll-distance="80"
         :class="props.class !== null ? props.class : 'flex flex-wrap'"
-        class="overflow-x-hidden"
+        class="overflow-hidden relative"
       >
-        <!-- 商品卡片 -->
-        <CardGoodsBox
-          @click="toGoodsView(p.id)"
-          class="mt-4/100 hover:shadow-md shadow-[var(--el-color-primary)] transition-300"
-          element-loading-background="transparent"
-          :goods="p"
-          :key="p.id"
+        <div
           v-for="p in goodsList"
+          :key="p.id"
         >
-          <small
-            float-right
-            mt-2px
-            text-blueGray
+          <!-- 商品卡片 -->
+          <CardGoodsBox
+            @click="toGoodsView(p.id)"
+            class="mt-4/100 transition-300"
+            element-loading-background="transparent"
+            :goods="p"
           >
-            销量：{{ p.sales }}
-          </small>
-        </CardGoodsBox>
+            <small
+              float-right
+              mt-2px
+              text-blueGray
+            >
+              销量：{{ p.sales }}
+            </small>
+          </CardGoodsBox>
+        </div>
       </transition-group>
     </ClientOnly>
     <p

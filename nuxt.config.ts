@@ -2,7 +2,8 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
-  ssr: process.env.NODE_ENV !== "development",
+  // ssr: process.env.NODE_ENV !== "development",
+  ssr: true,
   build: {
     transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
   },

@@ -28,8 +28,10 @@
         🎉
       </span>
     </div>
-    <!-- 搜索 -->
-    <IndexSearch class="pb-10 min-h-6rem md:min-h-a w-full md:w-470px mt-a" />
+    <ClientOnly>
+      <!-- 搜索 -->
+      <IndexSearch class="pb-10 min-h-6rem md:min-h-a w-full md:w-470px mt-a" />
+    </ClientOnly>
   </div>
 </template>
 <script lang="ts" setup>

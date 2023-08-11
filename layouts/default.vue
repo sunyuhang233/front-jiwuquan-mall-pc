@@ -1,7 +1,10 @@
 <template>
   <div class="min-h-100vh">
     <!-- 头部导航 -->
-    <MenuHeaderMenu class="sticky top-0 left-0 z-1001" />
+    <MenuHeaderMenu
+      class="sticky top-0 left-0 z-1001"
+      v-if="header"
+    />
     <div class="flex">
       <ClientOnly>
         <!-- 左侧边导航 -->
@@ -17,9 +20,7 @@
       <MenuRightButtons :menu="menu" />
     </ClientOnly>
     <!-- 页脚 -->
-    <ClientOnly>
-      <MenuFooter v-if="footer" />
-    </ClientOnly>
+    <MenuFooter v-if="footer" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -30,6 +31,11 @@ const { footer, menu, leftMenu } = defineProps({
     required: false,
   },
   leftMenu: {
+    type: Boolean,
+    default: true,
+    required: false,
+  },
+  header: {
     type: Boolean,
     default: true,
     required: false,

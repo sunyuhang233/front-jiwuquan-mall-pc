@@ -215,14 +215,14 @@
 .item-list-move,
 .item-list-enter-active,
 .item-list-leave-active {
-  transition: all 0.4s $animate-cubic;
+  transition: all 0.4s $animate-cubic-bount;
 }
 
 .item-list-enter-from,
 .item-list-leave-to {
   opacity: 0;
-  filter: blur(0.6em);
-  transform: scaleY(0.01);
+  filter: blur(2%);
+  transform: translateX(20%);
 }
 
 .item-list-leave-active {
@@ -238,7 +238,6 @@
 
 .group-list-enter-from,
 .group-list-leave-to {
-  position: absolute;
   opacity: 0;
 }
 
@@ -247,27 +246,59 @@
 }
 
 // fade动画
-.fade-bt-move,
+.fade-bt-list-move,
 .fade-bt-list-enter-active,
 .fade-bt-list-leave-active {
-  transition: all 0.3s $animate-cubic-bount;
+  transition: 0.4s ease;
 }
 
 .fade-bt-list-enter-from,
 .fade-bt-list-leave-to {
   opacity: 0;
-  transform: translateY(-40%);
+  transform: scaleX(0.01) translateY(20%);
 }
 
 .fade-bt-list-leave-active {
-  transform: translateY(0%);
-  opacity: 1;
+  position: absolute;
+}
+//  scale
+.filp-scale-list-move,
+.filp-scale-list-enter-active,
+.filp-scale-list-leave-active {
+  transition: 0.4s ease;
+}
+
+.filp-scale-list-enter-from,
+.filp-scale-list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) rotateX(90deg);
+}
+
+.filp-scale-list-leave-active {
+  position: absolute;
+}
+
+// fade动画
+.fade-lr-list-move,
+.fade-lr-list-enter-active,
+.fade-lr-list-leave-active {
+  transition: 0.4s ease;
+}
+
+.fade-lr-list-enter-from,
+.fade-lr-list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translateX(20%);
+}
+
+.fade-lr-list-leave-active {
+  position: absolute;
 }
 
 // 页面
 .sliceX-enter-active,
 .sliceX-leave-active {
-  transform: translateX(0);
+  transform: scaleY(0.01) translateX(0);
   transition: transform $transition-delay ease-in;
 }
 

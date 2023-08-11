@@ -1251,9 +1251,9 @@ const toBack = () => {
   </div>
 </template>
 <style scoped lang="scss">
-:deep(.el-radio-group) {
-  font-size: medium;
-  .address-list {
+.address-list {
+  :deep(.el-radio-group) {
+    font-size: medium;
     .el-radio {
       position: absolute;
       right: 0;
@@ -1274,12 +1274,12 @@ const toBack = () => {
         font-size: 1em;
         background: var(--el-color-primary);
         color: #fff;
-        width: 6em;
+        width: 8em;
         height: 4em;
-        line-height: 2.5em;
+        line-height: 2.8em;
         box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
         text-align: center;
-        transform: rotate(-45deg) translate(22%, 50%);
+        transform: rotate(-45deg) translate(25%, 52%);
       }
       &.is-checked:after {
         opacity: 100;

@@ -10,7 +10,7 @@ const { data } = defineProps<{
     class="aspect-ratio-1 goods-card w-full border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow-sm group"
   >
     <!-- 商品图片  -->
-    <div class="img relative w-full h-120px md:h-160px rounded-inherit overflow-hidden">
+    <div class="img relative w-full h-120px md:h-160px rounded-t-inherit overflow-hidden">
       <ElImage
         @click="$emit('link')"
         lazy

@@ -11,7 +11,7 @@
         ml-4
         p-3
         bg-yellow-4
-      ></i>
+      />
     </h3>
     <ElScrollbar
       :min-size="30"
