@@ -11,7 +11,7 @@
         <MenuDrawerMenu v-if="leftMenu" />
       </ClientOnly>
       <!-- 内容 -->
-      <div class="flex-1 min-h-100vh">
+      <div class="flex-1">
         <slot></slot>
       </div>
     </div>

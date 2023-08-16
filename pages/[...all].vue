@@ -1,17 +1,10 @@
 <script lang="ts" setup></script>
 
 <template>
-	<div>
-		<NuxtLayout name="error">
-			<ElEmpty description=" ">
-				<div flex-row-c-c flex-col>
-					<h3 mb-5>404, 找不到页面❌</h3>
-					<el-button plain type="primary" @click="clearError({ redirect: '/' })">
-						返回主页
-					</el-button>
-				</div>
-			</ElEmpty>
-		</NuxtLayout>
-	</div>
+  <div>
+    <NuxtLayout name="error">
+      <OtherError msg="404, 找不到页面❌" />
+    </NuxtLayout>
+  </div>
 </template>
 <style scoped lang="scss"></style>

@@ -9,8 +9,9 @@ const { goods } = defineProps<{
 <template>
   <div class="flex-row-bt-c cursor-pointer p-1">
     <ElImage
+      loading="lazy"
       class="hover:transform-scale-110 transition-300 w-6em h-6em"
-      :src="BaseUrlImg + goods.images[0]"
+      :src="BaseUrlImg + goods.images[0] + '?imageView2/1/w/100/h/100/format/webp/interlace/1/q/50'"
       style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px"
       fit="cover"
     />

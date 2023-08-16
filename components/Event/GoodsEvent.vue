@@ -21,6 +21,7 @@ const getInsurance = computed(() => {
     <div class="img relative w-full h-120px md:h-160px rounded-t-inherit overflow-hidden">
       <ElImage
         @click="$emit('link')"
+        loading="lazy"
         class="w-full h-full"
         :src="BaseUrlImg + data.images.split(',')[0]"
         :alt="data.name"

@@ -1,15 +1,16 @@
 const AuthRoute = [
-  /\/user\/*/,
-  /\/order\/*/,
-  /\/shopcart\/*/,
+  /^\/user\/*/,
+  /^\/order\/*/,
+  /^\/shopcart\/*/,
+  /^\/order\/*/,
 ]
 // 路由中间件
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const user = useUserStore();
-  if (to.path !== "/" && AuthRoute.find(p => p.test(to.path))) {
-    if (user.getToken === "") {
+  if (AuthRoute.find(p => p.test(to.path))) {
+    if (user.getToken === "" || !user.isLogin) {
       user.showLoginForm = true
-      //   return navigateTo("/")
+      navigateTo("/")
     }
   }
 

@@ -225,10 +225,7 @@ const toDetail = (o: OrderInfoVO = order) => {
 const toCommon = () => {
   if (order.status !== OrdersStatus.RECEIVED) return;
   navigateTo({
-    path: "/order/comment",
-    query: {
-      id: order.id,
-    },
+    path: `/order/comment/${order.id}`,
   });
 };
 // 计算优惠价
@@ -349,17 +346,25 @@ const delayOrder = () => {
       >
         -￥{{ getReduce }}
       </span>
-      <span
-        font-600
-        flex
-        ml-a
-        text-1.2rem
-      >
-        <small text-0.85rem>总计：</small>
-        <div :class="priceClass">
-          ￥{{ getReduce ? currency(order.spendPrice) : currency(order.totalPrice) }}
-        </div>
-      </span>
+      <div flex-row-bt-c>
+        <BtnCopyText
+          class="hover:underline opacity-0 group-hover:opacity-100"
+          :text="order.id"
+          pretext="订单号："
+          icon="i-solar:copy-outline"
+        />
+        <span
+          font-600
+          flex
+          ml-a
+          text-1.2rem
+        >
+          <small text-0.85rem>总计：</small>
+          <div :class="priceClass">
+            ￥{{ getReduce ? currency(order.spendPrice) : currency(order.totalPrice) }}
+          </div>
+        </span>
+      </div>
     </div>
     <!-- 按钮 -->
     <div
@@ -369,10 +374,10 @@ const delayOrder = () => {
     >
       <div class="left cursor-pointer flex items-center">
         <i
-          p-2
+          p-1.8
           bg-dark
           dark:bg-light
-          i-solar:headphones-square-sound-broken
+          i-solar:headphones-square-broken
         />
         <small class="mx-2 hover:underline hover:text-[var(--el-color-primary)]">客服</small>
         <!-- |

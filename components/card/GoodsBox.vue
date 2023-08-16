@@ -20,10 +20,11 @@ const getDiscount = computed<number>(() => {
     <div class="img relative w-full h-110px md:h-160px">
       <ClientOnly>
         <ElImage
+          loading="lazy"
           hover:transform-scale-110
           transition-300
           class="w-full h-full rounded-t-4px overflow-hidden"
-          :src="BaseUrlImg + goods.images[0]"
+          :src="BaseUrlImg + goods.images[0] + '?imageView2/0/format/webp/interlace/1/q/70'"
           :alt="goods.name"
           fit="cover"
         />

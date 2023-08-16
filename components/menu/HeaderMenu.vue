@@ -85,7 +85,10 @@
         @open="isShowSearch = true"
         @close="isShowSearch = false"
       />
-      <h2 class="transition-300 text-center absolute-center -translate-y-3.2em font-500 text-light">
+      <h2
+        class="transition-300 text-center absolute-center -translate-y-4em font-500 text-light"
+        :class="{ '-translate-y-3em': isShowSearch }"
+      >
         搜 索
       </h2>
     </div>
@@ -102,7 +105,7 @@
         />
         <!-- 购物车 -->
         <NuxtLink
-          to="/shopcart"
+          to="/user/shopcart"
           v-if="store.isLogin"
           class="hover:animate-[shopcart_1s_ease-in] hidden md:block"
         >

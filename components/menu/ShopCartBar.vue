@@ -121,8 +121,6 @@ const toOrderPage = (ids: string[]) => {
           @click="isShow = true"
           class="icon shadow-[#5d33f9] shadow-opacity-60 shadow-md"
           hover:scale-92
-          animate-zoom-in
-          animate-duration-600
           cursor-pointer
           flex-row-c-c
           hover:opacity-90

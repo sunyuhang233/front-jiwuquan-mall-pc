@@ -3,10 +3,6 @@ import currency from "currency.js";
 import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
 import type { PushOrdersItemDTO } from "~/composables/api/orders";
 
-// 定义当前页面
-// definePageMeta({
-// 	middleware: ["auth"],
-// });
 useHead({
   title: "极物 我的购物车",
   meta: [
@@ -16,6 +12,7 @@ useHead({
     },
   ],
 });
+
 const shop = useShopStore();
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
@@ -100,6 +97,7 @@ const getAllPostate = ref<number>(0);
 const getAllNums = ref<number>(0);
 const getAllPrice = computed(() => {
   getAllNums.value = 0;
+  getAllPostate.value = 0;
   const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
   let prices = currency(0);
   selectList.forEach((p) => {
@@ -121,88 +119,92 @@ const getAllPrice = computed(() => {
   <div>
     <NuxtLayout
       :menu="['back']"
+      name="user"
       :footer="false"
     >
       <ClientOnly>
-        <div
-          v-if="user.isLogin"
-          class="shopcart-list"
-          relative
-          mx-a
-          mt-2em
-          min-h-95vh
-          w-700px
-          rounded-t-10px
-          bg-white
-          p-20px
-          shadow-md
-          border-default
-          dark:bg-dark
-        >
-          <h2
-            mb-2
-            border-0
-            border-b-1
-            pb-4
-            text-center
-            tracking-0.1em
-            border-default
-          >
-            <small
-              style="font-size: 0.8em; padding-top: 0.2em; position: absolute; right: 1em"
-              cursor-pointer
-              select-none
-              :plain="!isEdit"
-              class="transition-300"
-              text-green-5
-              @click="isEdit = !isEdit"
-            >
-              {{ !isEdit ? "管理" : "取消" }}
-            </small>
-            购物车
-          </h2>
+        <div class="layout-default md:w-2/5 mx-a pb-0">
           <div
-            v-infinite-scroll="shop.loadShopcartList"
-            mb-2
-            :infinite-scroll-delay="1000"
-            :infinite-scroll-disabled="notMore"
-            style="overflow: auto"
+            v-if="user.isLogin"
+            class="shopcart-list"
+            relative
+            mx-a
+            rounded-10px
+            bg-white
+            p-4
+            md:p-6
+            shadow-md
+            border-default
+            dark:bg-dark
           >
-            <!-- 购物车项 -->
-            <el-checkbox-group
-              v-model="selectIds"
-              size="large"
-              class="relative"
+            <h3
+              mb-2
+              border-0
+              border-b-1
+              pb-4
+              text-center
+              tracking-0.1em
+              border-default
             >
-              <transition-group
-                tag="div"
-                name="item-list"
+              <small
+                style="font-size: 1rem"
+                float-right
+                my-1
+                cursor-pointer
+                select-none
+                :plain="!isEdit"
+                class="transition-300"
+                text-green-5
+                @click="isEdit = !isEdit"
               >
-                <li
-                  v-for="p in shop.shopcartList"
-                  :key="p.id"
+                {{ !isEdit ? "管理" : "取消" }}
+              </small>
+              购物车
+            </h3>
+            <el-scrollbar
+              height="66vh"
+              v-infinite-scroll="shop.loadShopcartList"
+              :infinite-scroll-delay="1000"
+              :infinite-scroll-disabled="notMore"
+              style="overflow: auto"
+            >
+              <!-- 购物车项 -->
+              <el-checkbox-group
+                v-model="selectIds"
+                size="large"
+                class="relative"
+              >
+                <transition-group
+                  tag="div"
+                  name="item-list"
                 >
-                  <CardShopLine :shop-cart="p">
-                    <template #btn>
-                      <el-checkbox
-                        :label="p.id"
-                        :disabled="!p.stock"
-                      />
-                    </template>
-                  </CardShopLine>
-                </li>
-              </transition-group>
-            </el-checkbox-group>
+                  <li
+                    v-for="p in shop.shopcartList"
+                    :key="p.id"
+                  >
+                    <CardShopLine :shop-cart="p">
+                      <template #btn>
+                        <el-checkbox
+                          :label="p.id"
+                          :disabled="!p.stock"
+                        />
+                      </template>
+                    </CardShopLine>
+                  </li>
+                </transition-group>
+              </el-checkbox-group>
+            </el-scrollbar>
           </div>
           <!-- 下方按钮 -->
           <div
-            class="drop-blur-20px animate-fade-in-up animate-duration-300 bg btns fixed bottom-4 z-999 my-4 mb-0 mt-4em"
+            sticky
+            bottom-4
+            z-99
+            class="w-full animate-fade-in-up animate-duration-300 my-4 mb-0"
           >
             <!-- 价格 -->
             <div
-              class=""
               flex-row-bt-c
-              w-660px
               p-2
               px-4
             >
@@ -231,7 +233,7 @@ const getAllPrice = computed(() => {
               </small>
             </div>
             <div
-              class="bottom drop-blur-2em h-4em w-660px flex items-center justify-between border-2px rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+              class="w-full backdrop-blur-2em h-4em flex items-center justify-between rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
             >
               <el-checkbox
                 v-model="isSelectAll"

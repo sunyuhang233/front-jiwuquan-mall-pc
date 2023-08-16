@@ -74,6 +74,7 @@ const getTotalPrice = computed(() => {
     <ClientOnly>
       <div class="w-2/7 md:w-8em">
         <ElImage
+          loading="lazy"
           hover:transform-scale-110
           transition-300
           :src="BaseUrlImg + data.image"

@@ -549,10 +549,7 @@ const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
 const toCommon = () => {
   if (order.status !== OrdersStatus.RECEIVED) return;
   navigateTo({
-    path: "/order/comment",
-    query: {
-      id: order.orderInfo.id,
-    },
+    path: `/order/comment/${order.id}`,
   });
 };
 // 10）删除订单 REFUND_SUCCESS、CANCELED、DELAY_CANCELED、COMMENTED
@@ -695,13 +692,13 @@ const reloadAddress = async () => {
     isLoadAddressList.value = false;
   }, 300);
 };
-
+const title = computed(() => `${appName} - ${ordersTitle.value.banner}`);
 useHead({
-  title: appName + " - " + ordersTitle.value.banner,
+  title: title,
   meta: [
     {
       name: "description",
-      content: "极物圈-我的订单",
+      content: title,
     },
   ],
 });
@@ -744,6 +741,7 @@ const toBack = () => {
             <div class="flex items-center">
               <NuxtLink to="/">
                 <el-image
+                  loading="lazy"
                   src="/logo_title.png"
                   alt="Design by Kiwi2333 LOGO"
                   class="w-20vw md:w-10rem"

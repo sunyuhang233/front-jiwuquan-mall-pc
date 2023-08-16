@@ -372,8 +372,8 @@ const changeDate = () => {
       </div>
       <!-- 列表 -->
       <transition-group
-        name="fade-bt-list"
         tag="div"
+        name="fade-bt-list"
         class="relative"
       >
         <OrderInfoLine

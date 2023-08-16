@@ -1,16 +1,22 @@
-// @ts-ignore
+// VMdPreview
 import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/preview.css';
-// @ts-ignore 
+// VMdEditor
+import VMdEditor from '@kangc/v-md-editor';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+// 插件
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
-// @ts-ignore 
 import hljs from 'highlight.js';// highlightjs
 // 引入icon
 export default defineNuxtPlugin(async (NuxtApp) => {
-  // 配置markdown
-  VMdPreview.use(vuepressTheme, {
+  // 预览
+  VMdPreview.use(vuepressTheme);
+  // 初级-编辑
+  VMdEditor.use(vuepressTheme, {
     Hljs: hljs,
   });
-  NuxtApp.vueApp.use(VMdPreview);
+  NuxtApp.vueApp
+    .use(VMdPreview)
+    .use(VMdEditor);
 });

@@ -44,6 +44,7 @@
 		"nprogress": "^0.2.0",
 		"nuxt": "^3.6.5",
 		"nuxt-swiper": "^1.2.0",
+		"qiniu-js": "^3.4.1",
 		"sass": "^1.64.1",
 		"vue-echarts": "^6.6.0"
 	}

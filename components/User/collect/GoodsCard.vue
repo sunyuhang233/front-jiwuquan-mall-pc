@@ -13,7 +13,7 @@ const { data } = defineProps<{
     <div class="img relative w-full h-120px md:h-160px rounded-t-inherit overflow-hidden">
       <ElImage
         @click="$emit('link')"
-        lazy
+        loading="lazy"
         class="w-full h-full"
         :src="BaseUrlImg + data.goods.images[0]"
         :alt="data.goods.name"

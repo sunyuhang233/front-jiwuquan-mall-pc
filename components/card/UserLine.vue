@@ -80,7 +80,7 @@ const menuList = ref([
   },
   {
     name: "购物车",
-    path: "/shopcart",
+    path: "/user/shopcart",
     className:
       "bg-red-5 i-solar:cart-large-2-bold-duotone group-hover:animate-[shopcart_1s_ease-out]",
   },
@@ -116,7 +116,8 @@ const menuList = ref([
     <ClientOnly>
       <!-- 头像弹窗 -->
       <el-popover
-        transition="popup"
+        transition="fade"
+        :teleported="false"
         style="transform-origin: right top"
         placement="bottom"
         :offset="20"

@@ -4,10 +4,24 @@ import { useStorage } from "@vueuse/core";
 const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
 const route = useRoute();
+
+const menuList = ref<
+  {
+    name: string;
+    path: string;
+    icon: string;
+  }[]
+>([
+  {
+    name: "首页",
+    path: "/",
+    icon: "home",
+  },
+]);
 </script>
 <template>
   <div
-    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-999 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-1/1"
+    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-1/1"
   >
     <ClientOnly>
       <!-- 菜单 -->
@@ -50,17 +64,17 @@ const route = useRoute();
           ></i>
           <span class="min-w-10em title ml-3">个人信息</span>
         </el-menu-item>
-        <!-- 我的收藏 -->
-        <el-menu-item index="/user/collect">
+        <!-- 购物车 -->
+        <el-menu-item index="/user/shopcart">
           <i
-            class="i-solar:star-broken"
-            v-show="route.path !== '/user/collect'"
+            class="i-solar:cart-large-2-linear"
+            v-show="route.path !== '/user/shopcart'"
           ></i>
           <i
-            class="i-solar:star-bold-duotone"
-            v-show="route.path === '/user/collect'"
+            class="i-solar:cart-large-2-bold"
+            v-show="route.path === '/user/shopcart'"
           ></i>
-          <span class="min-w-10em title ml-3">我的收藏</span>
+          <span class="min-w-10em title ml-3">购物车</span>
         </el-menu-item>
         <!-- 钱包 -->
         <el-menu-item index="/user/wallet">
@@ -199,6 +213,9 @@ const route = useRoute();
 
     .title {
       margin-left: 0.8em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

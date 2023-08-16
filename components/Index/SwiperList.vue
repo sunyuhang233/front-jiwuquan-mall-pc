@@ -91,6 +91,7 @@ const getEndDay = computed(() => {
       >
         <!-- 图片 -->
         <el-image
+          loading="lazy"
           :src="BaseUrlImg + p.images"
           :alt="p.details"
           class="e-img"

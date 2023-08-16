@@ -123,19 +123,20 @@
   padding: 2px 4px;
 }
 
-//
-.vuepress-markdown-body.vuepress-markdown-body.vuepress-markdown-body {
+/**------------------------------vuepress-markdown---------------------------------------**/
+.v-md-editor {
   border-radius: 8px;
   padding: 1rem;
   &,
   * {
-    color: var(--el-color-white);
+    background-color: #fff;
+    color: var(--el-color-black);
   }
 }
-.dark .vuepress-markdown-body {
+.dark .v-md-editor {
   &,
   * {
-    background-color: var(--el-color-black);
-    color: var(--el-color-white);
+    background-color: var(--el-color-black) !important;
+    color: #fff !important;
   }
 }

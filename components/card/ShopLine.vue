@@ -124,14 +124,18 @@ const toGoodsView = (gid: string) => {
 <template>
   <div
     v-loading="isUpdateLoading"
-    class="card flex-row-bt-c cursor-pointer p-4 rounded-6px mt-2 mb-3 transition-300 border-2px hover:shadow group"
-    hover:border="solid [var(--el-color-primary)]"
-    dark:hover:bg="dark-1"
+    p-0
+    pr-2
+    md:p-4
+    class="flex-row-bt-c cursor-pointer rounded-6px mt-2 mb-3 transition-300 border-2px hover:shadow group"
     border-dashed
     border-default
+    hover:border="solid [var(--el-color-primary)]"
+    dark:hover:bg="dark-1"
   >
     <ClientOnly>
       <ElImage
+        loading="lazy"
         @click="toGoodsView(shopCart.goodsId)"
         hover:transform-scale-110
         transition-300
@@ -188,6 +192,7 @@ const toGoodsView = (gid: string) => {
             :placeholder="getProps"
             collapse-tags-tooltip
             class="mr-2"
+            size="small"
           >
             <!-- value 内容 -->
             <el-option

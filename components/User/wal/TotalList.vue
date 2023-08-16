@@ -62,10 +62,17 @@ watch(
 // 列表配置项
 const list = ref<LineWalletDataType[]>([
   {
-    title: "总 支 出",
+    title: "总支出",
     name: `支出`,
     amount: computed(() => totalData.totalOut),
-    percentage: computed(() => ((totalData.totalOut || 0) / 10000) * 100),
+    percentage: computed(() => {
+      const sum = ((totalData.totalOut || 0) / 10000) * 100;
+      if (sum > 100) {
+        return 100;
+      } else {
+        sum;
+      }
+    }),
     isIncreAnimate: true,
     isInt: false,
     lightColor: "var(--el-color-error)",
@@ -73,7 +80,7 @@ const list = ref<LineWalletDataType[]>([
   },
 
   {
-    title: "总 收 入",
+    title: "总收入",
     name: "收入",
     amount: computed(() => totalData.totalIn),
     percentage: computed(() => ((totalData.totalIn || 0) / 10000) * 100),

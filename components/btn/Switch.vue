@@ -1,8 +1,7 @@
 <template>
   <ElButton
     @click="toggle"
-    class="btn"
-    mx-2
+    class="btn mx-2"
     round
   >
     <span

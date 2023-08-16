@@ -6,10 +6,9 @@ const { date } = defineProps<{
  * 结束时间
  */
 const endDate = computed(() => {
-  return date ? new Date(date.getTime()).setDate(date.getDate() + 1) : null;
+  return date ? new Date(date.getTime() + 24 * 60 * 60 * 1000).getTime() : null;
 });
 
-const isStop = ref(false);
 /**
  * 倒计时
  */
@@ -17,8 +16,8 @@ const countdown = (
   endTime: number,
   callback: (hours: number, minutes: number, seconds: number) => void
 ) => {
+  let animId: number;
   const update = () => {
-    if (isStop.value) return;
     const currentTime = Date.now();
     const remainingTime = Math.max(endTime - currentTime, 0);
 
@@ -26,8 +25,12 @@ const countdown = (
     const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
     const hours = Math.floor((remainingTime / 1000 / 60 / 60) % 24);
     callback(hours, minutes, seconds);
+    // 执行动画
     if (remainingTime > 0) {
-      requestAnimationFrame(update);
+      animId = requestAnimationFrame(update);
+    } else {
+      // 取消动画
+      cancelAnimationFrame(animId);
     }
   };
   requestAnimationFrame(update);
@@ -39,12 +42,9 @@ watchDebounced(
   (val) => {
     if (val && endDate.value && Date.now() < endDate.value) {
       countdown(endDate.value, (hours, minutes, seconds) => {
-        if (hours + minutes + seconds <= 0) {
+        if (+hours + +minutes + +seconds <= 0) {
           text.value = "订单超时，自动取消";
-          if (!isStop.value) {
-            emit("delay");
-          }
-          isStop.value = true;
+          emit("delay");
           return;
         }
         text.value = `${hours < 10 ? "0" + hours : hours}:${

@@ -57,6 +57,7 @@ export interface OrderInfoVO {
 }
 // 订单子项
 export interface OrdersItemVO {
+  id: string;
   skuId: string;
   quantity: number;
   reducePrice: number;
@@ -65,7 +66,7 @@ export interface OrdersItemVO {
   shopId?: string;
   address?: string;
   goods: Good;
-  goodsSku: GoodsSkuVO;
+  goodsSku: OrderGoodsSkuVO;
 }
 interface Good {
   id: string;
@@ -74,7 +75,7 @@ interface Good {
   postage: number;
 }
 
-interface GoodsSkuVO {
+export interface OrderGoodsSkuVO {
   id: string;
   image: string;
   size: string;
