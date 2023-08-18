@@ -24,20 +24,20 @@ const dto = useStorage(
   }),
   sessionStorage
 );
-// 上传内容
+// 上传内容 控制
 watch(
   [() => uploadFilesRef.value.images, () => uploadFilesRef.value.video],
   (val) => {
-    console.log(val);
     if (val[0]) {
+      // 图片
       dto.value.images = val[0];
     } else if (val[1]) {
+      // 视频
       dto.value.video = val[1];
     }
   },
   { deep: true }
 );
-
 defineExpose({ dto });
 </script>
 <template>

@@ -262,7 +262,7 @@ const onRemove = async (removeFile: UploadFile) => {
   // 删除项
   const item = uploadList.value[i] as UploadFileDTO;
   // 确认删除
-  ElMessageBox.confirm("确定删除该图片?", "提示", {
+  ElMessageBox.confirm("确定删除该图片?", "删除提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
@@ -278,7 +278,7 @@ const onRemove = async (removeFile: UploadFile) => {
 };
 const videoRef = ref();
 const onVideoRemove = (file: UploadFileDTO) => {
-  ElMessageBox.confirm("确定删除该视频?", "提示", {
+  ElMessageBox.confirm("确定删除该视频?", "删除提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
