@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { OrderCommentDTO, OrdersItemVO, OrderGoodsSkuVO } from "@/composables/api/orders";
+import { OrderCommentDTO, OrdersItemVO } from "@/composables/api/orders";
 import { useStorage } from "@vueuse/core";
 // props
-const { orderItem, isDisable } = defineProps<{
+const { orderItem, index, isDisable } = defineProps<{
   orderItem: OrdersItemVO;
   isDisable: boolean;
+  index: number;
 }>();
 const uploadFilesRef = ref({
   images: [],
@@ -15,6 +16,7 @@ const dto = useStorage(
   "jiwu_order_comment_" + orderItem.id,
   reactive<OrderCommentDTO>({
     orderItemId: orderItem.id,
+    skuId: orderItem.skuId,
     content: "",
     rate: 0,
     images: [],
@@ -31,31 +33,35 @@ watch(
     if (val[0]) {
       // 图片
       dto.value.images = val[0];
-    } else if (val[1]) {
+    }
+    if (val[1]) {
       // 视频
       dto.value.video = val[1];
     }
   },
   { deep: true }
 );
-defineExpose({ dto });
+const clearData = async () => {
+  uploadFilesRef.value.images = [];
+  uploadFilesRef.value.video = "";
+  dto.value = {
+    orderItemId: orderItem.id,
+    skuId: orderItem.skuId,
+    content: "",
+    rate: 0,
+    images: [],
+    video: "",
+    isRecommend: 0,
+    isAnonymous: 0,
+  };
+};
+defineExpose({ dto, clearData });
 </script>
 <template>
   <div class="card">
-    <!-- 评价 -->
-    <!-- <v-md-editor
-      :disabled="isDisable" v-model="dto.content"
-      :toc-nav-position-right="true"
-      left-toolbar="undo redo clear | save"
-      right-toolbar="preview sync-scroll toc"
-      placeholder="写下你对商品的真实评价！"
-      :upload-image-config="{ accept: BaseUrlImg }"
-      height="200px"
-      @save="saveLocal"
-    /> -->
     <!-- 评价内容 -->
     <el-input
-      class="mb-4"
+      class="mb-4 shadow rounded-10px"
       :disabled="isDisable"
       v-model.lazy="dto.content"
       type="textarea"
@@ -121,7 +127,7 @@ defineExpose({ dto });
   overflow: hidden;
 }
 :deep(.el-textarea__inner) {
-  box-shadow: 0 0 4px #61616115;
+  box-shadow: none;
   padding: 0.8rem;
 }
 :deep(.el-rate__text) {

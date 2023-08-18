@@ -2,7 +2,6 @@
 import { GoodsCommentsVO, getGoodsCommentPage } from "~/composables/api/goods/comments";
 import { GoodsSkuVO } from "~/composables/api/goods/sku";
 import { IPage } from "~/types";
-const router = useRouter();
 const { goodsId, skuList } = defineProps<{
   goodsId: string;
   skuList?: GoodsSkuVO[];
@@ -14,20 +13,22 @@ const commentList = ref<GoodsCommentsVO[]>([]);
 const page = ref<number>(0);
 const size = ref<number>(10);
 // 查询页信息
-let pageInfo = reactive<IPage<GoodsCommentsVO>>({
+const pageInfo = ref<IPage<GoodsCommentsVO>>({
   records: [],
   total: -1,
   pages: -1,
   size: -1,
   current: -1,
 });
-const isNoMore = computed<boolean>(() => commentList.value.length === pageInfo?.total);
+const isNoMore = computed<boolean>(
+  () => pageInfo.value.current > 0 && pageInfo.value.current >= pageInfo.value.pages
+);
 // 商品规格列表 构建map方便查询
 const skuMap = reactive(new Map<string, GoodsSkuVO>());
 skuList?.forEach((p) => {
   skuMap.set(p.id, p);
 });
-const loadGoodsPage = async () => {
+const loadCommentPage = async () => {
   if (isLoading.value) return;
   isLoading.value = true;
   page.value++;
@@ -38,60 +39,53 @@ const loadGoodsPage = async () => {
     return (isLoading.value = false);
   }
   // 展示结果
-  pageInfo = data as IPage<GoodsCommentsVO>;
-  let timer: NodeJS.Timeout | null;
+  pageInfo.value = data!;
   if (!data?.records) return;
-  for await (const p of data.records) {
-    await new Promise((resolve) => {
-      timer = setTimeout(() => {
-        // @ts-ignore
-        p.images = p.images.split(",");
-        commentList.value.push(p);
-        clearTimeout(timer ?? undefined);
-        timer = null;
-
-        isLoading.value = false;
-        return resolve(true);
-      }, 50);
-    });
-  }
-};
-loadGoodsPage(); // 加载一次
-
-const clearResult = () => {
-  commentList.value.splice(0);
-  pageInfo = reactive({
-    records: [],
-    total: -1,
-    pages: -1,
-    size: -1,
-    current: -1,
+  data.records?.forEach((p) => {
+    p.images = typeof p.images === "string" ? p.images?.split(",") : [];
+    isLoading.value = false;
   });
+  commentList.value.push(...data.records);
 };
+loadCommentPage(); // 加载一次
 
 const toCommentDetailView = (commentId: string) => {
   navigateTo({
     path: `/goods/comment/${commentId}`,
   });
 };
+const showVideo = (url: string) => {};
 </script>
 <template>
-  <div
+  <el-scrollbar
+    height="700px"
+    v-infinite-scroll="loadCommentPage"
+    :infinite-scroll-delay="400"
+    :infinite-scroll-distance="80"
+    :infinite-scroll-disable="isNoMore"
     class="comment-list"
-    v-for="p in commentList"
-    :key="p.id"
     style="width: 100%"
   >
-    <CardGoodsComment
+    <GoodsCommentCard
+      class="mb-4"
+      v-for="p in commentList"
+      :key="p.id"
       :comment="p"
+      @show-video="showVideo"
       :sku-item="skuMap.get(p.skuId)"
     />
-  </div>
-  <div
-    class="comment-list"
-    v-if="!commentList.length"
-  >
-    <small>暂时没有评论</small>
-  </div>
+    <div
+      class="comment-list"
+      v-show="isNoMore"
+    >
+      <small
+        inline-block
+        text-center
+        w-full
+        mb-10
+      >
+        暂时没有更多评论
+      </small>
+    </div>
+  </el-scrollbar>
 </template>
-<style scoped lang="scss"></style>

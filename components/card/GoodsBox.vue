@@ -17,7 +17,7 @@ const getDiscount = computed<number>(() => {
     md:aspect-ratio-1.2
   >
     <!-- 商品图片  -->
-    <div class="img relative w-full h-110px md:h-160px">
+    <div class="img relative w-full h-2/3">
       <ClientOnly>
         <ElImage
           loading="lazy"

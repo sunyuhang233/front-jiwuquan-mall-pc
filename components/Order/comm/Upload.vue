@@ -62,7 +62,7 @@
 
     <!-- 视频 -->
     <el-upload
-      ref="videoRef"
+      ref="videoInputRef"
       class="ml-3 upload-video"
       :file-list="videoList"
       accept="video/*"
@@ -119,6 +119,7 @@
           w-full
           h-full
           controls
+          ref="videoRef"
         ></video>
       </el-dialog>
     </Teleport>
@@ -127,7 +128,7 @@
 
 <script lang="ts" setup>
 import { ResOssVO, OssFileType } from "~/composables/api/res/index";
-import type { UploadProps, UploadFile, UploadUserFile } from "element-plus";
+import type { UploadFile, UploadUserFile } from "element-plus";
 const { isDisable } = defineProps<{
   isDisable: boolean;
 }>();
@@ -144,6 +145,7 @@ const imgUrl = ref<string>("");
 const videoUrl = ref<string>("");
 const isShowPreDialog = ref<boolean>(false);
 const isPicture = ref<boolean>(true);
+const videoRef = ref();
 const getVideoPath = (file: UploadFile) => {
   return file.url;
 };
@@ -177,8 +179,6 @@ const checkFile = (rawFile: UploadFile, size: number, msg: string) => {
   }
   return true;
 };
-
-const awaitList = [];
 // 2、改变
 const onChange = async (file: UploadFile, fileList: UploadFile[]) => {
   if (!checkFile(file, 3, "图片")) {
@@ -276,7 +276,7 @@ const onRemove = async (removeFile: UploadFile) => {
     })
     .catch(() => {});
 };
-const videoRef = ref();
+const videoInputRef = ref();
 const onVideoRemove = (file: UploadFileDTO) => {
   ElMessageBox.confirm("确定删除该视频?", "删除提示", {
     confirmButtonText: "确定",
@@ -286,7 +286,7 @@ const onVideoRemove = (file: UploadFileDTO) => {
     .then(async () => {
       const { code } = await deleteOssFile(file.key, user.getToken);
       videoList.value.splice(0);
-      videoRef.value.handleRemove(file);
+      videoInputRef.value.handleRemove(file);
       if (code === StatusCode.SUCCESS) {
         ElMessage.success("删除成功！");
       }

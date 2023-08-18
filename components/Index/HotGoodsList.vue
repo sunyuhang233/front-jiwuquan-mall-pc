@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { GoodsVO } from "~/types/goods";
 // 分页器
-const page = ref<number>(1);
+const page = ref<number>(0);
 const size = ref<number>(5);
 // 骨架屏
 const isLoading = ref<boolean>(false);
@@ -22,11 +22,6 @@ const searchPage = reactive(
 );
 // 列表
 const hotGoodsList = ref<GoodsVO[]>([]);
-res.data.value?.data?.records.forEach((p: GoodsVO) => {
-  p.images = p.images.toString().split(",");
-  hotGoodsList.value.push(p);
-});
-
 const loadHandle = async () => {
   isLoading.value = true;
   page.value++;
@@ -37,6 +32,7 @@ const loadHandle = async () => {
   });
   isLoading.value = false;
 };
+await loadHandle();
 </script>
 <template>
   <div

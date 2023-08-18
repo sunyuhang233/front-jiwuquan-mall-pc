@@ -317,7 +317,11 @@ export function deleteOrders(id: string, token: string) {
  */
 export function toOrdersComment(orderId: string, dtoList: OrderCommentDTO[], token: string) {
   return useHttp.post<Result<string>>(`/orders/comment/${orderId}`, {
-    dto: dtoList
+    list: dtoList.map(dto => {
+      dto.isAnonymous = +dto.isAnonymous
+      dto.isRecommend = +dto.isRecommend
+      return dto
+    })
   }, {
     headers: {
       "Authorization": token
@@ -326,12 +330,13 @@ export function toOrdersComment(orderId: string, dtoList: OrderCommentDTO[], tok
 }
 export interface OrderCommentDTO {
   orderItemId: string,
+  skuId: string,
   content: string,
-  rate: 0,
+  rate: number,
   images: string[],
   video: string,
-  isRecommend: 0,
-  isAnonymous: 0
+  isRecommend: number,
+  isAnonymous: number
 }
 
 

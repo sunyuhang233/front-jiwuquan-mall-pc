@@ -9,29 +9,29 @@ const { comment, skuItem } = defineProps<{
 
 const getPreImages = computed(() => {
   // @ts-ignore
-  return [...comment.images.map((p) => (p = BaseUrlImg + p))];
+  return comment.images?.map(
+    (p: string) => (p = BaseUrlImg + p + "?imageView2/0/w/100/h/100/format/webp/interlace/1/q/50")
+  );
 });
 
 const getRateComm = (rate: number): string => {
-  let msg = ["很差", "差", "一般", "较满意", "强烈推荐"];
+  let msg = ["很差", "差", "一般", "比较满意", "强烈推荐"];
   return msg[Math.floor(rate - 1)];
 };
 
-const getProps = (p: GoodsSkuVO): string => {
-  return (p?.size || "") + (p?.color || "") + (p?.combo || "");
+const getProps = (p?: GoodsSkuVO): string => {
+  return [p?.size, p?.color, p?.combo].join(" | ");
 };
 </script>
 <template>
   <div
-    animate-fade-in
-    class="card w-1/1"
+    class="card w-full"
     border-default-dashed
     border-2px
     transition-300
     hover:shadow-md
-    hover:border="solid purple-5"
     rounded-6px
-    p-5
+    p-4
   >
     <!-- 头像名称 -->
     <div class="top flex justify-between">
@@ -62,11 +62,12 @@ const getProps = (p: GoodsSkuVO): string => {
             {{ comment.createTime }}
           </small>
           <el-rate
+            class="float-left"
             v-model="comment.rate"
             disabled
             allow-half
           />
-          <el-text>{{ getRateComm(comment.rate) }}</el-text>
+          <el-text class="hidden md:inline">{{ getRateComm(comment.rate) }}</el-text>
         </div>
       </div>
       <div
@@ -85,50 +86,59 @@ const getProps = (p: GoodsSkuVO): string => {
     </div>
     <!-- 评论内容 -->
     <p
-      class="text text-overflow-2"
-      px-2
-      mt-2
+      class="text text-overflow-5 max-h-8.6em leading-1.5em rounded-6px border-default-dashed border-1px bg-[#6b6b6b0c]"
+      md:p-4
+      p-2
+      mt-4
       text-0.9em
     >
       {{ comment.content }}
     </p>
     <!-- 商品图片 -->
-    <el-scrollbar class="scroll flex flex-nowrap m-4">
-      <video
-        v-if="comment.video && comment.video !== 'default.mp4'"
-        hover:transform-scale-110
-        transition-300
-        :src="BaseUrlVideo + comment.video"
-        style="width: 6em; height: 6em"
-        class="rounded-4px mr-2 border-default-dashed border-1px"
-        fit="cover"
-      ></video>
-
-      <ElImage
-        loading="lazy"
-        v-for="(p, i) in comment.images"
-        :key="p"
-        preview-teleported
-        :preview-src-list="getPreImages"
-        hover:transform-scale-110
-        transition-300
-        :src="BaseUrlImg + p"
-        style="width: 6em; height: 6em"
-        class="rounded-4px mr-2 border-default-dashed border-1px"
-        fit="cover"
-      />
+    <el-scrollbar class="scroll my-4">
+      <div class="flex">
+        <div
+          w-5rem
+          h-5rem
+          md:w-6rem
+          md:h-6rem
+          class="group flex-shrink-0 cursor-pointer rounded-4px flex-row-c-c mr-2 border-default-dashed border-1px"
+          @click="$emit('show-video', comment.video)"
+          backdrop-blur-12px
+          style="background-color: rgba(73, 73, 73, 0.4)"
+        >
+          <i
+            z-1
+            bg-light
+            class="group-hover:bg-dark transition-200"
+            p-3
+            i-solar:play-circle-bold
+          ></i>
+        </div>
+        <ElImage
+          loading="lazy"
+          v-for="p in comment.images"
+          :key="p"
+          preview-teleported
+          :preview-src-list="getPreImages"
+          hover:transform-scale-110
+          transition-300
+          :src="BaseUrlImg + p"
+          class="w-5rem h-5rem md:w-6rem md:h-6rem flex-shrink-0 rounded-4px mr-2 border-default-dashed border-1px"
+          fit="cover"
+        />
+      </div>
     </el-scrollbar>
-    <!-- 评价商品规格 -->
+    <!-- 评价商品规格 词条 -->
     <div
       class="comment-sku"
       border-default-dashed
-      bg-gray-200
-      dark:bg-dark-5
+      bg-gray-100
+      dark:bg-dark-300
       border-2px
       rounded-6px
       inline-flex
       items-center
-      ml-4
       pr-4
       backdrop-blur-3px
     >
@@ -137,24 +147,25 @@ const getProps = (p: GoodsSkuVO): string => {
         v-show="skuItem?.image"
         hover:transform-scale-110
         transition-300
-        :src="BaseUrlImg + skuItem?.image"
-        style="width: 3em; height: 3em"
+        :src="BaseUrlImg + skuItem?.image + '?imageView2/0/w/100/h/100/format/q/50'"
+        style="width: 3rem; height: 3rem"
         class="rounded-4px mr-2 border-default-dashed border-1px"
         fit="cover"
       />
-      <small>{{ skuItem ? getProps(skuItem) : "" }}</small>
+      <small>{{ getProps(skuItem) }}</small>
     </div>
     <!-- 底部 -->
-    <div
-      class="bottom"
-      px-2
-      flex-row-bt-c
-    >
-      <span></span>
+    <div class="mt-2 w-full flex justify-end cursor-pointer">
       <el-text
         type="primary"
-        class="text text-overflow-2"
-        px-2
+        style="margin-left: 0.4rem"
+        text-0.9em
+      >
+        评论
+      </el-text>
+      <el-text
+        type="primary"
+        style="margin-left: 0.4rem"
         text-0.9em
       >
         回复

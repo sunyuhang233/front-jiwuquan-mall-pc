@@ -21,7 +21,7 @@ export interface GoodsCommentsVO {
 	isRecommend: number;
 	isAnonymous: number;
 	content: string;
-	images: string;
+	images: string | string[];
 	video: string;
 	rate: number;
 	createTime: string;

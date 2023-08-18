@@ -8,7 +8,7 @@
     <!-- 详情 -->
     <el-tab-pane
       name="detail"
-      class="animate__animated animate__fadeIn mt-2"
+      class="animate-[fade-in_0.4s] mt-2"
       label="详 情"
     >
       <!-- 标题 -->
@@ -61,11 +61,11 @@
     <!-- 评价 -->
     <el-tab-pane
       lazy
-      name="omments"
-      class="animate__animated animate__fadeIn mt-2"
+      name="comment"
+      class="animate-[fade-in_0.4s] mt-2"
       :label="'评 价'"
     >
-      <GoodsComments
+      <GoodsCommentList
         :goods-id="goodsInfo?.id || ''"
         :sku-list="skuList"
       />
@@ -74,7 +74,7 @@
     <el-tab-pane
       name="other"
       lazy
-      class="animate-fade-in mt-2 px-2"
+      class="animate-[fade-in_0.4s] mt-2 px-2"
       label="其 他"
     >
       <GoodsOtherTmp />
@@ -105,7 +105,7 @@ const activeMenu = ref<string>("detail");
 }
 // https://code-farmer-i.github.io/vue-markdown-editor/zh/theme/vuepress.html#%E4%BB%8B%E7%BB%8D
 :deep(.vuepress-markdown-body) {
-  padding: 1.5em;
+  padding: 1rem;
   border-radius: 4px;
 }
 </style>

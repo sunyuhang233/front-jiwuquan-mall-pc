@@ -142,19 +142,7 @@ defineComponent({
     <small
       @click="isOpenVideo = true"
       v-if="video"
-      cursor-pointer
-      mx-a
-      mt-2
-      leading-1.2em
-      bg-gray-200
-      dark:bg-dark-200
-      shadow-md
-      p-2
-      transition-200
-      hover:scale-110
-      flex-row-c-c
-      w-6em
-      rounded-2em
+      class="cursor-pointer mx-a leading-1.2em bg-gray-200 dark:bg-dark-200 shadow-md p-2 my-2 transition-200 hover:scale-110 flex-row-c-c w-6em rounded-2em"
     >
       <i
         i-solar:clapperboard-play-bold
@@ -172,7 +160,7 @@ defineComponent({
         >
           <!-- 视频播放 -->
           <video
-            class="videoRef"
+            class="w-80vw md:w-40vw videoRef"
             :src="BaseUrlVideo + video"
             :alt="goodsName || ' By Kiwi23333'"
             :key="video"
@@ -212,9 +200,5 @@ defineComponent({
   justify-content: center;
   align-items: center;
   background-color: #5252528a;
-  .videoRef {
-    width: 40vw;
-    display: block;
-  }
 }
 </style>

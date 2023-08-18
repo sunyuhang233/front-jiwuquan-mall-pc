@@ -52,6 +52,14 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
+
+.text-overflow-h {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--h);
+  -webkit-box-orient: vertical;
+}
 .text-overflow-5 {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,7 +132,8 @@
 }
 
 /**------------------------------vuepress-markdown---------------------------------------**/
-.v-md-editor {
+.v-md-editor,
+.vuepress-markdown-body {
   border-radius: 8px;
   padding: 1rem;
   &,
@@ -133,10 +142,13 @@
     color: var(--el-color-black);
   }
 }
-.dark .v-md-editor {
-  &,
-  * {
-    background-color: var(--el-color-black) !important;
-    color: #fff !important;
+.dark {
+  .v-md-editor,
+  .vuepress-markdown-body {
+    &,
+    * {
+      background-color: #1b1b1b;
+      color: #fff;
+    }
   }
 }
