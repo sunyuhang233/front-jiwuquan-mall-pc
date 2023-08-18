@@ -244,7 +244,7 @@ const delayOrder = () => {
 </script>
 <template>
   <div
-    class="v-card mb-6 border-default rounded-10px p-4 tracking-0.1em transition-300 hover:shadow active:shadow"
+    class="v-card group mb-6 border-default rounded-10px p-4 tracking-0.1em transition-300 hover:shadow active:shadow"
   >
     <!-- 顶部 -->
     <span class="flex items-center border-0 border-default pb-2 border-b-1px">
@@ -339,20 +339,24 @@ const delayOrder = () => {
     </div>
     <!-- 总价 -->
     <div class="mt-4 w-full flex flex-col">
-      <span
-        ml-a
-        mb-2
-        v-if="getReduce"
-      >
-        -￥{{ getReduce }}
-      </span>
       <div flex-row-bt-c>
         <BtnCopyText
-          class="hover:underline opacity-0 group-hover:opacity-100"
+          class="opacity-80 hover:underline opacity-0 group-hover:opacity-70"
           :text="order.id"
           pretext="订单号："
           icon="i-solar:copy-outline"
         />
+        <span
+          ml-a
+          mb-2
+          v-if="getReduce"
+        >
+          -￥{{ getReduce }}
+        </span>
+      </div>
+      <div flex-row-bt-c>
+        <small class="opacity-60">创建于{{ order.createTime }}</small>
+
         <span
           font-600
           flex

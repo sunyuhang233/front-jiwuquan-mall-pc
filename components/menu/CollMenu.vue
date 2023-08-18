@@ -5,23 +5,23 @@ const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
 const route = useRoute();
 
-const menuList = ref<
-  {
-    name: string;
-    path: string;
-    icon: string;
-  }[]
->([
-  {
-    name: "首页",
-    path: "/",
-    icon: "home",
-  },
-]);
+// const menuList = ref<
+//   {
+//     name: string;
+//     path: string;
+//     icon: string;
+//   }[]
+// >([
+//   {
+//     name: "首页",
+//     path: "/",
+//     icon: "home",
+//   },
+// ]);
 </script>
 <template>
   <div
-    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-1/1"
+    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
   >
     <ClientOnly>
       <!-- 菜单 -->

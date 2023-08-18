@@ -146,6 +146,8 @@ const toGoodsView = (gid: string) => {
     </ClientOnly>
     <div
       px-4
+      truncate
+      overflow-hidden
       style="width: 78%; height: 100%"
       group
       flex

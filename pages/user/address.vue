@@ -374,23 +374,18 @@ const rules = reactive({
             >
               <ElDivider />
               <!-- 列表 -->
-              <div
-                class="list"
-                flex
-                flex-wrap
-              >
+              <div class="list">
                 <!-- 单项 -->
                 <el-checkbox-group v-model="selectAddress">
                   <transition-group
                     tag="div"
                     name="item-list"
                     class="relative"
-                    grid="~ cols-2 md:cols-5 gap-2 md:gap-4 "
+                    grid="~ cols-2 md:cols-5 gap-4 md:gap-4 "
                   >
                     <!-- 添加按钮 -->
                     <div
                       :key="2030303"
-                      w-full
                       min-h-180px
                       class="select-none hover:scale-98 cursor-pointer flex-row-c-c flex-col add group border-default-dashed border-2px rounded-8px transition-300"
                       hover:border=" solid dark-4"
@@ -399,7 +394,7 @@ const rules = reactive({
                     >
                       <ElIconCirclePlusFilled
                         text-dark-2
-                        class="w-4em h-4em opacity-20 group-hover:opacity-80 transition-300"
+                        class="w-4rem h-4rem opacity-20 group-hover:opacity-80 transition-300"
                       />
                       <p
                         mt-2
@@ -410,12 +405,12 @@ const rules = reactive({
                         添加新地址
                       </p>
                     </div>
-                    <!-- 地址项 -->
+                    <!-- 地址项列表 -->
                     <CardAddressBox
                       v-for="p in address?.addressList"
                       :key="p.id"
                       :address="p"
-                      class="w-full md:min-w-240px"
+                      class="min-h-180px p-4"
                     >
                       <template #btns>
                         <div

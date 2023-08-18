@@ -1,33 +1,44 @@
 <script lang="ts" setup>
-import { OrderComment, OrdersItemVO, OrderGoodsSkuVO } from "@/composables/api/orders";
+import { OrderCommentDTO, OrdersItemVO, OrderGoodsSkuVO } from "@/composables/api/orders";
+import { useStorage } from "@vueuse/core";
 // props
-const { orderItem } = defineProps<{
+const { orderItem, isDisable } = defineProps<{
   orderItem: OrdersItemVO;
+  isDisable: boolean;
 }>();
-//
-const dto = reactive<OrderComment>({
-  orderItemId: orderItem.id,
-  content: "",
-  rate: 0,
-  images: "",
+const uploadFilesRef = ref({
+  images: [],
   video: "",
-  isRecommend: 0,
-  isAnonymous: 0,
 });
+// 评论对象
+const dto = useStorage(
+  "jiwu_order_comment_" + orderItem.id,
+  reactive<OrderCommentDTO>({
+    orderItemId: orderItem.id,
+    content: "",
+    rate: 0,
+    images: [],
+    video: "",
+    isRecommend: 0,
+    isAnonymous: 0,
+  }),
+  sessionStorage
+);
+// 上传内容
+watch(
+  [() => uploadFilesRef.value.images, () => uploadFilesRef.value.video],
+  (val) => {
+    console.log(val);
+    if (val[0]) {
+      dto.value.images = val[0];
+    } else if (val[1]) {
+      dto.value.video = val[1];
+    }
+  },
+  { deep: true }
+);
 
-const saveLocal = () => {
-  ElMessage.info("保存成功！");
-};
-
-// 是否完成
-const isDisable = ref<boolean>(false);
-
-// 商品规格
-const getProps = (p: OrderGoodsSkuVO): string => {
-  const arr = [];
-  arr.push(p.size, p.color, p.combo);
-  return arr.join(" | ");
-};
+defineExpose({ dto });
 </script>
 <template>
   <div class="card">
@@ -42,7 +53,9 @@ const getProps = (p: OrderGoodsSkuVO): string => {
       height="200px"
       @save="saveLocal"
     /> -->
+    <!-- 评价内容 -->
     <el-input
+      class="mb-4"
       :disabled="isDisable"
       v-model.lazy="dto.content"
       type="textarea"
@@ -52,29 +65,20 @@ const getProps = (p: OrderGoodsSkuVO): string => {
       size="large"
       placeholder="写下你对商品的真实评价！"
     />
-    <div class="goods mt-4 flex">
-      <el-image
-        loading="lazy"
-        class="w-14 h-14 rounded-6px overflow-hidden border-default"
-        :src="
-          BaseUrlImg +
-          orderItem.goodsSku.image +
-          '?imageView2/0/w/100/h/100/format/webp/interlace/1/q/50'
-        "
+    <div class="flex">
+      <OrderCommUpload
+        ref="uploadFilesRef"
+        :isDisable="isDisable"
       />
-      <div class="flex flex-col justify-around px-4">
-        <small>{{ orderItem.goods.name }}</small>
-        <small
-          opacity-60
-          text-0.6em
-        >
-          {{ getProps(orderItem.goodsSku) }}
-        </small>
-      </div>
     </div>
+    <!-- 商品 -->
+    <OrderCommGoods
+      :orderItem="orderItem"
+      class="mt-4"
+    />
     <!-- 评分 -->
     <div
-      mt-2
+      mt-4
       flex-row-bt-c
     >
       <div class="flex items-center">
@@ -117,9 +121,8 @@ const getProps = (p: OrderGoodsSkuVO): string => {
   overflow: hidden;
 }
 :deep(.el-textarea__inner) {
-  box-shadow: none;
+  box-shadow: 0 0 4px #61616115;
   padding: 0.8rem;
-  border: 1x solid #79797915;
 }
 :deep(.el-rate__text) {
   font-size: 0.95em;

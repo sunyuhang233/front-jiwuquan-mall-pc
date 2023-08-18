@@ -310,24 +310,25 @@ export function deleteOrders(id: string, token: string) {
 
 /**
  * 订单评论
- * @param dto OrderComment[]
+ * @param token 订单id
+ * @param dtoList OrderCommentDTO[]
  * @param token 
  * @returns 
  */
-export function toOrdersComment(dto: OrderComment[], token: string) {
-  return useHttp.post<Result<string>>(`/orders/comment`, {
-    dto
+export function toOrdersComment(orderId: string, dtoList: OrderCommentDTO[], token: string) {
+  return useHttp.post<Result<string>>(`/orders/comment/${orderId}`, {
+    dto: dtoList
   }, {
     headers: {
       "Authorization": token
     }
   })
 }
-export interface OrderComment {
+export interface OrderCommentDTO {
   orderItemId: string,
   content: string,
   rate: 0,
-  images: string,
+  images: string[],
   video: string,
   isRecommend: 0,
   isAnonymous: 0

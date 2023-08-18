@@ -10,7 +10,7 @@ import { Result } from 'types/result';
  * @param config 上传任务的配置
  * @returns 返回用于上传任务的可观察对象
  */
-export const defUpload = (file: File, fileName: string | null = null, token: string, observer: PartialObserver<UploadProgress, qiniu.QiniuError | qiniu.QiniuRequestError | qiniu.QiniuNetworkError, any>,
+export const uploadOssFile = (file: File, fileName: string | null = null, token: string, observer: PartialObserver<UploadProgress, qiniu.QiniuError | qiniu.QiniuRequestError | qiniu.QiniuNetworkError, any>,
   putExtra?: Partial<Extra>, config?: Config) => {
   const observable = qiniu.upload(file,
     fileName,
@@ -21,16 +21,38 @@ export const defUpload = (file: File, fileName: string | null = null, token: str
 }
 
 /**
- * 获取上传临时凭证token
+ * 获取上传临时凭证token（图片）
+ * @param fileType 文件类型
  * @param token 用户token
  * @returns 
  */
-export const getResToken = (token: string) => {
-  return useHttp.get<Result<ResOssVO>>("/res/user/image", {}, {
+export const getResToken = (fileType: OssFileType, token: string) => {
+  return useHttp.get<Result<ResOssVO>>(`/res/user/${fileType}`, {}, {
     headers: {
       Authorization: token
     }
   })
+}
+/**
+ * 删除oss文件
+ * @param key 文件名 
+ * @param token 用户token
+ * @returns 
+ */
+export const deleteOssFile = (key: string, token: string) => {
+  return useHttp.deleted<Result<string>>(`/res/user/files?key=${key}`, {
+  }, {
+    headers: {
+      Authorization: token
+    }
+  })
+}
+
+export enum OssFileType {
+  IMAGE = "image",
+  VIDEO = "video",
+  FILE = "file",
+  FONT = "font",
 }
 /**
  * oss上传临时凭证VO

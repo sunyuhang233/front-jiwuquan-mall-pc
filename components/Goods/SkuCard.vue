@@ -275,7 +275,9 @@ const setActiveItem = (image: string) => {
 								<el-radio :border="true" v-for="p in colorList" :key="p.name" :label="p.name"
 									style="height: 4em; border-radius: 4px;margin: 0 0.4rem 0.4rem 0;" @click="setActiveItem(p.image)"
 									class="flex flex-col color-group">
-									<img class="sku-img" :src="BaseUrlImg + p.image" :alt="p.name || 'Design By Kiwi23333'" rounded-4px
+									<img
+      						loading="lazy" 
+									class="sku-img" :src="BaseUrlImg + p.image" :alt="p.name || 'Design By Kiwi23333'" rounded-4px
 										overflow-hidden z-0 />
 									<div text-center py-2 px-4 z-5 class="tip">{{ p.name }}</div>
 								</el-radio>

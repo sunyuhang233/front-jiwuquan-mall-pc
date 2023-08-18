@@ -123,7 +123,7 @@ const getAllPrice = computed(() => {
       :footer="false"
     >
       <ClientOnly>
-        <div class="layout-default md:w-2/5 mx-a pb-0">
+        <div class="layout-default md:w-700px mx-a pb-0">
           <div
             v-if="user.isLogin"
             class="shopcart-list"

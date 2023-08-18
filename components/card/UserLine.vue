@@ -68,6 +68,12 @@ const exitLogin = () => {
 
 const menuList = ref([
   {
+    name: "个人主页",
+    path: "/user/info",
+    className:
+      "bg-[var(--el-color-primary)] i-solar:home-2-bold-duotone  group-hover:animate-[tada_1s_ease]",
+  },
+  {
     name: "我的收藏",
     path: "/user/collect",
     className: "bg-yellow-5 i-solar:star-bold-duotone  group-hover:animate-[jello_1s_ease]",
@@ -195,6 +201,7 @@ const menuList = ref([
               :on-success="updateSucess"
             >
               <img
+                loading="lazy"
                 w-6em
                 h-6em
                 v-if="avatarUrl"
@@ -246,6 +253,8 @@ const menuList = ref([
               >
                 <el-button
                   size="large"
+                  type="danger"
+                  plain
                   @click="exitLogin"
                   ml-3
                 >

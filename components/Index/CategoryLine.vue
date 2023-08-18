@@ -36,6 +36,7 @@
             flex-row-c-c
           >
             <img
+              loading="lazy"
               :src="BaseUrlImg + p.icon"
               :alt="p.name"
               opacity-85
@@ -66,6 +67,7 @@
             flex-row-c-c
           >
             <img
+              loading="lazy"
               :src="BaseUrlImg + k.icon"
               :alt="k.name"
               opacity-85
