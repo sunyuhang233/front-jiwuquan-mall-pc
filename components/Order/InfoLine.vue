@@ -283,12 +283,12 @@ const delayOrder = () => {
           loading="lazy"
           fit="cover"
           :src="BaseUrlImg + p.goodsSku.image"
-          class="w-5.8rem transition-300 hover:shadow md:w-7.2rem h-5.8rem md:h-7.2rem rounded-8px overflow-hidden border-default"
+          class="w-4.5rem md:w-7.2rem h-4.5rem md:h-7.2rem transition-300 hover:shadow rounded-8px overflow-hidden border-default"
         />
       </ClientOnly>
       <!-- 中间 -->
       <div
-        class="center flex-1 leading-1.2em md:leading-1.6em px-2 md:px-4 flex flex-col overflow-hidden truncate"
+        class="center text-0.8rem md:text-1rem flex-1 leading-1.4em md:leading-1.6em px-2 md:px-4 flex flex-col overflow-hidden truncate"
       >
         <strong truncate>
           {{ p.goods.name }}
@@ -314,6 +314,8 @@ const delayOrder = () => {
             ml-a
             opacity-80
             line-through
+            hidden
+            md:block
           >
             ￥{{ currency(p.goodsSku.price) }}
           </div>
@@ -341,6 +343,8 @@ const delayOrder = () => {
     <div class="mt-4 w-full flex flex-col">
       <div flex-row-bt-c>
         <BtnCopyText
+          hidden
+          md:inline
           class="opacity-80 hover:underline opacity-0 group-hover:opacity-70"
           :text="order.id"
           pretext="订单号："
@@ -355,7 +359,7 @@ const delayOrder = () => {
         </span>
       </div>
       <div flex-row-bt-c>
-        <small class="opacity-60">创建于{{ order.createTime }}</small>
+        <small class="opacity-60 hidden md:inline">创建于{{ order.createTime }}</small>
 
         <span
           font-600

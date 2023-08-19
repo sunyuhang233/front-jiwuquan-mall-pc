@@ -549,7 +549,7 @@ const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
 const toCommon = () => {
   if (order.status !== OrdersStatus.RECEIVED) return;
   navigateTo({
-    path: `/order/comment/${order.id}`,
+    path: `/order/comment/${order.orderInfo.id}`,
   });
 };
 // 10）删除订单 REFUND_SUCCESS、CANCELED、DELAY_CANCELED、COMMENTED
@@ -985,9 +985,9 @@ const toBack = () => {
                   <div class="left flex items-center">
                     <span
                       v-html="p.icon"
-                      class="w-2em mr-4 h-2em"
+                      class="w-2rem mr-4 h-2rem inline-block"
                     ></span>
-                    <span>{{ p.title }}</span>
+                    <small text-0.8rem>{{ p.title }}</small>
                   </div>
                   <el-radio
                     :label="p.type"
@@ -997,6 +997,7 @@ const toBack = () => {
                   <small
                     font-500
                     opacity-60
+                    text-0.6rem
                     v-else
                   >
                     暂未开启
@@ -1352,6 +1353,9 @@ const toBack = () => {
 }
 
 .pay-type-list {
+  :deep(.el-radio-group) {
+    font-size: inherit;
+  }
   :deep(.el-radio) {
     .el-radio__label {
       display: none;

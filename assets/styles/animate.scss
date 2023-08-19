@@ -227,6 +227,7 @@
 
 .item-list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 
 // group动画
@@ -243,6 +244,7 @@
 
 .group-list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 
 // fade动画
@@ -263,6 +265,7 @@
 
 .fade-bt-list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 //  scale
 .filp-scale-list-move,
@@ -279,6 +282,7 @@
 
 .filp-scale-list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 
 // fade动画
@@ -296,6 +300,7 @@
 
 .fade-lr-list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 
 // 页面

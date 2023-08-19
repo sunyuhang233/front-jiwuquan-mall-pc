@@ -3,7 +3,7 @@
   <header
     class="nav select-none"
     flex-row-bt-c
-    p-4
+    px-2
     md:px-6
     text-m
     dark:text="light"
@@ -118,27 +118,78 @@
         <BtnSwitch />
         <!-- 登陆注册 -->
         <div
-          class="box"
+          class="flex flex-col group"
           v-if="!store.isLogin"
         >
-          <ElButton
-            round
-            type="primary"
-            shadow-md
-            px-2cursor-pointer
-            @click="onLogin(FormType.LOGIN)"
+          <el-popover
+            placement="bottom"
+            teleported
+            :width="100"
+            :offset="20"
+            trigger="click"
           >
-            登 录
-          </ElButton>
-          <ElButton
-            style="border-radius: 30px"
-            px-2
-            mx-1
-            cursor-pointer
-            @click="onLogin(FormType.REGISTER)"
+            <template #reference>
+              <el-button
+                round
+                style="margin: 0; padding: 0.5em"
+              >
+                <i
+                  class="inline-block sm:hidden rounded-4em p-2 shadow-md cursor-pointer bg-dark-1 dark:bg-light opacity-80"
+                  i-solar:user-outline
+                />
+              </el-button>
+            </template>
+            <div
+              flex
+              flex-col
+            >
+              <ElButton
+                round
+                class="m-2 shadow-md px-2 cursor-pointer"
+                type="primary"
+                @click="onLogin(FormType.LOGIN)"
+              >
+                登 录
+              </ElButton>
+              <ElButton
+                round
+                px-2
+                m-2
+                cursor-pointer
+                style="margin-left: 0"
+                @click="onLogin(FormType.REGISTER)"
+              >
+                注 册
+              </ElButton>
+            </div>
+          </el-popover>
+          <div
+            hidden
+            flex-col
+            md:block
+            md:flex-row
+            items-center
+            class="bg-[#d8d8d854] dark:bg-[#4d4d4d48] backdrop-blur-12px rounded-10px z-1 p-2 md:p-0 md:bg-transparent md:static"
           >
-            注 册
-          </ElButton>
+            <ElButton
+              round
+              class="m-2 shadow-md px-2 cursor-pointer"
+              type="primary"
+              @click="onLogin(FormType.LOGIN)"
+            >
+              登 录
+            </ElButton>
+            <ElButton
+              round
+              px-2
+              m-2
+              cursor-pointer
+              style="margin-left: 0"
+              @click="onLogin(FormType.REGISTER)"
+            >
+              注 册
+            </ElButton>
+          </div>
         </div>
         <div
           class="box"

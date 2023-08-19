@@ -54,7 +54,6 @@ const startDotAnimate = (event:MouseEvent) => {
 	if (isAimate.value|| target.getBoundingClientRect===undefined) return
 	isAimate.value= true
 	const {bottom,right} = target.getBoundingClientRect()
-	console.dir(bottom,right);
 	gsap.to(target,{
 		bottom:0,
 	})

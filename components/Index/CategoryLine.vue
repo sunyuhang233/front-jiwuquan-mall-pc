@@ -37,7 +37,7 @@
           >
             <img
               loading="lazy"
-              :src="BaseUrlImg + p.icon"
+              :src="BaseUrlImg + p.icon + '?imageView2/0/w/100/h/100/format/webp/interlace/1/q/50'"
               :alt="p.name"
               opacity-85
               rounded-4px

@@ -2,7 +2,7 @@
 import { GoodsVO } from "~/types/goods";
 // 分页器
 const page = ref<number>(0);
-const size = ref<number>(5);
+const size = ref<number>(10);
 // 骨架屏
 const isLoading = ref<boolean>(false);
 const res = await getGoodsListByPageLazy(page.value, size.value, {
@@ -50,18 +50,18 @@ await loadHandle();
         i-solar:fire-bold
       ></span>
     </h3>
-    <!-- 商品列表 -->
-    <el-scrollbar
-      v-loading="isLoading"
-      :always="false"
-      height="88%"
-      style="width: 100%"
-    >
-      <ClientOnly>
+    <ClientOnly>
+      <!-- 商品列表 -->
+      <el-scrollbar
+        v-loading="isLoading"
+        :always="false"
+        height="88%"
+        style="width: 100%"
+      >
         <NuxtLink
           :to="`/goods/detail/${p.id}`"
           class="mt-2 w-1/1 animate-[fade-in_0.3s]"
-          v-for="p in hotGoodsList"
+          v-for="p in res.data.value?.data.records"
           :key="p.id"
         >
           <!-- 商品卡片 -->
@@ -94,24 +94,24 @@ await loadHandle();
             </template>
           </CardGoodsLine>
         </NuxtLink>
-      </ClientOnly>
-      <p
-        text-center
-        my-4
-        v-show="searchPage.pages !== 0 && searchPage.pages === page"
-      >
-        暂无更多商品
-      </p>
-      <p
-        text-center
-        my-4
-        cursor-pointer
-        v-show="searchPage.pages !== 0 && page < searchPage.pages"
-        @click="loadHandle"
-      >
-        加载更多
-      </p>
-    </el-scrollbar>
+        <p
+          text-center
+          my-4
+          v-show="searchPage.pages !== 0 && searchPage.pages === page"
+        >
+          暂无更多商品
+        </p>
+        <p
+          text-center
+          my-4
+          cursor-pointer
+          v-show="searchPage.pages !== 0 && page < searchPage.pages"
+          @click="loadHandle"
+        >
+          加载更多
+        </p>
+      </el-scrollbar>
+    </ClientOnly>
   </div>
 </template>
 <style scoped lang="scss">

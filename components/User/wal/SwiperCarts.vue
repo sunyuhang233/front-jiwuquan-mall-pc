@@ -15,13 +15,13 @@
   >
     <slot>
       <swiper-slide>
-        <UserWalCard class="w-full h-full transition-300 hover:translate-x-2" />
+        <UserWalCard class="w-full h-180px transition-300 hover:translate-x-2" />
       </swiper-slide>
       <swiper-slide>
-        <UserWalWxCard class="w-full h-full transition-300 hover:translate-x-2" />
+        <UserWalWxCard class="w-full h-180px transition-300 hover:translate-x-2" />
       </swiper-slide>
       <swiper-slide>
-        <UserWalAliCard class="w-full h-full transition-300 hover:translate-x-2" />
+        <UserWalAliCard class="w-full h-180px transition-300 hover:translate-x-2" />
       </swiper-slide>
     </slot>
   </swiper>

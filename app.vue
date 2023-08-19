@@ -22,15 +22,29 @@ watch(
     immediate: true,
   }
 );
-
-const logSomeError = () => {};
+// 加载
+const isLoading = ref<boolean>(true);
+useNuxtApp().hook("app:mounted", (app) => {
+  if (document && document.body) {
+    document.body.style.overflow = "hidden";
+  }
+});
+// 准备完成关闭加载
+onNuxtReady(async () => {
+  isLoading.value = false;
+  if (document && document.body) {
+    document.body.style.overflow = "auto";
+  }
+});
 // 不能有根节点
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
-  <NuxtErrorBoundary @error="logSomeError" />
   <FormUserDialog />
   <NuxtPage />
+  <Transition name="fade">
+    <OtherLoading v-show="isLoading" />
+  </Transition>
 </template>
 
 <style>

@@ -48,7 +48,6 @@ export const useOrderStore = defineStore('order', () => {
     const { data, code } = await getOrdersInfoById(id || orderId.value, useUserStore().getToken);
     if (code === StatusCode.SUCCESS) {
       orderInfo.value = data;
-      console.log(data)
       orderId.value = data?.id
       status.value = data.status;
       unPaidVO.value.reducePrice = currency(data.totalPrice).subtract(data.spendPrice).value
