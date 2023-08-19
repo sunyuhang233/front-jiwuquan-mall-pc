@@ -1,163 +1,249 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
+import { CommCategory } from "@/composables/api/community";
+import { ElMenuItem, ElSubMenu } from "element-plus";
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_isFold", true);
 // 路由
 const route = useRoute();
+const commList = await getCommCategory();
+const toMenuTypeFn = (p: CommCategory) => {
+  const arr: IndexMenuType = {
+    url: p.id || "",
+    icon: "",
+    image: p.image,
+    title: p.name || "",
+    children: [],
+  };
+  if (p.children?.length) {
+    arr.children = p.children?.map((item) => toMenuTypeFn(item)) as IndexMenuType[];
+  }
+  return arr;
+};
+const commMenu = toRaw(commList.data.value?.data || []).map((p) => {
+  if (p.isShow) {
+    return toMenuTypeFn(p);
+  }
+}) as IndexMenuType[];
+
+const menuList = <IndexMenuType[]>[
+  { url: "/", icon: "i-solar:home-2-bold", title: "首页", children: [] },
+  { url: "/community", icon: "i-solar:ufo-3-bold-duotone", title: "极物圈", children: [] },
+  { url: "/category", icon: "i-solar:widget-5-bold-duotone", title: "圈子", children: commMenu },
+  { url: "/setting", icon: "i-solar:settings-linear", title: "设置", children: [] },
+];
+interface IndexMenuType {
+  url: string;
+  icon: string;
+  image?: string;
+  title: string;
+  children: IndexMenuType[];
+}
+
+// 长短折叠
+const isCollapse = ref<boolean>(false);
 </script>
 <template>
-  <!-- 菜单 -->
   <div
-    class="group fixed md:sticky menu-list w-12vw md:w-200px"
-    :class="{ 'is-fold': isFold }"
+    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
   >
-    <el-menu
-      style="width: 100%"
-      :router="true"
-      :default-active="route.path"
-      bg=" dark:dark-600"
-    >
-      <!-- 首页 -->
-      <el-menu-item index="/">
-        <ElIconHomeFilled />
-        <div
-          class="title"
-          mx-4
-          hidden
-          md:block
-        >
-          首&emsp;页
-        </div>
-      </el-menu-item>
-      <!-- 社区 -->
-      <el-menu-item index="/community">
-        <ElIconSwitchFilled />
-        <div
-          class="title"
-          mx-4
-          hidden
-          md:block
-        >
-          社&emsp;区
-        </div>
-      </el-menu-item>
-      <!-- 分类 -->
-      <el-menu-item index="/category">
-        <ElIconGoodsFilled />
-        <div
-          class="title"
-          mx-4
-          hidden
-          md:block
-        >
-          分&emsp;类
-        </div>
-      </el-menu-item>
-      <el-menu-item index="/setting">
-        <ElIconSetting />
-        <div
-          class="title"
-          mx-4
-          hidden
-          md:block
-        >
-          设&emsp;置
-        </div>
-      </el-menu-item>
-    </el-menu>
     <ClientOnly>
-      <!-- 折叠按钮 -->
-      <div
-        class="collapse flex-row-c-c"
-        @click="isFold = !isFold"
+      <!-- 菜单 -->
+      <el-menu
+        :router="true"
+        :default-active="route.path"
+        :collapse="isFold"
       >
-        <i
-          class="icon p-3.2 mx-0.3rem"
-          i-solar:alt-arrow-left-bold
-        ></i>
-      </div>
+        <!-- 顶部 -->
+        <div
+          class="w-full flex-row-c-c justify-between flex-wrap transition-300 hover:bg-transparent px-4"
+          :class="{ 'flex-col items-center': isFold }"
+        >
+          <div class="home mt-6 transition-300">
+            <NuxtLink
+              to="/"
+              flex-row-c-c
+              class="group"
+            >
+              <img
+                src="@/assets/images/logo/logo.svg"
+                w-1.6rem
+                h-1.6rem
+              />
+            </NuxtLink>
+          </div>
+          <span
+            @click="isFold = !isFold"
+            class="mt-6 p-1 transition-300"
+          >
+            <i class="i-solar:hamburger-menu-line-duotone"></i>
+          </span>
+        </div>
+        <!-- 菜单 -->
+        <!-- <template
+          v-for="p in menuList"
+          :key="p.url"
+        >
+          <el-menu-item
+            v-if="p.children.length === 0"
+            :index="p.url"
+          >
+            <i
+              :class="p.icon"
+              p-3
+            />
+            <span class="title truncate min-w-4rem text-center">{{ p.title }}</span>
+            <span w-2rem></span>
+          </el-menu-item>
+
+          <el-sub-menu
+            v-else
+            :index="p.url"
+          >
+            <template #title>
+              <i
+                :class="p.icon"
+                p-3
+              />
+              <span class="title truncate min-w-4rem text-center mr-4">{{ p.title }}</span>
+              <span w-2rem></span>
+            </template>
+            <component
+              v-for="c in p.children"
+              :is="c.children.length ? ElSubMenu : ElMenuItem"
+              :index="c.url"
+              :key="c.url"
+            >
+              <template #title>
+                <el-image
+                  v-if="c.image"
+                  loading="lazy"
+                  :src="BaseUrlImg + c.image"
+                  :alt="p.title"
+                  class="w-2em h-2em"
+                  fit="cover"
+                  style="border-radius: 6px; overflow: hidden"
+                />
+                <span class="title truncate min-w-4rem text-center">{{ c.title }}</span>
+              </template>
+            </component>
+          </el-sub-menu>
+        </template>-->
+        <MenuLine
+          :data="data"
+          v-for="data in menuList"
+          :key="data.url"
+        />
+      </el-menu>
     </ClientOnly>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.menu-list {
-  top: $top-nav-height;
-  left: 0;
+.menu {
   user-select: none;
-  z-index: 100;
+  top: $top-nav-height;
   height: calc(100vh - $top-nav-height);
-  transition: all $transition-delay;
 
-  // 菜单和项
   :deep(.el-menu) {
-    width: 100%;
     height: 100%;
-    box-shadow: rgba(100, 100, 100, 0.1) 0px 1px 4px;
+
+    .el-sub-menu__title,
     .el-menu-item {
-      border-radius: 0 3px 3px 0;
-      border-right: 3px solid transparent;
-      transition: $transition-delay;
-      display: flex;
-      width: 101%;
+      padding: 0.8em;
+      padding-top: 0px;
+      padding-bottom: 0px;
       overflow: hidden;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0;
+      text-overflow: clip;
+      height: 3em;
+      border-radius: 8px;
+      margin: 10px;
       transition: $transition-delay;
-      svg {
-        width: 1.4em;
-        height: 1.4em;
+      border: 1px dashed transparent;
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: 100ms;
       }
+
+      &:hover,
+      &.is-active:hover,
       &.is-active {
-        border-right: 1%;
-        border-color: var(--el-color-primary);
+        border: 1px solid;
+        color: var(--el-color-primary);
+        background-color: var(--el-color-primary-light-9);
+
+        i {
+          color: var(--el-color-primary);
+        }
+      }
+
+      &:hover {
+        border: 1px dashed;
       }
     }
 
-    .el-menu-item.is-active {
-      background-color: var(--el-color-primary-light-9);
+    .el-menu-item-group {
+      .el-menu-item {
+        background-color: #8181811a;
+        opacity: 0.9;
+
+        &:hover {
+          background-color: #8181811a;
+          opacity: 1;
+        }
+
+        .second-icon {
+          padding: 2px;
+        }
+      }
+
+      .el-menu-item:hover {
+        background-color: transparent;
+        color: var(--el-color-primary);
+      }
+
+      .el-menu-item-group__title ml-2 {
+        display: none;
+      }
     }
-  }
-  .collapse {
-    position: absolute;
-    right: 0.3em;
-    transform: translateX(100%);
-    z-index: -1;
-    bottom: 2rem;
-    height: 3.2rem;
-    background-color: var(--el-color-primary);
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    transition: $transition-delay;
-    .icon {
-      background-color: #fff;
+
+    // 图标
+    i {
+      padding: 0.6rem;
+
+      &:hover {
+        transition: $transition-delay;
+        color: var(--el-color-primary);
+      }
     }
-    &:hover {
-      right: 0;
-      transform: translateX(100%);
+
+    .title {
+      margin-left: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      text-align: justify;
+      text-justify: distribute-all-lines;
+      text-align-last: justify;
     }
   }
 }
-.is-fold {
-  width: 0;
-  margin: 0;
-  padding: 0;
-  :deep(.el-menu-item) {
-    opacity: 0.6;
-    &,
-    .title,
-    &.is-active {
-      width: 0;
-      margin: 0;
-      padding: 0;
-    }
-  }
-  .collapse {
-    .icon {
-      transform: rotate(180deg);
-    }
+
+@media screen and (max-width: 768px) {
+  .menu-bg .bg {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150vw;
+    overflow: hidden;
+    height: 100vh;
+    background-color: rgba(51, 51, 51, 0.3);
+    z-index: -1;
+    transition: $transition-delay;
   }
 }
 </style>

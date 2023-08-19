@@ -9,7 +9,7 @@ const props = defineProps({
 });
 const user = useUserStore();
 const formData = new FormData();
-
+const avatatRef = ref();
 // 表单
 const avatarUrl = computed({
   get() {
@@ -42,10 +42,12 @@ const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
 const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
   if (data.code === StatusCode.SUCCESS) {
     user.userInfo.avatar = data.data;
+
+    avatatRef.value?.clearFiles();
     avatarUrl.value = data.data || "";
     ElMessage.success("更换头像成功！");
   } else {
-    ElMessage.error("更换头像失败！");
+    ElMessage.error(data.message);
   }
 };
 // 退出登录
@@ -186,7 +188,7 @@ const menuList = ref([
             <!-- 上传 -->
             <el-upload
               class="avatar-uploader"
-              ref="uploader"
+              ref="avatatRef"
               style="width: 100%; height: 100%; border-radius: 50%"
               drag
               :action="getBaseUrl + '/user/info/avatar'"

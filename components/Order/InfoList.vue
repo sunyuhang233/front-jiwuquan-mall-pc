@@ -330,8 +330,8 @@ const changeDate = () => {
   >
     <div
       v-infinite-scroll="loadOrdersPage"
-      :infinite-scroll-delay="800"
-      :infinite-scroll-distance="0"
+      :infinite-scroll-delay="500"
+      :infinite-scroll-distance="30"
     >
       <div class="mb-4 ml-a cursor-pointer flex justify-end">
         <div
@@ -359,7 +359,6 @@ const changeDate = () => {
             重置
           </el-button>
         </div>
-
         <el-button
           @click="isShow = !isShow"
           size="small"

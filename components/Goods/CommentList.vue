@@ -54,7 +54,14 @@ const toCommentDetailView = (commentId: string) => {
     path: `/goods/comment/${commentId}`,
   });
 };
-const showVideo = (url: string) => {};
+const showVideo = (url: string) => {
+  if (url) {
+    showVideoUrl.value = url;
+    isShowVideo.value = true;
+  }
+};
+const isShowVideo = ref<boolean>(false);
+const showVideoUrl = ref<string>("");
 </script>
 <template>
   <el-scrollbar
@@ -87,5 +94,16 @@ const showVideo = (url: string) => {};
         暂时没有更多评论
       </small>
     </div>
+    <Teleport to="body">
+      <el-dialog v-model="isShowVideo">
+        <video
+          :src="BaseUrlVideo + showVideoUrl"
+          w-full
+          h-full
+          controls
+          ref="videoRef"
+        ></video>
+      </el-dialog>
+    </Teleport>
   </el-scrollbar>
 </template>

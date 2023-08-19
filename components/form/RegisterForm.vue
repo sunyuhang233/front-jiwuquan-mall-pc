@@ -276,7 +276,7 @@ const getRegCode = async (type: RegisterType) => {
       formUser.code = data.data;
       useInterval(phoneTimer, phoneCodeStorage, 60, -1);
       ElMessage.success({
-        message: `手机验证码为：${data.data}`,
+        message: data.message,
         duration: 5000,
       });
     }

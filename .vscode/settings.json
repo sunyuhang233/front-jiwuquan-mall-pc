@@ -2,6 +2,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "editor.formatOnSave": true,
-  "vue.codeActions.enabled": false
+  "editor.formatOnSave": true
 }

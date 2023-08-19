@@ -121,48 +121,56 @@
           class="flex flex-col group"
           v-if="!store.isLogin"
         >
-          <el-popover
-            placement="bottom"
-            teleported
-            :width="100"
-            :offset="20"
-            trigger="click"
-          >
-            <template #reference>
-              <el-button
-                round
-                style="margin: 0; padding: 0.5em"
-              >
-                <i
-                  class="inline-block sm:hidden rounded-4em p-2 shadow-md cursor-pointer bg-dark-1 dark:bg-light opacity-80"
-                  i-solar:user-outline
-                />
-              </el-button>
-            </template>
-            <div
-              flex
-              flex-col
+          <!-- 移动端 -->
+          <div class="block md:hidden">
+            <el-popover
+              placement="bottom"
+              class="inline-block sm:hidden"
+              teleported
+              :width="100"
+              :offset="20"
+              trigger="click"
             >
-              <ElButton
-                round
-                class="m-2 shadow-md px-2 cursor-pointer"
-                type="primary"
-                @click="onLogin(FormType.LOGIN)"
+              <template #reference>
+                <el-button
+                  class="sm:hidden"
+                  round
+                  style="margin: 0; padding: 0.5em"
+                >
+                  <i
+                    class="rounded-4em p-2 shadow-md cursor-pointer bg-dark-1 dark:bg-light opacity-80"
+                    i-solar:user-outline
+                  />
+                </el-button>
+              </template>
+              <div
+                flex
+                inline-block
+                sm:hidden
+                flex-col
               >
-                登 录
-              </ElButton>
-              <ElButton
-                round
-                px-2
-                m-2
-                cursor-pointer
-                style="margin-left: 0"
-                @click="onLogin(FormType.REGISTER)"
-              >
-                注 册
-              </ElButton>
-            </div>
-          </el-popover>
+                <ElButton
+                  round
+                  class="m-2 shadow-md px-2 cursor-pointer"
+                  type="primary"
+                  @click="onLogin(FormType.LOGIN)"
+                >
+                  登 录
+                </ElButton>
+                <ElButton
+                  round
+                  px-2
+                  m-2
+                  cursor-pointer
+                  style="margin-left: 0"
+                  @click="onLogin(FormType.REGISTER)"
+                >
+                  注 册
+                </ElButton>
+              </div>
+            </el-popover>
+          </div>
+          <!-- pc -->
           <div
             hidden
             flex-col

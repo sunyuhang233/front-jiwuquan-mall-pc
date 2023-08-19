@@ -5,19 +5,43 @@ const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
 const route = useRoute();
 
-// const menuList = ref<
-//   {
-//     name: string;
-//     path: string;
-//     icon: string;
-//   }[]
-// >([
-//   {
-//     name: "首页",
-//     path: "/",
-//     icon: "home",
-//   },
-// ]);
+const menuList = [
+  {
+    title: "个人信息",
+    path: "/user/info",
+    icon: "i-solar:user-broken",
+    activeIcon: "i-solar:user-bold-duotone",
+  },
+  {
+    title: "购物车",
+    path: "/user/shopcart",
+    icon: "i-solar:cart-large-2-linear",
+    activeIcon: "i-solar:cart-large-2-bold",
+  },
+  {
+    title: "钱包账单",
+    path: "/user/wallet",
+    icon: "i-solar:wallet-broken",
+    activeIcon: "i-solar:wallet-bold-duotone",
+  },
+  {
+    title: "收货地址",
+    path: "/user/address",
+    icon: "i-solar:compass-broken",
+    activeIcon: "i-solar:compass-bold-duotone",
+  },
+  {
+    title: "账号与安全",
+    path: "/user/safe",
+    icon: "i-solar:danger-broken",
+    activeIcon: "i-solar:danger-bold-duotone",
+  },
+  {
+    title: "回到首页",
+    path: "/",
+    icon: "i-solar:square-alt-arrow-left-broken",
+  },
+];
 </script>
 <template>
   <div
@@ -53,75 +77,20 @@ const route = useRoute();
         </div>
         <div class="border-0 border-default border-b-1px w-5/6 mx-a my-4"></div>
         <!-- 个人信息 -->
-        <el-menu-item index="/user/info">
-          <i
-            class="i-solar:user-broken"
-            v-show="route.path !== '/user/info'"
-          ></i>
-          <i
-            class="i-solar:user-bold-duotone"
-            v-show="route.path === '/user/info'"
-          ></i>
-          <span class="min-w-10em title ml-3">个人信息</span>
-        </el-menu-item>
-        <!-- 购物车 -->
-        <el-menu-item index="/user/shopcart">
-          <i
-            class="i-solar:cart-large-2-linear"
-            v-show="route.path !== '/user/shopcart'"
-          ></i>
-          <i
-            class="i-solar:cart-large-2-bold"
-            v-show="route.path === '/user/shopcart'"
-          ></i>
-          <span class="min-w-10em title ml-3">购物车</span>
-        </el-menu-item>
-        <!-- 钱包 -->
-        <el-menu-item index="/user/wallet">
-          <i
-            class="i-solar:wallet-broken"
-            v-show="route.path !== '/user/wallet'"
-          ></i>
-          <i
-            class="i-solar:wallet-bold-duotone"
-            v-show="route.path === '/user/wallet'"
-          ></i>
-          <span class="title ml-3">钱包账单</span>
-        </el-menu-item>
-        <!-- 收货地址 -->
-        <el-menu-item index="/user/address">
-          <i
-            class="i-solar:compass-broken"
-            v-show="route.path !== '/user/address'"
-          ></i>
-          <i
-            class="i-solar:compass-bold-duotone"
-            v-show="route.path === '/user/address'"
-          ></i>
-          <span class="title ml-3">收货地址</span>
-        </el-menu-item>
-        <!-- 账号与安全 -->
         <el-menu-item
-          index="/user/safe"
-          class="group"
+          :index="p.path"
+          v-for="p in menuList"
+          :key="p.path"
         >
           <i
-            class="i-solar:danger-broken"
-            v-show="route.path !== '/user/safe'"
+            :class="p.icon"
+            v-show="route.path !== p.path"
           ></i>
           <i
-            class="i-solar:danger-bold-duotone"
-            v-show="route.path === '/user/safe'"
+            :class="p.activeIcon"
+            v-show="route.path === p.path"
           ></i>
-          <span class="title ml-3">账号与安全</span>
-        </el-menu-item>
-        <!-- 回到首页 -->
-        <el-menu-item
-          class="overflow-x-hidden truncate"
-          index="/"
-        >
-          <i i-solar:square-alt-arrow-left-broken></i>
-          <span class="title ml-3">回到首页</span>
+          <span class="min-w-10em title ml-3">{{ p.title }}</span>
         </el-menu-item>
       </el-menu>
     </ClientOnly>

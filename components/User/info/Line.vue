@@ -7,6 +7,7 @@ const user = useUserStore();
 const route = useRoute();
 const formData = new FormData();
 // 表单
+const avatatRef = ref();
 const avatarUrl = computed({
   get() {
     return user.userInfo.avatar;
@@ -40,12 +41,13 @@ const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
  */
 const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
   isLoading.value = false; // check success
+  avatatRef.value?.clearFiles();
   if (data.code === StatusCode.SUCCESS) {
     user.userInfo.avatar = data.data;
     avatarUrl.value = data.data || "";
     ElMessage.success("更换头像成功！");
   } else {
-    ElMessage.error("更换头像失败！");
+    ElMessage.error(data.message);
   }
 };
 
@@ -118,7 +120,7 @@ const showInvitation = () => {
       <!-- 上传 -->
       <el-upload
         class="avatar-uploader"
-        ref="uploader"
+        ref="avatatRef"
         drag
         :action="getBaseUrl + '/user/info/avatar'"
         :headers="{ Authorization: user.token }"
@@ -152,8 +154,9 @@ const showInvitation = () => {
       <!-- nickname -->
       <transition-group
         tag="h2"
-        name="group-list"
-        class="title min-h-2em group flex-row-c-c justify-start"
+        leave-active-class="animate-[fade-out_0.4s_ease-in] absolute"
+        appear-active-class="animate-[fade-in_0.4s_ease-in] absolute"
+        class="title min-h-2em group relative flex-row-c-c justify-start"
       >
         <div
           v-show="!isEditNickname"
