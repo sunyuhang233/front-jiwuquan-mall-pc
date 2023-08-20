@@ -11,10 +11,10 @@ import {
 } from "~/composables/api/user/address";
 
 // 页面
-definePageMeta({
-  pageTransition: false,
-  layoutTransition: false,
-});
+// definePageMeta({
+//   pageTransition: false,
+//   layoutTransition: false,
+// });
 useHead({
   title: "收货地址 - 个人中心",
   meta: [
@@ -374,12 +374,17 @@ const rules = reactive({
             >
               <ElDivider />
               <!-- 列表 -->
-              <div class="list">
+              <ClientOnly
+                fallback-tag="div"
+                class="list"
+              >
                 <!-- 单项 -->
                 <el-checkbox-group v-model="selectAddress">
-                  <transition-group
-                    tag="div"
-                    name="item-list"
+                  <div
+                    v-auto-animate="{
+                      duration: 300,
+                      easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
+                    }"
                     class="relative"
                     grid="~ cols-2 md:cols-5 gap-4 md:gap-4 "
                   >
@@ -438,9 +443,9 @@ const rules = reactive({
                         ></span>
                       </template>
                     </CardAddressBox>
-                  </transition-group>
+                  </div>
                 </el-checkbox-group>
-              </div>
+              </ClientOnly>
             </div>
             <!-- 按钮 -->
             <transition name="popup">

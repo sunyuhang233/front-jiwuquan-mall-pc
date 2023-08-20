@@ -15,6 +15,7 @@
 		"start:generate": "npx serve .output/public"
 	},
 	"devDependencies": {
+		"@formkit/auto-animate": "^0.7.0",
 		"@kangc/v-md-editor": "^2.3.15",
 		"@pinia-plugin-persistedstate/nuxt": "^1.1.1",
 		"@pinia/nuxt": "^0.4.11",

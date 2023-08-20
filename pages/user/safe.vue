@@ -10,10 +10,10 @@ useHead({
   ],
 });
 // 页面
-definePageMeta({
-  pageTransition: false,
-  layoutTransition: false,
-});
+// definePageMeta({
+//   pageTransition: false,
+//   layoutTransition: false,
+// });
 </script>
 <template>
   <div>

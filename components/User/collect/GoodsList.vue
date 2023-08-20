@@ -145,7 +145,13 @@ const reload = async () => {
             @click="batchCancelCollect"
             size="small"
           >
-            批量取消
+            批量
+            <div
+              hidden
+              md:inline
+            >
+              取消
+            </div>
           </el-button>
         </div>
         <el-button

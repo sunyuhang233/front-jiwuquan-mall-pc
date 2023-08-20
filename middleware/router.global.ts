@@ -10,10 +10,9 @@ export default defineNuxtRouteMiddleware((to) => {
   if (AuthRoute.find(p => p.test(to.path))) {
     if (user.getToken === "" || !user.isLogin) {
       user.showLoginForm = true
-      navigateTo("/")
+      abortNavigation()
     }
   }
-
 })
 
 

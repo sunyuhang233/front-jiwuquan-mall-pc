@@ -152,4 +152,18 @@ const delayOrder = () => {
     transform: scale(1.06);
   }
 }
+
+@media screen and (max-width: 768px) {
+  :deep(.el-step__main) {
+    .el-step__title {
+      font-size: 0.8rem;
+    }
+    .el-step__description {
+      transform: scale(0.8);
+      text-align: center;
+      white-space: nowrap;
+      padding: 0;
+    }
+  }
+}
 </style>

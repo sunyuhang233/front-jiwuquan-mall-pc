@@ -370,9 +370,8 @@ const changeDate = () => {
         </el-button>
       </div>
       <!-- 列表 -->
-      <transition-group
-        tag="div"
-        name="fade-bt-list"
+      <ul
+        v-auto-animate="{ duration: 400, easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.19)' }"
         class="relative"
       >
         <OrderInfoLine
@@ -381,7 +380,7 @@ const changeDate = () => {
           :order="p"
           :key="p.id"
         />
-      </transition-group>
+      </ul>
       <p
         v-show="isNotMore"
         class="w-1/1 py-4"

@@ -55,7 +55,7 @@ onNuxtReady(async () => {
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  /* filter:blur(1rem) grayscale(1); */
+  filter: blur(1rem) grayscale(1);
 }
 
 .layout-enter-active,
@@ -65,6 +65,6 @@ onNuxtReady(async () => {
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
-  /* filter:blur(1rem) grayscale(1); */
+  filter: blur(1rem) grayscale(1);
 }
 </style>

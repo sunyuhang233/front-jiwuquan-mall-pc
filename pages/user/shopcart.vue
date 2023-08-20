@@ -174,9 +174,11 @@ const getAllPrice = computed(() => {
                 size="large"
                 class="relative"
               >
-                <transition-group
-                  tag="div"
-                  name="item-list"
+                <ul
+                  v-auto-animate="{
+                    duration: 300,
+                    easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
+                  }"
                 >
                   <li
                     v-for="p in shop.shopcartList"
@@ -191,7 +193,7 @@ const getAllPrice = computed(() => {
                       </template>
                     </CardShopLine>
                   </li>
-                </transition-group>
+                </ul>
               </el-checkbox-group>
             </el-scrollbar>
           </div>

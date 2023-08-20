@@ -70,7 +70,7 @@
     <!-- 搜索框 -->
     <transition name="fadeInOut">
       <div
-        class="fixed left-0 top-0 w-full h-[100vh] z-1 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
+        class="fixed left-0 top-0 w-full h-[100vh] z-2 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
         v-show="isShowSearch"
         @click="isShowSearch = false"
       ></div>
@@ -118,7 +118,7 @@
         <BtnSwitch />
         <!-- 登陆注册 -->
         <div
-          class="flex flex-col group"
+          class="flex flex-col group z-0"
           v-if="!store.isLogin"
         >
           <!-- 移动端 -->

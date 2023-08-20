@@ -34,7 +34,13 @@ interface IndexMenuType {
         fit="cover"
         style="border-radius: 6px; overflow: hidden"
       />
-      <span class="title truncate min-w-5rem text-center pl-4">{{ data.title }}</span>
+      <i
+        :class="{ 'ml-a': data.children }"
+        v-else
+        i-solar:hashtag-bold-duotone
+        p-2
+      />
+      <span class="title truncate min-w-6rem text-center pl-4">{{ data.title }}</span>
       <span w-2rem></span>
     </template>
     <!-- 嵌套 -->
@@ -43,10 +49,26 @@ interface IndexMenuType {
       v-if="data.children?.length"
     >
       <i
+        v-if="data.icon"
         :class="data.icon"
         p-3
       />
-      <span class="title truncate min-w-5rem text-center pl-4">{{ data.title }}</span>
+      <el-image
+        v-else-if="data.image"
+        loading="lazy"
+        :src="BaseUrlImg + data.image"
+        :alt="data.title"
+        class="w-2em h-2em"
+        fit="cover"
+        style="border-radius: 6px; overflow: hidden"
+      />
+      <i
+        :class="{ 'ml-a': data.children }"
+        v-else
+        i-solar:dialog-2-line-duotone
+        p-2
+      />
+      <span class="title w-5rem truncate text-center">{{ data.title }}</span>
       <span w-2rem></span>
     </template>
     <MenuLine

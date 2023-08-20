@@ -739,7 +739,10 @@ const toBack = () => {
           <!--------------- 头部 ---------------->
           <div class="group flex-row-bt-c mt-1rem mb-2rem select-none">
             <div class="flex items-center">
-              <NuxtLink to="/">
+              <NuxtLink
+                to="/"
+                class="hidden md:block"
+              >
                 <el-image
                   loading="lazy"
                   src="/logo_title.png"
@@ -758,8 +761,12 @@ const toBack = () => {
               >
                 {{ ordersTitle.banner }}
                 <!-- 超时计时器 -->
-                <div v-if="order.status === OrdersStatus.UN_PAID">
-                  ，剩下
+                <div
+                  truncate
+                  inline
+                  v-if="order.status === OrdersStatus.UN_PAID"
+                >
+                  ：
                   <OrderDelayTimer :date="new Date(order.orderInfo.createTime)" />
                 </div>
               </lazy-el-text>
@@ -814,9 +821,11 @@ const toBack = () => {
                 :disabled="!isEdit"
               >
                 <el-scrollbar>
-                  <transition-group
-                    name="item-list"
-                    tag="div"
+                  <ul
+                    v-auto-animate="{
+                      duration: 300,
+                      easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
+                    }"
                     class="flex w-800px md:w-full pb-3"
                   >
                     <OrderAddressBoxSe
@@ -845,7 +854,7 @@ const toBack = () => {
                       <ElIconCirclePlusFilled class="transition-300 w-4em h-4em opacity-40" />
                       <strong class="mt-2 opacity-40 transition-300">添加新地址</strong>
                     </NuxtLink>
-                  </transition-group>
+                  </ul>
                 </el-scrollbar>
               </el-radio-group>
             </div>
@@ -1151,58 +1160,66 @@ const toBack = () => {
                   i-solar:dialog-2-broken
                   mr-2
                 ></i>
-                客服
+                <small
+                  hidden
+                  md:inline
+                >
+                  客服
+                </small>
               </el-text>
             </div>
-            <!-- 左侧菜单 -->
-            <div class="submit cursor-pointer">
-              <!-- 取消订单 -->
-              <el-button
-                size="default"
-                plain
-                v-if="order.status === OrdersStatus.UN_PAID"
-                @click="cancelOrder(order.orderId)"
-              >
-                取消订单
-              </el-button>
-              <!-- 删除订单 -->
-              <el-button
-                type="danger"
-                plain
-                v-if="
-                  order.orderInfo.status === OrdersStatus.REFUND_SUCCESS ||
-                  order.orderInfo.status === OrdersStatus.CANCELED ||
-                  order.orderInfo.status === OrdersStatus.DELAY_CANCELED ||
-                  order.orderInfo.status === OrdersStatus.COMMENTED
-                "
-                @click="deleteOrder(order.orderId)"
-              >
-                删除订单
-              </el-button>
-              <!-- 修改订单 -->
-              <el-button
-                size="default"
-                :type="isUpdate ? 'danger' : ''"
-                plain
-                v-if="order.status === OrdersStatus.UN_PAID || order.status === OrdersStatus.PAID"
-                @click="isUpdate = !isUpdate"
-              >
-                {{ isUpdate ? "取消修改" : "修改订单" }}
-              </el-button>
-              <!-- 申请退款 -->
-              <el-button
-                size="default"
-                type="danger"
-                plain
-                v-if="
-                  order.status === OrdersStatus.PAID ||
-                  order.status === OrdersStatus.RECEIVED ||
-                  order.status === OrdersStatus.DELIVERED
-                "
-                @click="pushRefundOrder(order.orderId)"
-              >
-                申请退款
-              </el-button>
+            <!-- 右侧菜单 -->
+            <div class="submit cursor-pointer flex items-center">
+              <i class="fold block md:hidden i-solar:menu-dots-bold-duotone w-6 h-6 mr-3" />
+              <div class="flex-row-c-c hidden md:flex mr-3 submit-lbtns">
+                <!-- 取消订单 -->
+                <el-button
+                  size="default"
+                  plain
+                  v-if="order.status === OrdersStatus.UN_PAID"
+                  @click="cancelOrder(order.orderId)"
+                >
+                  取消订单
+                </el-button>
+                <!-- 删除订单 -->
+                <el-button
+                  type="danger"
+                  plain
+                  v-if="
+                    order.orderInfo.status === OrdersStatus.REFUND_SUCCESS ||
+                    order.orderInfo.status === OrdersStatus.CANCELED ||
+                    order.orderInfo.status === OrdersStatus.DELAY_CANCELED ||
+                    order.orderInfo.status === OrdersStatus.COMMENTED
+                  "
+                  @click="deleteOrder(order.orderId)"
+                >
+                  删除订单
+                </el-button>
+                <!-- 修改订单 -->
+                <el-button
+                  size="default"
+                  :type="isUpdate ? 'danger' : ''"
+                  plain
+                  v-if="order.status === OrdersStatus.UN_PAID || order.status === OrdersStatus.PAID"
+                  @click="isUpdate = !isUpdate"
+                >
+                  {{ isUpdate ? "取消修改" : "修改订单" }}
+                </el-button>
+                <!-- 申请退款 -->
+                <el-button
+                  size="default"
+                  type="danger"
+                  plain
+                  v-if="
+                    order.status === OrdersStatus.PAID ||
+                    order.status === OrdersStatus.RECEIVED ||
+                    order.status === OrdersStatus.DELIVERED
+                  "
+                  @click="pushRefundOrder(order.orderId)"
+                >
+                  申请退款
+                </el-button>
+              </div>
               <!-- 提交 -->
               <el-button
                 @click="
@@ -1252,7 +1269,7 @@ const toBack = () => {
 <style scoped lang="scss">
 .address-list {
   :deep(.el-radio-group) {
-    font-size: medium;
+    font-size: 1rem;
     .el-radio {
       position: absolute;
       right: 0;
@@ -1303,6 +1320,7 @@ const toBack = () => {
 // 备注
 .remark {
   :deep(.el-textarea__inner) {
+    font-size: 0.8rem;
     box-shadow: none;
     &:focus,
     &:hover {
@@ -1359,6 +1377,28 @@ const toBack = () => {
   :deep(.el-radio) {
     .el-radio__label {
       display: none;
+    }
+  }
+}
+
+// 按钮移动端隐藏
+.submit {
+  &:hover,
+  &:active {
+    position: relative;
+    .submit-lbtns {
+      border-radius: 10px;
+      display: flex;
+      bottom: 2rem;
+      right: 4rem;
+      position: absolute;
+      background-color: #8f8f8f2a;
+      padding: 1rem;
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      :deep(.el-button) {
+        margin: 0.5rem 0;
+      }
     }
   }
 }

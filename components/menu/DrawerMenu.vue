@@ -45,7 +45,9 @@ const isCollapse = ref<boolean>(false);
 </script>
 <template>
   <div
-    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
+    transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
+    class="menu md:shadow-none fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
+    :class="{ '-translate-x-full': isCollapse }"
   >
     <ClientOnly>
       <!-- 菜单 -->
@@ -56,85 +58,58 @@ const isCollapse = ref<boolean>(false);
       >
         <!-- 顶部 -->
         <div
-          class="w-full flex-row-c-c justify-between flex-wrap transition-300 hover:bg-transparent px-4"
-          :class="{ 'flex-col items-center': isFold }"
+          py-4
+          border-default
+          border-0
+          border-b-1px
+          class="w-full flex-row-c-c flex-wrap transition-300 hover:bg-transparent px-4"
         >
-          <div class="home mt-6 transition-300">
-            <NuxtLink
-              to="/"
-              flex-row-c-c
-              class="group"
-            >
-              <img
-                src="@/assets/images/logo/logo.svg"
-                w-1.6rem
-                h-1.6rem
-              />
-            </NuxtLink>
-          </div>
+          <img
+            src="@/assets/images/logo/logo.svg"
+            class="inline-block mr-a"
+            w-1.6rem
+            h-1.6rem
+          />
           <span
+            cursor-pointer
             @click="isFold = !isFold"
-            class="mt-6 p-1 transition-300"
-          >
-            <i class="i-solar:hamburger-menu-line-duotone"></i>
-          </span>
-        </div>
-        <!-- 菜单 -->
-        <!-- <template
-          v-for="p in menuList"
-          :key="p.url"
-        >
-          <el-menu-item
-            v-if="p.children.length === 0"
-            :index="p.url"
+            class="transition-300 m-1"
           >
             <i
-              :class="p.icon"
-              p-3
-            />
-            <span class="title truncate min-w-4rem text-center">{{ p.title }}</span>
-            <span w-2rem></span>
-          </el-menu-item>
-
-          <el-sub-menu
-            v-else
-            :index="p.url"
-          >
-            <template #title>
-              <i
-                :class="p.icon"
-                p-3
-              />
-              <span class="title truncate min-w-4rem text-center mr-4">{{ p.title }}</span>
-              <span w-2rem></span>
-            </template>
-            <component
-              v-for="c in p.children"
-              :is="c.children.length ? ElSubMenu : ElMenuItem"
-              :index="c.url"
-              :key="c.url"
-            >
-              <template #title>
-                <el-image
-                  v-if="c.image"
-                  loading="lazy"
-                  :src="BaseUrlImg + c.image"
-                  :alt="p.title"
-                  class="w-2em h-2em"
-                  fit="cover"
-                  style="border-radius: 6px; overflow: hidden"
-                />
-                <span class="title truncate min-w-4rem text-center">{{ c.title }}</span>
-              </template>
-            </component>
-          </el-sub-menu>
-        </template>-->
+              inline-block
+              class="i-solar:hamburger-menu-line-duotone"
+              w-6
+              h-6
+            ></i>
+          </span>
+        </div>
+        <!-- 递归生成菜单栏 -->
         <MenuLine
           :data="data"
           v-for="data in menuList"
           :key="data.url"
         />
       </el-menu>
+      <!-- 折叠隐藏 -->
+      <div
+        @click="isCollapse = !isCollapse"
+        rounded-r-8px
+        cursor-pointer
+        hover:-translate-x-1
+        flex-row-c-c
+        shadow-sm
+        shadow-indigo-600
+        transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
+        class="absolute bottom-2rem -right-3rem -z-1 w-2.8rem h-3rem bg-[var(--el-color-primary)] -translate-x-2"
+      >
+        <i
+          transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
+          :class="{ 'rotate-180': isCollapse }"
+          i-solar:alt-arrow-left-bold
+          p-3
+          text-light
+        ></i>
+      </div>
     </ClientOnly>
   </div>
 </template>
@@ -245,5 +220,8 @@ const isCollapse = ref<boolean>(false);
     z-index: -1;
     transition: $transition-delay;
   }
+}
+:deep(.el-sub-menu__icon-arrow) {
+  right: 0;
 }
 </style>

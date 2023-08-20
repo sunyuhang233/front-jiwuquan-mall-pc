@@ -7,8 +7,7 @@ export const useAddressStore = defineStore('address', () => {
   const resetRequestList = async (token: string): Promise<boolean> => {
     const res = await getAddressList(token);
     if (res.code === StatusCode.SUCCESS) {
-      addressList.value.splice(0)
-      addressList.value.push(...res.data.sort((a, b) => b.isDefault - a.isDefault));
+      addressList.value = res.data.sort((a, b) => b.isDefault - a.isDefault);
       return Promise.resolve(true);
     } else {
       return Promise.resolve(false);

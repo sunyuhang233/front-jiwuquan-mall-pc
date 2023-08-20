@@ -2,7 +2,6 @@
   <ElButton
     @click="$emit('reload')"
     class="btn"
-    w-2.4em
     round
   >
     <span class="hidden truncate md:inline overflow-hidden">刷新</span>
@@ -26,7 +25,9 @@
   }
 
   &:hover {
-    width: 6em;
+    span {
+      width: 3em;
+    }
   }
   &:hover span,
   &:focus span {

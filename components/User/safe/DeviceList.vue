@@ -35,7 +35,7 @@ const reload = async () => {
   setTimeout(() => {
     isLoading.value = false;
     ElMessage.success(flag ? "刷新成功🎉！" : "刷新失败，请稍后重试！");
-  }, 500);
+  }, 300);
 };
 
 // 用户下线
@@ -91,9 +91,11 @@ const exitLogin = (ua?: string) => {
     >
       <el-scrollbar height="400px">
         <!-- 列表 -->
-        <transition-group
-          name="fade-lr-list"
-          tag="div"
+        <div
+          v-auto-animate="{
+            duration: 300,
+            easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
+          }"
           class="grid relative grid-cols-1 md:grid-cols-3 grid-gap-3"
         >
           <UserSafeDeviceCard
@@ -114,7 +116,7 @@ const exitLogin = (ua?: string) => {
               下线
             </el-button>
           </UserSafeDeviceCard>
-        </transition-group>
+        </div>
       </el-scrollbar>
     </div>
   </div>
