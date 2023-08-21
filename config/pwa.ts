@@ -28,10 +28,10 @@ export const pwa: ModuleOptions = {
       { "purpose": "any", "sizes": "any", "src": "glowing_star.svg", "type": "image/svg+xml" }
     ],
     related_applications: [
-      {
-        platform: "play",
-        url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
-      }
+      // {
+      //   platform: "play",
+      //   url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      // }
     ]
   },
   workbox: {
