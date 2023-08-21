@@ -14,15 +14,18 @@ export const pwa: ModuleOptions = {
     display: "standalone",
     name: appName,
     short_name: appName,
+    start_url: scope,
     description: appDescription,
     theme_color: '#5d33f6',
     icons: [
       {
-        src: 'logo.png',
+        src: '/logo.png',
         sizes: 'any',
         type: 'image/png',
-        purpose: 'any'
+        purpose: 'maskable '
       }
+      ,
+      { "purpose": "any", "sizes": "any", "src": "glowing_star.svg", "type": "image/svg+xml" }
     ],
     related_applications: [
       {
@@ -41,7 +44,7 @@ export const pwa: ModuleOptions = {
           cacheName: 'google-fonts-cache',
           expiration: {
             maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 60 // <== 365 days
+            maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
           },
           cacheableResponse: {
             statuses: [0, 200]
@@ -55,5 +58,4 @@ export const pwa: ModuleOptions = {
   devOptions: {
     enabled: true,
   },
-
 }
