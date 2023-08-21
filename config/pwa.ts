@@ -11,42 +11,49 @@ export const pwa: ModuleOptions = {
     id: scope,
     scope,
     background_color: "#fff",
-    start_url: "/",
     display: "standalone",
     name: appName,
     short_name: appName,
     description: appDescription,
-    theme_color: '#000000',
+    theme_color: '#5d33f6',
     icons: [
       {
-        src: './logo.png',
-        sizes: '436x436',
+        src: 'logo.png',
+        sizes: 'any',
         type: 'image/png',
+        purpose: 'any'
       }
     ],
+    related_applications: [
+      {
+        platform: "play",
+        url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      }
+    ]
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,txt,png,ico,svg}'],
-    navigateFallbackDenylist: [/^\/api\//],
-    navigateFallback: '/',
-
-    cleanupOutdatedCaches: true,
+    globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,ttf,woff,woff2}'],
     runtimeCaching: [
-    ],
+      {
+        urlPattern: "/^https://fonts.googleapis.com/.* /i",
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'google-fonts-cache',
+          expiration: {
+            maxEntries: 10,
+            maxAgeSeconds: 60 * 60 * 24 * 60 // <== 365 days
+          },
+          cacheableResponse: {
+            statuses: [0, 200]
+          }
+        }
+      },
+    ]
   },
   registerWebManifestInRouteRules: true,
   writePlugin: true,
   devOptions: {
-    enabled: process.env.VITE_PLUGIN_PWA === 'true',
-    navigateFallback: scope,
+    enabled: true,
   },
-  // related_applications: [
-  //   {
-  //     platform: "web"
-  //   },
-  //   {
-  //     platform: "play",
-  //     url: "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
-  //   }
-  // ]
+
 }

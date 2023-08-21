@@ -130,7 +130,7 @@ export default defineNuxtConfig({
     importStyle: 'scss',
     themes: ['dark'],
   },
-  // 断网启动
+  // pwa
   pwa,
   // nuxt开发者工具
   devtools: {

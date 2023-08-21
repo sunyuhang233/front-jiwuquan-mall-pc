@@ -14,7 +14,7 @@ import { appName } from "@/constants/index";
         src="@/assets/images/logo/logo.png"
         class="w-2rem h-2rem mr-3"
       />
-      {{ appName }}
+      极物圈
     </h2>
   </div>
 </template>

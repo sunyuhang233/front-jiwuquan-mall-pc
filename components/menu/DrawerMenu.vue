@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
 import { CommCategory } from "@/composables/api/community";
-import { ElMenuItem, ElSubMenu } from "element-plus";
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_isFold", true);
 // 路由
@@ -66,7 +65,7 @@ const isCollapse = ref<boolean>(false);
         >
           <img
             src="@/assets/images/logo/logo.svg"
-            class="inline-block mr-a"
+            class="inline-block m-0.2rem mr-a"
             w-1.6rem
             h-1.6rem
           />
@@ -78,8 +77,8 @@ const isCollapse = ref<boolean>(false);
             <i
               inline-block
               class="i-solar:hamburger-menu-line-duotone"
-              w-6
-              h-6
+              w-7
+              h-7
             ></i>
           </span>
         </div>
@@ -100,7 +99,7 @@ const isCollapse = ref<boolean>(false);
         shadow-sm
         shadow-indigo-600
         transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
-        class="absolute bottom-2rem -right-3rem -z-1 w-2.8rem h-3rem bg-[var(--el-color-primary)] -translate-x-2"
+        class="absolute bottom-2rem -right-2rem -z-1 w-2rem pl-1 h-3rem bg-[var(--el-color-primary)] -translate-x-2"
       >
         <i
           transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
@@ -119,7 +118,6 @@ const isCollapse = ref<boolean>(false);
   user-select: none;
   top: $top-nav-height;
   height: calc(100vh - $top-nav-height);
-
   :deep(.el-menu) {
     height: 100%;
 
@@ -161,6 +159,7 @@ const isCollapse = ref<boolean>(false);
 
     .el-menu-item-group {
       .el-menu-item {
+        overflow: hidden;
         background-color: #8181811a;
         opacity: 0.9;
 
@@ -223,5 +222,6 @@ const isCollapse = ref<boolean>(false);
 }
 :deep(.el-sub-menu__icon-arrow) {
   right: 0;
+  margin-top: -8px;
 }
 </style>
