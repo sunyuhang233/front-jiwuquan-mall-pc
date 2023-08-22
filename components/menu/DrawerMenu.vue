@@ -19,18 +19,23 @@ const toMenuTypeFn = (p: CommCategory) => {
   }
   return arr;
 };
-const commMenu = toRaw(commList.data.value?.data || []).map((p) => {
-  if (p.isShow) {
-    return toMenuTypeFn(p);
-  }
-}) as IndexMenuType[];
 
 const menuList = <IndexMenuType[]>[
   { url: "/", icon: "i-solar:home-2-bold", title: "首页", children: [] },
   { url: "/community", icon: "i-solar:ufo-3-bold-duotone", title: "极物圈", children: [] },
-  { url: "/category", icon: "i-solar:widget-5-bold-duotone", title: "圈子", children: commMenu },
+  {
+    url: "/category",
+    icon: "i-solar:widget-5-bold-duotone",
+    title: "圈子",
+    children: toRaw(commList.data.value?.data || []).map((p) => {
+      if (p.isShow) {
+        return toMenuTypeFn(p);
+      }
+    }),
+  },
   { url: "/setting", icon: "i-solar:settings-linear", title: "设置", children: [] },
 ];
+
 interface IndexMenuType {
   url: string;
   icon: string;
@@ -49,46 +54,50 @@ const isCollapse = ref<boolean>(false);
     :class="{ '-translate-x-full': isCollapse }"
   >
     <ClientOnly>
-      <!-- 菜单 -->
-      <el-menu
-        :router="true"
-        :default-active="route.path"
-        :collapse="isFold"
-      >
-        <!-- 顶部 -->
-        <div
-          py-4
-          border-default
-          border-0
-          border-b-1px
-          class="w-full flex-row-c-c flex-wrap transition-300 hover:bg-transparent px-4"
+      <el-scrollbar height="100%">
+        <!-- 菜单 -->
+        <el-menu
+          class="menu-first"
+          :router="true"
+          :default-active="route.path"
+          :collapse="isFold"
         >
-          <img
-            src="@/assets/images/logo/logo.svg"
-            class="inline-block m-0.2rem mr-a"
-            w-1.6rem
-            h-1.6rem
-          />
-          <span
-            cursor-pointer
-            @click="isFold = !isFold"
-            class="transition-300 m-1"
+          <!-- 顶部 -->
+          <div
+            border-default
+            border-0
+            border-b-1px
+            class="w-full flex-row-c-c flex-wrap transition-300 hover:bg-transparent px-4"
           >
-            <i
-              inline-block
-              class="i-solar:hamburger-menu-line-duotone"
-              w-7
-              h-7
-            ></i>
-          </span>
-        </div>
-        <!-- 递归生成菜单栏 -->
-        <MenuLine
-          :data="data"
-          v-for="data in menuList"
-          :key="data.url"
-        />
-      </el-menu>
+            <img
+              my-3
+              src="@/assets/images/logo/logo_dark.png"
+              class="inline-block m-0.2rem mr-a"
+              loading="lazy"
+              w-1.6rem
+              h-1.6rem
+            />
+            <span
+              py-2
+              cursor-pointer
+              @click="isFold = !isFold"
+            >
+              <i
+                inline-block
+                class="i-solar:hamburger-menu-line-duotone"
+                w-6
+                h-6
+              />
+            </span>
+          </div>
+          <!-- 递归生成菜单栏 -->
+          <MenuLine
+            :data="data"
+            v-for="data in menuList"
+            :key="data.url"
+          />
+        </el-menu>
+      </el-scrollbar>
       <!-- 折叠隐藏 -->
       <div
         @click="isCollapse = !isCollapse"
@@ -118,8 +127,8 @@ const isCollapse = ref<boolean>(false);
   user-select: none;
   top: $top-nav-height;
   height: calc(100vh - $top-nav-height);
-  :deep(.el-menu) {
-    height: 100%;
+  :deep(.el-menu).menu-first {
+    min-height: calc(100vh - $top-nav-height);
 
     .el-sub-menu__title,
     .el-menu-item {

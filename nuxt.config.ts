@@ -3,7 +3,7 @@ import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
   // ssr: process.env.NODE_ENV !== "development",
-  ssr: true,
+  ssr: false,
   build: {
     transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
   },
@@ -21,7 +21,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     // pwa
     '@vite-pwa/nuxt',
-    // eslint
   ],
   // 全局变量
   runtimeConfig: {
@@ -93,7 +92,6 @@ export default defineNuxtConfig({
       'defineStore', // import { defineStore } from 'pinia',
     ],
   },
-
   // pinia持久化到会话存储
   piniaPersistedstate: {
     storage: "localStorage",

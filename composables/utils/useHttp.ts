@@ -71,8 +71,6 @@ export function httpRequest<T = unknown>(
         case StatusCode.BUSY_ERR:
           msg = "服务器繁忙，请稍后重试！";
           break;
-        default:
-          break;
       }
       if (msg !== "") {
         // 组件

@@ -17,9 +17,10 @@
         mx-2
         to="/"
         flex-row-c-c
+        class="relative"
       >
         <img
-          w-42px
+          w-2.4rem
           object-contain
           group-hover:opacity-85
           transition-300
@@ -29,7 +30,7 @@
           dark:hidden
         />
         <img
-          w-42px
+          w-2.4rem
           object-contain
           group-hover:opacity-85
           transition-300
@@ -42,11 +43,11 @@
           transition-300
           group-hover:block
           hidden
-          w-32px
-          h-32px
+          w-1.6rem
+          h-1.6rem
           i-solar:home-2-bold
           absolute
-          left-9
+          left-1
           style="color: var(--el-text-color-primary)"
         ></span>
       </NuxtLink>
