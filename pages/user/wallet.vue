@@ -65,7 +65,7 @@ useHead({
               gap-12"
               md:grid="
               ~
-              cols-[4fr_3fr]
+              cols-[3fr_4fr]
               gap-8
               items-stretch
               "

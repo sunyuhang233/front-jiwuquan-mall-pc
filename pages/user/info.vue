@@ -21,25 +21,29 @@ const user = useUserStore();
       name="user"
       :menu="['back']"
     >
-      <div v-show="user.isLogin">
-        <!-- 壁纸 -->
-        <UserInfoBgToggle />
-        <div class="layout-default flex animate-[fade-in_.3s_ease]">
-          <div class="flex-1 flex flex-wrap">
-            <!-- 用户头像 -->
-            <div class="avatars relative -top-6em flex-1 md:pr-4">
-              <UserInfoLine />
-              <div class="m-2">
-                <UserInfoTabs />
+      <div>
+        <ClientOnly>
+          <div v-if="user.isLogin">
+            <!-- 壁纸 -->
+            <UserInfoBgToggle />
+            <div class="layout-default flex animate-[fade-in_.3s_ease]">
+              <div class="flex-1 flex flex-wrap">
+                <!-- 用户头像 -->
+                <div class="avatars relative -top-6em flex-1 md:pr-4">
+                  <UserInfoLine />
+                  <div class="m-2">
+                    <UserInfoTabs />
+                  </div>
+                </div>
+                <!-- 右侧 -->
+                <div class="v-card shadow-sm">
+                  <!-- 签到 -->
+                  <UserInfoSigninCard />
+                </div>
               </div>
             </div>
-            <!-- 右侧 -->
-            <div class="v-card shadow-sm">
-              <!-- 签到 -->
-              <UserInfoSigninCard />
-            </div>
           </div>
-        </div>
+        </ClientOnly>
       </div>
     </NuxtLayout>
   </div>
