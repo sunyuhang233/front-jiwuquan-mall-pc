@@ -35,3 +35,8 @@ const { width } = defineProps({
   },
 });
 </script>
+<style lang="scss" scoped>
+:deep(.swiper-cards) {
+  overflow: hidden;
+}
+</style>

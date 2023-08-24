@@ -7,6 +7,7 @@ import {
   BillsTimeTotalDTO,
   CurrencyType,
 } from "@/composables/api/user/bills";
+import { graphic } from "echarts";
 // @ts-ignore 引入 vue-echarts 组件
 import VChart, { THEME_KEY } from "vue-echarts";
 provide(THEME_KEY, useColorMode());
@@ -27,9 +28,10 @@ const timeTypeList = ref([
   { label: "按月", value: TimeType.Month },
   { label: "按年", value: TimeType.Year },
 ]);
+
 // echarts配置 图表数据
 const option = ref({
-  color: ["#0bdb85", "#fc3030"],
+  color: ["#0bdb85", "#fc2929"],
   title: {
     textStyle: {
       fontFamily: "Alimama",
@@ -68,12 +70,38 @@ const option = ref({
       data: computed(() => inData.value.map((p) => p.total)),
       type: "line",
       smooth: true,
+      areaStyle: {
+        opacity: 0.8,
+        color: new graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 0,
+            color: "rgba(11, 219, 133,0.5)",
+          },
+          {
+            offset: 1,
+            color: "rgba(22, 219, 133,0.1)",
+          },
+        ]),
+      },
       stack: "x",
     },
     {
       name: "支出",
       data: computed(() => outData.value.map((p) => p.total)),
       type: "line",
+      areaStyle: {
+        opacity: 0.8,
+        color: new graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 0,
+            color: "rgba(252, 41, 41,0.4)",
+          },
+          {
+            offset: 1,
+            color: "rgba(252, 41, 41,0.1)",
+          },
+        ]),
+      },
       smooth: true,
       stack: "x",
     },
@@ -128,13 +156,21 @@ onReload();
         </el-select>
       </div>
     </h3>
-
-    <!-- 表格 -->
-    <VChart
-      class="w-full h-380px flex-row-c-c overflow-hidden rounded-12px"
-      v-loading="isLoading"
-      :option="option"
-    />
+    <div
+      w-full
+      v-if="!isLoading"
+      h-380px
+      flex-row-c-c
+      rounded-12px
+      overflow-hidden
+    >
+      <!-- 表格 -->
+      <VChart
+        class="w-full h-380px flex-row-c-c rounded-12px"
+        v-loading="isLoading"
+        :option="option"
+      />
+    </div>
   </div>
 </template>
 <style scoped lang="scss">

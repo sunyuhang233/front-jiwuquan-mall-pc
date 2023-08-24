@@ -40,13 +40,14 @@ onNuxtReady(async () => {
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
-  <FormUserDialog />
-  <NuxtPage />
-  <Transition name="fade">
-    <OtherLoading v-show="isLoading" />
-  </Transition>
+  <div>
+    <Transition name="fade">
+      <OtherLoading v-show="isLoading" />
+    </Transition>
+    <NuxtPage />
+    <FormUserDialog />
+  </div>
 </template>
-
 <style>
 .page-enter-active,
 .page-leave-active {

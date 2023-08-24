@@ -18,8 +18,8 @@
       </template>
     </MenuHeaderMenuSe>
     <div class="flex">
+      <!-- 左侧边导航 -->
       <ClientOnly>
-        <!-- 左侧边导航 -->
         <MenuCollMenu
           v-if="leftMenu"
           class="-translate-x-full transition-300"
@@ -28,11 +28,9 @@
         />
       </ClientOnly>
       <!-- 内容 -->
-      <ClientOnly>
-        <div class="flex-1 animate-fade-in animate-duration-300">
-          <slot name="default"></slot>
-        </div>
-      </ClientOnly>
+      <div class="flex-1 animate-fade-in animate-duration-200">
+        <slot></slot>
+      </div>
     </div>
     <!-- 右下角功能区 -->
     <ClientOnly>

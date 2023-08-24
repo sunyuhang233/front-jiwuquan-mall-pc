@@ -57,11 +57,13 @@ useSeoMeta({
 // 定义页面元数据
 definePageMeta({
   key: (route) => route.path,
+  layout: false,
 });
 </script>
 <template>
   <div>
     <NuxtLayout
+      name="second"
       :menu="['shopcart', 'back']"
       :left-menu="false"
     >

@@ -1,28 +1,30 @@
 <template>
-  <ClientOnly>
-    <transition name="fadeInOutShadow">
-      <div
-        class="forms"
-        @keyup.esc="exitForm"
-        @click.self="exitForm"
-        v-if="user.showLoginForm || user.showRegisterForm"
-        relative
-      >
-        <!-- 登录 -->
-        <transition name="filp-scale-list">
-          <FormLoginForm v-show="user.showLoginForm" />
-        </transition>
-        <!-- 注册 -->
-        <transition name="filp-scale-list">
-          <FormRegisterForm v-if="user.showRegisterForm" />
-        </transition>
-        <!-- 找回密码 -->
-        <transition name="filp-scale-list">
-          <FormRegisterForm v-if="user.showUpdatePwd" />
-        </transition>
-      </div>
-    </transition>
-  </ClientOnly>
+  <div>
+    <ClientOnly>
+      <transition name="fadeInOutShadow">
+        <div
+          class="forms"
+          @keyup.esc="exitForm"
+          @click.self="exitForm"
+          v-if="user.showLoginForm || user.showRegisterForm"
+          relative
+        >
+          <!-- 登录 -->
+          <transition name="filp-scale-list">
+            <FormLoginForm v-show="user.showLoginForm" />
+          </transition>
+          <!-- 注册 -->
+          <transition name="filp-scale-list">
+            <FormRegisterForm v-if="user.showRegisterForm" />
+          </transition>
+          <!-- 找回密码 -->
+          <transition name="filp-scale-list">
+            <FormRegisterForm v-if="user.showUpdatePwd" />
+          </transition>
+        </div>
+      </transition>
+    </ClientOnly>
+  </div>
 </template>
 <script lang="ts" setup>
 const user = useUserStore();

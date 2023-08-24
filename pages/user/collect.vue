@@ -8,11 +8,8 @@ useHead({
     },
   ],
 });
-// 页面过渡
-definePageMeta({
-  pageTransition: false,
-  layoutTransition: false,
-});
+definePageMeta({ layout: false });
+
 const user = useUserStore();
 
 // 功能

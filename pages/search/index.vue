@@ -93,6 +93,11 @@ const clickTag = (val: string, i: number) => {
   keyWord.value = val;
   onSearch();
 };
+
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>

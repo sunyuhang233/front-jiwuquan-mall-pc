@@ -48,6 +48,9 @@ const billsPage = ref<IPage<BillsInfoVO>>({
   current: -1,
 });
 
+const noMore = computed(() => {
+  return billsPage.value.total > 0 && billsPage.value.pages === billsPage.value.current;
+});
 const dto = computed(() => {
   return opt.isNowDay
     ? { startTime: dayStartEndStr.value[0], endTime: dayStartEndStr.value[1] }
@@ -57,7 +60,7 @@ const dto = computed(() => {
  * 请求api
  */
 const getBillsPageApi = async () => {
-  if (noMore.value) {
+  if (isLoading.value || noMore.value) {
     return;
   }
   isLoading.value = true;
@@ -95,9 +98,6 @@ const reloadBills = async () => {
     isRefresh.value = false;
   }, 400);
 };
-const noMore = computed(() => {
-  return billsPage.value.total === 0 || billsList.value.length === billsPage.value.total;
-});
 watch(selectDay, (val) => {
   if (isLoading.value) {
     return;
@@ -116,6 +116,8 @@ watch(
   },
   { deep: true }
 );
+
+getBillsPageApi();
 </script>
 <template>
   <div class="bills-tabs shadow p-5 border-none grid grid-cols-1 rounded-14px v-card">
@@ -201,15 +203,12 @@ watch(
           </small>
         </div>
         <!-- 滚动内容 -->
-        <el-scrollbar
-          height="20rem"
-          wrap-class="overflow-x-hidden"
-        >
+        <el-scrollbar height="20rem">
           <div
             v-infinite-scroll="getBillsPageApi"
             :infinite-scroll-immediate="true"
-            :infinite-scroll-delay="200"
-            :infinite-scroll-distance="30"
+            :infinite-scroll-delay="400"
+            :infinite-scroll-distance="50"
           >
             <UserWalBillsCard
               v-for="p in billsList"
@@ -218,9 +217,10 @@ watch(
             />
             <small
               class="block opacity-80 text-center my-4 w-full select-none"
-              :class="{ 'animate-state': isLoading }"
+              v-show="isLoading"
+              animate-pulse
             >
-              {{ noMore ? "没有更多数据了" : "加载中..." }}
+              加载中...
             </small>
           </div>
         </el-scrollbar>

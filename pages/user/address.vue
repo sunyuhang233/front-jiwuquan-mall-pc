@@ -11,10 +11,8 @@ import {
 } from "~/composables/api/user/address";
 
 // 页面
-// definePageMeta({
-//   pageTransition: false,
-//   layoutTransition: false,
-// });
+definePageMeta({ layout: false });
+
 useHead({
   title: "收货地址 - 个人中心",
   meta: [

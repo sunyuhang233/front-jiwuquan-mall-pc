@@ -52,6 +52,11 @@ const getEventStatus = computed(() => {
 //     }
 //   }
 // });
+
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>

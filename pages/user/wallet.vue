@@ -9,11 +9,11 @@ useHead({
     },
   ],
 });
-// 页面
-// definePageMeta({
-//   pageTransition: false,
-//   layoutTransition: false,
-// });
+// 定义页面元数据
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>
@@ -23,79 +23,81 @@ useHead({
       :footer="false"
       class="p-0"
     >
-      <ClientOnly>
-        <div
-          class="layout-default py-0"
-          v-if="user.isLogin"
-        >
-          <!-- 标题 -->
+      <div>
+        <ClientOnly>
           <div
-            class="title animate-[fadeInDown_0.6s] w-full"
-            pt-8
-            pb-6
+            class="layout-default py-0"
+            v-if="user.isLogin"
           >
-            <span
-              font-600
-              text-2xl
-              tracking-1
-              flex
-            >
-              你的钱包
-              <el-text
-                style="font-size: 1.04em"
-                type="info"
-              >
-                账单
-              </el-text>
-            </span>
-          </div>
-          <!-- 下方 -->
-          <div
-            class="animate-[fade-in_.3s] grid grid-cols-1 md:grid-cols-[8fr_3fr] grid-gap-8"
-            grid-justify-items-stretch
-            grid-items-stretch
-          >
-            <!-------------1------------>
+            <!-- 标题 -->
             <div
-              w-full
-              grid="
+              class="title animate-[fadeInDown_0.6s] w-full"
+              pt-8
+              pb-6
+            >
+              <span
+                font-600
+                text-2xl
+                tracking-1
+                flex
+              >
+                你的钱包
+                <el-text
+                  style="font-size: 1.04em"
+                  type="info"
+                >
+                  账单
+                </el-text>
+              </span>
+            </div>
+            <!-- 下方 -->
+            <div
+              class="animate-[fade-in_.3s] grid grid-cols-1 md:grid-cols-[8fr_3fr] grid-gap-8"
+              grid-justify-items-stretch
+              grid-items-stretch
+            >
+              <!-------------1------------>
+              <div
+                w-full
+                grid="
               ~
               cols-1
               items-stretch
               gap-12"
-              md:grid="
+                md:grid="
               ~
               cols-[3fr_4fr]
               gap-8
               items-stretch
               "
-            >
-              <!-- 钱包 -->
-              <div
-                class="z-0 overflow-x-hidden md:overflow-x-visible flex items-center relative w-full md:w-full md:max-w-380px"
               >
-                <UserWalSwiperCarts />
-              </div>
-              <!-- 统计卡片 -->
-              <UserWalTotalList
-                grid="
+                <!-- 钱包 -->
+                <div
+                  class="z-0 overflow-x-hidden md:overflow-x-visible flex items-center relative w-full md:w-full md:max-w-380px"
+                >
+                  <UserWalSwiperCarts />
+                </div>
+                <!-- 统计卡片 -->
+                <UserWalTotalList
+                  grid="
                 ~
                 cols-1 gap-4 items-stretch"
-                md:grid="
+                  md:grid="
                 ~
                 cols-2 gap-6 items-stretch"
-              />
-              <!-- 套餐 -->
-              <UserWalCombo class="w-full" />
-              <!-- 统计表 -->
-              <UserWalTable class="h-360px md:h-full" />
+                />
+                <!-- 套餐 -->
+                <UserWalCombo class="w-full" />
+                <!-- 统计表 -->
+                <UserWalTable class="h-360px md:h-full" />
+              </div>
+              <!-------------2------------>
+              <!-- 账单和日历 -->
+              <UserWalBillsTab />
             </div>
-            <!-------------2------------>
-            <!-- 账单和日历 -->
-            <UserWalBillsTab />
           </div>
-        </div>
-      </ClientOnly>
+        </ClientOnly>
+      </div>
     </NuxtLayout>
   </div>
 </template>

@@ -84,6 +84,11 @@ const onSubmit = async () => {
   });
   isLoading.value = false;
 };
+
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>

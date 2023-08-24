@@ -21,6 +21,11 @@ const reload = () => {
     isLoading.value = false;
   }, 300);
 };
+
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>

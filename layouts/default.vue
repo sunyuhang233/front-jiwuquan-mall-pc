@@ -5,9 +5,9 @@
       class="sticky top-0 left-0 z-1001"
       v-if="header"
     />
+    <!-- 左侧边导航 -->
     <div class="flex">
       <ClientOnly>
-        <!-- 左侧边导航 -->
         <MenuDrawerMenu v-if="leftMenu" />
       </ClientOnly>
       <!-- 内容 -->
