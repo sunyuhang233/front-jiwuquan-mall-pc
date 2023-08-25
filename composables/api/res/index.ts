@@ -1,6 +1,6 @@
 import * as qiniu from 'qiniu-js';
-import { Config, Extra, UploadProgress } from 'qiniu-js/esm/upload/base';
-import { PartialObserver } from 'qiniu-js/esm/utils/observable';
+import type { Config, Extra, UploadProgress } from 'qiniu-js/esm/upload/base';
+import type { PartialObserver } from 'qiniu-js/esm/utils/observable';
 import { Result } from 'types/result';
 /**
  * @param file 上传文件

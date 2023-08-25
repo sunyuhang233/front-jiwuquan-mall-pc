@@ -5,9 +5,9 @@ import { getBaseUrl } from "./toggleDev";
 type Methods = "GET" | "POST" | "DELETE" | "PUT";
 export const BaseUrl = getBaseUrl;
 // 图片
-export const BaseUrlImg = BaseUrl + "/res/image/";
-export const BaseUrlVideo = BaseUrl + "/res/video/";
-export const BaseUrlFile = BaseUrl + "/res/file/";
+export const BaseUrlImg = BaseUrl + '/res/'
+export const BaseUrlVideo = BaseUrl + '/res/'
+export const BaseUrlFile = BaseUrl + '/res/'
 export const AuthKey = "Authorization";
 
 export interface Result<T> {
