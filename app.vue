@@ -6,6 +6,7 @@ useHead({
 // 1、确认是否登录
 const user = useUserStore();
 const shop = useShopStore();
+const address = useAddressStore();
 const isLogin = computed(() => user.isLogin);
 // 退出登录时候
 watch(
@@ -13,9 +14,9 @@ watch(
   async (val) => {
     if (val && user.getToken != "") {
       // 获取用户信息
-      await user.onCheckLogin();
+      user.onCheckLogin();
       // 获取用户购物车
-      await shop.reLoadShopcartList();
+      shop.reLoadShopcartList();
     }
   },
   {
@@ -40,13 +41,11 @@ onNuxtReady(async () => {
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
 <template>
-  <div>
-    <Transition name="fade">
-      <OtherLoading v-show="isLoading" />
-    </Transition>
-    <NuxtPage />
-    <FormUserDialog />
-  </div>
+  <Transition name="fade">
+    <OtherLoading v-show="isLoading" />
+  </Transition>
+  <NuxtPage />
+  <FormUserDialog />
 </template>
 <style>
 .page-enter-active,

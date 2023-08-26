@@ -12,7 +12,7 @@
             <i
               i-solar:hamburger-menu-broken
               p-2.4
-            ></i>
+            />
           </el-button>
         </div>
       </template>
@@ -40,12 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-const { footer, menu, leftMenu } = defineProps({
-  footer: {
-    type: Boolean,
-    default: true,
-    required: false,
-  },
+const { menu, leftMenu } = defineProps({
   leftMenu: {
     type: Boolean,
     default: true,

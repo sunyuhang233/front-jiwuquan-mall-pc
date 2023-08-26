@@ -72,7 +72,7 @@ definePageMeta({
         class="goods-detail"
       >
         <div
-          class="top"
+          class="top pt-2"
           flex
           items-center
         >
@@ -91,7 +91,7 @@ definePageMeta({
         >
           <!-- 商品轮播图 -->
           <GoodsPreSwiper
-            class="swiper ml-0em flex-2"
+            class="mr-a m-0 flex-2"
             w-500px
             :images="goodsImages"
             :video="goodsInfo.data.value?.data?.video"

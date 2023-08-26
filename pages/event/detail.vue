@@ -61,7 +61,7 @@ definePageMeta({
 <template>
   <div>
     <NuxtLayout
-      name="default"
+      name="main"
       :left-menu="false"
       :header="false"
       :menu="['home', 'back', 'service']"

@@ -250,6 +250,11 @@ export interface PayTypeDTO {
 
 // 1）提交订单 READY -1
 const pushOrder = async () => {
+  if (!selectAddressId.value) {
+    ElMessage.error("请选择收货地址！");
+
+    return (selectAddressId.value = address.addressList[0]?.id || "");
+  }
   isLoading.value = true;
   // 配置
   const items: PushOrdersItemDTO[] = orderItems.value.map((p) => {
@@ -1386,23 +1391,26 @@ definePageMeta({
   }
 }
 
-// 按钮移动端隐藏
-.submit {
-  &:hover,
-  &:active {
-    position: relative;
-    .submit-lbtns {
-      border-radius: 10px;
-      display: flex;
-      bottom: 2rem;
-      right: 4rem;
-      position: absolute;
-      background-color: #8f8f8f2a;
-      padding: 1rem;
-      backdrop-filter: blur(20px);
-      flex-direction: column;
-      :deep(.el-button) {
-        margin: 0.5rem 0;
+@media screen and (max-width: 768px) {
+  // 按钮移动端隐藏
+  .submit {
+    &:hover,
+    &:active,
+    &:focus {
+      position: relative;
+      & + .submit-lbtns {
+        border-radius: 10px;
+        display: flex;
+        bottom: 2rem;
+        right: 4rem;
+        position: absolute;
+        background-color: #8f8f8f2a;
+        padding: 1rem;
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        :deep(.el-button) {
+          margin: 0.5rem 0;
+        }
       }
     }
   }

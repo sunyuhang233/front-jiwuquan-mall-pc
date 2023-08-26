@@ -12,7 +12,7 @@
       </ClientOnly>
       <!-- 内容 -->
       <div class="flex-1">
-        <slot></slot>
+        <slot name="default"></slot>
       </div>
     </div>
     <!-- 右下角功能区 -->

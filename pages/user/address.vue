@@ -10,9 +10,6 @@ import {
   updateAddressById,
 } from "~/composables/api/user/address";
 
-// 页面
-definePageMeta({ layout: false });
-
 useHead({
   title: "收货地址 - 个人中心",
   meta: [
@@ -226,6 +223,11 @@ const rules = reactive({
   county: [{ required: true, message: "区县不能为空！", trigger: "blur" }],
   isDefault: [{ required: true, message: "是否默认不能为空！", trigger: "blur" }],
   postalCode: [{ required: true, message: "邮政编码不能为空！", trigger: "blur" }],
+});
+
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
 });
 </script>
 <template>

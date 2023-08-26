@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+// 定义页面元数据
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 useHead({
   title: "极物圈",
   meta: [
@@ -8,11 +13,10 @@ useHead({
     },
   ],
 });
-definePageMeta({ layout: false });
 </script>
 <template>
   <div>
-    <NuxtLayout name="default">
+    <NuxtLayout name="main">
       <div class="layout-default py-0">
         <div
           flex
@@ -39,7 +43,10 @@ definePageMeta({ layout: false });
           <!-- 热门商品分类 -->
           <IndexCategoryLine class="mt-6 md:my-8" />
           <!-- 商品列表tabs -->
-          <IndexGoodsTabs mt-4 />
+          <IndexGoodsTabs
+            mt-4
+            min-h-50vh
+          />
         </div>
       </div>
     </NuxtLayout>

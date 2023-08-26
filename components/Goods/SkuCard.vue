@@ -321,7 +321,7 @@ const setActiveItem = (image: string) => {
 							" shadow plain @click="onSubmitShopCart(FormRef,$event)">加入购物车
 						</el-button>
 						<!-- 立即购买 -->
-						<el-button size="large" style="
+						<el-button size="large" class="relative" style="
 								flex: 1;
 								margin-right: 0.6em;
 								transition: 300ms;
@@ -330,12 +330,12 @@ const setActiveItem = (image: string) => {
 								padding: 0.8em 1em;
 								letter-spacing: 0.1em; 
 							" shadow-md @click="onSubmitBuy(FormRef)" type="info" v-loading.fullscreen.lock="fullscreenLoading">立即购买
+							<p text-0.9rem border-default-dashed border-2px border-border-dark-300 shadow-md rounded="t-6px" bg-white dark:bg-dark-6
+								p-2 text-red-5 flex-row-c-c class="all-price -translate-1/1" :class="{ active: isAllCheckSku }">
+								<small block>￥</small>
+								<h3 v-incre-up="allPrice"></h3>
+							</p>
 						</el-button>
-						<p border-default-dashed border-2px border-border-dark-300 shadow-md rounded="t-6px" bg-white dark:bg-dark-6
-							p-2 text-red-5 flex-row-c-c class="all-price -translate-1/1" :class="{ active: isAllCheckSku }">
-							<small block>￥</small>
-						<h3 v-incre-up="allPrice"></h3>
-						</p>
 					</div>
 				</el-form-item>
 			</el-form>
@@ -388,8 +388,8 @@ const setActiveItem = (image: string) => {
 
 .all-price {
 	position: absolute;
-	right: 2em;
-	width: 9em;
+	right: 4%;
+	width: 9rem;
 	height: 3em;
 	z-index: -1;
 	opacity: 0;

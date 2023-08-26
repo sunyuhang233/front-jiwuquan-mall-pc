@@ -113,14 +113,17 @@ const getAllPrice = computed(() => {
   });
   return prices;
 });
-definePageMeta({ layout: false });
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 
 <template>
   <div>
     <NuxtLayout
-      :menu="['back']"
       name="user"
+      :menu="['back']"
       :footer="false"
     >
       <div>

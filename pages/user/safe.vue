@@ -10,7 +10,10 @@ useHead({
   ],
 });
 // 页面
-definePageMeta({ layout: false });
+definePageMeta({
+  key: (route) => route.path,
+  layout: false,
+});
 </script>
 <template>
   <div>

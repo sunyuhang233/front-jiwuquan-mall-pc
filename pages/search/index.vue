@@ -80,6 +80,9 @@ const reset = () => {
   dto.isNew = undefined;
   keyWord.value = "";
 };
+const isShowOrder = ref<boolean>(false);
+// list
+const goodsListRef = ref();
 
 let searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
 const handleClose = (tag: string) => {
@@ -93,7 +96,6 @@ const clickTag = (val: string, i: number) => {
   keyWord.value = val;
   onSearch();
 };
-
 definePageMeta({
   key: (route) => route.path,
   layout: false,
@@ -102,23 +104,23 @@ definePageMeta({
 <template>
   <div>
     <NuxtLayout
+      name="main"
       :left-menu="false"
       :menu="['shopcart', 'back']"
     >
       <div
         layout-default-se
-        w-1100px
         min-h-80vh
         flex
         flex-col
         justify-start
       >
         <!-- 搜索栏目 -->
-        <div class="flex-row-c-c w-1/1">
+        <div class="flex-row-c-c w-1/1 h-2.6rem">
           <ElInput
             clearable
             ref="searchInpRef"
-            input-style="border-radius:20px;height:52px;font-size:1em;"
+            input-style="border-radius:1rem;height:2.6rem;font-size:1rem;"
             type="text"
             size="large"
             class="shadow-sm"
@@ -135,75 +137,81 @@ definePageMeta({
             @click="onSearch"
             type="info"
             shadow-md
-            style="width: 10em; height: 50px; font-size: 1em; margin-left: 1em"
+            style="width: 10em; height: 100%; font-size: 1.2rem; margin-left: 1em"
             size="large"
           >
             搜 索
           </el-button>
         </div>
-        <!-- 筛选 -->
-        <div class="flex pt-4 opacity-80">
-          <el-checkbox
-            class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
-            v-model="isNew"
-            label="新品"
-          ></el-checkbox>
-          <el-checkbox
-            class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
-            v-model="isPostage"
-            label="免运费"
-          ></el-checkbox>
-          <el-select
-            v-model="dto.saleSort"
-            size="default"
-            class="ml-6 w-120px"
-            placeholder="销量排序"
+        <div class="flex items-start md:h-3rem mt-3">
+          <!-- 筛选 -->
+          <div
+            :class="{ 'h-6rem md:h-3rem': isShowOrder }"
+            class="flex-1 h-0 overflow-hidden transition-height transition-300 grid grid-cols-4 md:grid-cols-8 gap-2 opacity-80"
           >
-            <el-option
-              label="销量升序"
-              :value="0"
-            />
-            <el-option
-              label="销量降序"
-              :value="1"
-            />
-          </el-select>
-          <el-select
-            v-model="dto.priceSort"
-            size="default"
-            class="ml-6 w-120px"
-            placeholder="价格排序"
+            <el-checkbox
+              class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
+              v-model="isNew"
+              label="新品"
+              style="margin: 0"
+            ></el-checkbox>
+            <el-checkbox
+              class="border-default px-2 rounded-4px bg-white dark:bg-dark-5"
+              v-model="isPostage"
+              label="免运费"
+              style="margin: 0"
+            ></el-checkbox>
+            <el-select
+              v-model="dto.saleSort"
+              size="default"
+              placeholder="销量排序"
+            >
+              <el-option
+                label="销量升序"
+                :value="0"
+              />
+              <el-option
+                label="销量降序"
+                :value="1"
+              />
+            </el-select>
+            <el-select
+              v-model="dto.priceSort"
+              size="default"
+              placeholder="价格排序"
+            >
+              <el-option
+                label="价格升序"
+                :value="0"
+              />
+              <el-option
+                label="价格降序"
+                :value="1"
+              />
+            </el-select>
+            <el-select
+              v-model="dto.viewsSort"
+              size="default"
+              placeholder="浏览量排序"
+            >
+              <el-option
+                label="浏览量升序"
+                :value="0"
+              />
+              <el-option
+                label="浏览量降序"
+                :value="1"
+              />
+            </el-select>
+            <el-button @click="reset">重置</el-button>
+          </div>
+          <span
+            class="rounded p-2 ml-a flex-row-c-c cursor-pointer"
+            @click="isShowOrder = !isShowOrder"
           >
-            <el-option
-              label="价格升序"
-              :value="0"
-            />
-            <el-option
-              label="价格降序"
-              :value="1"
-            />
-          </el-select>
-          <el-select
-            v-model="dto.viewsSort"
-            size="default"
-            class="ml-6 w-120px"
-            placeholder="浏览量排序"
-          >
-            <el-option
-              label="浏览量升序"
-              :value="0"
-            />
-            <el-option
-              label="浏览量降序"
-              :value="1"
-            />
-          </el-select>
-          <el-button
-            @click="reset"
-            class="ml-6"
-          >
-            重置
-          </el-button>
+            {{ isShowOrder ? "收起" : "筛选" }}
+            <i class="p-2 i-solar:hamburger-menu-line-duotone p-0.8em ml-1" />
+          </span>
         </div>
         <ClientOnly>
           <!-- 搜索历史记录 -->
@@ -223,15 +231,17 @@ definePageMeta({
         </ClientOnly>
         <p
           opacity-80
-          mt-4
+          mb-2
           v-show="showResult"
         >
           {{ `搜索结果` }}
+          {{ goodsListRef?.goodsList?.length || "0" }}条
         </p>
         <!-- 搜索记录 -->
         <div v-if="showResult">
           <ListGoodsList
-            :class="'grid grid-cols-4 grid-gap-5'"
+            ref="goodsListRef"
+            :class="'grid grid-cols-2 md:grid-cols-4 grid-gap-4'"
             :timer="false"
             :dto="dto"
           />

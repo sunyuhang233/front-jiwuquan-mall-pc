@@ -10,7 +10,7 @@ const { comment, skuItem } = defineProps<{
 const getPreImages = computed(() => {
   // @ts-ignore
   return comment.images?.map(
-    (p: string) => (p = BaseUrlImg + p + "?imageView2/0/w/100/h/100/format/webp/interlace/1/q/50")
+    (p: string) => (p = BaseUrlImg + p + "?imageView2/0/format/webp/interlace/1/q/50")
   );
 });
 

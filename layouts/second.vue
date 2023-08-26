@@ -3,8 +3,8 @@
     <!-- 顶部导航 -->
     <MenuHeaderMenu v-if="header" />
     <!-- 左侧边导航 -->
-    <div class="flex-1 animate-fade-slice">
-      <slot></slot>
+    <div class="flex-1">
+      <slot name="default"></slot>
     </div>
     <!-- 右下角功能区 -->
     <ClientOnly>

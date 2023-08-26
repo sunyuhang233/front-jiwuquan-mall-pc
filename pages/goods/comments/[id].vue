@@ -9,6 +9,7 @@ definePageMeta({
 <template>
   <div>
     <NuxtLayout
+      name="main"
       :left-menu="false"
       :menu="['shopcart', 'back']"
     >
