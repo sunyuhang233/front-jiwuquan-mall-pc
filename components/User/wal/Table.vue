@@ -168,6 +168,7 @@ onReload();
       <VChart
         class="w-full h-380px flex-row-c-c rounded-12px"
         v-loading="isLoading"
+        :loading="isLoading"
         :option="option"
       />
     </div>

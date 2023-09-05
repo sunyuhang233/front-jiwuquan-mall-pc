@@ -20,13 +20,13 @@ export const useShopStore = defineStore('shop', () => {
     if (isLoading.value || notMore.value) return;
     page.value++
     isLoading.value = true;
-    const { data } = await getUserShopCartPage(page.value, size.value, user.getToken);
-    if (data) {
+    const { data, code } = await getUserShopCartPage(page.value, size.value, user.getToken);
+    if (code === StatusCode.SUCCESS) {
       pageInfo.value = toReactive({ ...data });
       shopcartList.value.push(...data.records);
       isLoading.value = false;
-      return true;
     }
+    return code === StatusCode.SUCCESS;
   };
   /**
    * 重新加载
@@ -64,9 +64,10 @@ export const useShopStore = defineStore('shop', () => {
   /**
    * 添加触发-重新加载
    */
-  const addShopcartAction = async (skuId?: string) => {
+  const addShopcartAction = async (skuId: string, quantity: number = 1, token: string) => {
     let id = "";
     let index = -1;
+    // 查询
     for (let i = 0; i < shopcartList.value.length; i++) {
       const p = shopcartList.value[i];
       if (p.skuId === skuId) {
@@ -75,11 +76,17 @@ export const useShopStore = defineStore('shop', () => {
         break;
       }
     }
+    // 存在累加
     if (index !== -1 && id !== "") {
-      shopcartList.value[index].quantity++
+      shopcartList.value[index].quantity += quantity
       return true
     } else {
-      await reLoadShopcartList()
+      // 不存在的进行重新添加请求（id）
+      const res = await addShopcart({ skuId, quantity: 1 }, token)
+      if (res.code === StatusCode.SUCCESS) {
+        await reLoadShopcartList()
+      }
+      return res.code === StatusCode.SUCCESS
     }
   }
 

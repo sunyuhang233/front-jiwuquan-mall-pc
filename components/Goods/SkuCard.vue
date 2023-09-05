@@ -31,10 +31,9 @@ const onSubmitShopCart = (formRef: FormInstance | undefined,event:MouseEvent) =>
 	formRef
 		?.validate(async (valid) => {
 			if (valid && user.getToken) {
-				if (await shop.addShopcartAction(form.skuId)) {
+				if (await shop.addShopcartAction(form.skuId,form.quantity,user.getToken)) {
 					ElMessage.success('添加成功！');
 					startDotAnimate(event)
-
 				} else {
 					ElMessage.error('添加失败，请稍后再试！');
 				}

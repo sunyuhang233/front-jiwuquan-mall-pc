@@ -252,8 +252,7 @@ export interface PayTypeDTO {
 const pushOrder = async () => {
   if (!selectAddressId.value) {
     ElMessage.error("请选择收货地址！");
-
-    return (selectAddressId.value = address.addressList[0]?.id || "");
+    return;
   }
   isLoading.value = true;
   // 配置
@@ -280,7 +279,6 @@ const pushOrder = async () => {
     });
     order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
     order.orderInfo.createTime = order.orderInfo.updateTime;
-
     setTimeout(async () => {
       ElNotification.success({
         title: "提交成功！",

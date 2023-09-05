@@ -208,6 +208,7 @@ const toGoodsView = (gid: string) => {
         </ClientOnly>
         <!-- 数量 -->
         <el-input-number
+        size="small"
           :min="1"
           :max="99"
           v-model="shopCart.quantity"
