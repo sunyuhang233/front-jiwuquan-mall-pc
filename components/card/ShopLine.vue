@@ -173,7 +173,7 @@ const toGoodsView = (gid: string) => {
         ￥{{ currency(shopCart.price) }}
         <span
           color-coolgray
-          text-0.6em
+          text-0.9em
           style="text-decoration: line-through"
         >
           ￥{{ currency(shopCart.costPrice) }}

@@ -56,6 +56,12 @@ const dto = computed(() => {
     ? { startTime: dayStartEndStr.value[0], endTime: dayStartEndStr.value[1] }
     : { startTime: monthStartEndStr.value[0], endTime: monthStartEndStr.value[1] };
 });
+
+const loadBills = useThrottleFn((scroll: { scrollTop: number; scrollLeft: number }) => {
+  if (scroll?.scrollTop && scroll.scrollTop < 200 * page.value) return;
+  getBillsPageApi();
+}, 250);
+
 /**
  * 请求api
  */
@@ -203,33 +209,30 @@ getBillsPageApi();
           </small>
         </div>
         <!-- 滚动内容 -->
-        <el-scrollbar height="20rem">
-          <div
-            v-infinite-scroll="getBillsPageApi"
-            :infinite-scroll-immediate="true"
-            :infinite-scroll-delay="400"
-            :infinite-scroll-distance="50"
+        <el-scrollbar
+          height="300px"
+          class="relative"
+          @scroll="loadBills"
+        >
+          <UserWalBillsCard
+            v-for="p in billsList"
+            :key="p.id"
+            :data="p"
+          />
+          <small
+            class="block opacity-80 text-center my-4 w-full select-none"
+            v-show="isLoading"
+            animate-pulse
           >
-            <UserWalBillsCard
-              v-for="p in billsList"
-              :key="p.id"
-              :data="p"
-            />
-            <small
-              class="block opacity-80 text-center my-4 w-full select-none"
-              v-show="isLoading"
-              animate-pulse
-            >
-              加载中...
-            </small>
+            加载中...
+          </small>
 
-            <small
-              class="block opacity-80 text-center my-4 w-full select-none"
-              v-show="noMore"
-            >
-              暂无更多
-            </small>
-          </div>
+          <small
+            class="block opacity-80 text-center my-4 w-full select-none"
+            v-show="noMore"
+          >
+            暂无更多
+          </small>
         </el-scrollbar>
       </div>
     </div>

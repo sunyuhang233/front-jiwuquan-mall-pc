@@ -45,16 +45,6 @@ const user = useUserStore();
     </div>
     <!-- 余额： -->
     <div class="flex-row-c-c leading-1.6em">
-      <!-- <span>余额：</span>
-			<h2>
-				<small>￥</small><span v-incre-up="user.userWallet.balance" mr-2></span>
-				<i
-					opacity-0
-					transition-300
-					group-hover:opacity-100
-					class="inline hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-0.8em h-0.8em"
-				/>
-			</h2> -->
       <small>暂未开启</small>
     </div>
     <small

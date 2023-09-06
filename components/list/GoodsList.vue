@@ -79,11 +79,6 @@ const clearResult = () => {
   pageInfo.current = -1;
   page.value = 0;
 };
-const toGoodsView = (id: string) => {
-  navigateTo({
-    path: `/goods/detail/${id}`,
-  });
-};
 // 条件筛选
 const dto = toReactive(props.dto);
 const timer = ref<any>(null);
@@ -119,22 +114,20 @@ defineExpose({
     <ClientOnly>
       <transition-group
         tag="div"
-        :name="transiton || 'fade-lr-list'"
+        class="overflow-hidden"
         v-infinite-scroll="loadGoodsPage"
         :infinite-scroll-delay="400"
-        :infinite-scroll-distance="80"
+        :name="transiton || 'fade-lr-list'"
         :class="props.class !== null ? props.class : 'flex flex-wrap'"
-        class="overflow-hidden relative"
       >
-        <div
+        <NuxtLink
+          :to="`/goods/detail/${p.id}`"
           v-for="p in goodsList"
           :key="p.id"
         >
           <!-- 商品卡片 -->
           <CardGoodsBox
-            @click="toGoodsView(p.id)"
             class="mt-4/100 transition-300"
-            element-loading-background="transparent"
             :goods="p"
           >
             <small
@@ -145,7 +138,7 @@ defineExpose({
               销量：{{ p.sales }}
             </small>
           </CardGoodsBox>
-        </div>
+        </NuxtLink>
       </transition-group>
     </ClientOnly>
     <p

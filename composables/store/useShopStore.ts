@@ -21,9 +21,9 @@ export const useShopStore = defineStore('shop', () => {
     page.value++
     isLoading.value = true;
     const { data, code } = await getUserShopCartPage(page.value, size.value, user.getToken);
-    if (code === StatusCode.SUCCESS) {
+    if (code === StatusCode.SUCCESS && data?.records.length > 0) {
       pageInfo.value = toReactive({ ...data });
-      shopcartList.value.push(...data.records);
+      shopcartList.value.push(...data?.records);
       isLoading.value = false;
     }
     return code === StatusCode.SUCCESS;

@@ -634,7 +634,7 @@ const getReduce = computed(() => {
   if (order.orderInfo.spendPrice) {
     return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
   } else {
-    return null;
+    return 0;
   }
 });
 // --------------------- 订单 ------------------------
@@ -1102,6 +1102,14 @@ definePageMeta({
             <small class="opacity-80 flex-row-bt-c w-full">
               原总价
               <span>￥{{ getAllCoastPrice }}</span>
+            </small>
+            <!-- 下单后减少 -->
+            <small
+              class="opacity-80 flex-row-bt-c w-full"
+              v-show="order.status > OrdersStatus.UN_PAID && getReduce !== 0"
+            >
+              优惠
+              <strong class="text-[var(--el-color-error)]">-{{ "￥" + getReduce }}</strong>
             </small>
             <!-- 运费 -->
             <small class="opacity-80 flex-row-bt-c w-full">

@@ -192,10 +192,7 @@ const toOrderPage = (ids: string[]) => {
             购物车
           </h2>
           <el-scrollbar
-            :always="false"
             height="50vh"
-            class="overflow-auto"
-            style="overflow: auto"
             v-if="user.isLogin"
             mb-2
           >
@@ -206,9 +203,9 @@ const toOrderPage = (ids: string[]) => {
               :infinite-scroll-delay="600"
               :infinite-scroll-distance="40"
               :infinite-scroll-disabled="shop.notMore"
+              v-auto-animate
             >
               <CardShopLine
-                @click=""
                 v-for="p in shop.shopcartList"
                 :shop-cart="p"
                 :key="p.id"
@@ -248,7 +245,7 @@ const toOrderPage = (ids: string[]) => {
               <h3 class="mx-4">
                 <small>总计：￥</small>
                 <span
-                  text-red-5
+                  class="text-[var(--el-color-error)]"
                   v-incre-up="getAllPrice"
                 ></span>
               </h3>
@@ -337,11 +334,10 @@ const toOrderPage = (ids: string[]) => {
       background-color: var(--el-color-danger);
       color: #fff;
       border-radius: 50%;
-      font-size: 0.4em;
-      width: 3.4em;
-      height: 3.4em;
-      text-align: center;
-      line-height: 3.4em;
+      font-size: 0.8rem;
+      width: 1.6rem;
+      line-height: 1.6rem;
+      height: 1.6rem;
       text-align: center;
       position: absolute;
       right: -15%;
