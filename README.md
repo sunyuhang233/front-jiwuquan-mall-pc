@@ -22,3 +22,19 @@
 ![商品](./.doc/goods.png)
 
 ![钱包](./.doc/wallet.png)
+
+### 起步 | Project Setup
+```
+pnpm install
+```
+### 开发 | Dev
+
+```
+pnpm run dev
+```
+
+### 构建 | Build
+
+```
+pnpm run build
+```
