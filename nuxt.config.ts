@@ -3,7 +3,7 @@ import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
   // ssr: process.env.NODE_ENV !== "development",
-  ssr: false,
+  ssr: process.env.NODE_ENV !== "development",
   build: {
     transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
   },
