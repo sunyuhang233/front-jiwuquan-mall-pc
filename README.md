@@ -1,4 +1,4 @@
-<h2 style="text-align:center;letter-spacing:0.3em;"><img src="./assets/images/logo/logo.png" width = "40" height = "40" alt="图片名称" align=center /> 极物圈</h2>
+<h2 align=center style="text-align:center;letter-spacing:0.3em;"><img src="./assets/images/logo/logo.png" width = "40" height = "40" alt="图片名称" align=center /> 极物圈</h2>
 
 ###  介绍
 `
