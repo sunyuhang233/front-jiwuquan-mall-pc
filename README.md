@@ -21,7 +21,7 @@
 
 ![钱包](./.doc/wallet.png)
 
-### 起步 | Project Setup
+### 起步 | Setup
 ```
 pnpm install
 ```
