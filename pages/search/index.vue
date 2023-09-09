@@ -241,7 +241,7 @@ definePageMeta({
         <div v-if="showResult">
           <ListGoodsList
             ref="goodsListRef"
-            :class="'grid grid-cols-2 md:grid-cols-4 grid-gap-4'"
+            class="grid grid-cols-2 md:grid-cols-4 grid-gap-4"
             :timer="false"
             :dto="dto"
           />

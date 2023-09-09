@@ -88,7 +88,6 @@ watchDebounced(
     if (timer.value) return;
     clearResult();
     await loadGoodsPage();
-
     timer.value = setTimeout(() => {
       clearTimeout(timer);
       timer.value = null;
@@ -108,15 +107,16 @@ defineExpose({
 </script>
 <template>
   <div
-    class="goods-list"
-    style="overflow: auto"
+    class="overflow-y-auto min-h-70vh"
+    v-infinite-scroll="loadGoodsPage"
+    :infinite-scroll-delay="400"
+    :infinite-scroll-immediate="true"
+    :infinite-scroll-disabled="isNoMore"
   >
     <ClientOnly>
       <transition-group
         tag="div"
-        class="overflow-hidden"
-        v-infinite-scroll="loadGoodsPage"
-        :infinite-scroll-delay="400"
+        class="overflow-hidden pb-2"
         :name="transiton || 'fade-lr-list'"
         :class="props.class !== null ? props.class : 'flex flex-wrap'"
       >
@@ -127,7 +127,7 @@ defineExpose({
         >
           <!-- 商品卡片 -->
           <CardGoodsBox
-            class="mt-4/100 transition-300"
+            class="mt-4/100 transition-300 v-card"
             :goods="p"
           >
             <small

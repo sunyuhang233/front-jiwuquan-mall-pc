@@ -198,6 +198,7 @@ const toOrderPage = (ids: string[]) => {
           >
             <!-- 购物车项 -->
             <el-checkbox-group
+              style="overflow-y: auto"
               v-model="selectIds"
               v-infinite-scroll="shop.loadShopcartList"
               :infinite-scroll-delay="600"

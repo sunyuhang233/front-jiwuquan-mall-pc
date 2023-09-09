@@ -1044,8 +1044,7 @@ definePageMeta({
               <span class="transition-300 hover:underline hover:text-[var(--el-color-info)]">
                 {{ order.orderInfo.id }}
                 <i
-                  class="p-2 opacity-60"
-                  i-solar:copy-outline
+                  class="p-2 opacity-60 i-solar:copy-outline"
                 />
               </span>
             </small>

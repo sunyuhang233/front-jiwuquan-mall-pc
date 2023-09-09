@@ -329,6 +329,7 @@ const changeDate = () => {
     style="overflow: auto"
   >
     <div
+      min-h-50vh
       v-infinite-scroll="loadOrdersPage"
       :infinite-scroll-delay="500"
       :infinite-scroll-distance="30"

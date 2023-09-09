@@ -1,6 +1,6 @@
 <template>
 	<footer
-		class="w-1/1 min-h-180px animate__animated animate__fadeIn"
+		class="w-full v-card min-h-180px"
 		border-t="1px solid gray-200"
 		dark:border-t-dark-3
 		shadow-md

@@ -13,8 +13,7 @@
         bg-yellow-4
       />
     </h3>
-    <ElScrollbar
-      :min-size="30"
+    <el-scrollbar
       overflow-x-scroll
       tracking-0.1em
       class="category animate-delay-100 animate__animated animate__fadeIn"
@@ -87,7 +86,7 @@
           </el-button>
         </div>
       </div>
-    </ElScrollbar>
+    </el-scrollbar>
   </div>
 </template>
 

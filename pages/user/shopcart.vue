@@ -166,17 +166,15 @@ definePageMeta({
                 </small>
                 购物车
               </h3>
-              <el-scrollbar
-                height="66vh"
-                v-infinite-scroll="shop.loadShopcartList"
-                :infinite-scroll-delay="1000"
-                :infinite-scroll-disabled="notMore"
-                style="overflow: auto"
-              >
+              <el-scrollbar height="66vh">
                 <!-- 购物车项 -->
                 <el-checkbox-group
                   v-model="selectIds"
                   size="large"
+                  v-infinite-scroll="shop.loadShopcartList"
+                  :infinite-scroll-delay="400"
+                  :infinite-scroll-disabled="notMore"
+                  overflow-y-auto
                   class="relative"
                 >
                   <ul

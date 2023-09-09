@@ -151,7 +151,7 @@ definePageMeta({
               猜你喜欢
             </h2>
             <ListGoodsList
-              :class="'grid grid-cols-2 grid-gap-4'"
+              class="grid grid-cols-2 grid-gap-4"
               :dto="{
                 name: goodsInfo.data.value?.data?.name[Math.floor(Math.random())],
               }"
