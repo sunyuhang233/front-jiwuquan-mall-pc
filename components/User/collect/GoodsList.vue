@@ -112,7 +112,7 @@ const reload = async () => {
 };
 </script>
 <template>
-  <div overflow-x-hidden>
+  <div overflow-x-hidden v-loading="isLoading">
     <!-- 顶部按钮 -->
     <div class="mb-3 flex-row-bt-c">
       <small opacity-60>操 作 ：</small>
@@ -168,7 +168,6 @@ const reload = async () => {
     <el-scrollbar
       height="62vh"
       overflow-x-hidden
-      v-loading="isLoading"
       rounded-8px
     >
       <el-checkbox-group
@@ -187,11 +186,10 @@ const reload = async () => {
           >
             <el-checkbox-button
               :label="p.goods.id"
-              class="active:scale-96 transition-300"
+              class="active:scale-96 transition-300 hover:shadow"
             >
               <UserCollectGoodsCard
                 :data="p"
-                class="border-none"
                 @link="!isEdit && navigateTo(`/goods/detail/${p.goods.id}`)"
                 @cancel="cancelCollect"
               >
@@ -220,7 +218,7 @@ const reload = async () => {
   .el-checkbox-button {
     display: inherit;
     border-radius: 6px;
-    border: 2px solid #75757523;
+    border: 2px solid  rgba(184, 184, 184, 0.1) ;
 
     .el-checkbox-button__inner {
       border-radius: 6px;
@@ -240,6 +238,7 @@ const reload = async () => {
     border-color: $check-color;
     position: relative;
     overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     &::after {
       content: "选中";
       position: absolute;

@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { appName } from "@/constants/index";
+import { appName } from '@/constants/index';
+
 useHead({
   title: appName,
 });
 // 1、确认是否登录
 const user = useUserStore();
 const shop = useShopStore();
-const address = useAddressStore();
+useAddressStore();
 const isLogin = computed(() => user.isLogin);
 // 退出登录时候
 watch(
   isLogin,
   async (val) => {
-    if (val && user.getToken != "") {
+    if (val && user.getToken !== '') {
       // 获取用户信息
       user.onCheckLogin();
       // 获取用户购物车
@@ -21,25 +22,24 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 // 加载
 const isLoading = ref<boolean>(true);
-useNuxtApp().hook("app:mounted", (app) => {
-  if (document && document.body) {
-    document.body.style.overflow = "hidden";
-  }
+useNuxtApp().hook('app:mounted', () => {
+  if (document && document.body)
+    document.body.style.overflow = 'hidden';
 });
 // 准备完成关闭加载
 onNuxtReady(async () => {
   isLoading.value = false;
-  if (document && document.body) {
-    document.body.style.overflow = "auto";
-  }
+  if (document && document.body)
+    document.body.style.overflow = 'auto';
 });
 // 不能有根节点
 // https://nuxt.com.cn/docs/guide/directory-structure/app
 </script>
+
 <template>
   <Transition name="fade">
     <OtherLoading v-show="isLoading" />
@@ -47,6 +47,7 @@ onNuxtReady(async () => {
   <NuxtPage />
   <FormUserDialog />
 </template>
+
 <style>
 .page-enter-active,
 .page-leave-active {

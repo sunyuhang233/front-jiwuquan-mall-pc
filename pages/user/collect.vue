@@ -52,6 +52,12 @@ const activeMenu = ref<string>("goods");
               >
                 <UserCollectGoodsList />
               </el-tab-pane>
+              <!-- 收藏帖子 -->
+              <el-tab-pane
+                name="post"
+                label="收藏帖子"
+              >
+              </el-tab-pane>
             </el-tabs>
           </div>
         </ClientOnly>
