@@ -1,69 +1,69 @@
 <script lang="ts" setup>
-import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
-import { PushOrdersItemDTO } from "~/composables/api/orders";
-import currency from "currency.js";
+import currency from 'currency.js';
+import { deleteBatchShopcartByIds, getUserShopCartPage } from '~/composables/api/shopcart';
+import type { PushOrdersItemDTO } from '~/composables/api/orders';
+
 const shop = useShopStore();
 const user = useUserStore();
 const isShow = ref<boolean>(false);
-if (user.isLogin) {
+if (user.isLogin)
   shop.loadShopcartList();
-}
+
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-const deleteBatchShopcart = (text: string = "删除") => {
+function deleteBatchShopcart(text: string = '删除') {
   ElMessageBox({
     title: `${text}提示！`,
     message: `确定要${text}吗？`,
-    type: "warning",
+    type: 'warning',
     showClose: false,
     center: true,
-    customClass: "text-center",
+    customClass: 'text-center',
     showCancelButton: true,
-    cancelButtonText: "取 消",
-    confirmButtonText: "删 除",
+    cancelButtonText: '取 消',
+    confirmButtonText: '删 除',
   })
     .then(async (res) => {
-      if (res === "confirm") {
-        if (res === "confirm") {
+      if (res === 'confirm') {
+        if (res === 'confirm') {
           const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
           if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
             selectIds.value.splice(0);
-            ElMessage.success(text + "成功！");
-          } else {
-            ElMessage.error("删除失败，请稍后再试试看！");
+            ElMessage.success(`${text}成功！`);
+          }
+          else {
+            ElMessage.error('删除失败，请稍后再试试看！');
           }
         }
       }
     })
-    .catch((err) => {});
-};
+    .catch();
+}
 
-const clearShopcart = () => {
-  isSelectAll.value = true;
-  deleteBatchShopcart("清空");
-};
+function clearShopcart() {
+  deleteBatchShopcart('清空');
+}
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
 watch(isSelectAll, (val: boolean) => {
   selectIds.value.splice(0);
-  if (val) {
-    selectIds.value.push(...shop.shopcartList.map((p) => p.id));
-  }
+  if (val)
+    selectIds.value.push(...shop.shopcartList.map(p => p.id));
 });
 // 购物车数量
 const getShopCartLength = computed(() => {
   let count = 0;
-  for (const p of shop.shopcartList) {
+  for (const p of shop.shopcartList)
     count += p.quantity;
-  }
+
   return count;
 });
 // 计算总价
 const getAllPrice = computed(() => {
-  const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
-  let count = currency("0.00");
+  const selectList = shop.shopcartList.filter(p => selectIds.value.includes(p.id));
+  let count = currency('0.00');
   selectList.forEach((p) => {
     count = count.add(currency(p.price).multiply(p.quantity));
   });
@@ -73,9 +73,9 @@ const getAllPrice = computed(() => {
 const fullscreenLoading = ref<boolean>(false);
 const order = useOrderStore();
 // 前往订单页面付款
-const toOrderPage = (ids: string[]) => {
+function toOrderPage(ids: string[]) {
   const dtoList: PushOrdersItemDTO[] = [];
-  shop.shopcartList.map((p) => {
+  shop.shopcartList.forEach((p) => {
     if (ids.includes(p.id)) {
       const { skuId, quantity } = p;
       dtoList.push({ skuId, quantity });
@@ -91,16 +91,17 @@ const toOrderPage = (ids: string[]) => {
     });
     fullscreenLoading.value = false;
     navigateTo({
-      path: "/order/detail",
+      path: '/order/detail',
     });
   }, 800);
-};
+}
 </script>
+
 <template>
   <div
-    class="shop-cart"
     v-if="user.isLogin"
     v-loading.fullscreen.lock="fullscreenLoading"
+    class="shop-cart"
   >
     <!-- 下拉框 -->
     <el-popover
@@ -108,41 +109,39 @@ const toOrderPage = (ids: string[]) => {
       shadow-lg
       :visible="isShow"
       :teleported="false"
-      @keyup.esc="isShow = false"
       popper-class="popover w-100% md:w-500px"
       transition="fade"
       :hide-after="0"
       popper-style="width:fit-content; box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
     min-height:380px; padding: 1.2em 1em; right: 0;"
       tabindex="0"
+      @keyup.esc="isShow = false"
     >
       <template #reference>
         <div
-          @click="isShow = true"
-          class="icon shadow-[#5d33f9] shadow-opacity-60 shadow-md"
-          hover:scale-92
-          cursor-pointer
+          class="icon shadow-[#5d33f9] shadow-md shadow-opacity-60"
           flex-row-c-c
-          hover:opacity-90
-          transition-300
+
+
+          cursor-pointer transition-300 hover:scale-92 hover:opacity-90 @click="isShow = true"
         >
           <span
-            class="count animate__animated animate__fadeIn"
-            shadow-sm
             v-show="getShopCartLength && getShopCartLength < 99"
             v-incre-up-int="getShopCartLength"
-          ></span>
-          <span
             class="count animate__animated animate__fadeIn"
             shadow-sm
+          />
+          <span
             v-show="getShopCartLength && getShopCartLength > 99"
+            class="count animate__animated animate__fadeIn"
+            shadow-sm
           >
             99+
           </span>
           <i
             i-solar:cart-large-bold-duotone
             style="width: 60%; height: 60%"
-          ></i>
+          />
         </div>
       </template>
       <template #default>
@@ -150,74 +149,73 @@ const toOrderPage = (ids: string[]) => {
           <!-- 2、 商品goods -->
           <!-- 未登录 -->
           <div
+            v-if="!user.isLogin"
             class="tologin"
             flex-row-c-c
             flex-col
-            v-if="!user.isLogin"
           >
             <h3
-              text-center
-              mt-10
-              mb-8
+
+
+              mb-8 mt-10 text-center
             >
               未登录，请登录！
             </h3>
             <el-button
-              @click="user.showLoginForm = true"
               size="large"
               type="primary"
+              @click="user.showLoginForm = true"
             >
               立即登录
             </el-button>
           </div>
           <h2
-            mb-2
-            text-center
-            border-0
-            border-b-1
-            border-default
-            tracking-0.1em
-            pb-4
+
+
+            mb-2 border-0 border-b-1 pb-4 text-center tracking-0.1em border-default
           >
             <span
               style="font-size: 0.6em; position: absolute; right: 2em; top: 2em"
               cursor-pointer
               select-none
-              @click="isEdit = !isEdit"
               :plain="!isEdit"
               class="transition-300"
+              @click="isEdit = !isEdit"
             >
               {{ !isEdit ? "管理" : "取消" }}
             </span>
             购物车
           </h2>
           <el-scrollbar
-            height="50vh"
             v-if="user.isLogin"
+            height="50vh"
             mb-2
           >
             <!-- 购物车项 -->
             <el-checkbox-group
-              style="overflow-y: auto"
               v-model="selectIds"
-              v-infinite-scroll="shop.loadShopcartList"
-              :infinite-scroll-delay="600"
-              :infinite-scroll-distance="40"
-              :infinite-scroll-disabled="shop.notMore"
-              v-auto-animate
             >
-              <CardShopLine
-                v-for="p in shop.shopcartList"
-                :shop-cart="p"
-                :key="p.id"
+              <div
+                v-infinite-scroll="shop.loadShopcartList"
+                v-auto-animate
+                style="overflow-y: auto"
+                :infinite-scroll-delay="400"
+                :infinite-scroll-distance="40"
+                :infinite-scroll-disabled="shop.notMore"
               >
-                <template #btn>
-                  <el-checkbox
-                    :label="p.id"
-                    :disabled="!p.stock"
-                  />
-                </template>
-              </CardShopLine>
+                <CardShopLine
+                  v-for="p in shop.shopcartList"
+                  :key="p.id"
+                  :shop-cart="p"
+                >
+                  <template #btn>
+                    <el-checkbox
+                      :label="p.id"
+                      :disabled="!p.stock"
+                    />
+                  </template>
+                </CardShopLine>
+              </div>
             </el-checkbox-group>
           </el-scrollbar>
 
@@ -225,13 +223,9 @@ const toOrderPage = (ids: string[]) => {
           <div
             class="bottom"
             style="width: 100%"
-            px-2
-            flex
-            justify-between
-            items-center
-            border-default
-            rounded-6px
-            border-2px
+
+
+            flex items-center justify-between border-2px rounded-6px px-2 border-default
           >
             <el-checkbox
               v-model="isSelectAll"
@@ -246,25 +240,25 @@ const toOrderPage = (ids: string[]) => {
               <h3 class="mx-4">
                 <small>总计：￥</small>
                 <span
-                  class="text-[var(--el-color-error)]"
                   v-incre-up="getAllPrice"
-                ></span>
+                  class="text-[var(--el-color-error)]"
+                />
               </h3>
               <el-button
                 v-if="isEdit && selectIds.length"
                 class="fadeInOut flex-1"
                 style="padding: 0em 1em"
                 type="danger"
-                plain
+
                 :disabled="selectIds.length === 0 && !isEdit"
-                round
+                round plain
                 @click="deleteBatchShopcart('批量删除')"
               >
                 批量删除
                 <i
                   i-solar:trash-bin-trash-broken
                   mr-1
-                ></i>
+                />
               </el-button>
               <el-button
                 v-if="isEdit"
@@ -279,7 +273,7 @@ const toOrderPage = (ids: string[]) => {
                 <i
                   i-solar:trash-bin-trash-broken
                   mr-1
-                ></i>
+                />
                 清空
               </el-button>
               <el-button
@@ -288,8 +282,8 @@ const toOrderPage = (ids: string[]) => {
                 type="info"
                 round
                 :disabled="selectIds.length === 0"
-                @click="toOrderPage(selectIds)"
                 tracking-0.1em
+                @click="toOrderPage(selectIds)"
               >
                 去结算
               </el-button>
@@ -300,20 +294,18 @@ const toOrderPage = (ids: string[]) => {
     </el-popover>
     <!-- 蒙版 -->
     <div
-      class="shop-cart-mock"
-      w-100vw
-      h-100vh
-      bg-dark-300
-      dark:bg-dark-200
-      transition-200
-      opacity-40
       v-show="isShow"
+
+
+      class="shop-cart-mock" h-100vh w-100vw bg-dark-300 opacity-40 transition-200
+      dark:bg-dark-200
+      style="position: fixed; top: 0; left: 0; z-index: -1"
       @click="isShow = false"
       @keyup.esc="isShow = false"
-      style="position: fixed; top: 0; left: 0; z-index: -1"
-    ></div>
+    />
   </div>
 </template>
+
 <style scoped lang="scss">
 .shop-cart {
   position: relative;

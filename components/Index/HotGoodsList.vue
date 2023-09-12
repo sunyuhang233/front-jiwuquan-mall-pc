@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { GoodsVO } from "~/types/goods";
+import type { GoodsVO } from '~/types/goods';
+
 // 分页器
 const page = ref<number>(0);
 const size = ref<number>(10);
@@ -18,25 +19,26 @@ const searchPage = reactive(
     pages: 0,
     size: 0,
     current: 0,
-  }
+  },
 );
 // 列表
 const hotGoodsList = ref<GoodsVO[]>([]);
-const loadHandle = async () => {
+async function loadHandle() {
   isLoading.value = true;
   page.value++;
   await res.refresh();
   res.data.value?.data?.records.forEach((p: GoodsVO) => {
-    p.images = p.images.toString().split(",");
+    p.images = p.images.toString().split(',');
     hotGoodsList.value.push(p);
   });
   isLoading.value = false;
-};
+}
 await loadHandle();
 </script>
+
 <template>
   <div
-    class="hot-list md:w-470px v-card dark:bg-dark-5 backdrop-blur-20px border-default shadow-sm min-h-420px h-420px p-4 rounded-4px overflow-visible"
+    class="v-card hot-list h-420px min-h-420px overflow-visible rounded-4px p-4 shadow-sm backdrop-blur-20px md:w-470px border-default dark:bg-dark-5"
   >
     <h3
       px-1
@@ -44,11 +46,8 @@ await loadHandle();
     >
       热门商品
       <span
-        p-3
-        bg-red-6
-        mx-2
-        i-solar:fire-bold
-      ></span>
+        i-solar:fire-bold mx-2 bg-red-6 p-3
+      />
     </h3>
     <ClientOnly>
       <!-- 商品列表 -->
@@ -59,23 +58,23 @@ await loadHandle();
         style="width: 100%"
       >
         <NuxtLink
-          :to="`/goods/detail/${p.id}`"
-          class="mt-2 w-1/1 animate-[fade-in_0.3s]"
           v-for="p in res.data.value?.data.records"
           :key="p.id"
+          :to="`/goods/detail/${p.id}`"
+          class="mt-2 w-1/1 animate-[fade-in_0.3s]"
         >
           <!-- 商品卡片 -->
           <CardGoodsLine
-            :goods="p"
             :key="p.id"
-            class="card my-2 pb-3 border-0 border-b-1px border-default"
+            :goods="p"
+            class="card my-2 border-0 border-b-1px pb-3 border-default"
           >
             <template #btn>
               <!-- 立即购买 -->
               <div
-                opacity-0
+
                 class="item"
-                float-right
+                float-right opacity-0
               >
                 <el-button
                   group:hover:block
@@ -95,17 +94,17 @@ await loadHandle();
           </CardGoodsLine>
         </NuxtLink>
         <p
+
+          v-show="searchPage.pages !== 0 && searchPage.pages === page" my-4
           text-center
-          my-4
-          v-show="searchPage.pages !== 0 && searchPage.pages === page"
         >
           暂无更多商品
         </p>
         <p
+
+
+          v-show="searchPage.pages !== 0 && page < searchPage.pages" my-4 cursor-pointer
           text-center
-          my-4
-          cursor-pointer
-          v-show="searchPage.pages !== 0 && page < searchPage.pages"
           @click="loadHandle"
         >
           加载更多
@@ -114,6 +113,7 @@ await loadHandle();
     </ClientOnly>
   </div>
 </template>
+
 <style scoped lang="scss">
 .card {
   .item {

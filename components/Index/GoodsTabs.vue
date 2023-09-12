@@ -1,15 +1,19 @@
+<script lang="ts" setup>
+const activeMenu = ref<string>('isHot');
+</script>
+
 <template>
   <el-tabs
+    v-model="activeMenu"
     class="goods-tabs"
     tab-position="top"
-    v-model="activeMenu"
   >
     <el-tab-pane
       name="isHot"
       label="热卖好物"
     >
       <ListGoodsList
-        :class="'grid grid-cols-2 md:grid-cols-5 grid-gap-6'"
+        class="grid grid-cols-2 grid-gap-6 md:grid-cols-5"
         :dto="{ saleSort: isTrue.TRUE }"
       />
     </el-tab-pane>
@@ -19,7 +23,7 @@
       label="新品上架"
     >
       <ListGoodsList
-        :class="'grid grid-cols-2 md:grid-cols-5 grid-gap-6'"
+        class="grid grid-cols-2 grid-gap-6 md:grid-cols-5"
         :dto="{ isNew: isTrue.TRUE }"
       />
     </el-tab-pane>
@@ -29,15 +33,12 @@
       label="人气商品"
     >
       <ListGoodsList
-        :class="'grid grid-cols-2 md:grid-cols-5 grid-gap-6'"
+        class="grid grid-cols-2 grid-gap-6 md:grid-cols-5"
         :dto="{ viewsSort: isTrue.TRUE }"
       />
     </el-tab-pane>
   </el-tabs>
 </template>
-<script lang="ts" setup>
-const activeMenu = ref<string>("isHot");
-</script>
 
 <!-- 样式scss -->
 <style scoped lang="scss">

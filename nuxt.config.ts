@@ -1,5 +1,5 @@
-import { pwa } from './config/pwa'
-import { appDescription } from './constants/index'
+import { pwa } from './config/pwa';
+import { appDescription } from './constants/index';
 
 export default defineNuxtConfig({
   // ssr: process.env.NODE_ENV !== "development",
@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     // UI
+    '@formkit/auto-animate/nuxt',
     '@element-plus/nuxt',
     'nuxt-swiper',
     // 工具
@@ -48,9 +49,9 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: false,
     inlineSSRStyles: false,
-    renderJsonPayloads: true,// 
-    viewTransition: true,// 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
-    crossOriginPrefetch: true, //使用 Speculation Rules API 启用跨源预取。
+    renderJsonPayloads: true, //
+    viewTransition: true, // 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
+    crossOriginPrefetch: true, // 使用 Speculation Rules API 启用跨源预取。
   },
   // 自动导入
   imports: {
@@ -62,7 +63,7 @@ export default defineNuxtConfig({
       'composables/api/*/',
       'types/*/.ts',
       'types/**',
-    ]
+    ],
   },
   // css
   css: [
@@ -72,7 +73,7 @@ export default defineNuxtConfig({
     '~/assets/styles/animate.scss',
     'animate.css',
   ],
-  // vite 
+  // vite
   vite: {
     css: {
       preprocessorOptions: {
@@ -94,7 +95,7 @@ export default defineNuxtConfig({
   },
   // pinia持久化到会话存储
   piniaPersistedstate: {
-    storage: "localStorage",
+    storage: 'localStorage',
   },
   colorMode: {
     classSuffix: '',
@@ -105,7 +106,7 @@ export default defineNuxtConfig({
   // },
   // nitro
   nitro: {
-    baseURL: "/api",
+    baseURL: '/api',
     esbuild: {
       options: {
         target: 'esnext',
@@ -134,4 +135,4 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
-})
+});
