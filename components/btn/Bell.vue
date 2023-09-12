@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const noticeTip = ref<number>(0);
 </script>
+
 <template>
   <div>
     <el-popover trigger="click">
@@ -11,11 +12,8 @@ const noticeTip = ref<number>(0);
           hover:animate-swing
         >
           <i
-            p-3
-            mx-1
-            px-0.7em
-            class="transition-100 hover:(bg-[var(--el-color-warning)] i-solar:bell-bold)"
-            i-solar:bell-outline
+            class="transition-100 hover:(i-solar:bell-bold bg-[var(--el-color-warning)])"
+            i-solar:bell-outline mx-1 p-3 px-0.7em
           />
         </el-badge>
       </template>
@@ -30,4 +28,5 @@ const noticeTip = ref<number>(0);
     </el-popover>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

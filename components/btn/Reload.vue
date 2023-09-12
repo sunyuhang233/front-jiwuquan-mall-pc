@@ -1,17 +1,21 @@
+<script lang="ts" setup>
+defineEmits(['reload']);
+</script>
+
 <template>
   <ElButton
-    @click="$emit('reload')"
     class="btn"
     round
+    @click="$emit('reload')"
   >
-    <span class="hidden truncate md:inline overflow-hidden">刷新</span>
+    <span class="hidden overflow-hidden truncate md:inline">刷新</span>
     <i
-      class="hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-1.4em w-1.4em"
+      class="i-solar:refresh-outline w-1.4em w-1.4em cursor-pointer bg-[var(--el-color-info)] transition-300 hover:rotate-180"
       alt="页面刷新"
     />
   </ElButton>
 </template>
-<script lang="ts" setup></script>
+
 <style lang="scss" scoped>
 .btn {
   padding: 0em 0.4em;

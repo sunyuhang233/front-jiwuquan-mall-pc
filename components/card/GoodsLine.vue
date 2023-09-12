@@ -1,36 +1,33 @@
 <script lang="ts" setup>
-import currency from "currency.js";
-import { type GoodsVO } from "~/types/goods";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
+import currency from 'currency.js';
+import { type GoodsVO } from '~/types/goods';
+import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+
 const { goods } = defineProps<{
-  goods: GoodsVO;
+  goods: GoodsVO
 }>();
 </script>
+
 <template>
   <div class="flex-row-bt-c cursor-pointer p-1">
     <ElImage
       loading="lazy"
-      class="hover:transform-scale-110 transition-300 w-6em h-6em overflow-hidden"
-      :src="BaseUrlImg + goods.images[0] + '?imageView2/1/w/100/h/100/format/webp/interlace/1/q/50'"
+      class="h-6em w-6em overflow-hidden transition-300 hover:transform-scale-110"
+      :src="`${BaseUrlImg + goods.images[0]}?imageView2/1/w/100/h/100/format/webp/interlace/1/q/50`"
       style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px"
       fit="cover"
     />
-    <div class="px-2 md:px-4 flex-1 group flex flex-col justify-between">
-      <h3 class="overflow-hidden truncate tracking-1px max-w-12em md:max-w-16em">
+    <div class="group flex flex-1 flex-col justify-between px-2 md:px-4">
+      <h3 class="max-w-12em overflow-hidden truncate tracking-1px md:max-w-16em">
         {{ goods.name }}
       </h3>
       <!-- 中下 -->
       <p
-        leading-1.2em
-        font-700
-        color-red-6
-        mt-1
-        mb-5
+        mb-5 mt-1 font-700 leading-1.2em color-red-6
       >
         ￥{{ currency(goods.price) }}
         <small
-          color-coolgray
-          text-0.4em
+          text-0.4em color-coolgray
           style="text-decoration: line-through"
         >
           ￥{{ currency(goods.costPrice) }}
@@ -42,8 +39,7 @@ const { goods } = defineProps<{
         flex-1
       >
         <small
-          opacity-80
-          mr-3
+          mr-3 opacity-80
         >
           浏览：{{ goods.views }}
         </small>
@@ -51,9 +47,10 @@ const { goods } = defineProps<{
         <slot
           name="btn"
           :goods="goods"
-        ></slot>
+        />
       </p>
     </div>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

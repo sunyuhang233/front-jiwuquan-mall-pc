@@ -1,49 +1,18 @@
-<template>
-  <ElButton
-    @click="toggle"
-    class="btn mx-2"
-    round
-  >
-    <span
-      hidden
-      md:inline
-      truncate
-      overflow-hidden
-    >
-      {{ isDark ? "切换日间" : "切换夜间" }}
-    </span>
-    <!-- <OtherMoonSun /> -->
-    <img
-      src="@/assets/images/icon/sun.svg"
-      class="w-1.3em h-1.3em"
-      alt="sun 日间模式"
-      v-if="!isDark"
-    />
-    <img
-      src="@/assets/images/icon/moon.svg"
-      class="fill-light-5 w-1.3em h-1.3em"
-      alt="sun 日间模式"
-      v-else
-    />
-  </ElButton>
-</template>
 <script lang="ts" setup>
 // 切换动画
 const mode = useColorMode();
 const isDark = useDark();
 // 节流watch
 watchDebounced(isDark, (value) => {
-  mode.preference = value ? "dark" : "light";
+  mode.preference = value ? 'dark' : 'light';
 });
 /**
  * 切换主题
  * @param event
  */
-let toggle = (event: MouseEvent) => {
-  // @ts-ignore
-  let isAppearanceTransition =
-    // @ts-ignore
-    document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function toggle(event: MouseEvent) {
+  const isAppearanceTransition
+    = document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!isAppearanceTransition || !event) {
     isDark.value = !isDark.value;
     return null;
@@ -69,13 +38,43 @@ let toggle = (event: MouseEvent) => {
       },
       {
         duration: 400,
-        easing: "ease-in-out",
-        pseudoElement: isDark.value ? "::view-transition-new(root)" : "::view-transition-old(root)",
-      }
+        easing: 'ease-in-out',
+        pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
+      },
     );
   });
-};
+}
 </script>
+
+<template>
+  <ElButton
+    class="btn mx-2"
+    round
+    @click="toggle"
+  >
+    <span
+
+
+      hidden overflow-hidden truncate md:inline
+    >
+      {{ isDark ? "切换日间" : "切换夜间" }}
+    </span>
+    <!-- <OtherMoonSun /> -->
+    <img
+      v-if="!isDark"
+      src="@/assets/images/icon/sun.svg"
+      class="h-1.3em w-1.3em"
+      alt="sun 日间模式"
+    >
+    <img
+      v-else
+      src="@/assets/images/icon/moon.svg"
+      class="h-1.3em w-1.3em fill-light-5"
+      alt="sun 日间模式"
+    >
+  </ElButton>
+</template>
+
 <style lang="scss" scoped>
 .btn {
   padding: 0em 0.4em;

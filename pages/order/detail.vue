@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import currency from 'currency.js';
 import {
   OrdersStatus,
   pushOrdersItems,
@@ -9,10 +10,10 @@ import {
   checkDeliveryOrders, // 确认收货
   deleteOrders, // 删除订单
   type PushOrdersItemDTO,
-} from "~/composables/api/orders";
-import { GoodsSkuMdVO, getGoodsSkuByIds } from "~/composables/api/goods/sku";
-import { appName } from "~/constants";
-import currency from "currency.js";
+} from '~/composables/api/orders';
+import type { GoodsSkuMdVO } from '~/composables/api/goods/sku';
+import { getGoodsSkuByIds } from '~/composables/api/goods/sku';
+import { appName } from '~/constants';
 
 // 1、订单内容store
 const order = useOrderStore();
@@ -21,76 +22,75 @@ const user = useUserStore();
 const route = useRoute();
 // 2、reloadOrderInfo
 useAsyncData(async () => {
-  if (route.query.id) {
+  if (route.query.id)
     order.reloadOrderInfo();
-  }
 });
 // 订单状态
 const ordersTitle = computed(() => {
-  let banner: string = "";
-  let submitText: string = "";
-  let type: any = "";
-  let btnType: any = "";
+  let banner: string = '';
+  let submitText: string = '';
+  let type: any = '';
+  let btnType: any = '';
   switch (order.status) {
     case OrdersStatus.READY:
-      banner = "提交订单";
-      submitText = "提交订单";
-      type = "primary";
-      btnType = "primary";
+      banner = '提交订单';
+      submitText = '提交订单';
+      type = 'primary';
+      btnType = 'primary';
       break;
     case OrdersStatus.UN_PAID:
-      banner = "待付款";
-      submitText = "立即付款";
-      type = "danger";
-      btnType = "danger";
+      banner = '待付款';
+      submitText = '立即付款';
+      type = 'danger';
+      btnType = 'danger';
       break;
     case OrdersStatus.PAID:
-      banner = "已付款，等待发货... 📦";
-      submitText = "催发货";
-      type = "primary";
-      btnType = "primary";
+      banner = '已付款，等待发货... 📦';
+      submitText = '催发货';
+      type = 'primary';
+      btnType = 'primary';
       break;
     case OrdersStatus.DELIVERED:
-      banner = "已发货，请等待物流运算";
-      submitText = "确认收货";
-      type = "success";
-      btnType = "success";
+      banner = '已发货，请等待物流运算';
+      submitText = '确认收货';
+      type = 'success';
+      btnType = 'success';
       break;
     case OrdersStatus.RECEIVED:
-      banner = "已确认收货，期待你的评价！";
-      submitText = "去评价";
-      type = "info";
-      btnType = "info";
+      banner = '已确认收货，期待你的评价！';
+      submitText = '去评价';
+      type = 'info';
+      btnType = 'info';
       break;
     case OrdersStatus.COMMENTED:
-      banner = "已完成评论，欢迎下次光临！";
-      submitText = "再来一单";
-      type = "success";
-      btnType = "success";
+      banner = '已完成评论，欢迎下次光临！';
+      submitText = '再来一单';
+      type = 'success';
+      btnType = 'success';
       break;
     case OrdersStatus.CANCELED:
-      banner = "订单已取消...";
-      submitText = "再来一单";
-      type = "primary";
-      btnType = "primary";
+      banner = '订单已取消...';
+      submitText = '再来一单';
+      type = 'primary';
+      btnType = 'primary';
       break;
     case OrdersStatus.DELAY_CANCELED:
-      banner = "订单已超时自动取消...";
-      submitText = "再来一单";
-      type = "primary";
-      btnType = "primary";
+      banner = '订单已超时自动取消...';
+      submitText = '再来一单';
+      type = 'primary';
+      btnType = 'primary';
       break;
     case OrdersStatus.REFUND:
-      banner = "发起退款中，等等卖家处理...";
-      submitText = "等待中，请稍后";
-      type = "warning";
-      btnType = "warning";
+      banner = '发起退款中，等等卖家处理...';
+      submitText = '等待中，请稍后';
+      type = 'warning';
+      btnType = 'warning';
       break;
     case OrdersStatus.REFUND_SUCCESS:
-      banner = "退款成功，请注意到账！";
-      submitText = "再来一单";
-      type = "info";
-      btnType = "info";
+      banner = '退款成功，请注意到账！';
+      submitText = '再来一单';
+      type = 'info';
+      btnType = 'info';
       break;
   }
   return {
@@ -105,13 +105,12 @@ const isEdit = ref<boolean>(false); // 是否编辑
 const isUpdate = ref<boolean>(order.status === OrdersStatus.READY); // 是否可更新 （地址|留言）
 const isLoading = ref<boolean>(false);
 const isLoadAddressList = ref<boolean>(false);
-if (address.addressList.length === 0) {
+if (address.addressList.length === 0)
   address.resetRequestList(user.getToken);
-}
+
 watch(isEdit, (val) => {
-  if (val) {
+  if (val)
     selectPointsVal.value = 0;
-  }
 });
 const orderItems = ref<(GoodsSkuMdVO & PushOrdersItemDTO)[]>([]);
 // 2、查询属性信息
@@ -120,36 +119,36 @@ order.pushOrderItems?.forEach((p) => {
   skuIdList.push(p.skuId);
 });
 // 3、加载属性购物列表和选中规格
-const loadSkuItems = async () => {
-  if (skuIdList.length === 0) return;
+async function loadSkuItems() {
+  if (skuIdList.length === 0)
+    return;
   const { data, code } = await getGoodsSkuByIds(skuIdList);
   if (code === StatusCode.SUCCESS) {
     data.forEach((sku) => {
-      const item = order.pushOrderItems.find((p) => p.skuId === sku.id) || {
-        skuId: "",
+      const item = order.pushOrderItems.find(p => p.skuId === sku.id) || {
+        skuId: '',
         quantity: 0,
       };
       orderItems.value.push({ ...sku, ...item });
     });
   }
-};
+}
 useAsyncData(async () => {
   await loadSkuItems();
 });
 
 // 4、选中地址id
-const selectAddressId = ref<string>("");
+const selectAddressId = ref<string>('');
 watch(
   address.addressList,
   (val) => {
-    if (!selectAddressId.value && val.length > 0) {
-      selectAddressId.value = val.find((p) => p.isDefault === 1)?.id || val[0].id;
-    }
+    if (!selectAddressId.value && val.length > 0)
+      selectAddressId.value = val.find(p => p.isDefault === 1)?.id || val[0].id;
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 );
 // 5、选择代金卷
-const selectVoucherId = ref<string>("");
+const selectVoucherId = ref<string>('');
 const voucherList = ref([]);
 // 6、选择积分抵扣
 const selectPointsVal = ref<number>(0);
@@ -160,7 +159,7 @@ const remark = ref<string>(order.orderInfo.remark);
  * 订单处理（提交、付款、修改订单）
  * @param status
  */
-const onSubmitOrders = async (status: OrdersStatus) => {
+async function onSubmitOrders(status: OrdersStatus) {
   // 1、开启加载 | 保存订单 | 关闭全部编辑
   isEdit.value = false; // 全局编辑
   isUpdate.value = false; // 地址|留言更新
@@ -191,7 +190,7 @@ const onSubmitOrders = async (status: OrdersStatus) => {
       toCommon();
       break;
   }
-};
+}
 
 // 选择支付方式
 const selectPayType = ref<PayType>(PayType.WEALLET);
@@ -199,8 +198,8 @@ const payTypeList = ref<PayTypeDTO[]>([
   {
     disable: false,
     type: PayType.WEALLET,
-    icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
-    title: "钱包",
+    icon: '<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>',
+    title: '钱包',
   },
   {
     disable: true,
@@ -219,7 +218,7 @@ const payTypeList = ref<PayTypeDTO[]>([
 						p-id="1523"
 					></path>
 				</svg>`,
-    title: "微信",
+    title: '微信',
   },
   {
     disable: true,
@@ -238,20 +237,20 @@ const payTypeList = ref<PayTypeDTO[]>([
 						p-id="2519"
 					></path>
 				</svg>`,
-    title: "支付宝",
+    title: '支付宝',
   },
 ]);
 export interface PayTypeDTO {
-  disable: boolean;
-  icon: string;
-  title: string;
-  type: PayType;
+  disable: boolean
+  icon: string
+  title: string
+  type: PayType
 }
 
 // 1）提交订单 READY -1
-const pushOrder = async () => {
+async function pushOrder() {
   if (!selectAddressId.value) {
-    ElMessage.error("请选择收货地址！");
+    ElMessage.error('请选择收货地址！');
     return;
   }
   isLoading.value = true;
@@ -269,7 +268,7 @@ const pushOrder = async () => {
     selectAddressId.value,
     items,
     useCheckXXSText(remark.value),
-    user.getToken
+    user.getToken,
   );
   if (code === StatusCode.SUCCESS) {
     order.$patch({
@@ -277,47 +276,48 @@ const pushOrder = async () => {
       unPaidVO: data,
       status: OrdersStatus.UN_PAID,
     });
-    order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
+    order.orderInfo.updateTime = useDateFormat(Date.now(), 'YYYY-MM-DD HH:mm:ss').value.toString();
     order.orderInfo.createTime = order.orderInfo.updateTime;
     setTimeout(async () => {
       ElNotification.success({
-        title: "提交成功！",
-        message: `提交订单成功，请在24小时内完成付款`,
+        title: '提交成功！',
+        message: '提交订单成功，请在24小时内完成付款',
       });
       isLoading.value = false;
     }, 300);
-  } else {
+  }
+  else {
     ElNotification.error({
-      title: "提交失败，请稍后再试！",
-      message: message || "",
+      title: '提交失败，请稍后再试！',
+      message: message || '',
     });
     isLoading.value = false;
   }
-};
+}
 
 // 2）支付订单 UN_PAID 0
-const payOrder = async (payType: PayType) => {
-  if (order.status !== OrdersStatus.UN_PAID) return;
-  const str =
-    payTypeList.value.map((p) => {
-      if (p.type === payType) {
+async function payOrder(payType: PayType) {
+  if (order.status !== OrdersStatus.UN_PAID)
+    return;
+  const str
+    = payTypeList.value.map((p) => {
+      if (p.type === payType)
         return p.title;
-      }
     }) || PayType.WEALLET;
 
   // 确认支付
   try {
     const action = await ElMessageBox.confirm(
       `使用${str[0]}支付 ￥${getFinalPrice.value}？`,
-      "确认支付",
+      '确认支付',
       {
-        confirmButtonText: "支 付",
-        confirmButtonClass: "el-button--info border-default shadow-sm",
-        cancelButtonText: "取 消",
+        confirmButtonText: '支 付',
+        confirmButtonClass: 'el-button--info border-default shadow-sm',
+        cancelButtonText: '取 消',
         center: true,
-      }
+      },
     );
-    if (action === "confirm") {
+    if (action === 'confirm') {
       isLoading.value = true;
       // 支付订单
       const { data, message, code } = await payOrders(
@@ -325,100 +325,108 @@ const payOrder = async (payType: PayType) => {
         PayType.WEALLET,
         selectPointsVal.value,
         selectVoucherId.value,
-        user.getToken
+        user.getToken,
       );
       if (code === StatusCode.SUCCESS) {
         ElNotification.success({
-          title: "付款成功！",
+          title: '付款成功！',
           message: `支付成功，共花费${data}元`,
         });
 
         order.status = OrdersStatus.PAID;
         order.orderInfo.status = OrdersStatus.PAID;
-      } else {
+      }
+      else {
         ElNotification.error({
-          title: "支付失败，请稍后再试！",
-          message: message,
+          title: '支付失败，请稍后再试！',
+          message,
         });
       }
     }
     isLoading.value = false;
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
+  finally {
+    isLoading.value = false;
+  }
+}
 // 3）待发货（催发货）
-const toastOrder = () => {
-  ElMessageBox.alert("我们已收到您的订单，将尽快处理并安排发货！", "提 醒", {
-    confirmButtonText: "明 白",
+function toastOrder() {
+  ElMessageBox.alert('我们已收到您的订单，将尽快处理并安排发货！', '提 醒', {
+    confirmButtonText: '明 白',
     center: true,
   }).catch();
-};
+}
 // 4）取消订单 CANCLEL
-const cancelOrder = async (orderId: string) => {
-  if (order.status !== OrdersStatus.UN_PAID) return;
+async function cancelOrder(orderId: string) {
+  if (order.status !== OrdersStatus.UN_PAID)
+    return;
   try {
-    const action = await ElMessageBox.confirm(`是否确认取消订单？`, "取消提示", {
-      confirmButtonText: "确 认",
-      confirmButtonClass: "el-button--primary is-plain border-default ",
-      cancelButtonText: "取 消",
+    const action = await ElMessageBox.confirm('是否确认取消订单？', '取消提示', {
+      confirmButtonText: '确 认',
+      confirmButtonClass: 'el-button--primary is-plain border-default ',
+      cancelButtonText: '取 消',
       center: true,
     });
-    if (action === "confirm") {
+    if (action === 'confirm') {
       isLoading.value = true;
       // 发起退款
       const { message, code } = await cancelOrders(
         order.orderId || order.orderInfo.id,
-        user.getToken
+        user.getToken,
       );
       isLoading.value = false;
       // 成功
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          "YYYY-MM-DD HH:mm:ss"
+          'YYYY-MM-DD HH:mm:ss',
         ).value.toString();
         order.status = OrdersStatus.CANCELED;
         order.orderInfo.status = OrdersStatus.CANCELED;
         ElNotification.success({
-          title: "取消成功 🎟",
-          message: "订单取消成功，优惠卷等优惠也将原路退回！",
+          title: '取消成功 🎟',
+          message: '订单取消成功，优惠卷等优惠也将原路退回！',
         });
-      } else {
+      }
+      else {
         // 失败
         ElNotification.error({
-          title: "订单取消失败，请稍后再试！",
+          title: '订单取消失败，请稍后再试！',
         });
       }
     }
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
+  finally {
+    isLoading.value = false;
+  }
+}
 // 5）修改订单 update
-const updateOrder = async (orderId: string) => {
-  if (order.status !== OrdersStatus.UN_PAID && order.status !== OrdersStatus.PAID) return;
+async function updateOrder(orderId: string) {
+  if (order.status !== OrdersStatus.UN_PAID && order.status !== OrdersStatus.PAID)
+    return;
   isUpdate.value = false;
   isLoading.value = true;
-  if (selectAddressId.value === "") {
-    ElMessage.warning("请选择修改地址！");
+  if (selectAddressId.value === '') {
+    ElMessage.warning('请选择修改地址！');
     return;
   }
   const { message, code } = await updateOrders(
     orderId,
     selectAddressId.value,
     remark.value || order.orderInfo.remark,
-    user.getToken
+    user.getToken,
   );
   isLoading.value = false;
 
   if (code === StatusCode.SUCCESS) {
-    order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
-    let vo = address.addressList.find((p) => p.id === selectAddressId.value);
+    order.orderInfo.updateTime = useDateFormat(Date.now(), 'YYYY-MM-DD HH:mm:ss').value.toString();
+    const vo = address.addressList.find(p => p.id === selectAddressId.value);
     if (vo) {
       order.orderInfo.name = vo.name;
       order.orderInfo.phone = vo.phone;
@@ -430,83 +438,89 @@ const updateOrder = async (orderId: string) => {
       order.orderInfo.remark = remark.value;
     }
     ElNotification.success({
-      title: "修改订单成功！",
-    });
-  } else {
-    ElNotification.error({
-      title: "修改失败，请稍后再试！",
-      message: message,
+      title: '修改订单成功！',
     });
   }
-};
+  else {
+    ElNotification.error({
+      title: '修改失败，请稍后再试！',
+      message,
+    });
+  }
+}
 // 6）发起退款订单 CANCLEL
-const pushRefundOrder = async (orderId: string) => {
+async function pushRefundOrder(orderId: string) {
   if (
-    order.status !== OrdersStatus.PAID &&
-    order.status !== OrdersStatus.RECEIVED &&
-    order.status !== OrdersStatus.DELIVERED
+    order.status !== OrdersStatus.PAID
+    && order.status !== OrdersStatus.RECEIVED
+    && order.status !== OrdersStatus.DELIVERED
   )
     return;
   try {
-    const action = await ElMessageBox.confirm(`确认发起退款？😢`, "退款提示", {
+    const action = await ElMessageBox.confirm('确认发起退款？😢', '退款提示', {
       center: true,
-      confirmButtonText: "退 款",
-      confirmButtonClass: "el-button--danger border-default shadow-sm",
-      cancelButtonText: "取 消",
+      confirmButtonText: '退 款',
+      confirmButtonClass: 'el-button--danger border-default shadow-sm',
+      cancelButtonText: '取 消',
     });
-    if (action === "confirm") {
+    if (action === 'confirm') {
       isLoading.value = true;
       // 发起退款
       const { message, code } = await refundOrders(
         order.orderId || order.orderInfo.id,
-        user.getToken
+        user.getToken,
       );
       isLoading.value = false;
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          "YYYY-MM-DD HH:mm:ss"
+          'YYYY-MM-DD HH:mm:ss',
         ).value.toString();
         // 发起退款
         if (order.status === OrdersStatus.RECEIVED) {
           order.status = OrdersStatus.REFUND;
           order.orderInfo.status = OrdersStatus.REFUND;
           ElNotification.success({
-            title: "发起退款成功",
-            message: message,
+            title: '发起退款成功',
+            message,
           });
-        } else {
+        }
+        else {
           // 未发货，直接退款
           order.status = OrdersStatus.REFUND_SUCCESS;
           order.orderInfo.status = OrdersStatus.REFUND_SUCCESS;
           ElNotification.success({
-            title: "发起退款成功",
-            message: "未发货，正在自动退款，请等待！",
+            title: '发起退款成功',
+            message: '未发货，正在自动退款，请等待！',
           });
         }
-      } else {
+      }
+      else {
         ElNotification.error({
-          title: "发起退款失败，请稍后再试！",
+          title: '发起退款失败，请稍后再试！',
         });
       }
     }
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
+  finally {
+    isLoading.value = false;
+  }
+}
 // 7）确认收货 DELIVERED 2
-const checkDeliveryOrder = async () => {
-  if (order.status !== OrdersStatus.DELIVERED) return;
+async function checkDeliveryOrder() {
+  if (order.status !== OrdersStatus.DELIVERED)
+    return;
   try {
-    const action = await ElMessageBox.confirm(`是否确认收货？`, "收货提示", {
+    const action = await ElMessageBox.confirm('是否确认收货？', '收货提示', {
       center: true,
-      confirmButtonText: "确 认",
-      confirmButtonClass: "el-button--success border-default shadow-sm",
-      cancelButtonText: "取 消",
+      confirmButtonText: '确 认',
+      confirmButtonClass: 'el-button--success border-default shadow-sm',
+      cancelButtonText: '取 消',
     });
-    if (action === "confirm") {
+    if (action === 'confirm') {
       isLoading.value = true;
       // 发起收货
       const { code } = await checkDeliveryOrders(order.orderInfo.id, user.getToken);
@@ -514,28 +528,32 @@ const checkDeliveryOrder = async () => {
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          "YYYY-MM-DD HH:mm:ss"
+          'YYYY-MM-DD HH:mm:ss',
         ).value.toString();
         order.status = OrdersStatus.RECEIVED;
         order.orderInfo.status = OrdersStatus.RECEIVED;
         ElNotification.success({
-          title: "收货成功",
-          message: "收货确认成功！如有任何问题，请随时联系我们的客服。",
+          title: '收货成功',
+          message: '收货确认成功！如有任何问题，请随时联系我们的客服。',
         });
-      } else {
+      }
+      else {
         ElNotification.error({
-          title: "确认收货失败，请稍后再试！",
+          title: '确认收货失败，请稍后再试！',
         });
       }
     }
-  } catch (e) {
-  } finally {
+  }
+  catch (e) {
+  }
+  finally {
     isLoading.value = false;
   }
-};
+}
 // 8）再来一单
-const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
-  if (!items || items.length === 0) return;
+async function aginPushOrder(items: PushOrdersItemDTO[]) {
+  if (!items || items.length === 0)
+    return;
   isLoading.value = true;
   const pushOrderItems = [...items];
   order.clearOrderItems();
@@ -547,35 +565,36 @@ const aginPushOrder = async (items: PushOrdersItemDTO[]) => {
   setTimeout(() => {
     isLoading.value = false;
   }, 500);
-};
+}
 // 9）去评价
-const toCommon = () => {
-  if (order.status !== OrdersStatus.RECEIVED) return;
+function toCommon() {
+  if (order.status !== OrdersStatus.RECEIVED)
+    return;
   navigateTo({
     path: `/order/comment/${order.orderInfo.id}`,
   });
-};
+}
 // 10）删除订单 REFUND_SUCCESS、CANCELED、DELAY_CANCELED、COMMENTED
-const deleteOrder = async (orderId: string) => {
+async function deleteOrder(orderId: string) {
   if (
-    order.orderInfo.status !== OrdersStatus.REFUND_SUCCESS &&
-    order.orderInfo.status !== OrdersStatus.CANCELED &&
-    order.orderInfo.status !== OrdersStatus.DELAY_CANCELED &&
-    order.orderInfo.status !== OrdersStatus.COMMENTED
+    order.orderInfo.status !== OrdersStatus.REFUND_SUCCESS
+    && order.orderInfo.status !== OrdersStatus.CANCELED
+    && order.orderInfo.status !== OrdersStatus.DELAY_CANCELED
+    && order.orderInfo.status !== OrdersStatus.COMMENTED
   )
     return;
   try {
     const action = await ElMessageBox.confirm(
-      `删除将永久移除该订单及其相关信息，是否确定删除？`,
-      "删除操作",
+      '删除将永久移除该订单及其相关信息，是否确定删除？',
+      '删除操作',
       {
         center: true,
-        confirmButtonText: "删 除",
-        confirmButtonClass: "el-button--danger border-default shadow-sm",
-        cancelButtonText: "取 消",
-      }
+        confirmButtonText: '删 除',
+        confirmButtonClass: 'el-button--danger border-default shadow-sm',
+        cancelButtonText: '取 消',
+      },
     );
-    if (action === "confirm") {
+    if (action === 'confirm') {
       isLoading.value = true;
       // 发起退款
       const { code } = await deleteOrders(orderId || order.orderInfo.id, user.getToken);
@@ -586,22 +605,25 @@ const deleteOrder = async (orderId: string) => {
         order.status = OrdersStatus.DELETED;
         order.orderInfo.status = OrdersStatus.DELETED;
         ElNotification.success({
-          title: "删除提示",
-          message: "订单和相关信息删除成功！",
+          title: '删除提示',
+          message: '订单和相关信息删除成功！',
         });
-      } else {
+      }
+      else {
         ElNotification.error({
-          title: "删除失败，请稍后再试！",
+          title: '删除失败，请稍后再试！',
         });
       }
     }
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
-//--------------------- 统计 计算 -----------------------
+  finally {
+    isLoading.value = false;
+  }
+}
+// --------------------- 统计 计算 -----------------------
 // 商品总价 +++
 const getAllCoastPrice = computed(() => {
   let price = currency(0);
@@ -620,7 +642,7 @@ const getAllPostage = computed(() => {
 });
 // 计算最大额度 --- (最后)
 const getPointMax = computed(() => {
-  let price = getAllCoastPrice.value.add(getAllPostage.value);
+  const price = getAllCoastPrice.value.add(getAllPostage.value);
   return price.intValue > 10000 ? 10000 : price.intValue;
 });
 // 最终价格
@@ -631,45 +653,44 @@ const getFinalPrice = computed(() => {
 });
 // 计算优惠价
 const getReduce = computed(() => {
-  if (order.orderInfo.spendPrice) {
+  if (order.orderInfo.spendPrice)
     return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
-  } else {
+
+  else
     return 0;
-  }
 });
 // --------------------- 订单 ------------------------
 
 // 选择地址
-const updateAddressId = (id: string) => {
-  if (isUpdate.value) {
+function updateAddressId(id: string) {
+  if (isUpdate.value)
     selectAddressId.value = id;
-  }
-};
+}
 // -------------------- 功能 -----------------------
 /**
  * 打开编辑状态
  * @param status
  */
-const toEditGoods = (status: OrdersStatus | number) => {
-  if (status !== OrdersStatus.READY) return;
+function toEditGoods(status: OrdersStatus | number) {
+  if (status !== OrdersStatus.READY)
+    return;
   if (isEdit.value) {
     saveOrdersItems();
     isEdit.value = false;
     return;
   }
-  ElMessageBox.alert("提交订单后便不可修改规格数量和优惠", "注意", {
-    confirmButtonText: "我已了解",
+  ElMessageBox.alert('提交订单后便不可修改规格数量和优惠', '注意', {
+    confirmButtonText: '我已了解',
     autofocus: true,
     center: true,
     callback: (action: string) => {
-      if (action === "confirm") {
+      if (action === 'confirm')
         isEdit.value = true;
-      }
     },
   });
-};
+}
 // 保存订单信息
-const saveOrdersItems = () => {
+function saveOrdersItems() {
   const list: PushOrdersItemDTO[] = orderItems.value.map((p) => {
     return {
       skuId: p.skuId,
@@ -682,53 +703,55 @@ const saveOrdersItems = () => {
   order.$patch({
     pushOrderItems: list,
   });
-};
+}
 
 // -------------------- 其他 -----------------------
 
 // 地址刷新
-const reloadAddress = async () => {
-  if (isLoadAddressList.value) return;
+async function reloadAddress() {
+  if (isLoadAddressList.value)
+    return;
   isLoadAddressList.value = true;
   await address.resetRequestList(user.getToken);
   setTimeout(() => {
     isLoadAddressList.value = false;
   }, 300);
-};
+}
 const title = computed(() => `${appName} - ${ordersTitle.value.banner}`);
 useHead({
-  title: title,
+  title,
   meta: [
     {
-      name: "description",
+      name: 'description',
       content: title,
     },
   ],
 });
 
-const reload = async () => {
-  if (isLoading.value) return;
+async function reload() {
+  if (isLoading.value)
+    return;
   isLoading.value = true;
   await order.reloadOrderInfo(order.orderId);
   setTimeout(() => {
-    ElMessage.success("刷新成功！");
+    ElMessage.success('刷新成功！');
     isLoading.value = false;
   }, 300);
-};
+}
 // 返回
-const toBack = () => {
-  if (history) {
-    history.length > 1 ? history.back() : navigateTo("/");
-  } else {
-    navigateTo("/");
-  }
-};
+function toBack() {
+  if (history)
+    history.length > 1 ? history.back() : navigateTo('/');
+  else
+    navigateTo('/');
+}
 
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout
@@ -740,12 +763,12 @@ definePageMeta({
     >
       <ClientOnly>
         <div
-          v-loading.fullscreen.lock="isLoading"
-          class="layout-default-se min-h-100vh tracking-0.1em"
           v-if="user.isLogin && order.pushOrderItems.length > 0"
+          v-loading.fullscreen.lock="isLoading"
+          class="min-h-100vh tracking-0.1em layout-default-se"
         >
           <!--------------- 头部 ---------------->
-          <div class="group flex-row-bt-c mt-1rem mb-2rem select-none">
+          <div class="group mb-2rem mt-1rem flex-row-bt-c select-none">
             <div class="flex items-center">
               <NuxtLink
                 to="/"
@@ -770,9 +793,9 @@ definePageMeta({
                 {{ ordersTitle.banner }}
                 <!-- 超时计时器 -->
                 <div
+
+                  v-if="order.status === OrdersStatus.UN_PAID" inline
                   truncate
-                  inline
-                  v-if="order.status === OrdersStatus.UN_PAID"
                 >
                   ：
                   <OrderDelayTimer :date="new Date(order.orderInfo.createTime)" />
@@ -781,43 +804,43 @@ definePageMeta({
             </div>
             <div class="flex">
               <BtnReload
-                class="md:opacity-0 group-hover:opacity-90"
+                class="group-hover:opacity-90 md:opacity-0"
                 @reload="reload"
               />
-              <BtnSwitch class="mr-0 md:opacity-0 group-hover:opacity-90" />
+              <BtnSwitch class="mr-0 group-hover:opacity-90 md:opacity-0" />
             </div>
           </div>
           <!--------------- 地址+状态 ---------------->
           <div
             v-loading="isLoadAddressList"
-            class="v-card group opacity-90 border-default flex flex-col border-t-[var(--el-color-primary)] dark:border-t-[var(--el-color-primary)]"
+            class="v-card group flex flex-col border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
             border-t="0.5rem solid "
             :style="{ borderTopColor: `var(--el-color-${ordersTitle.type})` }"
           >
             <!-- 订单-状态 -->
             <OrderStatusSteps
+              v-if="order.status > OrdersStatus.READY"
               class="mt-2"
               :active="order.status"
               :date="order.orderInfo.createTime"
               :color="ordersTitle.type"
-              v-if="order.status > OrdersStatus.READY"
             />
             <!-- 选择-收货地址 -->
             <div
-              class="address-list w-full flex flex-col"
               v-if="isUpdate"
+              class="address-list w-full flex flex-col"
             >
               <h4
-                tracking-0.2em
-                mb-2
+
+                mb-2 tracking-0.2em
               >
                 收货地址：
                 <i
-                  @click="reloadAddress"
-                  opacity-0
                   v-show="isUpdate"
+                  opacity-0
                   group-hover:opacity-100
-                  class="px-3 float-right hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)]"
+                  class="i-solar:refresh-outline float-right cursor-pointer bg-[var(--el-color-info)] px-3 transition-300 hover:rotate-180"
+                  @click="reloadAddress"
                 />
               </h4>
               <ElDivider
@@ -834,19 +857,19 @@ definePageMeta({
                       duration: 300,
                       easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
                     }"
-                    class="flex w-800px md:w-full pb-3"
+                    class="w-800px flex pb-3 md:w-full"
                   >
                     <OrderAddressBoxSe
-                      @click="updateAddressId(p.id)"
                       v-for="p in address.addressList"
-                      :address="p"
                       :key="p.id"
-                      class="overflow-hidden opacity-80 dark:opacity-70 transition-200 flex-shrink-0 w-220px"
+                      :address="p"
+                      class="w-220px flex-shrink-0 overflow-hidden opacity-80 transition-200 dark:opacity-70"
                       :class="
                         p.id === selectAddressId
                           ? 'border-[var(--el-color-primary)] dark:border-[var(--el-color-primary)]'
                           : ''
                       "
+                      @click="updateAddressId(p.id)"
                     >
                       <template #btns>
                         <!-- 选中 -->
@@ -854,12 +877,12 @@ definePageMeta({
                       </template>
                     </OrderAddressBoxSe>
                     <NuxtLink
-                      :key="'/user/address'"
+                      key="/user/address"
                       target="_blank"
                       to="/user/address"
-                      class="flex-shrink-0 hover:scale-96 hover:border-solid flex-row-c-c cursor-pointer transition-300 mr-3 mt-2 w-240px min-h-160px p-3.4 relative border-default-dashed border-2px rounded-8px rounded-6px opacity-90 flex flex-col leading-1.2em group"
+                      class="group relative mr-3 mt-2 min-h-160px w-240px flex flex-row-c-c flex-shrink-0 flex-col cursor-pointer border-2px rounded-6px rounded-8px p-3.4 leading-1.2em opacity-90 transition-300 hover:scale-96 border-default-dashed hover:border-solid"
                     >
-                      <ElIconCirclePlusFilled class="transition-300 w-4em h-4em opacity-40" />
+                      <ElIconCirclePlusFilled class="h-4em w-4em opacity-40 transition-300" />
                       <strong class="mt-2 opacity-40 transition-300">添加新地址</strong>
                     </NuxtLink>
                   </ul>
@@ -874,16 +897,16 @@ definePageMeta({
             :address="order.orderInfo"
           />
           <!-------------- 商品列表 -------------->
-          <div class="v-card border-default order-item flex flex-col">
+          <div class="v-card order-item flex flex-col border-default">
             <h4 mb-2>
               选购商品
               <el-text
                 v-if="order.status === OrdersStatus.READY"
-                @click="toEditGoods(order.status)"
-                class="cursor-pointer ml-a float-right"
+                class="float-right ml-a cursor-pointer"
                 plain
                 :type="isEdit ? 'danger' : 'primary'"
                 szie="small"
+                @click="toEditGoods(order.status)"
               >
                 {{ isEdit ? "确定修改" : "修改" }}
               </el-text>
@@ -902,7 +925,7 @@ definePageMeta({
                 :data="p"
                 :disable="!isEdit"
               >
-                <template #btn></template>
+                <template #btn />
               </CardOrderSku>
             </section>
           </div>
@@ -912,9 +935,9 @@ definePageMeta({
             <div class="flex-row-bt-c">
               <span>代金卷</span>
               <el-select
+                v-model="selectVoucherId"
                 :disabled="voucherList.length === 0 || !isEdit"
                 :class="voucherList.length === 0 || !isEdit ? 'w-4.6rem' : 'w-1/5'"
-                v-model="selectVoucherId"
                 :placeholder="voucherList.length ? '选择代金卷' : '暂无代金卷'"
               >
                 <el-option
@@ -931,8 +954,8 @@ definePageMeta({
             />
             <!-- 积分抵扣 -->
             <div
-              class="flex-row-bt-c border-0"
               v-if="order.status === OrdersStatus.READY || order.status === OrdersStatus.UN_PAID"
+              class="flex-row-bt-c border-0"
             >
               <span>
                 积分抵扣
@@ -940,38 +963,38 @@ definePageMeta({
               </span>
               <!-- 积分选择 -->
               <OrderSelectPoints
-                v-model="selectPointsVal"
-                :getPointMax="getPointMax"
-                :getFinalPrice="getFinalPrice"
                 v-if="user.userWallet.points > 0"
+                v-model="selectPointsVal"
+                :get-point-max="getPointMax"
+                :get-final-price="getFinalPrice"
               />
               <small
+
+                v-else font-600
                 opacity-40
-                font-600
-                v-else
               >
                 暂无积分
               </small>
             </div>
           </section>
           <!---------------- 备注 ---------------->
-          <section class="v-card border-default flex-row-bt-c">
+          <section class="v-card flex-row-bt-c border-default">
             备注
-            <div class="w-10rem md:w-14rem flex justify-end">
+            <div class="w-10rem flex justify-end md:w-14rem">
               <el-input
                 v-if="order.status < OrdersStatus.DELIVERED"
+                v-model.lazy="remark"
                 :disabled="!isUpdate"
                 class="remark"
                 type="textarea"
                 rows="1"
                 :minlength="0"
                 :maxlength="40"
-                v-model.lazy="remark"
                 placeholder="给卖家的备注（选填）"
               />
               <small
-                text-right
                 v-else
+                text-right
               >
                 {{ order.orderInfo.remark || "暂无备注" }}
               </small>
@@ -979,8 +1002,8 @@ definePageMeta({
           </section>
           <!---------------- 付款方式 ---------------->
           <section
-            class="v-card border-default"
             v-if="order.orderInfo.status === OrdersStatus.UN_PAID"
+            class="v-card border-default"
           >
             <h4 tracking-0.2em>
               付款方式
@@ -989,33 +1012,33 @@ definePageMeta({
                 opacity-40
               />
               <el-radio-group
-                :disable="!isUpdate || !isEdit"
                 v-model="selectPayType"
-                class="w-full pay-type-list"
+                :disable="!isUpdate || !isEdit"
+                class="pay-type-list w-full"
                 style="width: 100%"
               >
                 <div
-                  class="w-full my-2.4 flex-row-bt-c"
                   v-for="p in payTypeList"
                   :key="p.type"
+                  class="my-2.4 w-full flex-row-bt-c"
                 >
                   <div class="left flex items-center">
                     <span
+                      class="mr-4 inline-block h-2rem w-2rem"
                       v-html="p.icon"
-                      class="w-2rem mr-4 h-2rem inline-block"
-                    ></span>
+                    />
                     <small text-0.8rem>{{ p.title }}</small>
                   </div>
                   <el-radio
+                    v-if="!p.disable"
                     :label="p.type"
                     :disable="p.disable"
-                    v-if="!p.disable"
                   />
                   <small
-                    font-500
+
+
+                    v-else text-0.6rem font-500
                     opacity-60
-                    text-0.6rem
-                    v-else
                   >
                     暂未开启
                   </small>
@@ -1026,7 +1049,7 @@ definePageMeta({
           <!---------------- 订单-信息 ---------------->
           <section
             v-if="order.status !== OrdersStatus.READY"
-            class="v-card opacity-80 leading-2em border-default flex flex-col"
+            class="v-card flex flex-col leading-2em opacity-80 border-default"
           >
             <h4 tracking-0.2em>
               订单信息
@@ -1038,21 +1061,21 @@ definePageMeta({
             <!-- 订单号 -->
             <small
               v-copying.toast="order.orderInfo.id"
-              class="flex-row-bt-c w-full cursor-pointer"
+              class="w-full flex-row-bt-c cursor-pointer"
             >
               订单号
-              <span class="transition-300 hover:underline hover:text-[var(--el-color-info)]">
+              <span class="transition-300 hover:text-[var(--el-color-info)] hover:underline">
                 {{ order.orderInfo.id }}
                 <i
-                  class="p-2 opacity-60 i-solar:copy-outline"
+                  class="i-solar:copy-outline p-2 opacity-60"
                 />
               </span>
             </small>
             <!-- 支付时间 -->
             <small
+
+              v-show="order.orderInfo.paidTime" w-full
               flex-row-bt-c
-              w-full
-              v-show="order.orderInfo.paidTime"
             >
               支付时间
               <span
@@ -1064,8 +1087,8 @@ definePageMeta({
             </small>
             <!-- 更新时间 -->
             <small
-              flex-row-bt-c
-              w-full
+
+              w-full flex-row-bt-c
             >
               更新时间
               <span
@@ -1077,8 +1100,8 @@ definePageMeta({
             </small>
             <!-- 下单时间 -->
             <small
-              flex-row-bt-c
-              w-full
+
+              w-full flex-row-bt-c
             >
               下单时间
               <span
@@ -1091,59 +1114,61 @@ definePageMeta({
           </section>
           <!---------------- 总计 ---------------->
           <!-- 视图 -->
-          <section class="v-card leading-2em border-default flex flex-col">
-            <h4 tracking-0.2em>金额明细</h4>
+          <section class="v-card flex flex-col leading-2em border-default">
+            <h4 tracking-0.2em>
+              金额明细
+            </h4>
             <ElDivider
               style="margin: 0.6rem 0"
               opacity-40
             />
             <!-- 原价 -->
-            <small class="opacity-80 flex-row-bt-c w-full">
+            <small class="w-full flex-row-bt-c opacity-80">
               原总价
               <span>￥{{ getAllCoastPrice }}</span>
             </small>
             <!-- 下单后减少 -->
             <small
-              class="opacity-80 flex-row-bt-c w-full"
               v-show="order.status > OrdersStatus.UN_PAID && getReduce !== 0"
+              class="w-full flex-row-bt-c opacity-80"
             >
               优惠
-              <strong class="text-[var(--el-color-error)]">-{{ "￥" + getReduce }}</strong>
+              <strong class="text-[var(--el-color-error)]">-{{ `￥${getReduce}` }}</strong>
             </small>
             <!-- 运费 -->
-            <small class="opacity-80 flex-row-bt-c w-full">
+            <small class="w-full flex-row-bt-c opacity-80">
               运费
               <span>
-                {{ getAllPostage.value > 0 ? "￥" + getAllPostage : "￥0.00" }}
+                {{ getAllPostage.value > 0 ? `￥${getAllPostage}` : "￥0.00" }}
               </span>
             </small>
             <!-- 代金卷 -->
             <small
-              class="opacity-80 flex-row-bt-c w-full"
               v-show="selectVoucherId !== '' && order.status <= OrdersStatus.UN_PAID"
+              class="w-full flex-row-bt-c opacity-80"
             >
               代金卷优惠
               <span>{{ voucherList.length ? selectVoucherId : 0 }}元</span>
             </small>
             <!-- 积分抵扣 -->
             <small
-              class="opacity-80 flex-row-bt-c w-full"
               v-show="selectPointsVal > 0 && order.status <= OrdersStatus.UN_PAID"
+              class="w-full flex-row-bt-c opacity-80"
             >
               积分抵扣
               <span class="text-[var(--el-color-error)]">
-                -{{ "￥" + currency(selectPointsVal / 100) }}
+                -{{ `￥${currency(selectPointsVal / 100)}` }}
               </span>
             </small>
             <!-- 减少 v-if=">OrdersStatus.PAID" -->
             <small
               v-if="getReduce"
-              class="opacity-80 flex-row-bt-c w-full"
+              class="w-full flex-row-bt-c opacity-80"
             >
               减少
               <span class="text-[var(--el-color-error)]">
                 -{{
-                  "￥" + currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice)
+                  `￥${currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice)}`
                 }}
               </span>
             </small>
@@ -1153,11 +1178,11 @@ definePageMeta({
             />
             <!-- 总价 -->
             <div
-              flex-row-bt-c
-              w-full
+
+              w-full flex-row-bt-c
             >
               总计
-              <h3 class="text-[var(--el-color-error)] flex">
+              <h3 class="flex text-[var(--el-color-error)]">
                 ￥
                 <strong block>
                   {{ getReduce ? currency(order.orderInfo.spendPrice) : getFinalPrice }}
@@ -1166,15 +1191,15 @@ definePageMeta({
             </div>
           </section>
           <!---------------- 提交 ---------------->
-          <section class="v-card border-default flex-row-bt-c shadow-lg sticky bottom-6">
+          <section class="v-card sticky bottom-6 flex-row-bt-c shadow-lg border-default">
             <!-- 左侧菜单 -->
             <div class="menu">
               <el-text>
                 <i
-                  p-.8em
-                  i-solar:dialog-2-broken
-                  mr-2
-                ></i>
+
+
+                  i-solar:dialog-2-broken mr-2 p-.8em
+                />
                 <small
                   hidden
                   md:inline
@@ -1184,52 +1209,52 @@ definePageMeta({
               </el-text>
             </div>
             <!-- 右侧菜单 -->
-            <div class="submit cursor-pointer flex items-center">
-              <i class="fold block md:hidden i-solar:menu-dots-bold-duotone w-6 h-6 mr-3" />
-              <div class="flex-row-c-c hidden md:flex mr-3 submit-lbtns">
+            <div class="submit flex cursor-pointer items-center">
+              <i class="fold i-solar:menu-dots-bold-duotone mr-3 block h-6 w-6 md:hidden" />
+              <div class="submit-lbtns mr-3 hidden flex-row-c-c md:flex">
                 <!-- 取消订单 -->
                 <el-button
+                  v-if="order.status === OrdersStatus.UN_PAID"
                   size="default"
                   plain
-                  v-if="order.status === OrdersStatus.UN_PAID"
                   @click="cancelOrder(order.orderId)"
                 >
                   取消订单
                 </el-button>
                 <!-- 删除订单 -->
                 <el-button
+                  v-if="
+                    order.orderInfo.status === OrdersStatus.REFUND_SUCCESS
+                      || order.orderInfo.status === OrdersStatus.CANCELED
+                      || order.orderInfo.status === OrdersStatus.DELAY_CANCELED
+                      || order.orderInfo.status === OrdersStatus.COMMENTED
+                  "
                   type="danger"
                   plain
-                  v-if="
-                    order.orderInfo.status === OrdersStatus.REFUND_SUCCESS ||
-                    order.orderInfo.status === OrdersStatus.CANCELED ||
-                    order.orderInfo.status === OrdersStatus.DELAY_CANCELED ||
-                    order.orderInfo.status === OrdersStatus.COMMENTED
-                  "
                   @click="deleteOrder(order.orderId)"
                 >
                   删除订单
                 </el-button>
                 <!-- 修改订单 -->
                 <el-button
+                  v-if="order.status === OrdersStatus.UN_PAID || order.status === OrdersStatus.PAID"
                   size="default"
                   :type="isUpdate ? 'danger' : ''"
                   plain
-                  v-if="order.status === OrdersStatus.UN_PAID || order.status === OrdersStatus.PAID"
                   @click="isUpdate = !isUpdate"
                 >
                   {{ isUpdate ? "取消修改" : "修改订单" }}
                 </el-button>
                 <!-- 申请退款 -->
                 <el-button
+                  v-if="
+                    order.status === OrdersStatus.PAID
+                      || order.status === OrdersStatus.RECEIVED
+                      || order.status === OrdersStatus.DELIVERED
+                  "
                   size="default"
                   type="danger"
                   plain
-                  v-if="
-                    order.status === OrdersStatus.PAID ||
-                    order.status === OrdersStatus.RECEIVED ||
-                    order.status === OrdersStatus.DELIVERED
-                  "
                   @click="pushRefundOrder(order.orderId)"
                 >
                   申请退款
@@ -1237,17 +1262,17 @@ definePageMeta({
               </div>
               <!-- 提交 -->
               <el-button
+                v-if="ordersTitle.submitText"
+                size="default"
+
+                min-w-8em shadow-md
+                style="font-weight: 600"
+                :type="ordersTitle.btnType || 'primary'"
                 @click="
                   isUpdate && order.status !== OrdersStatus.READY
                     ? updateOrder(order.orderInfo.id)
                     : onSubmitOrders(order.status)
                 "
-                size="default"
-                shadow-md
-                min-w-8em
-                style="font-weight: 600"
-                v-if="ordersTitle.submitText"
-                :type="ordersTitle.btnType || 'primary'"
               >
                 {{
                   isUpdate && order.status !== OrdersStatus.READY ? "确 认" : ordersTitle.submitText
@@ -1257,21 +1282,21 @@ definePageMeta({
           </section>
         </div>
         <div
+
+
+          v-else h-90vh w-full
           flex-row-c-c
-          h-90vh
-          w-full
-          v-else
         >
           <el-empty description=" ">
             <h4
-              font-500
-              mb4
+
+              mb4 font-500
             >
               订单已删除或不存在
             </h4>
             <el-button
-              @click="toBack"
               type="primary"
+              @click="toBack"
             >
               返 回
             </el-button>
@@ -1281,6 +1306,7 @@ definePageMeta({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss">
 .address-list {
   :deep(.el-radio-group) {

@@ -1,44 +1,46 @@
 <script lang="ts" setup>
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
-import { GoodsSkuMdVO, GoodsSkuVO, getGoodsSkuByGid } from "~/composables/api/goods/sku";
-import { PushOrdersItemDTO } from "~/composables/api/orders/index";
-import currency from "currency.js";
+import currency from 'currency.js';
+import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import type { GoodsSkuMdVO, GoodsSkuVO } from '~/composables/api/goods/sku';
+import { getGoodsSkuByGid } from '~/composables/api/goods/sku';
+import type { PushOrdersItemDTO } from '~/composables/api/orders/index';
+
 const { data, disable } = defineProps<{
-  data: PushOrdersItemDTO & GoodsSkuMdVO;
-  disable: boolean;
+  data: PushOrdersItemDTO & GoodsSkuMdVO
+  disable: boolean
 }>();
 const isUpdateLoading = ref<boolean>(false);
 const isLoading = ref<boolean>(true);
 // 商品规格信息
 const skuList = ref<GoodsSkuVO[]>([]);
 // 加载规格列表
-const loadGoodSkuList = async (val: boolean) => {
+async function loadGoodSkuList(val: boolean) {
   if (val && isLoading.value) {
     const res = await getGoodsSkuByGid(data.goodsId);
     setTimeout(() => {
-      res.data.value?.data.forEach((p) => skuList.value.push(p));
+      res.data.value?.data.forEach(p => skuList.value.push(p));
       isLoading.value = false;
     }, 300);
   }
-};
+}
 // 计算规格全部属性
-const getSkuProps = (goodsSku: GoodsSkuVO) => {
-  return (goodsSku.size || "") + " " + (goodsSku.color || "") + " " + (goodsSku.combo || "");
-};
+function getSkuProps(goodsSku: GoodsSkuVO) {
+  return `${goodsSku.size || ''} ${goodsSku.color || ''} ${goodsSku.combo || ''}`;
+}
 // 规格属性计算
 const getProps = computed({
   get() {
-    return (data.size || "") + " " + (data.color || "") + " " + (data.combo || "");
+    return `${data.size || ''} ${data.color || ''} ${data.combo || ''}`;
   },
   set(skuId: string) {
-    const p = toRaw(skuList.value.find((p) => p.id === skuId));
+    const p = toRaw(skuList.value.find(p => p.id === skuId));
     // 更新
-    if (p && p.id !== "") {
-      data.size = p.size || "";
+    if (p && p.id !== '') {
+      data.size = p.size || '';
       data.image = p.image;
       data.price = p.price;
       data.costPrice = p.costPrice;
-      data.color = p.color || "";
+      data.color = p.color || '';
       data.combo = p.combo;
       data.skuId = p.id;
       data.id = p.id;
@@ -54,29 +56,22 @@ const getTotalPrice = computed(() => {
   return getGoodsPrices.value.add(data.postage);
 });
 </script>
+
 <template>
   <div
     v-loading="isUpdateLoading"
     class="card group"
-    flex
-    justify-between
-    flex-wrap
-    cursor-pointer
-    p-0
-    md:p-3
-    text-0.6rem
-    md:text-1em
-    rounded-8px
-    border-default-hover
-    border-2px
+
+
+    flex flex-wrap cursor-pointer justify-between border-2px rounded-8px p-0 text-0.6rem border-default-hover md:p-3 md:text-1em
   >
     <!-- 图片 -->
     <ClientOnly>
       <div class="w-2/7 md:w-8em">
         <ElImage
           loading="lazy"
-          hover:transform-scale-110
-          transition-300
+
+          transition-300 hover:transform-scale-110
           :src="BaseUrlImg + data.image"
           style="width: 100%; height: 100%; aspect-ratio: 1/1; border-radius: 4px"
           fit="cover"
@@ -84,22 +79,21 @@ const getTotalPrice = computed(() => {
       </div>
     </ClientOnly>
     <!-- 商品名称|规格 -->
-    <div class="flex py-2 justify-between overflow-hidden truncate flex-1">
-      <div class="h-full left px-4 group flex flex-col items-start justify-between">
-        <h4 class="max-w-1/1 md:max-w-16em overflow-hidden truncate">
+    <div class="flex flex-1 justify-between overflow-hidden truncate py-2">
+      <div class="group left h-full flex flex-col items-start justify-between px-4">
+        <h4 class="max-w-1/1 overflow-hidden truncate md:max-w-16em">
           {{ data.name }}
         </h4>
         <!-- 中下 -->
         <p
-          font-700
-          color-red-6
-          mt-1
-          mb-a
+
+
+          mb-a mt-1 font-700 color-red-6
         >
           ￥{{ currency(data.price) }}
           <span
-            color-coolgray
-            text-0.6em
+
+            text-0.6em color-coolgray
             style="text-decoration: line-through"
           >
             ￥{{ currency(data.costPrice) }}
@@ -113,14 +107,14 @@ const getTotalPrice = computed(() => {
           <!-- 规格 -->
           <ClientOnly>
             <el-select
+              v-model="getProps"
               :disabled="disable"
               no-data-text="暂无其他规格！"
-              @visible-change="loadGoodSkuList"
               loading-text="加载中..."
               :loading="isLoading"
-              v-model="getProps"
               :placeholder="getProps"
               collapse-tags-tooltip
+              @visible-change="loadGoodSkuList"
             >
               <!-- value 内容 -->
               <el-option
@@ -134,8 +128,8 @@ const getTotalPrice = computed(() => {
           </ClientOnly>
         </div>
       </div>
-      <div class="md:mr-4 flex items-end">
-        <div class="mt-a mr-2">
+      <div class="flex items-end md:mr-4">
+        <div class="mr-2 mt-a">
           <small v-if="disable">
             共
             <strong class="text-[var(--el-color-error)]">{{ data.quantity }}</strong>
@@ -143,13 +137,13 @@ const getTotalPrice = computed(() => {
           </small>
         </div>
         <!-- 金额+运费 -->
-        <div class="leading-1.2em hidden md:flex flex-col mt-a items-end">
+        <div class="mt-a hidden flex-col items-end leading-1.2em md:flex">
           <small>{{ data.postage ? `运费：￥${data.postage}` : "免运费" }}</small>
           <small v-if="data">价格：￥{{ getGoodsPrices }}</small>
           <small
+
+            v-if="data.quantity" mt-1
             font-600
-            mt-1
-            v-if="data.quantity"
           >
             合计：￥{{ getTotalPrice }}
           </small>
@@ -157,21 +151,21 @@ const getTotalPrice = computed(() => {
       </div>
     </div>
     <!-- 数量 -->
-    <div class="flex-row-c-c flex-col mr-4 md:mr-0 md:w-1/10 relative">
+    <div class="relative mr-4 flex-row-c-c flex-col md:mr-0 md:w-1/10">
       <slot name="btn">
         <!-- 数量 -->
         <el-input-number
+          v-if="!disable"
+          v-model="data.quantity"
           :min="1"
           :max="99"
           style="width: 5rem"
-          v-model="data.quantity"
           :disabled="disable"
           size="small"
-          v-if="!disable"
         />
         <span
-          class="font-700 opacity-40"
           v-else
+          class="font-700 opacity-40"
         >
           选中
         </span>
@@ -179,4 +173,5 @@ const getTotalPrice = computed(() => {
     </div>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

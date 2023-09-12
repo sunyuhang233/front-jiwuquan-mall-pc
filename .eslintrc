@@ -19,6 +19,7 @@
   "rules": {     
     // vue
     "vue/multi-word-component-names": ["off", {}],
+    "vue/no-mutating-props":"off",
     // base
     "no-multiple-empty-lines": ["warn", { "max": 2, "maxBOF": 1 }],// 空行
     "semi": ["error", "always"], // 结尾;
