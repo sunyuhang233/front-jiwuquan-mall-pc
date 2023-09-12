@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { type GoodsPageDTO } from '@/composables/api/goods';
-import type { GoodsVO } from '~/types/goods';
+import { type GoodsPageDTO } from "@/composables/api/goods";
+import type { GoodsVO } from "~/types/goods";
 
 // props
 interface Props {
@@ -32,16 +32,6 @@ const pageInfo = reactive({
   current: -1,
 });
 
-const loadingRef = ref();
-// 刷新
-const { stop } = useIntersectionObserver(
-  loadingRef,
-  ([obj]) => {
-    if (obj.isIntersecting)
-      loadGoodsPage();
-  },
-);
-
 const isNot = computed<boolean>(() => {
   return pageInfo?.total === 0 && pageInfo.pages === 0;
 });
@@ -69,13 +59,13 @@ async function loadGoodsPage() {
   pageInfo.pages = data.pages;
   if (props.isTimer) {
     for await (const p of data.records) {
-      p.images = typeof p.images === 'string' ? p.images.split(',') : [];
+      p.images = typeof p.images === "string" ? p.images.split(",") : [];
       goodsList.value.push(Object.freeze(p));
     }
   }
   else {
     for (const p of data.records) {
-      p.images = typeof p.images === 'string' ? p.images.split(',') : [];
+      p.images = typeof p.images === "string" ? p.images.split(",") : [];
       goodsList.value.push(p);
     }
   }
@@ -117,45 +107,43 @@ defineExpose({
 </script>
 
 <template>
-  <ClientOnly>
-    <transition-group
-      tag="div"
-      class="pb-2"
-      :name="transiton || 'fade-lr-list'"
-      :class="props.class !== null ? props.class : 'flex flex-wrap'"
-    >
-      <NuxtLink
-        v-for="p in goodsList"
-        :key="p.id"
-        :to="`/goods/detail/${p.id}`"
+  <ListAutoIncre :no-more="isNoMore" @load="loadGoodsPage">
+    <ClientOnly>
+      <transition-group
+        tag="div"
+        class="pb-2"
+        :name="transiton || 'fade-list'"
+        :class="props.class !== null ? props.class : 'flex flex-wrap'"
       >
-        <!-- 商品卡片 -->
-        <CardGoodsBox
-          class="v-card mt-4/100 transition-300"
-          :goods="p"
+        <NuxtLink
+          v-for="p in goodsList"
+          :key="p.id"
+          :to="`/goods/detail/${p.id}`"
         >
-          <small
-            float-right
-            mt-2px
-            text-blueGray
+          <!-- 商品卡片 -->
+          <CardGoodsBox
+            class="v-card mt-4/100 transition-300"
+            :goods="p"
           >
-            销量：{{ p.sales }}
-          </small>
-        </CardGoodsBox>
-      </NuxtLink>
-    </transition-group>
-  </ClientOnly>
-  <p
-    v-show="isNoMore || isNot"
-    class="w-1/1 py-8" text-center tracking-1
-    text-bluegray
-  >
-    {{ isNoMore ? "暂无更多商品" : "暂无商品" }}
-  </p>
-  <span
-    v-if="!isNoMore"
-    ref="loadingRef"
-  />
+            <small
+              float-right
+              mt-2px
+              text-blueGray
+            >
+              销量：{{ p.sales }}
+            </small>
+          </CardGoodsBox>
+        </NuxtLink>
+      </transition-group>
+    </ClientOnly>
+    <p
+      v-show="isNoMore || isNot"
+      class="w-1/1 py-8" text-center tracking-1
+      text-bluegray
+    >
+      {{ isNoMore ? "暂无更多商品" : "暂无商品" }}
+    </p>
+  </ListAutoIncre>
 </template>
 
 <style scoped lang="scss">

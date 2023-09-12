@@ -15,8 +15,6 @@ useHead({
 
 const shop = useShopStore();
 const user = useUserStore();
-const isLoading = ref<boolean>(false);
-const isShow = ref<boolean>(false);
 
 // 没有更多
 const notMore = computed(() => {
@@ -46,16 +44,17 @@ function deleteBatchShopcart(text = "删除") {
         if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
           selectIds.value.splice(0);
           ElMessage.success(`${text}成功！`);
-        } else {
+        }
+        else {
           ElMessage.error("删除失败，请稍后再试试看！");
         }
       }
     })
-    .catch((err) => {});
+    .catch();
 }
 // 2、清空购物车
 function clearShopcart() {
-  selectIds.value.push(...shop.shopcartList.map((p) => p.id));
+  selectIds.value.push(...shop.shopcartList.map(p => p.id));
   deleteBatchShopcart("清空");
 }
 // 购物车选中项目id
@@ -63,21 +62,15 @@ const isSelectAll = ref<boolean>(false);
 // 3、修改
 watch(isSelectAll, (val: boolean) => {
   selectIds.value.splice(0);
-  if (val) selectIds.value.push(...shop.shopcartList.map((p) => p.id));
-});
-// 购物车数量
-const getShopCartLength = computed(() => {
-  let count = 0;
-  for (const p of shop.shopcartList) count += p.quantity;
-
-  return count;
+  if (val)
+    selectIds.value.push(...shop.shopcartList.map(p => p.id));
 });
 const order = useOrderStore();
 
 // 4、前往订单页面付款
 function toOrderPage(ids: string[]) {
   const dtoList: PushOrdersItemDTO[] = [];
-  shop.shopcartList.map((p) => {
+  shop.shopcartList.forEach((p) => {
     if (ids.includes(p.id)) {
       const { skuId, quantity } = p;
       dtoList.push({ skuId, quantity });
@@ -98,23 +91,23 @@ const getAllNums = ref<number>(0);
 const getAllPrice = computed(() => {
   getAllNums.value = 0;
   getAllPostate.value = 0;
-  const selectList = shop.shopcartList.filter((p) => selectIds.value.includes(p.id));
+  const selectList = shop.shopcartList.filter(p => selectIds.value.includes(p.id));
   let prices = currency(0);
   selectList.forEach((p) => {
-    if (p.postage) {
+    if (p.postage)
       getAllPostate.value += +p.postage;
-    }
+
     getAllNums.value += p.quantity;
     prices = prices.add(
       currency(p.price)
         .multiply(p.quantity)
-        .add(+(p.postage || 0))
+        .add(+(p.postage || 0)),
     );
   });
   return prices;
 });
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
@@ -128,19 +121,11 @@ definePageMeta({
     >
       <div>
         <ClientOnly>
-          <div class="layout-default md:w-700px mx-a pb-0">
+          <div class="mx-a pb-0 layout-default md:w-700px">
             <div
               v-if="user.isLogin"
               class="shopcart-list"
-              relative
-              mx-a
-              rounded-10px
-              bg-white
-              p-4
-              md:p-6
-              shadow-md
-              border-default
-              dark:bg-dark
+              relative mx-a rounded-10px bg-white p-4 shadow-md border-default dark:bg-dark md:p-6
             >
               <h3
                 mb-2
@@ -171,17 +156,17 @@ definePageMeta({
                 <el-checkbox-group
                   v-model="selectIds"
                   size="large"
-                  v-infinite-scroll="shop.loadShopcartList"
-                  :infinite-scroll-delay="400"
-                  :infinite-scroll-disabled="notMore"
-                  overflow-y-auto
                   class="relative"
                 >
                   <ul
+                    v-infinite-scroll="shop.loadShopcartList"
                     v-auto-animate="{
                       duration: 300,
                       easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
                     }"
+                    :infinite-scroll-delay="400"
+                    :infinite-scroll-disabled="notMore"
+                    overflow-y-auto
                   >
                     <li
                       v-for="p in shop.shopcartList"
@@ -205,7 +190,7 @@ definePageMeta({
               sticky
               bottom-4
               z-99
-              class="w-full animate-fade-in-up animate-duration-300 my-4 mb-0"
+              class="my-4 mb-0 w-full animate-fade-in-up animate-duration-300"
             >
               <!-- 价格 -->
               <div
@@ -220,9 +205,9 @@ definePageMeta({
                   共计 {{ getAllNums }} 件
                 </span>
                 <div
-                  flex
-                  ml-a
-                  items-end
+
+
+                  ml-a flex items-end
                 >
                   <span p-1>总计：￥</span>
                   <h2
@@ -231,14 +216,14 @@ definePageMeta({
                   />
                 </div>
                 <small
-                  claas=""
                   v-show="getAllPostate > 0"
+                  claas=""
                 >
                   （运费：{{ currency(getAllPostate) }}￥）
                 </small>
               </div>
               <div
-                class="w-full backdrop-blur-2em h-4em flex items-center justify-between rounded-10px bg-white px-4 shadow-md border-default dark-bg-dark-6"
+                class="h-4em w-full flex items-center justify-between rounded-10px bg-white px-4 shadow-md backdrop-blur-2em border-default dark-bg-dark-6"
               >
                 <el-checkbox
                   v-model="isSelectAll"

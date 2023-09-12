@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { useLocalStorage } from "@vueuse/core";
+
 const bgList = ref<string[]>([
-  "kiwi-bg-1.jpg",
-  "kiwi-bg-2.jpg",
-  "kiwi-bg-3.jpg",
-  "kiwi-bg-4.jpg",
-  "kiwi-bg-5.jpg",
+  "/user_bg/kiwi-bg-1.jpg",
+  "/user_bg/kiwi-bg-2.jpg",
+  "/user_bg/kiwi-bg-3.jpg",
+  "/user_bg/kiwi-bg-4.jpg",
+  "/user_bg/kiwi-bg-5.jpg",
 ]);
-const bgUrl = useLocalStorage("jiwu_user_bg", "kiwi-bg-4.jpg");
+const bgUrl = useLocalStorage("jiwu_user_bg", "/user_bg/kiwi-bg-4.jpg");
 </script>
+
 <template>
-  <div class="top-bg group relative select-none shadow-lg shadow-inset">
+  <div class="group top-bg relative select-none shadow-lg shadow-inset">
     <el-popover
       :width="400"
       placement="top"
@@ -20,30 +22,28 @@ const bgUrl = useLocalStorage("jiwu_user_bg", "kiwi-bg-4.jpg");
       <template #reference>
         <!-- 切换按钮 -->
         <el-button
-          class="opacity-0 group-hover:opacity-100 absolute right-1em bottom-1.4em z-1"
+          class="absolute bottom-1.4em right-1em z-1 opacity-0 group-hover:opacity-100"
           type="info"
           plain
           style="padding: 8px; background-color: rgba(97, 255, 163, 0.1); transition: 0.3s"
         >
           <i
-            i-solar:pallete-2-bold
-            w-1.6em
-            h-1.6em
-          ></i>
+            i-solar:pallete-2-bold h-1.6em w-1.6em
+          />
         </el-button>
       </template>
       <template #default>
         <ClientOnly>
           <div class="img-list">
             <el-image
-              loading="lazy"
               v-for="(p, i) in bgList"
               :key="i"
+              loading="lazy"
               alt="Design By Kiwi23333"
               :src="BaseUrlImg + p"
               object-cover
+              class="hover: m-1 h-4em w-1/1 w-6em rounded-4px object-cover transition-300 hover:scale-110 border-default"
               @click="bgUrl = p"
-              class="w-6em h-4em hover:scale-110 transition-300 object-cover w-1/1 m-1 border-default rounded-4px hover:"
             />
           </div>
         </ClientOnly>
@@ -53,8 +53,9 @@ const bgUrl = useLocalStorage("jiwu_user_bg", "kiwi-bg-4.jpg");
       loading="lazy"
       :src="BaseUrlImg + bgUrl"
       object-cover
-      class="h-300px object-cover w-1/1"
+      class="h-300px w-1/1 object-cover"
     />
   </div>
 </template>
+
 <style scoped lang="scss"></style>

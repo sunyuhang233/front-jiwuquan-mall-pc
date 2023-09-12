@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+const { menu, leftMenu } = defineProps({
+  leftMenu: {
+    type: Boolean,
+    default: true,
+    required: false,
+  },
+  menu: {
+    default: ["shopcart"],
+    required: false,
+  },
+});
+const isShowMenu = ref<boolean>(false);
+</script>
+
 <template>
   <div class="min-h-100vh flex flex-col">
     <!-- 头部 -->
@@ -22,14 +37,14 @@
       <ClientOnly>
         <MenuCollMenu
           v-if="leftMenu"
-          class="-translate-x-full transition-300"
-          @close="isShowMenu = false"
+          class="transition-300 -translate-x-full"
           :class="{ 'translate-x-0 menu-bg': isShowMenu }"
+          @close="isShowMenu = false"
         />
       </ClientOnly>
       <!-- 内容 -->
       <div class="flex-1 animate-fade-in animate-duration-200">
-        <slot></slot>
+        <slot />
       </div>
     </div>
     <!-- 右下角功能区 -->
@@ -38,18 +53,3 @@
     </ClientOnly>
   </div>
 </template>
-
-<script lang="ts" setup>
-const { menu, leftMenu } = defineProps({
-  leftMenu: {
-    type: Boolean,
-    default: true,
-    required: false,
-  },
-  menu: {
-    default: ["shopcart"],
-    required: false,
-  },
-});
-const isShowMenu = ref<boolean>(false);
-</script>

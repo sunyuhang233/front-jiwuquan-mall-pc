@@ -1,68 +1,70 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
+
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
 const route = useRoute();
 </script>
+
 <template>
-	<div class="menu bg-light dark:bg-dark-5 backdrop-blur-30 h-1/1">
-		<ClientOnly>
-			<!-- 菜单 -->
-			<el-menu :router="true" :default-active="route.path" class="sticky" :collapse="isFold">
-				<!-- 顶部 -->
-				<div class="w-1/1 flex-row-c-c flex-wrap transition-300 px-5 hover:bg-transparent">
-					<div class="home mt-6 transition-300">
-						<NuxtLink to="/" flex-row-c-c class="group">
-							<i class="i-solar:home-2-broken"></i>
-						</NuxtLink>
-					</div>
-					<div class="ml-a mt-6 ml-a float-left">
-						<BtnBell />
-					</div>
-					<span @click="isFold = !isFold" class="mt-6 p-1 transition-300">
-						<i class="i-solar:hamburger-menu-line-duotone"></i>
-					</span>
-				</div>
-				<div class="border-0 border-default border-b-1px w-5/6 mx-a my-4"></div>
-				<!-- 个人信息 -->
-				<el-menu-item index="/user/info">
-					<i class="i-solar:user-broken" v-show="route.path !== '/user/info'"></i>
-					<i class="i-solar:user-bold-duotone" v-show="route.path === '/user/info'"></i>
-					<span class="min-w-10em title ml-3">个人信息</span>
-				</el-menu-item>
-				<!-- 钱包 -->
-				<el-menu-item index="/user/wallet">
-					<i class="i-solar:wallet-broken" v-show="route.path !== '/user/wallet'"></i>
-					<i
-						class="i-solar:wallet-bold-duotone"
-						v-show="route.path === '/user/wallet'"
-					></i>
-					<span class="title ml-3">钱包</span>
-				</el-menu-item>
-				<!-- 收货地址 -->
-				<el-menu-item index="/user/address">
-					<i class="i-solar:compass-broken" v-show="route.path !== '/user/address'"></i>
-					<i
-						class="i-solar:compass-bold-duotone"
-						v-show="route.path === '/user/address'"
-					></i>
-					<span class="title ml-3">收货地址</span>
-				</el-menu-item>
-				<!-- 账号与安全 -->
-				<el-menu-item index="/user/safe" class="group">
-					<i class="i-solar:danger-broken" v-show="route.path !== '/user/safe'"></i>
-					<i class="i-solar:danger-bold-duotone" v-show="route.path === '/user/safe'"></i>
-					<span class="title ml-3">账号与安全</span>
-				</el-menu-item>
-				<!-- 回到首页 -->
-				<el-menu-item class="overflow-x-hidden truncate ..." index="/">
-					<i i-solar:square-alt-arrow-left-broken></i>
-					<span class="title ml-3">回到首页</span>
-				</el-menu-item>
-			</el-menu>
-		</ClientOnly>
-	</div>
+  <div class="menu h-1/1 bg-light backdrop-blur-30 dark:bg-dark-5">
+    <ClientOnly>
+      <!-- 菜单 -->
+      <el-menu :router="true" :default-active="route.path" class="sticky" :collapse="isFold">
+        <!-- 顶部 -->
+        <div class="w-1/1 flex-row-c-c flex-wrap px-5 transition-300 hover:bg-transparent">
+          <div class="home mt-6 transition-300">
+            <NuxtLink to="/" flex-row-c-c class="group">
+              <i class="i-solar:home-2-broken" />
+            </NuxtLink>
+          </div>
+          <div class="float-left ml-a ml-a mt-6">
+            <BtnBell />
+          </div>
+          <span class="mt-6 p-1 transition-300" @click="isFold = !isFold">
+            <i class="i-solar:hamburger-menu-line-duotone" />
+          </span>
+        </div>
+        <div class="mx-a my-4 w-5/6 border-0 border-b-1px border-default" />
+        <!-- 个人信息 -->
+        <el-menu-item index="/user/info">
+          <i v-show="route.path !== '/user/info'" class="i-solar:user-broken" />
+          <i v-show="route.path === '/user/info'" class="i-solar:user-bold-duotone" />
+          <span class="title ml-3 min-w-10em">个人信息</span>
+        </el-menu-item>
+        <!-- 钱包 -->
+        <el-menu-item index="/user/wallet">
+          <i v-show="route.path !== '/user/wallet'" class="i-solar:wallet-broken" />
+          <i
+            v-show="route.path === '/user/wallet'"
+            class="i-solar:wallet-bold-duotone"
+          />
+          <span class="title ml-3">钱包</span>
+        </el-menu-item>
+        <!-- 收货地址 -->
+        <el-menu-item index="/user/address">
+          <i v-show="route.path !== '/user/address'" class="i-solar:compass-broken" />
+          <i
+            v-show="route.path === '/user/address'"
+            class="i-solar:compass-bold-duotone"
+          />
+          <span class="title ml-3">收货地址</span>
+        </el-menu-item>
+        <!-- 账号与安全 -->
+        <el-menu-item index="/user/safe" class="group">
+          <i v-show="route.path !== '/user/safe'" class="i-solar:danger-broken" />
+          <i v-show="route.path === '/user/safe'" class="i-solar:danger-bold-duotone" />
+          <span class="title ml-3">账号与安全</span>
+        </el-menu-item>
+        <!-- 回到首页 -->
+        <el-menu-item class="... overflow-x-hidden truncate" index="/">
+          <i i-solar:square-alt-arrow-left-broken />
+          <span class="title ml-3">回到首页</span>
+        </el-menu-item>
+      </el-menu>
+    </ClientOnly>
+  </div>
 </template>
 
 <style lang="scss" scoped>

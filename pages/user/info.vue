@@ -10,10 +10,11 @@ useHead({
 });
 // 页面
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout
@@ -24,10 +25,10 @@ definePageMeta({
         <ClientOnly>
           <!-- 壁纸 -->
           <UserInfoBgToggle />
-          <div class="layout-default flex animate-[fade-in_.3s_ease]">
-            <div class="flex-1 flex flex-wrap">
+          <div class="flex animate-[fade-in_.3s_ease] layout-default">
+            <div class="flex flex-1 flex-wrap">
               <!-- 用户头像 -->
-              <div class="avatars relative -top-6em flex-1 md:pr-4">
+              <div class="avatars relative flex-1 -top-6em md:pr-4">
                 <UserInfoLine />
                 <div class="m-2">
                   <UserInfoTabs />
@@ -45,4 +46,5 @@ definePageMeta({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

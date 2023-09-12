@@ -1,91 +1,68 @@
 <script lang="ts" setup>
-const user = useUserStore();
 const { menu } = defineProps({
   menu: {
     default: ["shopcart"],
     required: false,
   },
 });
+const user = useUserStore();
 const router = useRouter();
-const toBack = () => {
-  if (history.length > 1) {
+function toBack() {
+  if (history.length > 1)
     router.back();
-  } else {
+  else
     navigateTo("/");
-  }
-};
-// const isFold = computed(() => {
-//   return menu.length >= 3;
-// });
-// const toggle = ref<boolean>(false);
+}
 </script>
+
 <template>
   <ClientOnly>
     <KeepAlive>
-      <div class="btns group flex px-2 flex-col">
-        <div class="btn-group py-3 flex flex-col justify-end">
+      <div class="group btns flex flex-col px-2">
+        <div class="btn-group flex flex-col justify-end py-3">
           <!-- 回到顶部 -->
           <el-backtop
             key="backtop"
             style="width: 3rem; height: 3rem; overflow: visible"
-            class="cursor-pointer rounded-1/2 hover:scale-90 transition-300 rounded-1/2 shadow-[#0bdb85] shadow-opacity-60 shadow-md btn"
+            class="btn cursor-pointer rounded-1/2 rounded-1/2 shadow-[#0bdb85] shadow-md shadow-opacity-60 transition-300"
           >
             <i
-              class="w-3/5 h-3/5"
+              class="h-3/5 w-3/5"
               i-solar:alt-arrow-up-bold
               text-light
             />
           </el-backtop>
           <!-- 返回 -->
           <span
-            key="back"
             v-if="menu.includes('back')"
-            @click="toBack()"
-            cursor-pointer
-            hover:scale-90
-            transition-300
-            class="bg-[var(--el-color-primary)] shadow-md shadow-[var(--el-color-primary)] shadow-opacity-40 btn"
-            p-1
+            key="back"
+            class="btn bg-[var(--el-color-primary)] shadow-[var(--el-color-primary)] shadow-md shadow-opacity-40"
             mt-3
-            w-3rem
-            h-3rem
-            flex-row-c-c
-            rounded-4em
+            h-3rem w-3rem flex-row-c-c cursor-pointer rounded-4em p-1 transition-300 @click="toBack()"
           >
             <i
-              class="w-2/3 h-2/3"
-              mr-0.5
-              i-solar:alt-arrow-left-line-duotone
-              text-light
+              class="h-2/3 w-2/3"
+              i-solar:alt-arrow-left-line-duotone mr-0.5 text-light
             />
           </span>
           <!-- 返回首页 -->
           <NuxtLink
             v-if="menu.includes('home')"
-            to="/"
-            hover:scale-90
-            transition-300
             key="home"
-            class="shadow-[var(--el-color-primary)] shadow-opacity-40 shadow-md btn"
-            p-1
-            mt-3
-            rounded-4em
+            to="/"
+            class="btn shadow-[var(--el-color-primary)] shadow-md shadow-opacity-40"
             style="background-color: var(--el-color-primary)"
-            w-3rem
-            h-3rem
-            flex-row-c-c
+            mt-3 h-3rem w-3rem flex-row-c-c rounded-4em p-1 transition-300
           >
             <i
-              p-2.6
-              i-solar:home-smile-outline
-              text-light
+              i-solar:home-smile-outline p-2.6 text-light
             />
           </NuxtLink>
           <!-- 客服 -->
           <div
-            key="service"
-            class="w-3rem h-3rem cursor-pointer flex-row-c-c shadow-lg p-2.4 transition-300 hover:scale-90 bg-[var(--el-color-info)] rounded-1/2 mt-3 btn"
             v-if="menu.includes('service') && user.isLogin"
+            key="service"
+            class="btn mt-3 h-3rem w-3rem flex-row-c-c cursor-pointer rounded-1/2 bg-[var(--el-color-info)] p-2.4 shadow-lg transition-300"
           >
             <el-tooltip
               effect="dark"
@@ -101,19 +78,20 @@ const toBack = () => {
           </div>
           <!-- 购物车 -->
           <MenuShopCartBar
-            class="mt-3 w-3rem h-3rem"
             v-if="menu.includes('shopcart') && user.isLogin"
             key="shopcart"
+            class="mt-3 h-3rem w-3rem"
           />
         </div>
         <ElIconMenu
-          class="fold w-3rem z-1 h-3rem p-3 transition-300 group-hover:-rotate-90 hover:scale-105 cursor-pointer text-light bg-[var(--el-color-primary)] rounded-1/2"
+          class="fold z-1 h-3rem w-3rem cursor-pointer rounded-1/2 bg-[var(--el-color-primary)] p-3 text-light transition-300 hover:scale-105 group-hover:-rotate-90"
           style="box-shadow: 1px 1px 6px var(--el-color-primary-light-3)"
         />
       </div>
     </KeepAlive>
   </ClientOnly>
 </template>
+
 <style scoped lang="scss">
 .btns {
   z-index: 999;
@@ -140,7 +118,7 @@ const toBack = () => {
   .btn {
     opacity: 0;
     transform: translateY(100%) scale3d(0, 0, 0.4);
-    width: 0;
+    width: 3rem;
     height: 0;
     z-index: 0;
     transition: 0.3s $animate-cubic-bount;

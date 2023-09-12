@@ -24,7 +24,11 @@
     "no-multiple-empty-lines": ["warn", { "max": 2, "maxBOF": 1 }],// 空行
     "semi": ["error", "always"], // 结尾;
     "no-trailing-spaces": "error",
+    "quotes":["error", "double"],
+    "no-tabs": "off",
     // ts
-    "@typescript-eslint/semi": "off"
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/quotes":["error", "double"]
+
   }  
 }

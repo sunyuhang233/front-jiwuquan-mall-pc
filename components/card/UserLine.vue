@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { UploadProps } from "element-plus";
+import type { UploadProps } from "element-plus";
 import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
-const props = defineProps({
+
+defineProps({
   userInfo: {
     type: Object,
     required: false,
@@ -28,7 +29,8 @@ const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
   if (!imageTypeList.value.includes(rawFile.type)) {
     ElMessage.error("文件格式不是图片格式!");
     return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
+  }
+  else if (rawFile.size / 1024 / 1024 > 2) {
     ElMessage.error("头像需要小于2MB!");
     return false;
   }
@@ -42,22 +44,22 @@ const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
 const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
   if (data.code === StatusCode.SUCCESS) {
     user.userInfo.avatar = data.data;
-
     avatatRef.value?.clearFiles();
     avatarUrl.value = data.data || "";
     ElMessage.success("更换头像成功！");
-  } else {
+  }
+  else {
     ElMessage.error(data.message);
   }
 };
 // 退出登录
-const exitLogin = () => {
+function exitLogin() {
   ElMessageBox.confirm("是否确认退出登录？", "退出登录", {
     confirmButtonText: "确认退出",
     cancelButtonText: "取消",
     type: "warning",
   })
-    .then((e) => {
+    .then(() => {
       // 退出登录
       user.onUserExit(user.token);
       user?.$reset();
@@ -66,7 +68,7 @@ const exitLogin = () => {
       ElMessage.success("退出成功！");
     })
     .catch(() => {});
-};
+}
 
 const menuList = ref([
   {
@@ -115,6 +117,7 @@ const menuList = ref([
   },
 ]);
 </script>
+
 <template>
   <div
     class="user-card"
@@ -137,7 +140,7 @@ const menuList = ref([
             <!-- 替换头像 -->
             <el-badge
               :is-dot="!user.userInfo.avatar || user.userInfo.avatar === 'default.png'"
-              class="item mr-2 border-default rounded-10em"
+              class="item mr-2 rounded-10em border-default"
             >
               <el-avatar
                 :src="
@@ -150,7 +153,7 @@ const menuList = ref([
                 <span
                   i-solar:user-bold
                   style="width: 60%; height: 60%"
-                ></span>
+                />
               </el-avatar>
             </el-badge>
             <div
@@ -158,22 +161,21 @@ const menuList = ref([
               class="hidden md:block"
             >
               <h4
-                tracking-1px
-                w-7em
-                class="overflow-hidden truncate ..."
+                w-7em tracking-1px
+                class="... overflow-hidden truncate"
               >
                 {{ user.userInfo.nickname }}
               </h4>
               <small
-                opacity-80
                 v-copying.toast="user.userInfo.id"
-                class="group p-0 hover:underline decoration-dashed overflow-hidden truncate ..."
+                opacity-80
+                class="group ... overflow-hidden truncate p-0 decoration-dashed hover:underline"
               >
                 ID:{{ user.userInfo.id }}
                 <span
-                  class="p2 group-hover:opacity-80 opacity-0 transition-300"
+                  class="p2 opacity-0 transition-300 group-hover:opacity-80"
                   i-solar:copy-bold-duotone
-                ></span>
+                />
               </small>
             </div>
           </div>
@@ -183,15 +185,15 @@ const menuList = ref([
           <div
             class="top"
             p-10
-          ></div>
+          />
           <div class="popup">
             <!-- 上传 -->
             <el-upload
-              class="avatar-uploader"
               ref="avatatRef"
+              class="avatar-uploader"
               style="width: 100%; height: 100%; border-radius: 50%"
               drag
-              :action="getBaseUrl + '/user/info/avatar'"
+              :action="`${getBaseUrl}/user/info/avatar`"
               :headers="{ Authorization: user.token }"
               method="PUT"
               :limit="1"
@@ -203,17 +205,15 @@ const menuList = ref([
               :on-success="updateSucess"
             >
               <img
-                loading="lazy"
-                w-6em
-                h-6em
                 v-if="avatarUrl"
+                loading="lazy" h-6em w-6em
                 :src="BaseUrlImg + avatarUrl"
                 :alt="user.userInfo.nickname"
                 class="avatar"
-              />
+              >
               <ElIconPlus
-                size="2em"
                 v-else
+                size="2em"
               />
             </el-upload>
             <div
@@ -228,11 +228,9 @@ const menuList = ref([
               </h3>
               <!-- 卡片集合 -->
               <div
-                mb-2
-                grid
-                grid-cols-3
-                grid-gap-2
-                justify-around
+
+
+                grid grid-cols-3 mb-2 justify-around grid-gap-2
               >
                 <NuxtLink
                   v-for="p in menuList"
@@ -243,8 +241,10 @@ const menuList = ref([
                   <p
                     class="icon transition-200 group-hover:bg-light"
                     :class="p.className"
-                  ></p>
-                  <p mt-2>{{ p.name }}</p>
+                  />
+                  <p mt-2>
+                    {{ p.name }}
+                  </p>
                 </NuxtLink>
               </div>
               <!-- 退出登录| 我的主页 -->
@@ -257,8 +257,8 @@ const menuList = ref([
                   size="large"
                   type="danger"
                   plain
-                  @click="exitLogin"
                   ml-3
+                  @click="exitLogin"
                 >
                   退出登录
                 </el-button>
@@ -281,6 +281,7 @@ const menuList = ref([
     </ClientOnly>
   </div>
 </template>
+
 <style scoped lang="scss">
 .hovers {
   width: 2.3em;

@@ -1,9 +1,9 @@
 // 返回值定义
 export interface Result<T> {
-  [x: string]: any;
-  code: StatusCode;
-  message: string;
-  data: T;
+  [x: string]: any
+  code: StatusCode
+  message: string
+  data: T
 }
 export enum StatusCode {
   SUCCESS = 20000,
@@ -20,7 +20,7 @@ export enum StatusCode {
 
 export enum Sort {
   ASC = 0,
-  DESC = 1,// 降序
+  DESC = 1, // 降序
 }
 export enum isTrue {
   TRUE = 1,

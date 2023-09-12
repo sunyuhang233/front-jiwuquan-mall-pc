@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import currency from 'currency.js';
-import { deleteBatchShopcartByIds, getUserShopCartPage } from '~/composables/api/shopcart';
-import type { PushOrdersItemDTO } from '~/composables/api/orders';
+import currency from "currency.js";
+import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
+import type { PushOrdersItemDTO } from "~/composables/api/orders";
 
 const shop = useShopStore();
 const user = useUserStore();
@@ -13,28 +13,28 @@ if (user.isLogin)
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
-function deleteBatchShopcart(text: string = '删除') {
+function deleteBatchShopcart(text: string = "删除") {
   ElMessageBox({
     title: `${text}提示！`,
     message: `确定要${text}吗？`,
-    type: 'warning',
+    type: "warning",
     showClose: false,
     center: true,
-    customClass: 'text-center',
+    customClass: "text-center",
     showCancelButton: true,
-    cancelButtonText: '取 消',
-    confirmButtonText: '删 除',
+    cancelButtonText: "取 消",
+    confirmButtonText: "删 除",
   })
     .then(async (res) => {
-      if (res === 'confirm') {
-        if (res === 'confirm') {
+      if (res === "confirm") {
+        if (res === "confirm") {
           const { code } = await deleteBatchShopcartByIds(selectIds.value, user.getToken);
           if (code === StatusCode.SUCCESS && shop.deleteBatchShopCart(selectIds.value)) {
             selectIds.value.splice(0);
             ElMessage.success(`${text}成功！`);
           }
           else {
-            ElMessage.error('删除失败，请稍后再试试看！');
+            ElMessage.error("删除失败，请稍后再试试看！");
           }
         }
       }
@@ -43,7 +43,7 @@ function deleteBatchShopcart(text: string = '删除') {
 }
 
 function clearShopcart() {
-  deleteBatchShopcart('清空');
+  deleteBatchShopcart("清空");
 }
 // 购物车选中项目id
 const isSelectAll = ref<boolean>(false);
@@ -63,7 +63,7 @@ const getShopCartLength = computed(() => {
 // 计算总价
 const getAllPrice = computed(() => {
   const selectList = shop.shopcartList.filter(p => selectIds.value.includes(p.id));
-  let count = currency('0.00');
+  let count = currency("0.00");
   selectList.forEach((p) => {
     count = count.add(currency(p.price).multiply(p.quantity));
   });
@@ -91,7 +91,7 @@ function toOrderPage(ids: string[]) {
     });
     fullscreenLoading.value = false;
     navigateTo({
-      path: '/order/detail',
+      path: "/order/detail",
     });
   }, 800);
 }
@@ -109,7 +109,7 @@ function toOrderPage(ids: string[]) {
       shadow-lg
       :visible="isShow"
       :teleported="false"
-      popper-class="popover w-100% md:w-500px"
+      popper-class="popover "
       transition="fade"
       :hide-after="0"
       popper-style="width:fit-content; box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
@@ -121,9 +121,7 @@ function toOrderPage(ids: string[]) {
         <div
           class="icon shadow-[#5d33f9] shadow-md shadow-opacity-60"
           flex-row-c-c
-
-
-          cursor-pointer transition-300 hover:scale-92 hover:opacity-90 @click="isShow = true"
+          cursor-pointer transition-300 @click="isShow = true"
         >
           <span
             v-show="getShopCartLength && getShopCartLength < 99"
@@ -147,31 +145,7 @@ function toOrderPage(ids: string[]) {
       <template #default>
         <div>
           <!-- 2、 商品goods -->
-          <!-- 未登录 -->
-          <div
-            v-if="!user.isLogin"
-            class="tologin"
-            flex-row-c-c
-            flex-col
-          >
-            <h3
-
-
-              mb-8 mt-10 text-center
-            >
-              未登录，请登录！
-            </h3>
-            <el-button
-              size="large"
-              type="primary"
-              @click="user.showLoginForm = true"
-            >
-              立即登录
-            </el-button>
-          </div>
           <h2
-
-
             mb-2 border-0 border-b-1 pb-4 text-center tracking-0.1em border-default
           >
             <span
@@ -196,12 +170,13 @@ function toOrderPage(ids: string[]) {
               v-model="selectIds"
             >
               <div
-                v-infinite-scroll="shop.loadShopcartList"
                 v-auto-animate
+                v-infinite-scroll="shop.loadShopcartList"
                 style="overflow-y: auto"
                 :infinite-scroll-delay="400"
                 :infinite-scroll-distance="40"
                 :infinite-scroll-disabled="shop.notMore"
+                class="w-90vw md:w-460px"
               >
                 <CardShopLine
                   v-for="p in shop.shopcartList"
@@ -218,13 +193,10 @@ function toOrderPage(ids: string[]) {
               </div>
             </el-checkbox-group>
           </el-scrollbar>
-
           <!-- 下方按钮 -->
           <div
             class="bottom"
             style="width: 100%"
-
-
             flex items-center justify-between border-2px rounded-6px px-2 border-default
           >
             <el-checkbox
