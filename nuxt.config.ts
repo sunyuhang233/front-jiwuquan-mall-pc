@@ -1,47 +1,47 @@
-import { pwa } from './config/pwa';
-import { appDescription } from './constants/index';
+import { pwa } from "./config/pwa";
+import { appDescription } from "./constants/index";
 
 export default defineNuxtConfig({
   // ssr: process.env.NODE_ENV !== "development",
-  ssr: false,
+  ssr: true,
   build: {
-    transpile: [/echarts/, 'vue-echarts', 'resize-detector'],
+    transpile: [/echarts/, "vue-echarts", "resize-detector"],
   },
   // 模块
   modules: [
     // 基础
-    '@unocss/nuxt',
-    '@nuxtjs/color-mode',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    "@unocss/nuxt",
+    "@nuxtjs/color-mode",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
     // UI
-    '@formkit/auto-animate/nuxt',
-    '@element-plus/nuxt',
-    'nuxt-swiper',
+    "@formkit/auto-animate/nuxt",
+    "@element-plus/nuxt",
+    "nuxt-swiper",
     // 工具
-    '@vueuse/nuxt',
+    "@vueuse/nuxt",
     // pwa
-    '@vite-pwa/nuxt',
+    "@vite-pwa/nuxt",
   ],
   // 全局变量
   runtimeConfig: {
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
-    pageTransition: { name: 'page', mode: 'out-in' },
-    layoutTransition: { name: 'layout', mode: 'out-in' },
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
     head: {
-      viewport: 'width=device-width,initial-scale=1',
+      viewport: "width=device-width,initial-scale=1",
       // 网站头部信息
       link: [
-        { rel: 'icon', href: '/logo.png', sizes: 'any' },
-        { rel: 'apple-touch-icon', href: '/logo.png' },
+        { rel: "icon", href: "/logo.png", sizes: "any" },
+        { rel: "apple-touch-icon", href: "/logo.png" },
       ],
       // 网站meta
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: appDescription },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "description", content: appDescription },
+        { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       ],
     },
   },
@@ -57,21 +57,21 @@ export default defineNuxtConfig({
   imports: {
     dirs: [
       // Scan top-level modules
-      'composables',
-      'composables/utils/**',
-      'composables/store/**',
-      'composables/api/*/',
-      'types/*/.ts',
-      'types/**',
+      "composables",
+      "composables/utils/**",
+      "composables/store/**",
+      "composables/api/*/",
+      "types/*/.ts",
+      "types/**",
     ],
   },
   // css
   css: [
-    'nprogress/nprogress.css',
-    '~/assets/styles/init.scss',
-    '~/assets/styles/index.scss',
-    '~/assets/styles/animate.scss',
-    'animate.css',
+    "nprogress/nprogress.css",
+    "~/assets/styles/init.scss",
+    "~/assets/styles/index.scss",
+    "~/assets/styles/animate.scss",
+    "animate.css",
   ],
   // vite
   vite: {
@@ -90,15 +90,15 @@ export default defineNuxtConfig({
   // pinia
   pinia: {
     autoImports: [
-      'defineStore', // import { defineStore } from 'pinia',
+      "defineStore", // import { defineStore } from 'pinia',
     ],
   },
   // pinia持久化到会话存储
   piniaPersistedstate: {
-    storage: 'localStorage',
+    storage: "localStorage",
   },
   colorMode: {
-    classSuffix: '',
+    classSuffix: "",
   },
   // alias: {
   //   // 配置@使用静态资源
@@ -106,10 +106,10 @@ export default defineNuxtConfig({
   // },
   // nitro
   nitro: {
-    baseURL: '/api',
+    baseURL: "/api",
     esbuild: {
       options: {
-        target: 'esnext',
+        target: "esnext",
       },
     },
     // devServer: {
@@ -125,9 +125,9 @@ export default defineNuxtConfig({
   },
   // elementPlus
   elementPlus: {
-    icon: 'ElIcon',
-    importStyle: 'scss',
-    themes: ['dark'],
+    icon: "ElIcon",
+    importStyle: "scss",
+    themes: ["dark"],
   },
   // pwa
   pwa,

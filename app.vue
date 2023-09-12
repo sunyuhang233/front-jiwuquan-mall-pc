@@ -24,6 +24,7 @@ watch(
     immediate: true,
   },
 );
+
 // 加载
 const isLoading = ref<boolean>(true);
 useNuxtApp().hook("app:mounted", () => {

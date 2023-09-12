@@ -36,13 +36,11 @@ const isNot = computed<boolean>(() => {
   return pageInfo?.total === 0 && pageInfo.pages === 0;
 });
 const isNoMore = computed<boolean>(() => {
-  if (pageInfo.pages > 0 && page.value >= pageInfo.pages) {
-    stop && stop();
+  if (pageInfo.pages > 0 && page.value >= pageInfo.pages)
     return true;
-  }
-  else {
+  else
     return false;
-  };
+  ;
 });
 
 async function loadGoodsPage() {

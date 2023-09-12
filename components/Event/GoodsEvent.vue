@@ -1,33 +1,34 @@
 <script lang="ts" setup>
-import { EventGoodsVO } from "@/composables/api/event/index";
 import currency from "currency.js";
+import type { EventGoodsVO } from "@/composables/api/event/index";
+
 const { data } = defineProps<{
-  data: EventGoodsVO;
+  data: EventGoodsVO
 }>();
 
 const getInsurance = computed(() => {
   return data.warrantyTime
-    ? data.warrantyTime + "天无理由 "
-    : " " + data.refundTime
-    ? data.refundTime + "天保修 "
-    : " ";
+    ? `${data.warrantyTime}天无理由 `
+    : `${data.refundTime}`
+      ? `${data.refundTime}天保修 `
+      : " ";
 });
 </script>
+
 <template>
   <div
-    class="aspect-ratio-1 goods-card w-full border-default cursor-pointer flex flex-col dark:border-dark-200 dark:bg-dark-8 border-gray-200 rounded-4px shadow-sm group"
+    class="group goods-card aspect-ratio-1 w-full flex flex-col cursor-pointer border-gray-200 rounded-4px shadow-sm border-default dark:border-dark-200 dark:bg-dark-8"
   >
     <!-- 商品图片  -->
-    <div class="img relative w-full h-120px md:h-160px rounded-t-inherit overflow-hidden">
+    <div class="img relative h-120px w-full overflow-hidden rounded-t-inherit md:h-160px">
       <ElImage
-        @click="$emit('link')"
         loading="lazy"
-        class="w-full h-full"
+        class="h-full w-full"
         :src="BaseUrlImg + data.images.split(',')[0]"
         :alt="data.name"
         fit="cover"
       />
-      <div class="absolute top-2 right-2">
+      <div class="absolute right-2 top-2">
         <el-tag
           type="danger"
           effect="dark"
@@ -39,11 +40,11 @@ const getInsurance = computed(() => {
       </div>
       <!-- 浏览量 -->
       <small
-        class="view w-full py-1 px-3 flex-row-bt-c absolute left-0 bottom-0 z-1 color-light bg-[var(--el-bg-color-primary)] backdrop-blur-2em opacity-0 transition-300"
+        class="view absolute bottom-0 left-0 z-1 w-full flex-row-bt-c bg-[var(--el-bg-color-primary)] px-3 py-1 color-light opacity-0 backdrop-blur-2em transition-300"
         group-hover:opacity-80
       >
         <div>
-          <i class="i-solar:eye-bold p-2 mr-1" />
+          <i class="i-solar:eye-bold mr-1 p-2" />
           {{ data.views }}
         </div>
         <div>
@@ -54,26 +55,22 @@ const getInsurance = computed(() => {
     </div>
     <!-- 商品名 -->
     <div
-      @click="$emit('link')"
-      class="texts flex relative flex-col px-2 py-2 md:px-3 justify-around h-1/3 justify-between"
+      class="texts relative flex flex-col justify-between justify-around px-2 py-2 md:px-3"
     >
       <h4 class="w-full truncate">
         {{ data.name }}
       </h4>
-      <p class="opacity-80 text-0.4em">
+      <p class="my-1 text-0.8em opacity-80">
         <small>
-          {{ data.city ? data.city + "发货 " : "" }}
+          {{ data.city ? `${data.city}发货 ` : "" }}
         </small>
         <small float-right>{{ getInsurance }}</small>
       </p>
       <!-- 价格 -->
-      <p class="color-[var(--el-color-danger)] flex items-end">
+      <p class="flex items-end color-[var(--el-color-danger)]">
         <strong pr-1>￥{{ currency(data.eventPrice) }}</strong>
         <small
-          hidden
-          md:inline
-          color-coolgray
-          text-0.6em
+          hidden text-0.8em color-coolgray md:inline
           style="text-decoration: line-through"
         >
           ￥{{ currency(data.price) }}
@@ -82,6 +79,7 @@ const getInsurance = computed(() => {
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 .texts {
   &::before {

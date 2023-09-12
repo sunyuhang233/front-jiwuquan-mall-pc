@@ -43,8 +43,8 @@ const isShowMenu = ref<boolean>(false);
         />
       </ClientOnly>
       <!-- 内容 -->
-      <div class="flex-1 animate-fade-in animate-duration-200">
-        <slot />
+      <div class="flex-1">
+        <slot name="default" />
       </div>
     </div>
     <!-- 右下角功能区 -->

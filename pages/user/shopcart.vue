@@ -158,16 +158,7 @@ definePageMeta({
                   size="large"
                   class="relative"
                 >
-                  <ul
-                    v-infinite-scroll="shop.loadShopcartList"
-                    v-auto-animate="{
-                      duration: 300,
-                      easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.3)',
-                    }"
-                    :infinite-scroll-delay="400"
-                    :infinite-scroll-disabled="notMore"
-                    overflow-y-auto
-                  >
+                  <ListAutoIncre @load="shop.loadShopcartList">
                     <li
                       v-for="p in shop.shopcartList"
                       :key="p.id"
@@ -181,7 +172,7 @@ definePageMeta({
                         </template>
                       </CardShopLine>
                     </li>
-                  </ul>
+                  </ListAutoIncre>
                 </el-checkbox-group>
               </el-scrollbar>
             </div>

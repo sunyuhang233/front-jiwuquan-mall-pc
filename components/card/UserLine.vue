@@ -41,7 +41,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
 /**
  * 更新
  */
-const updateSucess: UploadProps["onSuccess"] = async (data, file) => {
+const updateSucess: UploadProps["onSuccess"] = async (data) => {
   if (data.code === StatusCode.SUCCESS) {
     user.userInfo.avatar = data.data;
     avatatRef.value?.clearFiles();
