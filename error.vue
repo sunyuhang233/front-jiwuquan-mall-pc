@@ -1,4 +1,5 @@
 <script lang="ts" setup></script>
+
 <template>
   <div>
     <NuxtLayout name="error">
@@ -6,4 +7,5 @@
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

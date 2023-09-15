@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
+
 <template>
-	<div w-full h-100vh mx-a flex-row-c-c>
-		<slot></slot>
-	</div>
+  <div mx-a h-100vh w-full flex-row-c-c>
+    <slot />
+  </div>
 </template>
+
 <style scoped lang="scss"></style>
