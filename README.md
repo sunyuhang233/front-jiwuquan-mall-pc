@@ -1,4 +1,4 @@
-<h2 align=center margin="10em" style="margin:4em;letter-spacing:0.3em;"><img src="./assets/images/logo/logo.png" width = "40" height = "40" alt="图片名称" align=center /> 极物圈</h2>
+<h2 align=center margin="10em" style="margin:4em;letter-spacing:0.3em;"><img src="./assets/images/logo/logo.png" width = "40" height = "40" alt="图片名称" align=center />   极  物  圈  </h2>
 
 ###  介绍
 极物圈是一个商城、社交平台，用户可以在这里购买商品（虚拟），发布自己的帖子，评论别人的帖子。
