@@ -243,6 +243,7 @@ function setActiveItem(image: string) {
             <BtnCollectGoods :gid="goodsInfo?.id || ''" />
           </ClientOnly>
         </div>
+        <!-- 规格选择 -->
         <div class="sku-list" flex flex-col pt-6 leading-1.4em tracking-0.1em>
           <!-- 顶部 -->
           <h3 mb-4 leading-1.2em>
@@ -310,6 +311,9 @@ function setActiveItem(image: string) {
             </el-form-item>
           </div>
         </div>
+        <div v-if="!goodsSku || !goodsSku.length" class="h-12rem w-full text-center leading-12rem">
+          暂未开售
+        </div>
         <!-- 数量 -->
         <div class="card">
           <small>数 量</small>
@@ -319,19 +323,23 @@ function setActiveItem(image: string) {
             <small v-show="!isAllCheckSku">（总库存剩余：{{ getMaxStock }} 件）</small>
           </el-form-item>
         </div>
-
         <!-- 购物车|立即购买 -->
         <el-form-item>
           <div class="relative mt-2 w-1/1 flex justify-between py-3">
             <!-- 加入 -->
             <el-button
+              :disabled="!goodsSku || !goodsSku?.length"
               size="large" style="flex: 1;transition: 300ms;font-size: 1.2em;padding: 0.8em 1em;letter-spacing: 0.1em;margin-right: 0.6em;font-weight: 700;" plain shadow @click="onSubmitShopCart(FormRef, $event)"
             >
               加入购物车
             </el-button>
             <!-- 立即购买 -->
             <el-button
-              v-loading.fullscreen.lock="fullscreenLoading" size="large" class="relative" style="flex: 1;margin-right: 0.6em;transition: 300ms;font-size: 1.2em;font-weight: 600;padding: 0.8em 1em;letter-spacing: 0.1em;" shadow-md type="info" @click="onSubmitBuy(FormRef)"
+              v-loading.fullscreen.lock="fullscreenLoading"
+              :disabled="!goodsSku || !goodsSku?.length"
+              size="large"
+              class="relative"
+              style="flex: 1;margin-right: 0.6em;transition: 300ms;font-size: 1.2em;font-weight: 600;padding: 0.8em 1em;letter-spacing: 0.1em;" shadow-md type="info" @click="onSubmitBuy(FormRef)"
             >
               立即购买
               <div

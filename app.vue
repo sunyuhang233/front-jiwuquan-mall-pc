@@ -52,21 +52,21 @@ onNuxtReady(async () => {
 <style>
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.2s;
+  transition: all 0.3s;
 }
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  filter: blur(1rem) grayscale(1);
+  filter: blur(16px) contrast(4);
 }
 
 .layout-enter-active,
 .layout-leave-active {
-  transition: opacity 0.2s;
+  transition: all 0.3s;
 }
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
-  filter: blur(1rem) grayscale(1);
+  filter: blur(16px) contrast(4);
 }
 </style>

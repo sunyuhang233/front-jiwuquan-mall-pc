@@ -1,19 +1,19 @@
-import { UseFetchOptions } from "nuxt/app";
-import { StatusCode } from "~/types/result";
+import type { UseFetchOptions } from "nuxt/app";
 import { getBaseUrl } from "./toggleDev";
+import type { StatusCode } from "~/types/result";
 
 type Methods = "GET" | "POST" | "DELETE" | "PUT";
 export const BaseUrl = getBaseUrl;
 // 图片
-export const BaseUrlImg = BaseUrl + '/res/'
-export const BaseUrlVideo = BaseUrl + '/res/'
-export const BaseUrlFile = BaseUrl + '/res/'
+export const BaseUrlImg = `${BaseUrl}/res/`;
+export const BaseUrlVideo = `${BaseUrl}/res/`;
+export const BaseUrlFile = `${BaseUrl}/res/`;
 export const AuthKey = "Authorization";
 
 export interface Result<T> {
-  msg: string;
-  code: StatusCode;
-  data: T;
+  msg: string
+  code: StatusCode
+  data: T
 }
 
 class useFetchUtil {
@@ -26,18 +26,18 @@ class useFetchUtil {
     return new Promise<T>((resolve, reject) => {
       const newOptions: UseFetchOptions<T> = {
         baseURL: BaseUrl,
-        method: method,
+        method,
         ...options,
       };
 
-      if (method === "GET" || method === "DELETE") {
+      if (method === "GET" || method === "DELETE")
         newOptions.params = data;
-      }
-      if (method === "POST" || method === "PUT") {
-        newOptions.body = data;
-      }
 
-      useLazyFetch(url, newOptions)
+      if (method === "POST" || method === "PUT")
+        newOptions.body = data;
+
+
+      useLazyFetch(url, newOptions);
     });
   }
 
@@ -50,6 +50,7 @@ class useFetchUtil {
   post<T = any>(url: string, data: any, options?: UseFetchOptions<T>) {
     return this.request<T>(url, "POST", data, options);
   }
+
   Put<T = any>(url: string, data: any, options?: UseFetchOptions<T>) {
     return this.request<T>(url, "PUT", data, options);
   }

@@ -8,7 +8,7 @@ export function httpRequest<T = unknown>(
   bodyOrParams?: any,
   opts?: FetchOptions,
 ) {
-  const store = useUserStore()
+  const store = useUserStore();
   let msg: string = "";
   const defaultOpts = {
     method,
@@ -17,11 +17,11 @@ export function httpRequest<T = unknown>(
     // 请求拦截器
     onRequest: (config) => {
       // 需要登录操作
-      // @ts-ignore
+      // @ts-expect-error
       if (config.options.headers?.Authorization !== undefined) {
-        // @ts-ignore
+        // @ts-expect-error
         if (config.options.headers?.Authorization === "") {
-          store?.$reset()
+          store?.$reset();
           store.showLoginForm = true;
         }
       }
@@ -40,7 +40,7 @@ export function httpRequest<T = unknown>(
     onResponse: (coinfig) => {
       const data = coinfig.response._data;
       let msg: string = "";
-      let type: string = "error";
+      const type: string = "error";
       switch (data.code) {
         case StatusCode.INSERT_ERR:
           msg = "错误，添加失败！";
@@ -63,7 +63,7 @@ export function httpRequest<T = unknown>(
           break;
         case StatusCode.TOKEN_ERR:
           msg = "身份验证失败！";
-          store.showLoginForm = true
+          store.showLoginForm = true;
           break;
         case StatusCode.PARAM_ERR:
           msg = "请求失败，参数错误！";
@@ -83,42 +83,41 @@ export function httpRequest<T = unknown>(
     },
     // 请求错误
     onRequestError() {
-      msg = '请求出错，请重试！'
+      msg = "请求出错，请重试！";
     },
     // 不同响应码
     onResponseError({ response }) {
       switch (response.status) {
         case 400:
-          msg = '请求参数错误，请稍后重试！';
-          break
+          msg = "请求参数错误，请稍后重试！";
+          break;
         case 401:
-          msg = '没有权限，拒绝访问！';
-          break
+          msg = "没有权限，拒绝访问！";
+          break;
         case 403:
-          msg = '没有权限，拒绝访问！';
-          break
+          msg = "没有权限，拒绝访问！";
+          break;
         case 404:
-          msg = '请求地址错误！';
-          break
+          msg = "请求地址错误！";
+          break;
         case 500:
-          msg = '服务器故障，稍后重试！';
-          break
+          msg = "服务器故障，稍后重试！";
+          break;
       }
       // 客户端报错
-      if (msg) {
-        ElMessage.error(msg)
-      }
+      if (msg)
+        ElMessage.error(msg);
     },
-  } as FetchOptions
+  } as FetchOptions;
   if (defaultOpts) {
-    if (method === 'post' || method === 'put')
-      defaultOpts.body = bodyOrParams
-    else if (method === 'delete' || method === 'get')
-      defaultOpts.params = bodyOrParams
+    if (method === "post" || method === "put")
+      defaultOpts.body = bodyOrParams;
+    else if (method === "delete" || method === "get")
+      defaultOpts.params = bodyOrParams;
     else
-      defaultOpts.body = bodyOrParams
+      defaultOpts.body = bodyOrParams;
   }
-  return $fetch<T>(url, { ...defaultOpts, ...opts })
+  return $fetch<T>(url, { ...defaultOpts, ...opts });
 }
 
 export const useHttp = {
@@ -127,7 +126,7 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>('post', request, body, opts)
+    return httpRequest<T>("post", request, body, opts);
   },
 
   get<T = unknown>(
@@ -135,7 +134,7 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>('get', request, body, opts)
+    return httpRequest<T>("get", request, body, opts);
   },
 
 
@@ -144,7 +143,7 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>('DELETE', request, body, opts)
+    return httpRequest<T>("DELETE", request, body, opts);
   },
 
 
@@ -153,7 +152,7 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>('put', request, body, opts)
+    return httpRequest<T>("put", request, body, opts);
   },
 
-}
+};

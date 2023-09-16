@@ -2,13 +2,13 @@
 import { useLocalStorage } from "@vueuse/core";
 
 const bgList = ref<string[]>([
-  "/user_bg/kiwi-bg-1.jpg",
-  "/user_bg/kiwi-bg-2.jpg",
-  "/user_bg/kiwi-bg-3.jpg",
-  "/user_bg/kiwi-bg-4.jpg",
-  "/user_bg/kiwi-bg-5.jpg",
+  "/image/kiwi-bg-1.jpg",
+  "/image/kiwi-bg-2.jpg",
+  "/image/kiwi-bg-3.jpg",
+  "/image/kiwi-bg-4.jpg",
+  "/image/kiwi-bg-5.jpg",
 ]);
-const bgUrl = useLocalStorage("jiwu_user_bg", "/user_bg/kiwi-bg-4.jpg");
+const bgUrl = useLocalStorage("jiwu_user_bg", "/image/kiwi-bg-4.jpg");
 </script>
 
 <template>
