@@ -34,7 +34,7 @@ export const pwa: ModuleOptions = {
     // ],
   },
   workbox: {
-    globPatterns: ["**/*.{css,js,html,svg,png,ico,txt,ttf,woff,woff2}"],
+    globPatterns: ["**/*.{css,js,html,svg,png,woff,woff2}"],
     runtimeCaching: [
       {
         urlPattern: "/^https://quang.kiwi2333.top/font/* /i",

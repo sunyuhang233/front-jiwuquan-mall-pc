@@ -59,6 +59,11 @@ onNuxtReady(async () => {
   opacity: 0;
   filter: blur(16px) contrast(4);
 }
+.dark .page-enter-from,
+.dark .page-leave-to {
+    filter: blur(10px) contrast(0);
+}
+
 
 .layout-enter-active,
 .layout-leave-active {
@@ -68,5 +73,9 @@ onNuxtReady(async () => {
 .layout-leave-to {
   opacity: 0;
   filter: blur(16px) contrast(4);
+}
+.dark .layout-enter-from,
+.dark .layout-leave-to {
+  filter: blur(10px) contrast(0);
 }
 </style>

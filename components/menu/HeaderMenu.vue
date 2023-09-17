@@ -1,11 +1,36 @@
+<script lang="ts" setup>
+// 搜索
+const isShowSearch = ref<boolean>(false);
+const searchWord = ref<string>("");
+// 登录表单
+const store = useUserStore();
+enum FormType {
+  LOGIN,
+  REGISTER,
+}
+// 表单
+function onLogin(type: FormType) {
+  if (type === FormType.LOGIN) {
+    // 登录
+    store.showLoginForm = true;
+    store.showRegisterForm = false;
+  }
+  else {
+    // 注册
+    store.showLoginForm = false;
+    store.showRegisterForm = true;
+  }
+}
+function onSerch(val: string) {
+}
+// 搜索
+</script>
+
 <template>
   <!-- 顶部header -->
   <header
     class="nav select-none"
-    flex-row-bt-c
-    px-2
-    md:px-6
-    text-m
+    text-m flex-row-bt-c px-2 md:px-6
     dark:text="light"
   >
     <!-- 左侧 -->
@@ -20,74 +45,52 @@
         class="relative"
       >
         <img
-          w-2.4rem
-          object-contain
-          group-hover:opacity-85
-          transition-300
-          group-hover:filter-blur-2px
           alt="Design By Kiwi23333"
           src="@/assets/images/logo/logo.png"
-          dark:hidden
-        />
+          w-2.4rem object-contain transition-300 dark:hidden group-hover:opacity-85 group-hover:filter-blur-2px
+        >
         <img
-          w-2.4rem
-          object-contain
-          group-hover:opacity-85
-          transition-300
-          group-hover:filter-blur-2px
+          alt="Design By Kiwi23333"
           src="@/assets/images/logo/logo_dark.png"
-          hidden
-          dark:block
-        />
+          hidden w-2.4rem object-contain transition-300 dark:block group-hover:opacity-85 group-hover:filter-blur-2px
+        >
         <span
-          transition-300
-          group-hover:block
-          hidden
-          w-1.6rem
-          h-1.6rem
-          i-solar:home-2-bold
-          absolute
-          left-1
+          i-solar:home-2-bold absolute left-1 hidden h-1.6rem w-1.6rem transition-300 group-hover:block
           style="color: var(--el-text-color-primary)"
-        ></span>
+        />
       </NuxtLink>
-      <span class="tracking-2 mx-4 font-700 text-xl hidden md:inline">极物圈</span>
+      <span class="mx-4 hidden text-xl font-700 tracking-2 md:inline">极物圈</span>
       <a
         class="group"
         target="_blank"
         href="https://github.com/KiWi233333"
       >
         <img
-          dark:filter-invert-100
-          ml-4
-          w-5rem
-          opacity-0
-          transition-300
-          group-hover:opacity-100
+          ml-4 w-5rem opacity-0 transition-300 group-hover:opacity-100 dark:filter-invert-100
           src="@/assets/images/logo/kiwi_strong.svg"
-        />
+        >
       </a>
     </div>
     <!-- 搜索框 -->
     <transition name="fadeInOut">
       <div
-        class="fixed left-0 top-0 w-full h-[100vh] z-2 bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)] animate-[fade-in_0.2s_ease-out]"
         v-show="isShowSearch"
+        class="fixed left-0 top-0 z-2 h-[100vh] w-full animate-[fade-in_0.2s_ease-out] bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)]"
         @click="isShowSearch = false"
-      ></div>
+      />
     </transition>
     <div
-      class="z-2 absolute-center transition-300 translate-y-0 transition-ease-in-out"
+      class="z-2 translate-y-0 transition-300 transition-ease-in-out absolute-center"
       :class="{ 'translate-y-20vh scale-120': isShowSearch }"
     >
       <InputSearch
         v-model="searchWord"
-        :onSerch="onSerch"
+        :on-serch="onSerch"
         @open="isShowSearch = true"
         @close="isShowSearch = false"
       />
       <h2
-        class="transition-300 text-center absolute-center -translate-y-4em font-500 text-light"
+        class="text-center font-500 text-light transition-300 absolute-center -translate-y-4em"
         :class="{ '-translate-y-3em': isShowSearch }"
       >
         搜 索
@@ -102,16 +105,16 @@
         <!-- 消息 -->
         <BtnBell
           v-if="store.isLogin"
-          class="hidden md:block mx-2"
+          class="mx-2 hidden md:block"
         />
         <!-- 购物车 -->
         <NuxtLink
-          to="/user/shopcart"
           v-if="store.isLogin"
-          class="hover:animate-[shopcart_1s_ease-in] hidden md:block"
+          to="/user/shopcart"
+          class="hidden md:block hover:animate-[shopcart_1s_ease-in]"
         >
           <i
-            class="p-3 mx-2 px-0.7em transition-100 hover:bg-[var(--el-color-danger)] hover:i-solar:cart-large-2-bold"
+            class="mx-2 p-3 px-0.7em transition-100 hover:i-solar:cart-large-2-bold hover:bg-[var(--el-color-danger)]"
             i-solar:cart-large-2-linear
           />
         </NuxtLink>
@@ -119,8 +122,8 @@
         <BtnSwitch />
         <!-- 登陆注册 -->
         <div
-          class="flex flex-col group z-0"
           v-if="!store.isLogin"
+          class="group z-0 flex flex-col"
         >
           <!-- 移动端 -->
           <div class="block md:hidden">
@@ -139,30 +142,24 @@
                   style="margin: 0; padding: 0.5em"
                 >
                   <i
-                    class="rounded-4em p-2 shadow-md cursor-pointer bg-dark-1 dark:bg-light opacity-80"
+                    class="cursor-pointer rounded-4em bg-dark-1 p-2 opacity-80 shadow-md dark:bg-light"
                     i-solar:user-outline
                   />
                 </el-button>
               </template>
               <div
-                flex
-                inline-block
-                sm:hidden
-                flex-col
+                inline-block flex flex-col sm:hidden
               >
                 <ElButton
                   round
-                  class="m-2 shadow-md px-2 cursor-pointer"
+                  class="m-2 cursor-pointer px-2 shadow-md"
                   type="primary"
                   @click="onLogin(FormType.LOGIN)"
                 >
                   登 录
                 </ElButton>
                 <ElButton
-                  round
-                  px-2
-                  m-2
-                  cursor-pointer
+                  round m-2 cursor-pointer px-2
                   style="margin-left: 0"
                   @click="onLogin(FormType.REGISTER)"
                 >
@@ -173,26 +170,19 @@
           </div>
           <!-- pc -->
           <div
-            hidden
-            flex-col
-            md:block
-            md:flex-row
-            items-center
-            class="bg-[#d8d8d854] dark:bg-[#4d4d4d48] backdrop-blur-12px rounded-10px z-1 p-2 md:p-0 md:bg-transparent md:static"
+            hidden flex-col items-center md:block md:flex-row
+            class="z-1 rounded-10px bg-[#d8d8d854] p-2 backdrop-blur-12px md:static dark:bg-[#4d4d4d48] md:bg-transparent md:p-0 dark:md:bg-transparent"
           >
             <ElButton
               round
-              class="m-2 shadow-md px-2 cursor-pointer"
+              class="m-2 cursor-pointer px-2 shadow-md"
               type="primary"
               @click="onLogin(FormType.LOGIN)"
             >
               登 录
             </ElButton>
             <ElButton
-              round
-              px-2
-              m-2
-              cursor-pointer
+              round m-2 cursor-pointer px-2
               style="margin-left: 0"
               @click="onLogin(FormType.REGISTER)"
             >
@@ -201,8 +191,8 @@
           </div>
         </div>
         <div
-          class="box"
           v-else
+          class="box"
         >
           <CardUserLine :user-info="store.userInfo" />
         </div>
@@ -211,31 +201,6 @@
   </header>
 </template>
 
-<script lang="ts" setup>
-// 搜索
-let isShowSearch = ref<boolean>(false);
-let searchWord = ref<string>("");
-// 登录表单
-const store = useUserStore();
-enum FormType {
-  LOGIN,
-  REGISTER,
-}
-// 表单
-const onLogin = (type: FormType) => {
-  if (type === FormType.LOGIN) {
-    // 登录
-    store.showLoginForm = true;
-    store.showRegisterForm = false;
-  } else {
-    // 注册
-    store.showLoginForm = false;
-    store.showRegisterForm = true;
-  }
-};
-const onSerch = (val: string) => {};
-// 搜索
-</script>
 <style lang="scss" scoped>
 .nav {
   box-shadow: rgba(9, 30, 66, 0.1) 0px 4px 2px -2px;

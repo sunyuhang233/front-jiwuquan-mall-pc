@@ -1,188 +1,13 @@
-<template>
-  <!-- 登录 -->
-  <el-form
-    v-loading="isLoading"
-    label-position="top"
-    ref="formRef"
-    hide-required-asterisk
-    :rules="rules"
-    :model="userForm"
-    class="form animate__animated w-94vw sm:w-400px"
-  >
-    <h2
-      mb-5
-      mt-4
-      tracking-0.2em
-    >
-      欢迎来到极物圈!
-    </h2>
-    <p
-      mb-10
-      tracking-0.1em
-      text-0.8em
-    >
-      没有账户？
-      <span
-        color-emerald
-        cursor-pointer
-        hover:font-700
-        transition-300
-        @click="toRegister"
-      >
-        立即注册
-      </span>
-    </p>
-    <!-- 切换登录 -->
-    <div
-      class="toggle-login"
-      my-1em
-    >
-      <el-button
-        flex-1
-        :class="{ active: loginType === LoginType.EMAIL }"
-        @click="loginType = LoginType.EMAIL"
-        tracking-0.1em
-      >
-        邮箱登录
-      </el-button>
-      <el-button
-        flex-1
-        :class="{ active: loginType === LoginType.PHONE }"
-        @click="loginType = LoginType.PHONE"
-        tracking-0.1em
-      >
-        手机登录
-      </el-button>
-      <el-button
-        flex-1
-        :class="{ active: loginType === LoginType.PWD }"
-        @click="loginType = LoginType.PWD"
-        tracking-0.1em
-        tracking-0.2em
-      >
-        密码登录
-      </el-button>
-    </div>
-    <!-- 验证码登录(客户端 ) -->
-    <ClientOnly>
-      <!-- 邮箱登录 -->
-      <el-form-item
-        v-if="loginType === LoginType.EMAIL"
-        prop="email"
-        class="animated"
-      >
-        <el-input
-          type="email"
-          @keyup.enter="getLoginCode(loginType)"
-          prefix-icon="Message"
-          v-model.trim="userForm.email"
-          size="large"
-          placeholder="请输入邮箱"
-        >
-          <template #append>
-            <el-button
-              type="primary"
-              @click="getLoginCode(loginType)"
-              :disabled="phoneCodeStorage > 0 && isLoading"
-            >
-              {{ emailCodeStorage > 0 ? `${emailCodeStorage}s后重新发送` : "获取验证码" }}
-            </el-button>
-          </template>
-        </el-input>
-      </el-form-item>
-      <!-- 手机号登录 -->
-      <el-form-item
-        type="tel"
-        v-if="loginType === LoginType.PHONE"
-        prop="phone"
-        class="animated"
-      >
-        <el-input
-          prefix-icon="Iphone"
-          v-model.trim="userForm.phone"
-          @keyup.enter="getLoginCode(loginType)"
-          size="large"
-          type="tel"
-          placeholder="请输入手机号"
-        >
-          <template #append>
-            <el-button
-              type="primary"
-              @click="getLoginCode(loginType)"
-              :disabled="phoneCodeStorage > 0"
-            >
-              {{ phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : "获取验证码" }}
-            </el-button>
-          </template>
-        </el-input>
-      </el-form-item>
-    </ClientOnly>
-    <el-form-item
-      v-if="loginType === LoginType.EMAIL || loginType === LoginType.PHONE"
-      prop="code"
-      class="animated"
-    >
-      <el-input
-        prefix-icon="ChatDotSquare"
-        @keyup.enter="onLogin(formRef)"
-        v-model.trim="userForm.code"
-        size="large"
-        placeholder="请输入验证码"
-      />
-    </el-form-item>
-    <!-- 密码登录 -->
-    <el-form-item
-      label=""
-      v-if="loginType === LoginType.PWD"
-      prop="username"
-      class="animated"
-    >
-      <el-input
-        prefix-icon="user"
-        v-model.trim="userForm.username"
-        @keyup.enter="onLogin(formRef)"
-        size="large"
-        placeholder="请输入用户名、手机号或邮箱"
-      />
-    </el-form-item>
-    <el-form-item
-      type="password"
-      label=""
-      v-if="loginType === LoginType.PWD"
-      prop="password"
-      class="animated"
-    >
-      <el-input
-        @keyup.enter="onLogin(formRef)"
-        prefix-icon="Lock"
-        v-model.trim="userForm.password"
-        size="large"
-        placeholder="请输入密码"
-        type="password"
-      />
-    </el-form-item>
-    <el-form-item mt-1em>
-      <el-button
-        @keyup.enter="onLogin(formRef)"
-        type="primary"
-        class="submit w-full"
-        style="padding: 20px"
-        @click="onLogin(formRef)"
-      >
-        登 录
-      </el-button>
-    </el-form-item>
-  </el-form>
-</template>
 <script lang="ts" setup>
 import {
-  getLoginCodeByType,
-  toLoginByPwd,
-  toLoginByPhone,
-  toLoginByEmail,
   DeviceType,
+  getLoginCodeByType,
+  toLoginByEmail,
+  toLoginByPhone,
+  toLoginByPwd,
 } from "~/composables/api/user";
 import { LoginType } from "~/types/user/index.js";
+
 const loginType = ref<number>(LoginType.EMAIL);
 const isLoading = ref<boolean>(false);
 const autoLogin = ref<boolean>(false);
@@ -244,12 +69,13 @@ const phoneCodeStorage = ref<number>(0);
  * 获取验证码
  * @param type
  */
-const getLoginCode = async (type: LoginType) => {
+async function getLoginCode(type: LoginType) {
   let data;
   // 获取邮箱验证码
   if (type === LoginType.EMAIL) {
     // 简单校验
-    if (userForm.email.trim() === "") return;
+    if (userForm.email.trim() === "")
+      return;
     if (!checkEmail(userForm.email)) {
       isLoading.value = false;
       return ElMessage.error("邮箱格式不正确！");
@@ -269,7 +95,8 @@ const getLoginCode = async (type: LoginType) => {
   }
   // 获取手机号验证码
   else if (type === LoginType.PHONE) {
-    if (userForm.phone.trim() === "") return;
+    if (userForm.phone.trim() === "")
+      return;
     if (!checkPhone(userForm.phone)) {
       isLoading.value = false;
       return ElMessage.error("手机号格式不正确！");
@@ -284,13 +111,14 @@ const getLoginCode = async (type: LoginType) => {
         duration: 5000,
       });
       // userForm.code = data.data;
-    } else {
+    }
+    else {
       ElMessage.error(data.message);
     }
   }
   // 关闭加载
   isLoading.value = false;
-};
+}
 /**
  * 定时器
  * @param timer 本地定时器
@@ -299,13 +127,11 @@ const getLoginCode = async (type: LoginType) => {
  * @param step 自增自减
  * @param fn 回调
  */
-const useInterval = (
-  timer: any,
+function useInterval(timer: any,
   num: Ref<number>,
   target?: number,
   step: number = -1,
-  fn?: Function
-) => {
+  fn?: () => void) {
   num.value = target || timer.value;
   timer.value = setInterval(() => {
     num.value += step;
@@ -315,25 +141,27 @@ const useInterval = (
       clearInterval(timer.value);
       timer.value = -1;
     }
+    fn && fn();
   }, 1000);
-};
+}
 
 const store = useUserStore();
-const toRegister = () => {
+function toRegister() {
   store.showLoginForm = false;
   store.showRegisterForm = true;
-};
+}
 
 const formRef = ref();
 /**
  * 登录
  * @param type
  */
-const onLogin = async (formEl: any | undefined) => {
-  if (!formEl || isLoading.value) return;
-  // @ts-ignore
-  formEl.validate(async (valid) => {
-    if (!valid) return;
+async function onLogin(formEl: any | undefined) {
+  if (!formEl || isLoading.value)
+    return;
+  formEl.validate(async (valid: boolean) => {
+    if (!valid)
+      return;
     isLoading.value = true;
     let res = { code: 20001, data: "", message: "登录失败！" };
     switch (loginType.value) {
@@ -349,7 +177,7 @@ const onLogin = async (formEl: any | undefined) => {
     }
     if (res.code === 20000) {
       // 登录成功
-      if (res.data != "") {
+      if (res.data !== "") {
         ElMessage.success({
           message: "登录成功！",
           duration: 2000,
@@ -379,8 +207,185 @@ const onLogin = async (formEl: any | undefined) => {
       isLoading.value = false;
     }, 300);
   });
-};
+}
 </script>
+
+<template>
+  <!-- 登录 -->
+  <el-form
+    ref="formRef"
+    v-loading="isLoading"
+    label-position="top"
+    hide-required-asterisk
+    :rules="rules"
+    :model="userForm"
+    class="form animate__animated w-94vw sm:w-400px"
+  >
+    <h2
+      mb-5
+      mt-4
+      tracking-0.2em
+    >
+      欢迎来到极物圈!
+    </h2>
+    <p
+
+
+      mb-10 text-0.8em tracking-0.1em
+    >
+      没有账户？
+      <span
+
+
+        cursor-pointer color-emerald transition-300 hover:font-700
+        @click="toRegister"
+      >
+        立即注册
+      </span>
+    </p>
+    <!-- 切换登录 -->
+    <div
+      class="toggle-login"
+      my-1em
+    >
+      <el-button
+        flex-1
+        :class="{ active: loginType === LoginType.EMAIL }"
+        tracking-0.1em
+        @click="loginType = LoginType.EMAIL"
+      >
+        邮箱登录
+      </el-button>
+      <el-button
+        flex-1
+        :class="{ active: loginType === LoginType.PHONE }"
+        tracking-0.1em
+        @click="loginType = LoginType.PHONE"
+      >
+        手机登录
+      </el-button>
+      <el-button
+        flex-1
+        :class="{ active: loginType === LoginType.PWD }"
+        tracking-0.1em
+        tracking-0.2em
+        @click="loginType = LoginType.PWD"
+      >
+        密码登录
+      </el-button>
+    </div>
+    <!-- 验证码登录(客户端 ) -->
+    <ClientOnly>
+      <!-- 邮箱登录 -->
+      <el-form-item
+        v-if="loginType === LoginType.EMAIL"
+        prop="email"
+        class="animated"
+      >
+        <el-input
+          v-model.trim="userForm.email"
+          type="email"
+          prefix-icon="Message"
+          size="large"
+          placeholder="请输入邮箱"
+          @keyup.enter="getLoginCode(loginType)"
+        >
+          <template #append>
+            <el-button
+              type="primary"
+              :disabled="phoneCodeStorage > 0 && isLoading"
+              @click="getLoginCode(loginType)"
+            >
+              {{ emailCodeStorage > 0 ? `${emailCodeStorage}s后重新发送` : "获取验证码" }}
+            </el-button>
+          </template>
+        </el-input>
+      </el-form-item>
+      <!-- 手机号登录 -->
+      <el-form-item
+        v-if="loginType === LoginType.PHONE"
+        type="tel"
+        prop="phone"
+        class="animated"
+      >
+        <el-input
+          v-model.trim="userForm.phone"
+          prefix-icon="Iphone"
+          size="large"
+          type="tel"
+          placeholder="请输入手机号"
+          @keyup.enter="getLoginCode(loginType)"
+        >
+          <template #append>
+            <el-button
+              type="primary"
+              :disabled="phoneCodeStorage > 0"
+              @click="getLoginCode(loginType)"
+            >
+              {{ phoneCodeStorage > 0 ? `${phoneCodeStorage}s后重新发送` : "获取验证码" }}
+            </el-button>
+          </template>
+        </el-input>
+      </el-form-item>
+    </ClientOnly>
+    <el-form-item
+      v-if="loginType === LoginType.EMAIL || loginType === LoginType.PHONE"
+      prop="code"
+      class="animated"
+    >
+      <el-input
+        v-model.trim="userForm.code"
+        prefix-icon="ChatDotSquare"
+        size="large"
+        placeholder="请输入验证码"
+        @keyup.enter="onLogin(formRef)"
+      />
+    </el-form-item>
+    <!-- 密码登录 -->
+    <el-form-item
+      v-if="loginType === LoginType.PWD"
+      label=""
+      prop="username"
+      class="animated"
+    >
+      <el-input
+        v-model.trim="userForm.username"
+        prefix-icon="user"
+        size="large"
+        placeholder="请输入用户名、手机号或邮箱"
+        @keyup.enter="onLogin(formRef)"
+      />
+    </el-form-item>
+    <el-form-item
+      v-if="loginType === LoginType.PWD"
+      type="password"
+      label=""
+      prop="password"
+      class="animated"
+    >
+      <el-input
+        v-model.trim="userForm.password"
+        prefix-icon="Lock"
+        size="large"
+        placeholder="请输入密码"
+        type="password"
+        @keyup.enter="onLogin(formRef)"
+      />
+    </el-form-item>
+    <el-form-item mt-1em>
+      <el-button
+        type="primary"
+        class="submit w-full"
+        style="padding: 20px"
+        @keyup.enter="onLogin(formRef)"
+        @click="onLogin(formRef)"
+      >
+        登 录
+      </el-button>
+    </el-form-item>
+  </el-form>
+</template>
+
 <style scoped lang="scss">
 .form {
   display: block;

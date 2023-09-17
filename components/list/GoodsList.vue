@@ -106,34 +106,32 @@ defineExpose({
 
 <template>
   <ListAutoIncre :no-more="isNoMore" @load="loadGoodsPage">
-    <ClientOnly>
-      <transition-group
-        tag="div"
-        class="pb-2"
-        :name="transiton || 'fade-list'"
-        :class="props.class !== null ? props.class : 'flex flex-wrap'"
+    <transition-group
+      tag="div"
+      class="pb-2"
+      :name="transiton || 'fade-list'"
+      :class="props.class !== null ? props.class : 'flex flex-wrap'"
+    >
+      <NuxtLink
+        v-for="p in goodsList"
+        :key="p.id"
+        :to="`/goods/detail/${p.id}`"
       >
-        <NuxtLink
-          v-for="p in goodsList"
-          :key="p.id"
-          :to="`/goods/detail/${p.id}`"
+        <!-- 商品卡片 -->
+        <CardGoodsBox
+          class="v-card mt-4/100 transition-300"
+          :goods="p"
         >
-          <!-- 商品卡片 -->
-          <CardGoodsBox
-            class="v-card mt-4/100 transition-300"
-            :goods="p"
+          <small
+            float-right
+            mt-2px
+            text-blueGray
           >
-            <small
-              float-right
-              mt-2px
-              text-blueGray
-            >
-              销量：{{ p.sales }}
-            </small>
-          </CardGoodsBox>
-        </NuxtLink>
-      </transition-group>
-    </ClientOnly>
+            销量：{{ p.sales }}
+          </small>
+        </CardGoodsBox>
+      </NuxtLink>
+    </transition-group>
     <p
       v-show="isNoMore || isNot"
       class="w-1/1 py-8" text-center tracking-1

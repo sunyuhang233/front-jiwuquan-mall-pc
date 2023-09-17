@@ -50,7 +50,7 @@ const isCollapse = ref<boolean>(false);
 <template>
   <div
     transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
-    class="menu md:shadow-none fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
+    class="menu  md:shadow-none fixed md:sticky md:block z-998 bg-light dark:bg-dark-8 backdrop-blur-30 h-full"
     :class="{ '-translate-x-full': isCollapse }"
   >
     <ClientOnly>
@@ -106,9 +106,10 @@ const isCollapse = ref<boolean>(false);
         hover:-translate-x-1
         flex-row-c-c
         shadow-sm
+
         shadow-indigo-600
         transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
-        class="absolute bottom-2rem -right-2rem -z-1 w-2rem pl-1 h-3rem bg-[var(--el-color-primary)] -translate-x-2"
+        class="absolute bottom-2rem -right-2rem -z-20 w-2rem pl-1 h-3rem bg-[var(--el-color-primary)] -translate-x-2"
       >
         <i
           transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
@@ -123,6 +124,12 @@ const isCollapse = ref<boolean>(false);
 </template>
 
 <style lang="scss" scoped>
+.dark .menu {
+  :deep(.el-menu) {
+
+    background-color: #0f0f0ffa;
+  }
+}
 .menu {
   user-select: none;
   top: $top-nav-height;

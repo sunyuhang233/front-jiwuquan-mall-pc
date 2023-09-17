@@ -10,19 +10,20 @@ const list = useAsyncData(async () => {
     item.goods.images = typeof item.goods.images === "string" ? item.goods.images.split(",") : [];
   });
   isLoading.value = false;
-  if (code === StatusCode.SUCCESS) {
+  if (code === StatusCode.SUCCESS)
     return data;
-  } else {
+
+  else
     return [];
-  }
 });
 /**
  * 单个取消收藏
  * @param gId 商品id
  */
-const cancelCollect = (gId: string) => {
-  if (isLoading.value) return;
-  ElMessageBox.confirm(`是否取消收藏？`, "取消提示", {
+function cancelCollect(gId: string) {
+  if (isLoading.value)
+    return;
+  ElMessageBox.confirm("是否取消收藏？", "取消提示", {
     confirmButtonText: "确 认",
     confirmButtonClass: "el-button--warning is-plain border-default ",
     cancelButtonText: "取 消",
@@ -41,14 +42,15 @@ const cancelCollect = (gId: string) => {
             }
           }
           ElMessage.success("取消成功！");
-        } else {
+        }
+        else {
           ElMessage.error("取消失败！");
         }
       }
       isLoading.value = false;
     },
   });
-};
+}
 
 // 选中集合
 const selectIdsList = ref<string[]>([]);
@@ -58,25 +60,24 @@ const isSelectAll = computed({
     return selectIdsList.value.length === list.data.value?.length;
   },
   set(val: boolean) {
-    if (val) {
-      selectIdsList.value = list.data.value?.map((p) => p.goods.id) || [];
-    } else {
+    if (val)
+      selectIdsList.value = list.data.value?.map(p => p.goods.id) || [];
+
+    else
       selectIdsList.value.splice(0);
-    }
   },
 });
 watchDebounced(isEdit, (val: boolean) => {
-  if (!val) {
+  if (!val)
     selectIdsList.value.splice(0);
-  }
 });
 /**
  * 取消收藏（批量）
  */
-const batchCancelCollect = () => {
-  if (isLoading.value || selectIdsList.value.length === 0) {
+function batchCancelCollect() {
+  if (isLoading.value || selectIdsList.value.length === 0)
     return ElMessage.warning("请选中取消的商品！");
-  }
+
 
   ElMessageBox.confirm(`是否取消${selectIdsList.value.length}个商品收藏？`, "取消提示", {
     confirmButtonText: "确 认",
@@ -89,36 +90,37 @@ const batchCancelCollect = () => {
         if (code === StatusCode.SUCCESS) {
           if (list.data.value) {
             list.data.value.forEach((p, i) => {
-              if (selectIdsList.value.includes(p.goods.id) && list.data.value) {
+              if (selectIdsList.value.includes(p.goods.id) && list.data.value)
                 list.data.value.splice(i, 1);
-              }
             });
           }
           ElMessage.success("取消成功！");
-        } else {
+        }
+        else {
           ElMessage.error("取消失败！");
         }
       }
     },
   });
-};
+}
 
-const reload = async () => {
+async function reload() {
   isLoading.value = true;
   await list.refresh();
   setTimeout(() => {
     isLoading.value = false;
   }, 300);
-};
+}
 </script>
+
 <template>
-  <div overflow-x-hidden v-loading="isLoading">
+  <div v-loading="isLoading" overflow-x-hidden>
     <!-- 顶部按钮 -->
     <div class="mb-3 flex-row-bt-c">
       <small opacity-60>操 作 ：</small>
       <div class="btns flex">
         <div
-          class="w-0 opacity-80 flex justify-between transition-300 transition-width truncate overflow-hidden"
+          class="w-0 flex justify-between overflow-hidden truncate opacity-80 transition-300 transition-width"
           :class="{ 'w-14.8em': isEdit }"
           mr-2
         >
@@ -127,14 +129,14 @@ const reload = async () => {
             @click="reload"
           >
             <i
-              class="hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] w-1em h-1em"
+              class="i-solar:refresh-outline h-1em w-1em cursor-pointer bg-[var(--el-color-info)] transition-300 hover:rotate-180"
               mr-2
             />
             刷新
           </el-button>
           <el-checkbox
-            :border="true"
             v-model="isSelectAll"
+            :border="true"
             label="全选"
             size="small"
           />
@@ -142,8 +144,8 @@ const reload = async () => {
             plain
             type="danger"
             :icon="ElIconDelete"
-            @click="batchCancelCollect"
             size="small"
+            @click="batchCancelCollect"
           >
             批量
             <div
@@ -155,10 +157,10 @@ const reload = async () => {
           </el-button>
         </div>
         <el-button
-          @click="isEdit = !isEdit"
           size="small"
           plain
           type="info"
+          @click="isEdit = !isEdit"
         >
           {{ isEdit ? "取消" : "管理" }}
         </el-button>
@@ -171,8 +173,8 @@ const reload = async () => {
       rounded-8px
     >
       <el-checkbox-group
-        :disabled="!isEdit"
         v-model="selectIdsList"
+        :disabled="!isEdit"
         overflow-x-hidden
       >
         <transition-group
@@ -186,30 +188,30 @@ const reload = async () => {
           >
             <el-checkbox-button
               :label="p.goods.id"
-              class="active:scale-96 transition-300 hover:shadow"
+              class="transition-300 active:scale-96 hover:shadow"
             >
               <UserCollectGoodsCard
                 :data="p"
                 @link="!isEdit && navigateTo(`/goods/detail/${p.goods.id}`)"
                 @cancel="cancelCollect"
               >
-                <template #btns></template>
+                <template #btns />
               </UserCollectGoodsCard>
             </el-checkbox-button>
           </div>
         </transition-group>
       </el-checkbox-group>
       <small
-        block
-        text-center
-        mt-6
-        opacity-60
+
+
+        mt-6 block text-center opacity-60
       >
         {{ list.data.value?.length ? "暂无更多收藏" : "还没有收藏噢，快去逛一逛商品吧" }}
       </small>
     </el-scrollbar>
   </div>
 </template>
+
 <style scoped lang="scss">
 :deep(.el-checkbox-group) {
   font-size: inherit;

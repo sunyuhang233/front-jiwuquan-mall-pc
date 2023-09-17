@@ -1,56 +1,56 @@
 <script lang="ts" setup>
-import { GoodsCollectVO } from "@/composables/api/goods/collect";
 import currency from "currency.js";
+import type { GoodsCollectVO } from "@/composables/api/goods/collect";
+
 const { data } = defineProps<{
-  data: GoodsCollectVO;
+  data: GoodsCollectVO
 }>();
+
+defineEmits(["link", "cancel"]);
 </script>
+
 <template>
   <div
-    class="aspect-ratio-1 w-full cursor-pointer flex flex-col dark:bg-dark-8 border-transparent rounded-4px group"
+    class="group aspect-ratio-1 w-full flex flex-col cursor-pointer border-transparent rounded-4px dark:border-transparent"
   >
     <!-- 商品图片  -->
-    <div class="img relative w-full h-120px md:h-160px rounded-t-inherit overflow-hidden">
+    <div class="img relative h-120px w-full overflow-hidden rounded-t-inherit md:h-160px">
       <ElImage
-        @click="$emit('link')"
         loading="lazy"
-        class="w-full h-full"
+        class="h-full w-full"
         :src="BaseUrlImg + data.goods.images[0]"
         :alt="data.goods.name"
         fit="cover"
+        @click="$emit('link')"
       />
-      <div class="absolute top-0 left-0">
-        <slot name="btns"></slot>
+      <div class="absolute left-0 top-0">
+        <slot name="btns" />
       </div>
       <!-- 商品收藏 -->
       <small
+        class="v-card group absolute right-0 top-0 m-2 bg-light py-0.6 pl-2.6 pr-1.8 text-0.8rem text-black opacity-0 shadow dark:text-light hover:text-[var(--el-color-danger)] group-hover:opacity-100"
         @click="$emit('cancel', data.goods.id)"
-        rounded-3px
-        class="v-card opacity-0 hover:text-[var(--el-color-danger)] group-hover:opacity-100 bg-light shadow text-black group dark:text-light text-0.8rem absolute top-0 right-0 pl-2.6 pr-1.8 py-0.6 m-2"
       >
         <div class="inline text-dark dark:text-light">取消收藏</div>
         <i
-          ml-1
-          i-solar:star-bold
-          text-yellow-4
-          p-0.6em
+          i-solar:star-bold ml-1 p-0.6em text-yellow-4
         />
       </small>
       <!-- 浏览量 -->
       <small
-        class="view w-full py-1 px-3 flex-row-bt-c absolute left-0 bottom-0 z-1 color-light bg-[var(--el-bg-color-primary)] backdrop-blur-2em opacity-0 transition-300"
+        class="view absolute bottom-0 left-0 z-1 w-full flex-row-bt-c bg-[var(--el-bg-color-primary)] px-3 py-1 color-light opacity-0 backdrop-blur-2em transition-300"
         group-hover:opacity-80
       >
         <div class="icon">
-          <i class="i-solar:eye-bold p-2 mr-1" />
+          <i class="i-solar:eye-bold mr-1 p-2" />
           {{ data.goods.views }}
         </div>
       </small>
     </div>
     <!-- 商品名 -->
     <div
+      class="relative h-1/3 flex flex-col justify-between justify-around px-2 py-2 md:px-3"
       @click="$emit('link')"
-      class="flex relative flex-col px-2 py-2 md:px-3 justify-around h-1/3 justify-between"
     >
       <h4 class="w-full truncate">
         {{ data.goods.name }}
@@ -61,10 +61,9 @@ const { data } = defineProps<{
       >
         <strong pr-1>￥{{ currency(data.goods.price) }}</strong>
         <small
-          hidden
-          md:inline
-          color-coolgray
-          text-0.6em
+
+
+          hidden text-0.6em color-coolgray md:inline
           style="text-decoration: line-through"
         >
           ￥{{ currency(data.goods.costPrice) }}
@@ -73,4 +72,5 @@ const { data } = defineProps<{
     </div>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

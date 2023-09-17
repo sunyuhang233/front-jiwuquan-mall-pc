@@ -13,6 +13,8 @@ definePageMeta({
   key: route => route.path,
   layout: false,
 });
+
+const user = useUserStore();
 </script>
 
 <template>
@@ -21,7 +23,7 @@ definePageMeta({
       name="user"
       :menu="['back']"
     >
-      <div>
+      <div v-if="user.getToken">
         <ClientOnly>
           <!-- 壁纸 -->
           <UserInfoBgToggle />

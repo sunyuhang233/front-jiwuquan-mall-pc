@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { getGoodsListByPage } from "@/composables/api/goods";
 import { useStorage } from "@vueuse/core";
-import { IPage } from "~/types";
-import { GoodsVO } from "~/types/goods";
+import { getGoodsListByPage } from "@/composables/api/goods";
+import type { IPage } from "~/types";
+import type { GoodsVO } from "~/types/goods";
+
 // 搜索相关
 const searchKeyWords = ref<string>("");
 const isSearch = ref<boolean>(false);
@@ -21,12 +22,13 @@ const page = ref<number>(1);
 const size = ref<number>(1);
 const noMore = computed(() => searchPage.total > 0 && searchPageList.length === searchPage.total);
 // 搜索历史 本地存储
-let searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
+const searchHistoryList = useStorage<string[]>("jiwu_index_search", []);
 /**
  * 搜索商品
  */
-const onSearch = async () => {
-  if (isSearch.value) return ElMessage.error("搜索太频繁！");
+async function onSearch() {
+  if (isSearch.value)
+    return ElMessage.error("搜索太频繁！");
   if (!searchKeyWords.value) {
     return ElMessage.error({
       message: "搜索内容不能为空！",
@@ -59,22 +61,22 @@ const onSearch = async () => {
   });
   // 添加记录
   if (
-    !searchHistoryList.value.includes(searchKeyWords.value) &&
-    searchHistoryList.value.length <= 6
-  ) {
+    !searchHistoryList.value.includes(searchKeyWords.value)
+    && searchHistoryList.value.length <= 6
+  )
     searchHistoryList.value.unshift(searchKeyWords.value.trim());
-  } else {
+  else
     searchHistoryList.value.pop();
-  }
+
   // 结束
   // searchKeyWords.value = ""
   setTimeout(() => {
     isLoading.value = false;
     isSearch.value = false;
   }, 800);
-};
+}
 
-const onLoadMore = async () => {
+async function onLoadMore() {
   if (page.value < searchPage.pages) {
     page.value += 1;
     const data = await getGoodsListByPage(page.value, size.value, {
@@ -88,12 +90,12 @@ const onLoadMore = async () => {
       searchPageList.push(p);
     });
   }
-};
+}
 
 /**
  * 清除
  */
-const closeSearch = (e: any) => {
+function closeSearch() {
   setTimeout(() => {
     isShowResult.value = false;
     searchKeyWords.value = "";
@@ -105,46 +107,52 @@ const closeSearch = (e: any) => {
       current: 0,
     });
   }, 10);
-};
-watch(isShowResult, (val) => {
-  if (val) {
-    document.body.style.overflowY = "hidden";
-  } else {
-    document.body.style.overflowY = "auto";
-  }
-});
-useNuxtApp().hook("page:transition:finish", () => {
-  if (document) {
-    document.body.style.overflowY = "auto";
-  }
-});
+}
+// watch(isShowResult, (val) => {
+//   if (val) {
+//     const cWidth = document.body.clientWidth || document.documentElement.clientWidth;// 页面可视区域宽度
+//     const iWidth = window.innerWidth;// 浏览器窗口大小
+//     document.body.style.paddingRight = `${iWidth - cWidth}px`;
+//     document.body.style.overflowY = "hidden";
+//   }
+//   else {
+//     document.body.style.overflowY = "auto";
+//     document.body.style.paddingRight = "0px";
+//   }
+// });
+// useNuxtApp().hook("page:transition:finish", () => {
+//   if (document) {
+//     document.body.style.overflowY = "auto";
+//     document.body.style.paddingRight = "0px";
+//   }
+// });
 /**
  * 关闭历史标签
  * @param tag
  */
-const handleClose = (tag: string) => {
+function handleClose(tag: string) {
   searchHistoryList.value.splice(searchHistoryList.value.indexOf(tag), 1);
-};
+}
 /**
  * 点击历史标签
  */
-const clickTag = (val: string, i: number) => {
+function clickTag(val: string, i: number) {
   searchHistoryList.value.splice(i, 1);
   searchHistoryList.value.push(val);
   searchKeyWords.value = val;
   onSearch();
-};
+}
 </script>
 
 <template>
-  <div relative>
+  <div v-window-lock="isShowResult" relative>
     <!-- 下拉框 -->
     <el-popover
       width="100%"
-      popper-class="popover"
+      popper-class="relative popover"
       :teleported="false"
-      transition="fade"
-      :placement="'bottom-end'"
+      transition="popup"
+      placement="bottom-end"
       :show-after="200"
       :hide-after="0"
       trigger="click"
@@ -159,10 +167,10 @@ const clickTag = (val: string, i: number) => {
         >
           <transition name="fade">
             <div
-              @click="closeSearch"
               v-show="isShowResult"
-              class="fixed top-0 left-0 w-full h-100vh overflow-hidden bg-[ #7d7d7d] backdrop-blur-8px"
-            ></div>
+              class="#7d7d7d] bg-[ fixed left-0 top-0 h-100vh w-full overflow-hidden backdrop-blur-8px"
+              @click="closeSearch"
+            />
           </transition>
           <!-- 搜索 -->
           <div
@@ -171,7 +179,7 @@ const clickTag = (val: string, i: number) => {
             pb-2
           >
             <ElInput
-              @focus="isShowResult = true"
+              v-model.trim="searchKeyWords"
               class="mr-2"
               type="text"
               size="large"
@@ -180,18 +188,18 @@ const clickTag = (val: string, i: number) => {
               :prefix-icon="ElIconSearch"
               minlength="2"
               maxlength="30"
-              v-model.trim="searchKeyWords"
-              :onSearch="onSearch"
-              :placeholder="'搜索商品'"
+              :on-search="onSearch"
+              placeholder="搜索商品"
+              @focus="isShowResult = true"
               @keyup.esc="closeSearch"
               @keyup.enter="onSearch"
             />
             <ElButton
               type="primary"
               w-66px
-              @click="onSearch"
               style="transition: 0.2s; position: relative"
               :loading="isLoading"
+              @click="onSearch"
             >
               搜索
             </ElButton>
@@ -201,25 +209,18 @@ const clickTag = (val: string, i: number) => {
             <div
               v-show="!isShowResult"
               class="tags animate__animated animate__headShake"
-              z-0
-              top-40px
-              absolute
-              top-0
-              cursor-pointer
-              py-1
-              flex
-              items-center
-              flex-nowrap
-              overflow-hidden
+
+
+              absolute top-0 top-40px z-0 flex flex-nowrap cursor-pointer items-center overflow-hidden py-1
             >
               <ElTag
-                size="large"
                 v-for="(p, i) in searchHistoryList"
                 :key="p + i"
+                size="large"
                 closable
+                class="mr-1 mt-2 transition-300"
                 @close="handleClose(p)"
                 @click="clickTag(p, i)"
-                class="mr-1 mt-2 transition-300"
               >
                 <span pr-0.3em>{{ p }}</span>
               </ElTag>
@@ -239,23 +240,15 @@ const clickTag = (val: string, i: number) => {
       </span>
       <ElIconCloseBold
         width="1.6em"
-        absolute
-        right-1em
-        top-1em
-        cursor-pointer
         style="color: var(--el-color-primary)"
-        shadow
-        shadow-inset
-        rounded-4px
-        active:transform-scale-80
-        transition-300
+        absolute right-1em top-1em cursor-pointer rounded-4px shadow shadow-inset transition-300 active:transform-scale-80
         @click="closeSearch"
       />
       <ElScrollbar
-        @scroll="onLoadMore"
-        class="overflow-hidden pb-6 pt-2 pr-2 flex-col"
         v-loading="isLoading"
+        class="flex-col overflow-hidden pb-6 pr-2 pt-2"
         element-loading-background="transparent"
+        @scroll="onLoadMore"
       >
         <transition-group
           tag="div"
@@ -264,37 +257,35 @@ const clickTag = (val: string, i: number) => {
         >
           <!-- 跳转详情页 -->
           <NuxtLink
-            :to="`/goods/detail/${p.id}`"
-            class="mt-2 animate__animated animate__fadeIn"
             v-for="(p, i) in searchPageList"
             :key="p.id"
+            :to="`/goods/detail/${p.id}`"
+            class="animate__animated animate__fadeIn mt-2"
           >
             <!-- 商品卡片 -->
             <CardGoodsLine
-              :goods="p"
               :key="p.id"
+              :goods="p"
             />
             <ElDivider
-              dark:opacity-50
               v-if="i !== searchPageList.length - 1"
+              dark:opacity-50
               style="width: 100%; margin: 0.6em auto; margin-bottom: 0.8em"
             />
           </NuxtLink>
         </transition-group>
         <ElEmpty
+          v-show="searchPageList.length <= 0"
           mt-10
           :image-size="80"
           description="没有找到商品"
-          v-show="searchPageList.length <= 0"
         />
       </ElScrollbar>
       <p
         v-show="noMore"
-        py-4
-        mb-4
-        opacity-80
-        text-center
-        tracking-2px
+
+
+        mb-4 py-4 text-center tracking-2px opacity-80
       >
         没有更多了
       </p>

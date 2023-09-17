@@ -1,38 +1,38 @@
+<script lang="ts" setup>
+const user = useUserStore();
+function exitForm() {
+  user.showLoginForm = false;
+  user.showRegisterForm = false;
+}
+</script>
+
 <template>
   <div>
     <ClientOnly>
-      <transition name="fadeInOutShadow">
+      <transition name="fade">
         <div
+          v-if="user.showLoginForm || user.showRegisterForm"
+          v-window-lock="user.showLoginForm || user.showRegisterForm"
+          v-auto-animate
+          tag="div"
+          name="popup"
           class="forms"
+          relative
           @keyup.esc="exitForm"
           @click.self="exitForm"
-          v-if="user.showLoginForm || user.showRegisterForm"
-          relative
         >
           <!-- 登录 -->
-          <transition name="filp-scale-list">
-            <FormLoginForm v-show="user.showLoginForm" />
-          </transition>
+          <FormLoginForm v-if="user.showLoginForm" key="login-form" />
           <!-- 注册 -->
-          <transition name="filp-scale-list">
-            <FormRegisterForm v-if="user.showRegisterForm" />
-          </transition>
-          <!-- 找回密码 -->
-          <transition name="filp-scale-list">
-            <FormRegisterForm v-if="user.showUpdatePwd" />
-          </transition>
+          <FormRegisterForm v-if="user.showRegisterForm" key="register-form" />
+        <!-- 找回密码 -->
+        <!-- <FormRegisterForm key="form" v-if="user.showUpdatePwd" /> -->
         </div>
       </transition>
     </ClientOnly>
   </div>
 </template>
-<script lang="ts" setup>
-const user = useUserStore();
-const exitForm = () => {
-  user.showLoginForm = false;
-  user.showRegisterForm = false;
-};
-</script>
+
 <style scoped lang="scss">
 .forms {
   position: fixed;

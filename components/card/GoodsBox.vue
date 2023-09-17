@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import currency from 'currency.js';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
-import type { GoodsVO } from '~/types/goods';
+import currency from "currency.js";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
+import type { GoodsVO } from "~/types/goods";
 
 // 商品参数
 const { goods } = defineProps<{
@@ -14,7 +14,7 @@ const getDiscount = computed<number>(() => {
 
 <template>
   <div
-    class="group w-full flex flex-col cursor-pointer border-gray-200 rounded-4px shadow-sm border-default dark:border-dark-200 dark:bg-dark-8"
+    class="group w-full flex flex-col cursor-pointer rounded-4px shadow-sm border-default"
     aspect-ratio-1
     md:aspect-ratio-1.2
   >

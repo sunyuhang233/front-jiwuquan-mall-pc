@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import currency from 'currency.js';
-import { type GoodsVO } from '~/types/goods';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
+import currency from "currency.js";
+import { type GoodsVO } from "~/types/goods";
+import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 
 const { goods } = defineProps<{
   goods: GoodsVO
@@ -27,7 +27,7 @@ const { goods } = defineProps<{
       >
         ￥{{ currency(goods.price) }}
         <small
-          text-0.4em color-coolgray
+          text-0.7em color-coolgray
           style="text-decoration: line-through"
         >
           ￥{{ currency(goods.costPrice) }}
