@@ -4,7 +4,7 @@ const mode = useColorMode();
 const isDark = useDark();
 // 节流watch
 watchDebounced(isDark, (value) => {
-  mode.preference = value ? 'dark' : 'light';
+  mode.preference = value ? "dark" : "light";
 });
 /**
  * 切换主题
@@ -12,7 +12,7 @@ watchDebounced(isDark, (value) => {
  */
 function toggle(event: MouseEvent) {
   const isAppearanceTransition
-    = document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    = document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!isAppearanceTransition || !event) {
     isDark.value = !isDark.value;
     return null;
@@ -37,9 +37,9 @@ function toggle(event: MouseEvent) {
         clipPath: isDark.value ? clipPath : [...clipPath].reverse(),
       },
       {
-        duration: 400,
-        easing: 'ease-in-out',
-        pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
+        duration: 550,
+        easing: "ease-in-out",
+        pseudoElement: isDark.value ? "::view-transition-new(root)" : "::view-transition-old(root)",
       },
     );
   });

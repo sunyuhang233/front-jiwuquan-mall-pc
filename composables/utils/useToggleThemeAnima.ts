@@ -1,45 +1,43 @@
 // 切换动画
-const mode = useColorMode()
+const mode = useColorMode();
 const isDark = computed({
   get(): boolean {
-    return mode.value === 'dark'
+    return mode.value === "dark";
   },
   set(): void {
-    mode.preference = isDark ? 'light' : 'dark'
+    mode.preference = isDark ? "light" : "dark";
   },
-})
+});
 // @ts-expect-error: Transition Api
-const isAppearanceTransition = document.starViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const isAppearanceTransition = document.starViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export default (event: MouseEvent) => {
-  if (!isAppearanceTransition || !event) {
-    isDark.value = !isDark.value
-    return null
-  }
-  const x = event.clientX
-  const y = event.clientY
-  const endRadius = Math.hypot(
-    Math.max(x, innerWidth - x),
-    Math.max(y, innerHeight - y),
-  )
-  // @ts-expect-error: Transition API
-  const transition = document.starViewTransition(() => {
-    isDark.value = !isDark.value
-  })
+function toggle(event: MouseEvent) {
+  if (!event || !document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    return null;
+
+  const isDarkValue = !isDark.value;
+  const clientX = event.clientX;
+  const clientY = event.clientY;
+  const maxRadius = Math.hypot(Math.max(clientX, innerWidth - clientX), Math.max(clientY, innerHeight - clientY));
+  const transition = document.startViewTransition(() => {
+    isDark.value = isDarkValue;
+  });
+
   transition.ready.then(() => {
     const clipPath = [
-      `circle(0px at ${x}px ${y}px)`,
-      `circle(${endRadius}px at ${x}px ${y}px)`,
-    ]
+      `circle(0px at ${clientX}px ${clientY}px)`,
+      `circle(${maxRadius.toFixed(0)}px at ${clientX}px ${clientY}px)`,
+    ];
+
     document.documentElement.animate(
       {
-        clipPath: isDark.value ? clipPath : [...clipPath].reverse(),
+        clipPath: isDarkValue ? clipPath : [...clipPath].reverse(),
       },
       {
-        duration: 300,
-        easing: 'ease-in',
-        pseudoElement: isDark.value ? '::view-transition-new(root)' : '::view-transition-old(root)',
+        duration: 550,
+        easing: "ease-in-out",
+        pseudoElement: isDarkValue ? "::view-transition-new(root)" : "::view-transition-old(root)",
       },
-    )
-  })
+    );
+  });
 }

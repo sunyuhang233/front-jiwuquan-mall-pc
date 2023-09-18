@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import currency from "currency.js";
-import type { PushOrdersItemDTO } from "~/composables/api/orders";
 import {
   OrdersStatus,
   cancelOrders,
@@ -9,11 +8,22 @@ import {
   payOrders,
   pushOrdersItems,
   refundOrders,
+  // eslint-disable-next-line sort-imports
+  PayType,
 } from "~/composables/api/orders";
+
+import type {
+  PushOrdersItemDTO,
+} from "~/composables/api/orders";
+
 import type { GoodsSkuMdVO } from "~/composables/api/goods/sku";
 import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
 import { appName } from "~/constants";
-import { PayType } from ".nuxt/imports";
+
+definePageMeta({
+  key: route => route.path,
+  layout: false,
+});
 
 // 1、订单内容store
 const order = useOrderStore();
@@ -755,11 +765,6 @@ function toBack() {
   else
     navigateTo("/");
 }
-
-definePageMeta({
-  key: route => route.path,
-  layout: false,
-});
 </script>
 
 <template>

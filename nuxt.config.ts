@@ -2,7 +2,7 @@ import { pwa } from "./config/pwa";
 import { appDescription } from "./constants/index";
 
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
   build: {
     transpile: [/echarts/, "vue-echarts", "resize-detector"],
   },
