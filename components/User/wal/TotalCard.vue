@@ -1,31 +1,32 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  data: LineWalletDataType;
+  data: LineWalletDataType
 }>();
 export interface LineWalletDataType {
-  title: string;
-  name: string; // 圆心的文字
-  pre?: string | Element; // 数字符号前缀
-  amount?: number | ComputedRef;
-  percentage?: number | ComputedRef;
-  isInt?: boolean;
-  isIncreAnimate?: boolean;
-  lightColor?: string;
-  class?: string;
+  title: string
+  name: string // 圆心的文字
+  pre?: string | Element // 数字符号前缀
+  amount?: number | ComputedRef
+  percentage?: number | ComputedRef
+  isInt?: boolean
+  isIncreAnimate?: boolean
+  lightColor?: string
+  class?: string
 }
 </script>
+
 <template>
   <div
-    class="v-card p-6 flex-row-bt-c"
+    class="v-card flex-row-bt-c p-6"
     :class="props.data.class"
   >
     <!-- 左边 -->
     <div class="flex flex-col justify-between">
       <!-- 标题 -->
       <small
-        opacity-80
-        font-600
-        mb-3
+
+
+        mb-3 font-600 opacity-80
       >
         {{ props.data.title }}
       </small>
@@ -33,19 +34,19 @@ export interface LineWalletDataType {
       <h2 class="w-full truncate text-ellipsis">
         <span>{{ props.data.pre }}</span>
         <span
-          v-incre-up="props.data.amount"
           v-if="props.data.isIncreAnimate && !props.data.isInt"
-        ></span>
+          v-incre-up="props.data.amount"
+        />
         <span
-          v-incre-up-int="props.data.amount"
           v-else-if="props.data.isIncreAnimate && props.data.isInt"
-        ></span>
+          v-incre-up-int="props.data.amount"
+        />
         <span v-else>{{ props.data.amount }}</span>
       </h2>
-      <slot name="default"></slot>
+      <slot name="default" />
     </div>
     <!-- 右边 -->
-    <div class="px-2 right">
+    <div class="right px-2">
       <el-progress
         type="circle"
         :width="76"
@@ -64,6 +65,7 @@ export interface LineWalletDataType {
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 :deep(.el-progress-circle__track) {
   stroke: #9b9b9b25 !important;

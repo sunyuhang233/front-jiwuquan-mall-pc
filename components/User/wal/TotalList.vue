@@ -1,32 +1,36 @@
 <script lang="ts" setup>
-import { BillsTotalVO, getBillsTotal } from "@/composables/api/user/bills";
+import type { LineWalletDataType } from "./TotalCard.vue";
+import type { BillsTotalVO } from "@/composables/api/user/bills";
+import { getBillsTotal } from "@/composables/api/user/bills";
 import { getUserLeave } from "@/composables/utils";
-import { LineWalletDataType } from "./TotalCard.vue";
+
 const user = useUserStore();
 const isLoading = ref<boolean>(true);
 // 账单统计
 const totalData = reactive<TotalVO>({ totalIn: 0, totalOut: 0, monthTotal: 0 });
 
 interface TotalVO extends BillsTotalVO {
-  monthTotal?: number;
+  monthTotal?: number
 }
 const monthTime = getMonthStartEnd();
 // 获取总消费和总收入
-const getAllTotals = async () => {
+async function getAllTotals() {
   const { data, code } = await getBillsTotal(
     {
       currencyType: 0,
     },
-    user.getToken
+    user.getToken,
   );
   if (code === StatusCode.SUCCESS) {
-    if (data?.totalIn) totalData.totalIn = data?.totalIn;
-    if (data?.totalOut) totalData.totalOut = data?.totalOut;
+    if (data?.totalIn)
+      totalData.totalIn = data?.totalIn;
+    if (data?.totalOut)
+      totalData.totalOut = data?.totalOut;
   }
-};
+}
 
 // 获取月份的统计
-const getMonthTotals = async () => {
+async function getMonthTotals() {
   const { data, code } = await getBillsTotal(
     {
       type: 0,
@@ -34,21 +38,20 @@ const getMonthTotals = async () => {
       startTime: useDateFormat(monthTime[0], "YYYY-MM-DD hh:mm:ss").value,
       endTime: useDateFormat(monthTime[1], "YYYY-MM-DD hh:mm:ss").value,
     },
-    user.getToken
+    user.getToken,
   );
   if (code === StatusCode.SUCCESS) {
     // 本月支出
-    if (data?.totalOut) {
+    if (data?.totalOut)
       totalData.monthTotal = data?.totalOut;
-    }
   }
-};
-const reloadData = async () => {
+}
+async function reloadData() {
   isLoading.value = true;
   await getAllTotals();
   await getMonthTotals();
   isLoading.value = false;
-};
+}
 await reloadData();
 // 监听重新查询
 watch(
@@ -56,22 +59,18 @@ watch(
   async () => {
     await reloadData();
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 );
 
 // 列表配置项
 const list = ref<LineWalletDataType[]>([
   {
     title: "总支出",
-    name: `支出`,
+    name: "支出",
     amount: computed(() => totalData.totalOut),
     percentage: computed(() => {
       const sum = ((totalData.totalOut || 0) / 10000) * 100;
-      if (sum > 100) {
-        return 100;
-      } else {
-        sum;
-      }
+      return sum >= 100 ? 100 : sum;
     }),
     isIncreAnimate: true,
     isInt: false,
@@ -83,7 +82,10 @@ const list = ref<LineWalletDataType[]>([
     title: "总收入",
     name: "收入",
     amount: computed(() => totalData.totalIn),
-    percentage: computed(() => ((totalData.totalIn || 0) / 10000) * 100),
+    percentage: computed(() => {
+      const sum = ((totalData.totalIn || 0) / 10000) * 100;
+      return sum >= 100 ? 100 : sum;
+    }),
     isIncreAnimate: true,
     isInt: false,
     lightColor: "var(--el-color-info)",
@@ -102,7 +104,7 @@ const list = ref<LineWalletDataType[]>([
 const pointsData = ref({
   title: "积分剩余",
   name: computed(() => {
-    return getUserLeave(user.userWallet.points) + "级";
+    return `${getUserLeave(user.userWallet.points)}级`;
   }),
   amount: computed(() => user.userWallet.points || 0),
   percentage: computed(() => {
@@ -114,17 +116,18 @@ const pointsData = ref({
   class: "  dark:text-bluegray-2",
 });
 </script>
+
 <template>
   <div class="cards">
     <UserWalTotalCard
-      class="w-full v-card shadow-sm rounded-14px hover:scale-104 transition-200 cursor-pointer"
       v-for="p in list"
       :key="p.title"
+      class="v-card w-full cursor-pointer rounded-14px shadow-sm transition-200 hover:scale-104"
       :data="p"
     />
     <!-- 积分 -->
     <UserWalTotalCard
-      class="w-full rounded-14px shadow-sm hover:scale-104 transition-200 cursor-pointer"
+      class="w-full cursor-pointer rounded-14px shadow-sm transition-200 hover:scale-104"
       :data="pointsData"
     >
       <template #default>
@@ -134,10 +137,9 @@ const pointsData = ref({
         >
           <template #reference>
             <small
-              cursor-pointer
-              mt-2
-              text-blueGray
-              underline
+
+
+              mt-2 cursor-pointer text-bluegray underline
             >
               如何获取积分?
             </small>
@@ -149,4 +151,5 @@ const pointsData = ref({
     </UserWalTotalCard>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

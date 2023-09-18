@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
+
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
@@ -43,9 +44,10 @@ const menuList = [
   },
 ];
 </script>
+
 <template>
   <div
-    class="menu md:shadow-none md:translate-x-0px fixed md:sticky md:block z-998 bg-light dark:bg-[#121212] bg-opacity-80 backdrop-blur-30 h-full"
+    class="menu fixed z-998 h-full bg-light bg-opacity-80 backdrop-blur-30 md:sticky md:block md:translate-x-0px dark:bg-[#121212] md:shadow-none"
   >
     <ClientOnly>
       <!-- 菜单 -->
@@ -55,49 +57,49 @@ const menuList = [
         :collapse="isFold"
       >
         <!-- 顶部 -->
-        <div class="w-full flex-row-c-c flex-wrap transition-300 px-5 hover:bg-transparent">
+        <div class="w-full flex-row-c-c flex-wrap px-5 transition-300 hover:bg-transparent">
           <div class="home mt-6 transition-300">
             <NuxtLink
               to="/"
               flex-row-c-c
               class="group"
             >
-              <i class="i-solar:home-2-broken"></i>
+              <i class="i-solar:home-2-broken" />
             </NuxtLink>
           </div>
-          <div class="ml-a mt-6 ml-a float-left">
+          <div class="float-left ml-a ml-a mt-6">
             <BtnBell />
           </div>
           <span
-            @click="isFold = !isFold"
             class="mt-6 p-1 transition-300"
+            @click="isFold = !isFold"
           >
-            <i class="i-solar:hamburger-menu-line-duotone"></i>
+            <i class="i-solar:hamburger-menu-line-duotone" />
           </span>
         </div>
-        <div class="border-0 border-default border-b-1px w-5/6 mx-a my-4"></div>
+        <div class="mx-a my-4 w-5/6 border-0 border-b-1px border-default" />
         <!-- 个人信息 -->
         <el-menu-item
-          :index="p.path"
           v-for="p in menuList"
           :key="p.path"
+          :index="p.path"
         >
           <i
-            :class="p.icon"
             v-show="route.path !== p.path"
-          ></i>
+            :class="p.icon"
+          />
           <i
-            :class="p.activeIcon"
             v-show="route.path === p.path"
-          ></i>
-          <span class="min-w-10em title ml-3">{{ p.title }}</span>
+            :class="p.activeIcon"
+          />
+          <span class="title ml-3 min-w-10em">{{ p.title }}</span>
         </el-menu-item>
       </el-menu>
     </ClientOnly>
     <div
       class="bg"
       @click="$emit('close')"
-    ></div>
+    />
   </div>
 </template>
 

@@ -35,7 +35,7 @@ function onSerch(val: string) {
   >
     <!-- 左侧 -->
     <div
-      class="left group"
+      class="group left"
       flex-row-c-c
     >
       <NuxtLink

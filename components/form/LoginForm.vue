@@ -219,7 +219,7 @@ async function onLogin(formEl: any | undefined) {
     hide-required-asterisk
     :rules="rules"
     :model="userForm"
-    class="form animate__animated w-94vw sm:w-400px"
+    class="animate__animated form w-94vw sm:w-400px"
   >
     <h2
       mb-5

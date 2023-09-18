@@ -1,18 +1,17 @@
+<script lang="ts" setup>
+</script>
+
 <template>
   <!-- 顶部header -->
   <header
     class="nav select-none"
-    flex-row-bt-c
-    py-4
-    px-6
-    text-m
+    text-m flex-row-bt-c px-6 py-4
     dark:text="light"
   >
     <!-- 左侧 -->
     <div
       class="left"
-      flex-row-c-c
-      group
+      group flex-row-c-c
     >
       <NuxtLink
         mx-2
@@ -21,44 +20,21 @@
         class="group"
       >
         <img
-          w-42px
           alt="Design By Kiwi23333"
-          object-contain
-          group-hover:opacity-85
-          transition-300
-          group-hover:filter-blur-2px
           src="@/assets/images/logo/logo.png"
-          dark:hidden
-        />
+          w-42px object-contain transition-300 dark:hidden group-hover:opacity-85 group-hover:filter-blur-2px
+        >
         <img
-          w-42px
-          object-contain
           alt="Design By Kiwi23333"
-          group-hover:opacity-85
-          transition-300
-          group-hover:filter-blur-2px
           src="@/assets/images/logo/logo_dark.png"
-          hidden
-          dark:block
+          hidden w-42px object-contain transition-300 dark:block group-hover:opacity-85 group-hover:filter-blur-2px
+        >
+        <span
+          i-solar:home-2-bold absolute left-9 hidden h-32px w-32px transition-300 group-hover:block
+          style="color: var(--el-text-color-primary)"
         />
         <span
-          transition-300
-          group-hover:block
-          hidden
-          w-32px
-          h-32px
-          i-solar:home-2-bold
-          absolute
-          left-9
-          style="color: var(--el-text-color-primary)"
-        ></span>
-        <span
-          tracking-2
-          m-4
-          font-700
-          text-xl
-          hidden
-          md:inline
+          m-4 hidden text-xl font-700 tracking-2 md:inline
         >
           极物圈
         </span>
@@ -70,23 +46,17 @@
         class="right"
         flex-row-c-c
       >
-        <slot name="right"></slot>
+        <slot name="right" />
         <!-- 切换主题 -->
         <BtnSwitch />
         <!-- 头像简约 -->
+        <!-- <CardUserLineSe /> -->
         <CardUserLineSe />
       </div>
     </ClientOnly>
   </header>
 </template>
 
-<script lang="ts" setup>
-// 搜索
-let searchWord = ref<string>("");
-// 登录表单
-const user = useUserStore();
-// 搜索
-</script>
 <style lang="scss" scoped>
 .nav {
   position: sticky;

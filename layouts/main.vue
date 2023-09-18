@@ -1,28 +1,3 @@
-<template>
-  <div class="min-h-100vh">
-    <!-- 头部导航 -->
-    <MenuHeaderMenu
-      class="sticky top-0 left-0 z-1001"
-      v-if="header"
-    />
-    <!-- 左侧边导航 -->
-    <div class="flex">
-      <ClientOnly>
-        <MenuDrawerMenu v-if="leftMenu" />
-      </ClientOnly>
-      <!-- 内容 -->
-      <div class="flex-1">
-        <slot name="default"></slot>
-      </div>
-    </div>
-    <!-- 右下角功能区 -->
-    <ClientOnly>
-      <MenuRightButtons :menu="menu" />
-    </ClientOnly>
-    <!-- 页脚 -->
-    <MenuFooter v-if="footer" />
-  </div>
-</template>
 <script lang="ts" setup>
 const { footer, menu, leftMenu } = defineProps({
   footer: {
@@ -46,3 +21,24 @@ const { footer, menu, leftMenu } = defineProps({
   },
 });
 </script>
+
+<template>
+  <div class="min-h-100vh">
+    <MenuHeaderMenu
+      v-if="header"
+      class="sticky left-0 top-0 z-1001"
+    />
+    <div class="flex">
+      <ClientOnly>
+        <MenuDrawerMenu v-if="leftMenu" />
+      </ClientOnly>
+      <div class="flex-1">
+        <slot name="default" />
+      </div>
+    </div>
+    <ClientOnly>
+      <MenuRightButtons :menu="menu" />
+    </ClientOnly>
+    <MenuFooter v-if="footer" />
+  </div>
+</template>

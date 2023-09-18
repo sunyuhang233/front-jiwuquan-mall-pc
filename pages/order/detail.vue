@@ -1,30 +1,89 @@
 <script lang="ts" setup>
 import currency from "currency.js";
+import type { PushOrdersItemDTO } from "~/composables/api/orders";
 import {
   OrdersStatus,
-  pushOrdersItems,
-  payOrders,
-  PayType,
   cancelOrders,
-  refundOrders,
   checkDeliveryOrders, // 确认收货
   deleteOrders, // 删除订单
-  type PushOrdersItemDTO,
+  payOrders,
+  pushOrdersItems,
+  refundOrders,
 } from "~/composables/api/orders";
 import type { GoodsSkuMdVO } from "~/composables/api/goods/sku";
 import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
 import { appName } from "~/constants";
+import { PayType } from ".nuxt/imports";
 
 // 1、订单内容store
 const order = useOrderStore();
 const address = useAddressStore();
 const user = useUserStore();
 const route = useRoute();
+
+
+// 选择支付方式
+const selectPayType = ref<PayType>(PayType.WEALLET);
+const payTypeList = ref<PayTypeDTO[]>([
+  {
+    disable: false,
+    type: PayType.WEALLET,
+    icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
+    title: "钱包",
+  },
+  {
+    disable: true,
+    type: PayType.WECHAT,
+    icon: `<svg
+					t="1689749259928"
+					class="icon"
+					viewBox="0 0 1024 1024"
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					p-id="1522"
+				>
+					<path
+						class="fill-[#29bd29] dark-fill-##29bd29"
+						d="M683.058 364.695c11 0 22 1.016 32.943 1.976C686.564 230.064 538.896 128 370.681 128c-188.104 0.66-342.237 127.793-342.237 289.226 0 93.068 51.379 169.827 136.725 229.256L130.72 748.43l119.796-59.368c42.918 8.395 77.37 16.79 119.742 16.79 11 0 21.46-0.48 31.914-1.442a259.168 259.168 0 0 1-10.455-71.358c0.485-148.002 128.744-268.297 291.403-268.297l-0.06-0.06z m-184.113-91.992c25.99 0 42.913 16.79 42.913 42.575 0 25.188-16.923 42.579-42.913 42.579-25.45 0-51.38-16.85-51.38-42.58 0-25.784 25.93-42.574 51.38-42.574z m-239.544 85.154c-25.384 0-51.374-16.85-51.374-42.58 0-25.784 25.99-42.574 51.374-42.574 25.45 0 42.918 16.79 42.918 42.575 0 25.188-16.924 42.579-42.918 42.579z m736.155 271.655c0-135.647-136.725-246.527-290.983-246.527-162.655 0-290.918 110.88-290.918 246.527 0 136.128 128.263 246.587 290.918 246.587 33.972 0 68.423-8.395 102.818-16.85l93.809 50.973-25.93-84.677c68.907-51.93 120.286-119.815 120.286-196.033z m-385.275-42.58c-16.923 0-34.452-16.79-34.452-34.179 0-16.79 17.529-34.18 34.452-34.18 25.99 0 42.918 16.85 42.918 34.18 0 17.39-16.928 34.18-42.918 34.18z m188.165 0c-16.984 0-33.972-16.79-33.972-34.179 0-16.79 16.927-34.18 33.972-34.18 25.93 0 42.913 16.85 42.913 34.18 0 17.39-16.983 34.18-42.913 34.18z"
+						p-id="1523"
+					></path>
+				</svg>`,
+    title: "微信",
+  },
+  {
+    disable: true,
+    type: PayType.ALIPAY,
+    icon: `<svg
+					t="1689752384390"
+					class="icon"
+					viewBox="0 0 1024 1024"
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					p-id="2518"
+				>
+					<path
+						d="M230.771014 576.556522c-12.614493 9.646377-25.228986 23.744928-28.93913 42.295652-5.194203 24.486957-0.742029 55.652174 22.26087 80.13913 28.93913 28.93913 72.718841 37.101449 92.011594 38.585508 51.2 3.710145 106.110145-22.26087 147.663768-50.457971 16.324638-11.130435 43.77971-34.133333 70.492754-69.750725-59.362319-30.423188-133.565217-64.556522-212.22029-61.588406-41.553623 1.484058-70.492754 9.646377-91.269566 20.776812zM983.188406 712.347826c25.971014-61.588406 40.811594-129.113043 40.811594-200.347826 0-281.971014-230.028986-512-512-512S0 230.028986 0 512s230.028986 512 512 512c170.666667 0 321.298551-83.849275 414.794203-212.22029C838.492754 768.742029 693.797101 696.023188 604.011594 652.985507c-42.295652 48.973913-105.368116 97.205797-176.602898 117.982609-44.521739 13.356522-85.333333 18.550725-126.886957 9.646377-42.295652-8.904348-72.718841-28.197101-90.527536-47.489855-8.904348-10.388406-19.292754-22.26087-27.455073-37.843479 0.742029 0.742029 0.742029 2.226087 0.742029 2.968116 0 0-4.452174-7.42029-7.420289-19.292753-1.484058-5.936232-2.968116-11.872464-3.710145-17.808696-0.742029-4.452174-0.742029-8.904348 0-12.614493-0.742029-7.42029 0-15.582609 1.484058-23.744927 4.452174-20.776812 12.614493-43.77971 35.617391-65.298551 48.973913-48.231884 115.014493-50.457971 149.147826-50.457971 50.457971 0.742029 138.017391 22.26087 212.22029 48.973913 20.776812-43.77971 34.133333-89.785507 42.295652-121.692754H304.973913v-33.391304h158.052174v-66.782609H272.324638v-34.133333h190.701449v-66.782609c0-8.904348 2.226087-16.324638 16.324638-16.324637h74.944927v83.107246h207.026087v33.391304H554.295652v66.782609H719.768116S702.701449 494.933333 651.501449 586.202899c115.014493 40.811594 277.518841 104.626087 331.686957 126.144927z m0 0"
+						fill="#1374f7"
+						p-id="2519"
+					></path>
+				</svg>`,
+    title: "支付宝",
+  },
+]);
+export interface PayTypeDTO {
+  disable: boolean
+  icon: string
+  title: string
+  type: PayType
+}
+
+
 // 2、reloadOrderInfo
 useAsyncData(async () => {
   if (route.query.id)
     order.reloadOrderInfo();
 });
+
 // 订单状态
 const ordersTitle = computed(() => {
   let banner: string = "";
@@ -108,10 +167,6 @@ const isLoadAddressList = ref<boolean>(false);
 if (address.addressList.length === 0)
   address.resetRequestList(user.getToken);
 
-watch(isEdit, (val) => {
-  if (val)
-    selectPointsVal.value = 0;
-});
 const orderItems = ref<(GoodsSkuMdVO & PushOrdersItemDTO)[]>([]);
 // 2、查询属性信息
 const skuIdList: string[] = [];
@@ -147,6 +202,8 @@ watch(
   },
   { deep: true, immediate: true },
 );
+
+
 // 5、选择代金卷
 const selectVoucherId = ref<string>("");
 const voucherList = ref([]);
@@ -154,6 +211,11 @@ const voucherList = ref([]);
 const selectPointsVal = ref<number>(0);
 // 7、备注
 const remark = ref<string>(order.orderInfo.remark);
+
+watch(isEdit, (val) => {
+  if (val)
+    selectPointsVal.value = 0;
+});
 
 /**
  * 订单处理（提交、付款、修改订单）
@@ -192,60 +254,44 @@ async function onSubmitOrders(status: OrdersStatus) {
   }
 }
 
-// 选择支付方式
-const selectPayType = ref<PayType>(PayType.WEALLET);
-const payTypeList = ref<PayTypeDTO[]>([
-  {
-    disable: false,
-    type: PayType.WEALLET,
-    icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
-    title: "钱包",
-  },
-  {
-    disable: true,
-    type: PayType.WECHAT,
-    icon: `<svg
-					t="1689749259928"
-					class="icon"
-					viewBox="0 0 1024 1024"
-					version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-					p-id="1522"
-				>
-					<path
-						class="fill-[#29bd29] dark-fill-##29bd29"
-						d="M683.058 364.695c11 0 22 1.016 32.943 1.976C686.564 230.064 538.896 128 370.681 128c-188.104 0.66-342.237 127.793-342.237 289.226 0 93.068 51.379 169.827 136.725 229.256L130.72 748.43l119.796-59.368c42.918 8.395 77.37 16.79 119.742 16.79 11 0 21.46-0.48 31.914-1.442a259.168 259.168 0 0 1-10.455-71.358c0.485-148.002 128.744-268.297 291.403-268.297l-0.06-0.06z m-184.113-91.992c25.99 0 42.913 16.79 42.913 42.575 0 25.188-16.923 42.579-42.913 42.579-25.45 0-51.38-16.85-51.38-42.58 0-25.784 25.93-42.574 51.38-42.574z m-239.544 85.154c-25.384 0-51.374-16.85-51.374-42.58 0-25.784 25.99-42.574 51.374-42.574 25.45 0 42.918 16.79 42.918 42.575 0 25.188-16.924 42.579-42.918 42.579z m736.155 271.655c0-135.647-136.725-246.527-290.983-246.527-162.655 0-290.918 110.88-290.918 246.527 0 136.128 128.263 246.587 290.918 246.587 33.972 0 68.423-8.395 102.818-16.85l93.809 50.973-25.93-84.677c68.907-51.93 120.286-119.815 120.286-196.033z m-385.275-42.58c-16.923 0-34.452-16.79-34.452-34.179 0-16.79 17.529-34.18 34.452-34.18 25.99 0 42.918 16.85 42.918 34.18 0 17.39-16.928 34.18-42.918 34.18z m188.165 0c-16.984 0-33.972-16.79-33.972-34.179 0-16.79 16.927-34.18 33.972-34.18 25.93 0 42.913 16.85 42.913 34.18 0 17.39-16.983 34.18-42.913 34.18z"
-						p-id="1523"
-					></path>
-				</svg>`,
-    title: "微信",
-  },
-  {
-    disable: true,
-    type: PayType.ALIPAY,
-    icon: `<svg
-					t="1689752384390"
-					class="icon"
-					viewBox="0 0 1024 1024"
-					version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-					p-id="2518"
-				>
-					<path
-						d="M230.771014 576.556522c-12.614493 9.646377-25.228986 23.744928-28.93913 42.295652-5.194203 24.486957-0.742029 55.652174 22.26087 80.13913 28.93913 28.93913 72.718841 37.101449 92.011594 38.585508 51.2 3.710145 106.110145-22.26087 147.663768-50.457971 16.324638-11.130435 43.77971-34.133333 70.492754-69.750725-59.362319-30.423188-133.565217-64.556522-212.22029-61.588406-41.553623 1.484058-70.492754 9.646377-91.269566 20.776812zM983.188406 712.347826c25.971014-61.588406 40.811594-129.113043 40.811594-200.347826 0-281.971014-230.028986-512-512-512S0 230.028986 0 512s230.028986 512 512 512c170.666667 0 321.298551-83.849275 414.794203-212.22029C838.492754 768.742029 693.797101 696.023188 604.011594 652.985507c-42.295652 48.973913-105.368116 97.205797-176.602898 117.982609-44.521739 13.356522-85.333333 18.550725-126.886957 9.646377-42.295652-8.904348-72.718841-28.197101-90.527536-47.489855-8.904348-10.388406-19.292754-22.26087-27.455073-37.843479 0.742029 0.742029 0.742029 2.226087 0.742029 2.968116 0 0-4.452174-7.42029-7.420289-19.292753-1.484058-5.936232-2.968116-11.872464-3.710145-17.808696-0.742029-4.452174-0.742029-8.904348 0-12.614493-0.742029-7.42029 0-15.582609 1.484058-23.744927 4.452174-20.776812 12.614493-43.77971 35.617391-65.298551 48.973913-48.231884 115.014493-50.457971 149.147826-50.457971 50.457971 0.742029 138.017391 22.26087 212.22029 48.973913 20.776812-43.77971 34.133333-89.785507 42.295652-121.692754H304.973913v-33.391304h158.052174v-66.782609H272.324638v-34.133333h190.701449v-66.782609c0-8.904348 2.226087-16.324638 16.324638-16.324637h74.944927v83.107246h207.026087v33.391304H554.295652v66.782609H719.768116S702.701449 494.933333 651.501449 586.202899c115.014493 40.811594 277.518841 104.626087 331.686957 126.144927z m0 0"
-						fill="#1374f7"
-						p-id="2519"
-					></path>
-				</svg>`,
-    title: "支付宝",
-  },
-]);
-export interface PayTypeDTO {
-  disable: boolean
-  icon: string
-  title: string
-  type: PayType
-}
+
+// --------------------- 统计 计算 -----------------------
+// 商品总价 +++
+const getAllCoastPrice = computed(() => {
+  let price = currency(0);
+  orderItems.value.forEach((p) => {
+    price = price.add(currency(p.price).multiply(p.quantity));
+  });
+  return price;
+});
+// 商品运费 +++
+const getAllPostage = computed(() => {
+  let price = currency(0);
+  orderItems.value.forEach((p) => {
+    price = price.add(currency(p.postage));
+  });
+  return price;
+});
+// 计算最大额度 --- (最后)
+const getPointMax = computed(() => {
+  const price = getAllCoastPrice.value.add(getAllPostage.value);
+  return price.intValue > 10000 ? 10000 : price.intValue;
+});
+// 最终价格
+const getFinalPrice = computed(() => {
+  return getAllCoastPrice.value
+    .add(getAllPostage.value)
+    .subtract((selectPointsVal.value || 0) / 100);
+});
+// 计算优惠价
+const getReduce = computed(() => {
+  if (order.orderInfo.spendPrice)
+    return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
+
+  else
+    return 0;
+});
+
 
 // 1）提交订单 READY -1
 async function pushOrder() {
@@ -253,6 +299,9 @@ async function pushOrder() {
     ElMessage.error("请选择收货地址！");
     return;
   }
+  if (isLoading.value)
+    return;
+  // 加载
   isLoading.value = true;
   // 配置
   const items: PushOrdersItemDTO[] = orderItems.value.map((p) => {
@@ -299,12 +348,7 @@ async function pushOrder() {
 async function payOrder(payType: PayType) {
   if (order.status !== OrdersStatus.UN_PAID)
     return;
-  const str
-    = payTypeList.value.map((p) => {
-      if (p.type === payType)
-        return p.title;
-    }) || PayType.WEALLET;
-
+  const str = payTypeList.value.find(p => p.type === payType)?.title || PayType.WEALLET;
   // 确认支付
   try {
     const action = await ElMessageBox.confirm(
@@ -373,8 +417,8 @@ async function cancelOrder(orderId: string) {
     if (action === "confirm") {
       isLoading.value = true;
       // 发起退款
-      const { message, code } = await cancelOrders(
-        order.orderId || order.orderInfo.id,
+      const { code } = await cancelOrders(
+        orderId || order.orderInfo.id,
         user.getToken,
       );
       isLoading.value = false;
@@ -623,42 +667,7 @@ async function deleteOrder(orderId: string) {
     isLoading.value = false;
   }
 }
-// --------------------- 统计 计算 -----------------------
-// 商品总价 +++
-const getAllCoastPrice = computed(() => {
-  let price = currency(0);
-  orderItems.value.forEach((p) => {
-    price = price.add(currency(p.price).multiply(p.quantity));
-  });
-  return price;
-});
-// 商品运费 +++
-const getAllPostage = computed(() => {
-  let price = currency(0);
-  orderItems.value.forEach((p) => {
-    price = price.add(currency(p.postage));
-  });
-  return price;
-});
-// 计算最大额度 --- (最后)
-const getPointMax = computed(() => {
-  const price = getAllCoastPrice.value.add(getAllPostage.value);
-  return price.intValue > 10000 ? 10000 : price.intValue;
-});
-// 最终价格
-const getFinalPrice = computed(() => {
-  return getAllCoastPrice.value
-    .add(getAllPostage.value)
-    .subtract((selectPointsVal.value || 0) / 100);
-});
-// 计算优惠价
-const getReduce = computed(() => {
-  if (order.orderInfo.spendPrice)
-    return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
 
-  else
-    return 0;
-});
 // --------------------- 订单 ------------------------
 
 // 选择地址
@@ -666,6 +675,7 @@ function updateAddressId(id: string) {
   if (isUpdate.value)
     selectAddressId.value = id;
 }
+
 // -------------------- 功能 -----------------------
 /**
  * 打开编辑状态
@@ -1282,8 +1292,6 @@ definePageMeta({
           </section>
         </div>
         <div
-
-
           v-else h-90vh w-full
           flex-row-c-c
         >

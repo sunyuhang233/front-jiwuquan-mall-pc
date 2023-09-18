@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { appName } from "@/constants/index";
 
-useHead({
-  title: appName,
-});
 // 1、确认是否登录
 const user = useUserStore();
 const shop = useShopStore();
@@ -31,14 +28,25 @@ useNuxtApp().hook("app:mounted", () => {
   if (document && document.body)
     document.body.style.overflow = "hidden";
 });
+// 不能有根节点
+// https://nuxt.com.cn/docs/guide/directory-structure/app
+
 // 准备完成关闭加载
 onNuxtReady(async () => {
   isLoading.value = false;
   if (document && document.body)
     document.body.style.overflow = "auto";
 });
-// 不能有根节点
-// https://nuxt.com.cn/docs/guide/directory-structure/app
+
+useHead({
+  title: appName,
+  meta: [
+    {
+      name: "description",
+      content: "极物圈-主页 开启你的极物之旅！",
+    },
+  ],
+});
 </script>
 
 <template>

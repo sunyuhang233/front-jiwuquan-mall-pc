@@ -119,7 +119,7 @@ definePageMeta({
               商品介绍
             </h2>
             <GoodsDetailTabs
-              v-if="goodsSku.data.value?.data"
+              v-if="goodsSku?.data?.value?.data"
               class="mt-10 min-h-800px w-full overflow-hidden rounded-4px shadow-sm md:w-680px dark:opacity-90"
               :goods-info="goodsInfo.data.value?.data"
               :sku-list="goodsSku.data.value?.data"

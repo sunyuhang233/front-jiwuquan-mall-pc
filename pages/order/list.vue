@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { appName } from "~/constants";
+
 useHead({
   title: `${appName} - 订单`,
   meta: [
@@ -14,19 +15,21 @@ const user = useUserStore();
 const activeMenu = ref<string>("all");
 // isLoading
 const isLoading = ref<boolean>(false);
-const reload = () => {
-  if (isLoading.value) return;
+function reload() {
+  if (isLoading.value)
+    return;
   isLoading.value = true;
   setTimeout(() => {
     isLoading.value = false;
   }, 300);
-};
+}
 
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout
@@ -38,9 +41,9 @@ definePageMeta({
       <div>
         <ClientOnly>
           <div
-            class="layout-default-se min-h-80vh group"
-            v-loading.fullscreen="isLoading"
             v-if="user.isLogin"
+            v-loading.fullscreen="isLoading"
+            class="group min-h-80vh layout-default-se"
           >
             <!-- 头部 -->
             <div class="top my-4 mb-6 flex-row-bt-c">
@@ -61,21 +64,21 @@ definePageMeta({
                 </ClientOnly>
               </h2>
               <i
-                @click="reload"
                 opacity-0
                 transition-300
                 group-hover:opacity-100
-                class="block hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)] p-0.8em"
+                class="i-solar:refresh-outline block cursor-pointer bg-[var(--el-color-info)] p-0.8em transition-300 hover:rotate-180"
+                @click="reload"
               />
             </div>
             <!-- 订单列表 -->
             <div
-              class="v-card p-6 rounded-10px shadow"
               v-if="!isLoading"
+              class="v-card rounded-10px p-6 shadow"
             >
               <el-tabs
-                tab-position="top"
                 v-model="activeMenu"
+                tab-position="top"
                 :stretch="true"
               >
                 <!-- 全部 -->

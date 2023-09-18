@@ -15,7 +15,6 @@ const isShowMenu = ref<boolean>(false);
 
 <template>
   <div class="min-h-100vh flex flex-col">
-    <!-- 头部 -->
     <MenuHeaderMenuSe>
       <template #right>
         <div class="md:hidden">
@@ -44,7 +43,7 @@ const isShowMenu = ref<boolean>(false);
       </ClientOnly>
       <!-- 内容 -->
       <div class="flex-1">
-        <slot name="default" />
+        <slot />
       </div>
     </div>
     <!-- 右下角功能区 -->

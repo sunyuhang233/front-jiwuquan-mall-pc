@@ -2,9 +2,7 @@ import { pwa } from "./config/pwa";
 import { appDescription } from "./constants/index";
 
 export default defineNuxtConfig({
-  // eslint-disable-next-line n/prefer-global/process
-  ssr: process.env.NODE_ENV === "production",
-  // ssr: true,
+  ssr: true,
   build: {
     transpile: [/echarts/, "vue-echarts", "resize-detector"],
   },

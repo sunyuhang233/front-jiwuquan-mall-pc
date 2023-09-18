@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 // 定义页面元数据
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 useHead({
@@ -14,10 +14,11 @@ useHead({
   ],
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout name="main">
-      <div class="layout-default py-0">
+      <div class="py-0 layout-default">
         <div
           flex
           flex-col
@@ -25,19 +26,15 @@ useHead({
           <!-- 顶部菜单 -->
           <IndexTopMenu w-full />
           <div
-            flex
-            flex-col
-            md:flex-row
-            w-full
+            w-full flex flex-col md:flex-row
           >
             <!-- 轮播图 -->
             <IndexSwiperList
-              class="my-6 w-full md:mr-a md:w-620px h-260px md:h-420px aspect-ratio-1.48"
+              class="my-6 aspect-ratio-1.48 h-260px w-full md:mr-a md:h-420px md:w-620px"
             />
             <!-- 热门商品 -->
             <IndexHotGoodsList
-              my-6
-              mx-0
+              mx-0 my-6
             />
           </div>
           <!-- 热门商品分类 -->
@@ -52,4 +49,5 @@ useHead({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

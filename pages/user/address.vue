@@ -1,25 +1,25 @@
 <script lang="ts" setup>
-import { codeToText, regionData } from 'element-china-area-data';
-import type { FormInstance } from 'element-plus';
+import { codeToText, regionData } from "element-china-area-data";
+import type { FormInstance } from "element-plus";
 import type {
   AddressDTO,
   AddressInfoVO,
-} from '~/composables/api/user/address';
+} from "~/composables/api/user/address";
 import {
   addAddressByDTO,
   deleteAddressById,
   deleteBatchAddressByIds,
   updateAddressById,
-} from '~/composables/api/user/address';
+} from "~/composables/api/user/address";
 
 // 添加 | 修改
 
 useHead({
-  title: '收货地址 - 个人中心',
+  title: "收货地址 - 个人中心",
   meta: [
     {
-      name: 'description',
-      content: '个人中心 收货地址',
+      name: "description",
+      content: "个人中心 收货地址",
     },
   ],
 });
@@ -28,18 +28,18 @@ const address = useAddressStore();
 address.resetRequestList(user.getToken);
 
 const form = reactive<AddressDTO>({
-  name: '',
-  phone: '',
-  province: '',
-  city: '',
-  county: '',
-  address: '',
+  name: "",
+  phone: "",
+  province: "",
+  city: "",
+  county: "",
+  address: "",
   isDefault: 0,
-  postalCode: '',
+  postalCode: "",
 });
 // 对象
 const addressRef = ref<FormInstance>();
-const activeAddresId = ref<string>('');
+const activeAddresId = ref<string>("");
 // 功能
 const isLoading = ref<boolean>(false);
 const isLoadingAll = ref<boolean>(false);
@@ -55,8 +55,8 @@ const selectAddress = ref<string[]>([]);
 function onReqAddress(formRef: FormInstance | undefined) {
   formRef
     ?.validate(async (valid: boolean) => {
-      if (form.province === '' || form.city === '' || form.county === '')
-        return ElMessage.warning('地址不能为空！');
+      if (form.province === "" || form.city === "" || form.county === "")
+        return ElMessage.warning("地址不能为空！");
 
       if (valid && user.getToken) {
         let data;
@@ -68,7 +68,7 @@ function onReqAddress(formRef: FormInstance | undefined) {
           // 添加
           data = await addAddressByDTO({ ...form }, user.getToken);
         }
-        const msg = isUpdate.value ? '更新' : '添加';
+        const msg = isUpdate.value ? "更新" : "添加";
         if (data.code === StatusCode.SUCCESS) {
           ElMessage.success(`${msg}成功！`);
           if (isUpdate.value)
@@ -113,9 +113,9 @@ async function refreshData() {
   isLoadingAll.value = true;
   const res = await address.resetRequestList(user.getToken);
   if (res)
-    ElMessage.success('刷新成功！🎉');
+    ElMessage.success("刷新成功！🎉");
   else
-    ElMessage.error('刷新失败！😥');
+    ElMessage.error("刷新失败！😥");
 
   setTimeout(() => {
     isLoadingAll.value = false;
@@ -139,17 +139,17 @@ function showUpdate(p: AddressInfoVO) {
 // 删除单个地址
 async function deleteAddress(id: string) {
   ElMessageBox({
-    title: '删除提示',
-    message: '确定要删除吗？',
-    type: 'warning',
+    title: "删除提示",
+    message: "确定要删除吗？",
+    type: "warning",
     showClose: false,
-    customClass: 'text-center',
+    customClass: "text-center",
     showCancelButton: true,
-    cancelButtonText: '取 消',
-    confirmButtonText: '删 除',
+    cancelButtonText: "取 消",
+    confirmButtonText: "删 除",
   })
     .then(async (res) => {
-      if (res === 'confirm') {
+      if (res === "confirm") {
         const { code } = await deleteAddressById(id, user.getToken);
         if (code === StatusCode.SUCCESS) {
           for (let i = 0; i < address.addressList.length; i++) {
@@ -158,10 +158,10 @@ async function deleteAddress(id: string) {
               break;
             }
           }
-          ElMessage.success('删除成功！');
+          ElMessage.success("删除成功！");
         }
         else {
-          ElMessage.error('删除错误，请稍后再试试看！');
+          ElMessage.error("删除错误，请稍后再试试看！");
         }
       }
     })
@@ -170,12 +170,12 @@ async function deleteAddress(id: string) {
 // 删除地址
 async function deleteAddressByIds() {
   ElMessageBox.confirm(`是否删除选中${selectAddress.value.length}条?`, {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning',
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
   })
     .then(async (e) => {
-      if (e === 'confirm') {
+      if (e === "confirm") {
         const { code } = await deleteBatchAddressByIds([...selectAddress.value], user.getToken);
 
         ElMessage.closeAll();
@@ -186,10 +186,10 @@ async function deleteAddressByIds() {
               break;
             }
           }
-          ElMessage.success('删除成功！');
+          ElMessage.success("删除成功！");
         }
         else {
-          ElMessage.error('删除失败！');
+          ElMessage.error("删除失败！");
         }
       }
     })
@@ -197,11 +197,11 @@ async function deleteAddressByIds() {
 }
 function showAdd() {
   isShow.value = true;
-  form.name = '';
-  form.province = '';
-  form.city = '';
-  form.county = '';
-  form.phone = '';
+  form.name = "";
+  form.province = "";
+  form.city = "";
+  form.county = "";
+  form.phone = "";
   form.isDefault = 0;
   isUpdate.value = false;
 }
@@ -209,27 +209,27 @@ function showAdd() {
 // 规则
 const rules = reactive({
   name: [
-    { required: true, message: '收货人不能为空！', trigger: 'blur' },
-    { min: 2, max: 10, message: '长度在2-10个字符！', trigger: 'change' },
+    { required: true, message: "收货人不能为空！", trigger: "blur" },
+    { min: 2, max: 10, message: "长度在2-10个字符！", trigger: "change" },
   ],
   address: [
-    { required: true, message: '收货人不能为空！', trigger: 'blur' },
-    { min: 3, max: 25, message: '长度在3-25个字符！', trigger: 'change' },
+    { required: true, message: "收货人不能为空！", trigger: "blur" },
+    { min: 3, max: 25, message: "长度在3-25个字符！", trigger: "change" },
   ],
   phone: [
-    { required: true, message: '手机号不能为空！', trigger: 'blur' },
+    { required: true, message: "手机号不能为空！", trigger: "blur" },
     {
       pattern:
         /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/,
-      message: '手机号格式不正确！',
-      trigger: 'change',
+      message: "手机号格式不正确！",
+      trigger: "change",
     },
   ],
-  province: [{ required: true, message: '省份不能为空！', trigger: 'blur' }],
-  city: [{ required: true, message: '城市不能为空！', trigger: 'blur' }],
-  county: [{ required: true, message: '区县不能为空！', trigger: 'blur' }],
-  isDefault: [{ required: true, message: '是否默认不能为空！', trigger: 'blur' }],
-  postalCode: [{ required: true, message: '邮政编码不能为空！', trigger: 'blur' }],
+  province: [{ required: true, message: "省份不能为空！", trigger: "blur" }],
+  city: [{ required: true, message: "城市不能为空！", trigger: "blur" }],
+  county: [{ required: true, message: "区县不能为空！", trigger: "blur" }],
+  isDefault: [{ required: true, message: "是否默认不能为空！", trigger: "blur" }],
+  postalCode: [{ required: true, message: "邮政编码不能为空！", trigger: "blur" }],
 });
 
 definePageMeta({
@@ -271,112 +271,114 @@ definePageMeta({
         <ClientOnly>
           <div
             v-if="user.isLogin"
-            class="address-list animate-[fade-in_.6s_ease]"
+            class="v-card animate-[fade-in_.6s_ease] rounded-12px p-6 border-default"
             @keyup.esc="isEdit = false"
           >
             <!-- 表单弹窗 -->
-            <lazy-el-dialog
-              v-model="isShow"
-              style="width: 400px; padding: 0 20px"
-              :show-close="true"
-            >
-              <el-form
-                ref="addressRef"
-                v-loading.fullscreen="isLoading"
-                label-position="top"
-                hide-required-asterisk
-                :rules="rules"
-                :model="form"
-                class="form animate__animated"
-                @submit.prevent="onReqAddress"
+            <Teleport to="body">
+              <lazy-el-dialog
+                v-model="isShow"
+                style="width: 400px; padding: 0 20px"
+                :show-close="true"
               >
-                <h2
-                  mb-5
-                  tracking-0.2em
+                <el-form
+                  ref="addressRef"
+                  v-loading.fullscreen="isLoading"
+                  label-position="top"
+                  hide-required-asterisk
+                  :rules="rules"
+                  :model="form"
+                  class="animate__animated form"
+                  @submit.prevent="onReqAddress"
                 >
-                  {{ isUpdate ? "修改地址" : "添加地址" }}
-                </h2>
-                <!-- 收货人 -->
-                <el-form-item
-                  label="收货人"
-                  prop="name"
-                  class="animated pb-2"
-                >
-                  <el-input
-                    v-model.trim="form.name"
-                    prefix-icon="user"
-                    size="large"
-                    placeholder="请输入2-10字姓名"
-                  />
-                </el-form-item>
-                <!-- 手机号 -->
-                <el-form-item
-                  label="手机号"
-                  prop="phone"
-                  class="animated pb-2"
-                >
-                  <el-input
-                    v-model.trim="form.phone"
-                    prefix-icon="phone"
-                    size="large"
-                    placeholder="手机号"
-                  />
-                </el-form-item>
-                <el-form-item
-                  required
-                  label="地址"
-                >
-                  <el-cascader
-                    v-model="selectAddressOption"
-                    style="width: 100%"
-                    size="large"
-                    :placeholder="
-                      form.province
-                        ? `${form.province} / ${form.city} / ${form.county}`
-                        : '选择地址'
-                    "
-                    :options="regionDatas"
-                  />
-                </el-form-item>
-                <!-- 详细地址 -->
-                <el-form-item
-                  label="详细地址"
-                  prop="address"
-                  class="animated pb-2"
-                >
-                  <el-input
-                    v-model.trim="form.address"
-                    prefix-icon="location"
-                    size="large"
-                    placeholder="详细地址"
-                  />
-                </el-form-item>
-                <!-- 是否默认 -->
-                <el-form-item
-                  prop="isDefault"
-                  class="animated"
-                  flex-row-c-c
-                >
-                  <el-checkbox
-                    v-model="form.isDefault"
-                    label="是否默认"
-                    size="large"
-                  />
-                </el-form-item>
-                <!-- 是否默认 -->
-                <el-form-item mt-1em>
-                  <el-button
-                    :type="isUpdate ? 'info' : 'primary'"
-                    flex-1
-                    size="large"
-                    class="button"
-                    @click="onReqAddress(addressRef)"
+                  <h2
+                    mb-5
+                    tracking-0.2em
                   >
-                    {{ isUpdate ? "更 新" : "添 加" }}
-                  </el-button>
-                </el-form-item>
-              </el-form>
-            </lazy-el-dialog>
+                    {{ isUpdate ? "修改地址" : "添加地址" }}
+                  </h2>
+                  <!-- 收货人 -->
+                  <el-form-item
+                    label="收货人"
+                    prop="name"
+                    class="animated pb-2"
+                  >
+                    <el-input
+                      v-model.trim="form.name"
+                      prefix-icon="user"
+                      size="large"
+                      placeholder="请输入2-10字姓名"
+                    />
+                  </el-form-item>
+                  <!-- 手机号 -->
+                  <el-form-item
+                    label="手机号"
+                    prop="phone"
+                    class="animated pb-2"
+                  >
+                    <el-input
+                      v-model.trim="form.phone"
+                      prefix-icon="phone"
+                      size="large"
+                      placeholder="手机号"
+                    />
+                  </el-form-item>
+                  <el-form-item
+                    required
+                    label="地址"
+                  >
+                    <el-cascader
+                      v-model="selectAddressOption"
+                      style="width: 100%"
+                      size="large"
+                      :placeholder="
+                        form.province
+                          ? `${form.province} / ${form.city} / ${form.county}`
+                          : '选择地址'
+                      "
+                      :options="regionDatas"
+                    />
+                  </el-form-item>
+                  <!-- 详细地址 -->
+                  <el-form-item
+                    label="详细地址"
+                    prop="address"
+                    class="animated pb-2"
+                  >
+                    <el-input
+                      v-model.trim="form.address"
+                      prefix-icon="location"
+                      size="large"
+                      placeholder="详细地址"
+                    />
+                  </el-form-item>
+                  <!-- 是否默认 -->
+                  <el-form-item
+                    prop="isDefault"
+                    class="animated"
+                    flex-row-c-c
+                  >
+                    <el-checkbox
+                      v-model="form.isDefault"
+                      label="是否默认"
+                      size="large"
+                    />
+                  </el-form-item>
+                  <!-- 是否默认 -->
+                  <el-form-item mt-1em>
+                    <el-button
+                      :type="isUpdate ? 'info' : 'primary'"
+                      flex-1
+                      size="large"
+                      class="button"
+                      @click="onReqAddress(addressRef)"
+                    >
+                      {{ isUpdate ? "更 新" : "添 加" }}
+                    </el-button>
+                  </el-form-item>
+                </el-form>
+              </lazy-el-dialog>
+            </Teleport>
             <!-- 列表 -->
             <div
               v-loading.fullscreen="isLoadingAll"
@@ -402,7 +404,7 @@ definePageMeta({
                     <div
                       :key="2030303"
                       min-h-180px
-                      class="add group flex-row-c-c flex-col cursor-pointer select-none border-2px rounded-8px transition-300 hover:scale-98 border-default-dashed"
+                      class="group add flex-row-c-c flex-col cursor-pointer select-none border-2px rounded-8px transition-300 hover:scale-98 border-default-dashed"
                       hover:border=" solid dark-4"
                       dark:hover:border-gray-5
                       @click="showAdd"
@@ -424,7 +426,7 @@ definePageMeta({
                       v-for="p in address?.addressList"
                       :key="p.id"
                       :address="p"
-                      class="min-h-180px p-4"
+                      class="min-h-180px p-6"
                     >
                       <template #btns>
                         <div
@@ -480,7 +482,6 @@ definePageMeta({
           </div>
         </ClientOnly>
       </div>
-      <!-- https://www.npmjs.com/package/element-china-area-data -->
     </NuxtLayout>
   </div>
 </template>

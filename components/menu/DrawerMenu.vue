@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
 import { CommCategory } from "@/composables/api/community";
+
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_isFold", true);
+// 长短折叠
+const isCollapse = ref<boolean>(false);
 // 路由
 const route = useRoute();
 const commList = await getCommCategory();
@@ -43,10 +46,8 @@ interface IndexMenuType {
   title: string;
   children: IndexMenuType[];
 }
-
-// 长短折叠
-const isCollapse = ref<boolean>(false);
 </script>
+
 <template>
   <div
     transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
@@ -55,7 +56,6 @@ const isCollapse = ref<boolean>(false);
   >
     <ClientOnly>
       <el-scrollbar height="100%">
-        <!-- 菜单 -->
         <el-menu
           class="menu-first"
           :router="true"

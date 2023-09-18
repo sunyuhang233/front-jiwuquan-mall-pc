@@ -1,7 +1,8 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { getUserInfo, type UserInfoVO, type UserWallet } from "../api/user/info";
+import { type UserInfoVO, type UserWallet, getUserInfo } from "../api/user/info";
 import { toLogout } from "../api/user";
 import { getUserWallet } from "../api/user/wallet";
+
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useUserStore = defineStore(
   "user",
@@ -47,9 +48,9 @@ export const useUserStore = defineStore(
       get() {
         if (!isLogin || !token.value) {
           showLoginForm.value = true;
-          showLoginForm.value;
           return "";
-        } else {
+        }
+        else {
           return token.value;
         }
       },
@@ -57,28 +58,6 @@ export const useUserStore = defineStore(
         token.value = value;
       },
     });
-
-    /**
-     * 用户登录
-     * @param token token
-     */
-    const onUserLogin = async (token: string, saveLocal?: boolean) => {
-      // 用户信息
-      const store = useUserStore();
-      let res = await getUserInfo(token);
-      if (res.code === StatusCode.SUCCESS) {
-        store.$patch({
-          userInfo: {
-            ...res.data,
-          },
-        });
-      } else {
-        onUserExit(token);
-        return;
-      }
-      // 钱包
-      loadUserWallet(token)
-    };
 
     /**
      * 加载用户钱包信息
@@ -92,16 +71,41 @@ export const useUserStore = defineStore(
             ...wallet.data,
           },
         });
-        return true
-      } else {
-        return false
+        return true;
       }
-    }
+      else {
+        return false;
+      }
+    };
+
+    /**
+     * 用户登录
+     * @param token token
+     */
+    const onUserLogin = async (token: string, saveLocal?: boolean) => {
+      // 用户信息
+      const store = useUserStore();
+      const res = await getUserInfo(token);
+      if (res.code === StatusCode.SUCCESS) {
+        store.$patch({
+          userInfo: {
+            ...res.data,
+          },
+        });
+      }
+      else {
+        onUserExit(token);
+        return;
+      }
+      // 钱包
+      loadUserWallet(token);
+    };
+
 
     /**
      * 加载用户信息
      * @param token 用户token
-     * @returns 
+     * @returns
      */
     const loadUserInfo = async (token: string): Promise<boolean> => {
       const user = await getUserInfo(token);
@@ -111,20 +115,20 @@ export const useUserStore = defineStore(
             ...user.data,
           },
         });
-        return true
-      } else {
-        return false
+        return true;
       }
-    }
+      else {
+        return false;
+      }
+    };
 
     /**
      * 用户确认状态
      * @param token token
      */
     const onCheckLogin = () => {
-      if (token.value) {
+      if (token.value)
         return onUserLogin(token.value);
-      } else { }
     };
     /**
      * 退出登录
@@ -132,8 +136,8 @@ export const useUserStore = defineStore(
      */
     async function onUserExit(t?: string) {
       if (t) {
-        clearUserStore()
-        const data = await toLogout(t);
+        clearUserStore();
+        return await toLogout(t);
       }
     }
     /**
@@ -175,7 +179,7 @@ export const useUserStore = defineStore(
         useShopStore()?.$reset();
         useAddressStore()?.$reset();
         useOrderStore()?.$reset();
-      })
+      });
     }
     return {
       // state
@@ -201,6 +205,7 @@ export const useUserStore = defineStore(
     // https://juejin.cn/post/7216182763250581564  持久化
     // https://juejin.cn/post/7216174863445737528
     persist: true,
-  }
+  },
 );
-if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));

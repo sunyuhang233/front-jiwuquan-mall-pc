@@ -1,19 +1,3 @@
-<template>
-  <div class="min-h-100vh flex flex-col">
-    <!-- 顶部导航 -->
-    <MenuHeaderMenu v-if="header" />
-    <!-- 左侧边导航 -->
-    <div class="flex-1">
-      <slot name="default"></slot>
-    </div>
-    <!-- 右下角功能区 -->
-    <ClientOnly>
-      <MenuRightButtons :menu="menu" />
-    </ClientOnly>
-    <!-- 页脚 -->
-    <MenuFooter v-if="footer" />
-  </div>
-</template>
 <script lang="ts" setup>
 const { footer, menu } = defineProps({
   footer: {
@@ -32,6 +16,23 @@ const { footer, menu } = defineProps({
   },
 });
 </script>
+
+<template>
+  <div class="min-h-100vh flex flex-col">
+    <MenuHeaderMenu v-if="header" />
+    <!-- 左侧边导航 -->
+    <div class="flex-1">
+      <slot name="default" />
+    </div>
+    <!-- 右下角功能区 -->
+    <ClientOnly>
+      <MenuRightButtons :menu="menu" />
+    </ClientOnly>
+    <!-- 页脚 -->
+    <MenuFooter v-if="footer" />
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .animate-fade-slice {
   animation: fade-slice-anim $transition-delay;

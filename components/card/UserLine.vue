@@ -169,7 +169,7 @@ const menuList = ref([
               <small
                 v-copying.toast="user.userInfo.id"
                 opacity-80
-                class="group ... overflow-hidden truncate p-0 decoration-dashed hover:underline"
+                class="group overflow-hidden truncate p-0 decoration-dashed hover:underline"
               >
                 ID:{{ user.userInfo.id }}
                 <span
