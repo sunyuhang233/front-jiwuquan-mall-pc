@@ -11,7 +11,7 @@
 ```
 
 ###  体验
-[<img src="./assets/images/logo/logo.png" width = "20" height = "20" alt="图片名称" align=center /> 极物圈 —— 体验入口](https://kiwi2333.netlify.app)
+[<img src="./assets/images/logo/logo.png" width = "20" height = "20" alt="图片名称" align=center /> 极物圈 —— 体验入口](https://jiwuquan.netlify.app)
 
 ###  项目截图
 
