@@ -808,7 +808,6 @@ function toBack() {
                 {{ ordersTitle.banner }}
                 <!-- 超时计时器 -->
                 <div
-
                   v-if="order.status === OrdersStatus.UN_PAID" inline
                   truncate
                 >
@@ -846,7 +845,6 @@ function toBack() {
               class="address-list w-full flex flex-col"
             >
               <h4
-
                 mb-2 tracking-0.2em
               >
                 收货地址：

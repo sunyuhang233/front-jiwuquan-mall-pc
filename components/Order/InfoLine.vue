@@ -1,31 +1,32 @@
 <script lang="ts" setup>
 import currency from "currency.js";
 import { type OrderInfoVO } from "~/composables/api/orders";
-const { order } = defineProps<{
-  order: OrderInfoVO;
-}>();
+
 const emit = defineEmits(["submit"]);
+const { order } = toRefs(defineProps<{
+  order: OrderInfoVO
+}>());
 // sotre
 const store = useOrderStore();
 
 interface BtnType {
-  title?: string;
-  type?: any;
-  fn?: () => void;
+  title?: string
+  type?: any
+  fn?: () => void
 }
 // 订单状态
 const types = computed(() => {
   const data: {
-    banner: string;
-    type: any;
-    btns: BtnType[];
+    banner: string
+    type: any
+    btns: BtnType[]
   } = {
     banner: "",
     type: "",
     btns: [],
   };
 
-  switch (order.status) {
+  switch (order.value.status) {
     case OrdersStatus.UN_PAID:
       data.banner = "待付款";
       data.btns = [
@@ -33,21 +34,21 @@ const types = computed(() => {
           title: "取 消",
           type: "default",
           fn: () => {
-            emit("submit", "cancel", order);
+            emit("submit", "cancel", order.value);
           },
         },
         {
           title: "修 改",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
         {
           title: "立即付款",
           type: "danger",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -101,7 +102,7 @@ const types = computed(() => {
           title: "再来一单",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
         {
@@ -121,7 +122,7 @@ const types = computed(() => {
           title: "再来一单",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -134,14 +135,14 @@ const types = computed(() => {
           title: "删除订单",
           type: "danger",
           fn: () => {
-            emit("submit", "toDelete", order);
+            emit("submit", "toDelete", order.value);
           },
         },
         {
           title: "再来一单",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -154,14 +155,14 @@ const types = computed(() => {
           title: "删除订单",
           type: "danger",
           fn: () => {
-            emit("submit", "toDelete", order);
+            emit("submit", "toDelete", order.value);
           },
         },
         {
           title: "再来一单",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -174,7 +175,7 @@ const types = computed(() => {
           title: "处理中，请稍后",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -187,7 +188,7 @@ const types = computed(() => {
           title: "已退款",
           type: "default",
           fn: () => {
-            toDetail(order);
+            toDetail(order.value);
           },
         },
       ];
@@ -201,7 +202,7 @@ const priceClass = computed(() => {
   return `text-[var(--el-color-${types.value.type || "default"})]`;
 });
 // 1、去到详情页
-const toDetail = (o: OrderInfoVO = order) => {
+function toDetail(o: OrderInfoVO = order.value) {
   store.$patch({
     orderId: o.id,
     status: o.status,
@@ -217,38 +218,44 @@ const toDetail = (o: OrderInfoVO = order) => {
     },
   });
   setTimeout(() => {
-    window.open(`/order/detail?id=${o.id}`, "_blank");
-  }, 100);
-};
+    navigateTo(`/order/detail?id=${o.id}`, {
+      open: {
+        target: "_blank",
+      },
+    });
+  }, 50);
+}
 
 // 2、去评价
-const toCommon = () => {
-  if (order.status !== OrdersStatus.RECEIVED) return;
+function toCommon() {
+  if (order.value.status !== OrdersStatus.RECEIVED)
+    return;
   navigateTo({
-    path: `/order/comment/${order.id}`,
+    path: `/order/comment/${order.value.id}`,
   });
-};
+}
 // 计算优惠价
 const getReduce = computed(() => {
-  if (order.spendPrice) {
-    return currency(order.totalPrice).subtract(order.spendPrice);
-  } else {
+  if (order.value.spendPrice)
+    return currency(order.value.totalPrice).subtract(order.value.spendPrice);
+
+  else
     return null;
-  }
 });
 
-const delayOrder = () => {
-  order.status = OrdersStatus.DELAY_CANCELED;
-  order.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
-};
+function delayOrder() {
+  order.value.status = OrdersStatus.DELAY_CANCELED;
+  order.value.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
+}
 </script>
+
 <template>
   <div
-    class="v-card group mb-6 border-default rounded-10px p-4 tracking-0.1em transition-300 hover:shadow active:shadow"
+    class="v-card group mb-6 rounded-10px p-4 tracking-0.1em transition-300 border-default active:shadow hover:shadow"
   >
     <!-- 顶部 -->
-    <span class="flex items-center border-0 border-default pb-2 border-b-1px">
-      <i class="p-2 opacity-50 i-solar:shop-bold-duotone bg-[var(--el-color-primary)] mr-2" />
+    <span class="flex items-center border-0 border-b-1px pb-2 border-default">
+      <i class="i-solar:shop-bold-duotone mr-2 bg-[var(--el-color-primary)] p-2 opacity-50" />
       <small font-600>极物圈</small>
       <div ml-a>
         <el-text
@@ -256,13 +263,13 @@ const delayOrder = () => {
           class="flex"
         >
           <span
+            v-if="order.status === OrdersStatus.UN_PAID"
             flex
             items-center
-            v-if="order.status === OrdersStatus.UN_PAID"
           >
             <OrderDelayTimer
-              @delay="delayOrder"
               :date="new Date(order.createTime)"
+              @delay="delayOrder"
             />
             ，
           </span>
@@ -272,23 +279,23 @@ const delayOrder = () => {
     </span>
     <!-- 子订单 -->
     <div
-      @click="toDetail(order)"
-      class="flex cursor-pointer items-center"
-      my-4
       v-for="p in order.ordersItems"
       :key="p.skuId"
+      class="flex cursor-pointer items-center"
+      my-4
+      @click="toDetail(order)"
     >
       <ClientOnly>
         <el-image
           loading="lazy"
           fit="cover"
           :src="BaseUrlImg + p.goodsSku.image"
-          class="w-4.5rem md:w-7.2rem h-4.5rem md:h-7.2rem transition-300 hover:shadow rounded-8px overflow-hidden border-default"
+          class="h-4.5rem w-4.5rem overflow-hidden rounded-8px transition-300 md:h-7.2rem md:w-7.2rem border-default hover:shadow"
         />
       </ClientOnly>
       <!-- 中间 -->
       <div
-        class="center text-0.8rem md:text-1rem flex-1 leading-1.4em md:leading-1.6em px-2 md:px-4 flex flex-col overflow-hidden truncate"
+        class="center flex flex-1 flex-col overflow-hidden truncate px-2 text-0.8rem leading-1.4em md:px-4 md:text-1rem md:leading-1.6em"
       >
         <strong truncate>
           {{ p.goods.name }}
@@ -304,23 +311,15 @@ const delayOrder = () => {
           {{ [p.goodsSku.size, p.goodsSku.color, p.goodsSku.combo].filter((p) => p).join(" | ") }}
         </small>
         <small
-          inline
-          ml-a
-          flex
-          flex-col
-          justify-end
+          ml-a inline flex flex-col justify-end
         >
           <div
-            ml-a
-            opacity-80
-            line-through
-            hidden
-            md:block
+            ml-a hidden line-through opacity-80 md:block
           >
             ￥{{ currency(p.goodsSku.price) }}
           </div>
           <div
-            class="font-600 text-1.2em"
+            class="text-1.2em font-600"
             opacity-80
             :class="priceClass"
           >
@@ -330,11 +329,7 @@ const delayOrder = () => {
       </div>
       <!-- 价格 -->
       <span
-        font-600
-        h-full
-        flex
-        items-center
-        ml-4
+        ml-4 h-full flex items-center font-600
       >
         X{{ p.quantity }}
       </span>
@@ -345,27 +340,22 @@ const delayOrder = () => {
         <BtnCopyText
           hidden
           md:inline
-          class="opacity-80 hover:underline opacity-0 group-hover:opacity-70"
+          class="opacity-0 opacity-80 hover:underline group-hover:opacity-70"
           :text="order.id"
           pretext="订单号："
           icon="i-solar:copy-outline"
         />
         <span
+          v-if="getReduce" mb-2
           ml-a
-          mb-2
-          v-if="getReduce"
         >
           -￥{{ getReduce }}
         </span>
       </div>
       <div flex-row-bt-c>
-        <small class="opacity-60 hidden md:inline">创建于{{ order.createTime }}</small>
-
+        <small class="hidden opacity-60 md:inline">创建于{{ order.createTime }}</small>
         <span
-          font-600
-          flex
-          ml-a
-          text-1.2rem
+          ml-a flex text-1.2rem font-600
         >
           <small text-0.85rem>总计：</small>
           <div :class="priceClass">
@@ -380,22 +370,19 @@ const delayOrder = () => {
       flex-row-bt-c
       tracking-0.3em
     >
-      <div class="left cursor-pointer flex items-center">
+      <div class="left flex cursor-pointer items-center">
         <i
-          p-1.8
-          bg-dark
-          dark:bg-light
-          i-solar:headphones-square-broken
+          i-solar:headphones-square-broken bg-dark p-1.8 dark:bg-light
         />
-        <small class="mx-2 hover:underline hover:text-[var(--el-color-primary)]">客服</small>
+        <small class="mx-2 hover:text-[var(--el-color-primary)] hover:underline">客服</small>
         <!-- |
         <small class="mx-2 hover:underline hover:text-[var(--el-color-primary)]">查看详情</small> -->
       </div>
       <div class="btns">
         <el-button
-          class="ml-2 hover:-translate-y-0.15em"
           v-for="p in types.btns"
           :key="p.title"
+          class="ml-2 hover:-translate-y-0.15em"
           :type="p.type || 'default'"
           @click="(p.fn || toDetail)()"
         >
@@ -405,6 +392,7 @@ const delayOrder = () => {
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 .btns {
   :deep(.el-button) {

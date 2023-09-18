@@ -1,27 +1,28 @@
 <script lang="ts" setup>
-import { resolveModuleName } from "typescript";
-import { getAllOrderPage, getOrderPageByDTO } from "~/composables/api/orders";
-import { OrderInfoVO, OrdersPageDTO, OrdersStatus } from "~/composables/api/orders";
+import type { OrderInfoVO, OrdersPageDTO } from "~/composables/api/orders";
+import { OrdersStatus, getAllOrderPage, getOrderPageByDTO } from "~/composables/api/orders";
 
-// 查询参数
-const dto = ref<OrdersPageDTO>({
-  id: undefined,
-  endTime: undefined,
-  startTime: undefined,
-});
+
 // props
 const props = withDefaults(
   defineProps<{
-    dto?: OrdersPageDTO;
-    status?: OrdersStatus;
+    dto?: OrdersPageDTO
+    status?: OrdersStatus
   }>(),
   {
     dto: () => {
       return {};
     },
     status: () => -1,
-  }
+  },
 );
+
+// 查询参数
+const params = ref<Partial<OrdersPageDTO>>({
+  id: undefined,
+  endTime: undefined,
+  startTime: undefined,
+});
 // store
 const user = useUserStore();
 const isLoading = ref<boolean>(false);
@@ -45,29 +46,32 @@ const isNothing = computed(() => {
 });
 // 加载数据
 async function loadOrdersPage() {
-  if (isNotMore.value || isNothing.value || isLoading.value) return;
+  if (isNotMore.value || isNothing.value || isLoading.value)
+    return;
   isLoading.value = true;
   // 翻页
   page.value++;
-  const { data, code } =
-    props.status === -1
-      ? await getAllOrderPage(page.value, size.value, dto.value || {}, user.getToken)
+  const { data, code }
+    = props.status === -1
+      ? await getAllOrderPage(page.value, size.value, params.value || {}, user.getToken)
       : await getOrderPageByDTO(
-          props.status,
-          page.value,
-          size.value,
-          dto.value || {},
-          user.getToken
-        );
+        props.status,
+        page.value,
+        size.value,
+        params.value || {},
+        user.getToken,
+      );
   if (code === StatusCode.SUCCESS) {
-    if (data.records.length) list.value.push(...data.records);
+    if (data.records.length)
+      list.value.push(...data.records);
 
     pageInfo.value = {
       total: data.total,
       pages: data.pages,
       current: data.current,
     };
-  } else {
+  }
+  else {
     ElMessage.error({
       grouping: true,
       message: "获取失败，请稍后再试！",
@@ -91,16 +95,25 @@ function reload() {
   loadOrdersPage();
 }
 
-const reloadSearch = () => {
-  dto.value.startTime = undefined;
-  dto.value.endTime = undefined;
+function reloadSearch() {
+  params.value.startTime = undefined;
+  params.value.endTime = undefined;
   reload();
-};
+}
 
 // 更新loading
 const isUpdateLoading = ref<boolean>(false);
+
+enum SubmitFnType {
+  cancel = "cancel",
+  toastDelivery = "toastDelivery",
+  pushRefund = "pushRefund",
+  toDelete = "toDelete",
+  checkDelivery = "checkDelivery", // 确认收货
+}
+
 // 订单操作集合
-const submit = (type: SubmitFnType, order: OrderInfoVO) => {
+function submit(type: SubmitFnType, order: OrderInfoVO) {
   switch (type) {
     case SubmitFnType.cancel:
       cancel(order);
@@ -118,19 +131,13 @@ const submit = (type: SubmitFnType, order: OrderInfoVO) => {
       toDelete(order);
       break;
   }
-};
-enum SubmitFnType {
-  cancel = "cancel",
-  toastDelivery = "toastDelivery",
-  pushRefund = "pushRefund",
-  toDelete = "toDelete",
-  checkDelivery = "checkDelivery", // 确认收货
 }
 // 1、取消订单 CANCLEL
-const cancel = async (order: OrderInfoVO) => {
-  if (order.status !== OrdersStatus.UN_PAID) return;
+async function cancel(order: OrderInfoVO) {
+  if (order.status !== OrdersStatus.UN_PAID)
+    return;
   try {
-    const action = await ElMessageBox.confirm(`是否确认取消订单？`, "取消提示", {
+    const action = await ElMessageBox.confirm("是否确认取消订单？", "取消提示", {
       confirmButtonText: "确 认",
       confirmButtonClass: "el-button--primary is-plain border-default ",
       cancelButtonText: "取 消",
@@ -157,45 +164,48 @@ const cancel = async (order: OrderInfoVO) => {
         //     return;
         //   }
         // }
-      } else {
+      }
+      else {
         // 失败
         ElNotification.error({
           title: "订单取消失败，请稍后再试！",
         });
       }
     }
-  } catch (e) {
-    isUpdateLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isUpdateLoading.value = false;
   }
-};
+  finally {
+    isUpdateLoading.value = false;
+  }
+}
 // 2、待发货（催发货）
-const toastDelivery = () => {
+function toastDelivery() {
   ElMessageBox.alert("我们已收到您的订单，将尽快处理并安排发货！", "提 醒", {
     confirmButtonText: "好 的",
     center: true,
   }).catch();
-};
+}
 // 3、删除订单订单 DELETE
-const toDelete = async (order: OrderInfoVO) => {
+async function toDelete(order: OrderInfoVO) {
   if (
-    order.status !== OrdersStatus.REFUND_SUCCESS &&
-    order.status !== OrdersStatus.CANCELED &&
-    order.status !== OrdersStatus.DELAY_CANCELED &&
-    order.status !== OrdersStatus.COMMENTED
+    order.status !== OrdersStatus.REFUND_SUCCESS
+    && order.status !== OrdersStatus.CANCELED
+    && order.status !== OrdersStatus.DELAY_CANCELED
+    && order.status !== OrdersStatus.COMMENTED
   )
     return;
   try {
     const action = await ElMessageBox.confirm(
-      `删除将永久移除该订单及其相关信息，是否确定删除？`,
+      "删除将永久移除该订单及其相关信息，是否确定删除？",
       "删除操作",
       {
         center: true,
         confirmButtonText: "删 除",
         confirmButtonClass: "el-button--danger border-default shadow-sm",
         cancelButtonText: "取 消",
-      }
+      },
     );
     if (action === "confirm") {
       isLoading.value = true;
@@ -214,28 +224,31 @@ const toDelete = async (order: OrderInfoVO) => {
           title: "删除提示",
           message: "订单和相关信息移除成功！",
         });
-      } else {
+      }
+      else {
         ElNotification.error({
           title: "删除失败，请稍后再试！",
         });
       }
     }
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
+  finally {
+    isLoading.value = false;
+  }
+}
 // 4、发起退款订单 CANCLEL
-const pushRefund = async (order: OrderInfoVO) => {
+async function pushRefund(order: OrderInfoVO) {
   if (
-    order.status !== OrdersStatus.PAID &&
-    order.status !== OrdersStatus.RECEIVED &&
-    order.status !== OrdersStatus.DELIVERED
+    order.status !== OrdersStatus.PAID
+    && order.status !== OrdersStatus.RECEIVED
+    && order.status !== OrdersStatus.DELIVERED
   )
     return;
   try {
-    const action = await ElMessageBox.confirm(`确认发起退款？😢`, "退款提示", {
+    const action = await ElMessageBox.confirm("确认发起退款？😢", "退款提示", {
       center: true,
       confirmButtonText: "退 款",
       confirmButtonClass: "el-button--danger border-default shadow-sm",
@@ -253,9 +266,10 @@ const pushRefund = async (order: OrderInfoVO) => {
           order.status = OrdersStatus.REFUND;
           ElNotification.success({
             title: "发起退款成功",
-            message: message,
+            message,
           });
-        } else {
+        }
+        else {
           // 未发货，直接退款
           order.status = OrdersStatus.REFUND_SUCCESS;
           ElNotification.success({
@@ -263,23 +277,27 @@ const pushRefund = async (order: OrderInfoVO) => {
             message: "未发货，正在自动退款，请等待！",
           });
         }
-      } else {
+      }
+      else {
         ElNotification.error({
           title: "发起退款失败，请稍后再试！",
         });
       }
     }
-  } catch (e) {
-    isLoading.value = false;
-  } finally {
+  }
+  catch (e) {
     isLoading.value = false;
   }
-};
+  finally {
+    isLoading.value = false;
+  }
+}
 // 5）确认收货 DELIVERED
-const checkDelivery = async (order: OrderInfoVO) => {
-  if (order.status !== OrdersStatus.DELIVERED) return;
+async function checkDelivery(order: OrderInfoVO) {
+  if (order.status !== OrdersStatus.DELIVERED)
+    return;
   try {
-    const action = await ElMessageBox.confirm(`是否确认收货？`, "收货提示", {
+    const action = await ElMessageBox.confirm("是否确认收货？", "收货提示", {
       center: true,
       confirmButtonText: "确 认",
       confirmButtonClass: "el-button--success border-default shadow-sm",
@@ -297,29 +315,32 @@ const checkDelivery = async (order: OrderInfoVO) => {
           title: "收货成功",
           message: "收货确认成功！如有任何问题，请随时联系我们的客服。",
         });
-      } else {
+      }
+      else {
         ElNotification.error({
           title: "确认收货失败，请稍后再试！",
         });
       }
     }
-  } catch (e) {
-  } finally {
+  }
+  catch (e) {
+  }
+  finally {
     isLoading.value = false;
   }
-};
+}
 // 筛选
 const isShow = ref<boolean>(false);
 // 时间
 const selectDate = ref("");
 // 折叠收起
-const changeDate = () => {
+function changeDate() {
   const startTime = useDateFormat(selectDate.value[0], "YYYY-MM-DD HH:mm:ss").value.toString();
   const endTime = useDateFormat(selectDate.value[1], "YYYY-MM-DD HH:mm:ss").value.toString();
-  dto.value.startTime = startTime;
-  dto.value.endTime = endTime;
+  params.value.startTime = startTime;
+  params.value.endTime = endTime;
   reload();
-};
+}
 </script>
 
 <template>
@@ -329,43 +350,43 @@ const changeDate = () => {
     style="overflow: auto"
   >
     <div
-      min-h-50vh
       v-infinite-scroll="loadOrdersPage"
+      min-h-50vh
       :infinite-scroll-delay="500"
       :infinite-scroll-distance="30"
     >
-      <div class="mb-4 ml-a cursor-pointer flex justify-end">
+      <div class="mb-4 ml-a flex cursor-pointer justify-end">
         <div
-          class="flex-row-c-c w-0em transition-300 overflow-hidden truncate"
+          class="w-0em flex-row-c-c overflow-hidden truncate transition-300"
           :class="{ 'w-23em': isShow }"
         >
           <small class="flex-1">筛选：</small>
           <el-date-picker
+            v-model="selectDate"
             style="flex: 7"
             format="YYYY-MM-DD HH:mm:ss"
-            v-model="selectDate"
             type="datetimerange"
             size="small"
-            @change="changeDate"
             start-placeholder="起 始"
             :time-arrow-control="true"
             end-placeholder="结 束"
+            @change="changeDate"
           />
           <el-button
-            @click="reloadSearch"
             size="small"
             ml-1
             md:ml-2
+            @click="reloadSearch"
           >
             重置
           </el-button>
         </div>
         <el-button
-          @click="isShow = !isShow"
           size="small"
           ml-1
           md:ml-2
           :type="isShow ? 'danger' : 'default'"
+          @click="isShow = !isShow"
         >
           {{ isShow ? "收起" : "筛选" }}
         </el-button>
@@ -376,10 +397,10 @@ const changeDate = () => {
         class="relative"
       >
         <OrderInfoLine
-          @submit="submit"
           v-for="p in list"
-          :order="p"
           :key="p.id"
+          :order="p"
+          @submit="submit"
         />
       </ul>
       <p
