@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import currency from 'currency.js';
+import currency from "currency.js";
 import {
   OrdersStatus,
   pushOrdersItems,
@@ -10,10 +10,10 @@ import {
   checkDeliveryOrders, // 确认收货
   deleteOrders, // 删除订单
   type PushOrdersItemDTO,
-} from '~/composables/api/orders';
-import type { GoodsSkuMdVO } from '~/composables/api/goods/sku';
-import { getGoodsSkuByIds } from '~/composables/api/goods/sku';
-import { appName } from '~/constants';
+} from "~/composables/api/orders";
+import type { GoodsSkuMdVO } from "~/composables/api/goods/sku";
+import { getGoodsSkuByIds } from "~/composables/api/goods/sku";
+import { appName } from "~/constants";
 
 // 1、订单内容store
 const order = useOrderStore();
@@ -27,70 +27,70 @@ useAsyncData(async () => {
 });
 // 订单状态
 const ordersTitle = computed(() => {
-  let banner: string = '';
-  let submitText: string = '';
-  let type: any = '';
-  let btnType: any = '';
+  let banner: string = "";
+  let submitText: string = "";
+  let type: any = "";
+  let btnType: any = "";
   switch (order.status) {
     case OrdersStatus.READY:
-      banner = '提交订单';
-      submitText = '提交订单';
-      type = 'primary';
-      btnType = 'primary';
+      banner = "提交订单";
+      submitText = "提交订单";
+      type = "primary";
+      btnType = "primary";
       break;
     case OrdersStatus.UN_PAID:
-      banner = '待付款';
-      submitText = '立即付款';
-      type = 'danger';
-      btnType = 'danger';
+      banner = "待付款";
+      submitText = "立即付款";
+      type = "danger";
+      btnType = "danger";
       break;
     case OrdersStatus.PAID:
-      banner = '已付款，等待发货... 📦';
-      submitText = '催发货';
-      type = 'primary';
-      btnType = 'primary';
+      banner = "已付款，等待发货... 📦";
+      submitText = "催发货";
+      type = "primary";
+      btnType = "primary";
       break;
     case OrdersStatus.DELIVERED:
-      banner = '已发货，请等待物流运算';
-      submitText = '确认收货';
-      type = 'success';
-      btnType = 'success';
+      banner = "已发货，请等待物流运算";
+      submitText = "确认收货";
+      type = "success";
+      btnType = "success";
       break;
     case OrdersStatus.RECEIVED:
-      banner = '已确认收货，期待你的评价！';
-      submitText = '去评价';
-      type = 'info';
-      btnType = 'info';
+      banner = "已确认收货，期待你的评价！";
+      submitText = "去评价";
+      type = "info";
+      btnType = "info";
       break;
     case OrdersStatus.COMMENTED:
-      banner = '已完成评论，欢迎下次光临！';
-      submitText = '再来一单';
-      type = 'success';
-      btnType = 'success';
+      banner = "已完成评论，欢迎下次光临！";
+      submitText = "再来一单";
+      type = "success";
+      btnType = "success";
       break;
     case OrdersStatus.CANCELED:
-      banner = '订单已取消...';
-      submitText = '再来一单';
-      type = 'primary';
-      btnType = 'primary';
+      banner = "订单已取消...";
+      submitText = "再来一单";
+      type = "primary";
+      btnType = "primary";
       break;
     case OrdersStatus.DELAY_CANCELED:
-      banner = '订单已超时自动取消...';
-      submitText = '再来一单';
-      type = 'primary';
-      btnType = 'primary';
+      banner = "订单已超时自动取消...";
+      submitText = "再来一单";
+      type = "primary";
+      btnType = "primary";
       break;
     case OrdersStatus.REFUND:
-      banner = '发起退款中，等等卖家处理...';
-      submitText = '等待中，请稍后';
-      type = 'warning';
-      btnType = 'warning';
+      banner = "发起退款中，等等卖家处理...";
+      submitText = "等待中，请稍后";
+      type = "warning";
+      btnType = "warning";
       break;
     case OrdersStatus.REFUND_SUCCESS:
-      banner = '退款成功，请注意到账！';
-      submitText = '再来一单';
-      type = 'info';
-      btnType = 'info';
+      banner = "退款成功，请注意到账！";
+      submitText = "再来一单";
+      type = "info";
+      btnType = "info";
       break;
   }
   return {
@@ -126,7 +126,7 @@ async function loadSkuItems() {
   if (code === StatusCode.SUCCESS) {
     data.forEach((sku) => {
       const item = order.pushOrderItems.find(p => p.skuId === sku.id) || {
-        skuId: '',
+        skuId: "",
         quantity: 0,
       };
       orderItems.value.push({ ...sku, ...item });
@@ -138,7 +138,7 @@ useAsyncData(async () => {
 });
 
 // 4、选中地址id
-const selectAddressId = ref<string>('');
+const selectAddressId = ref<string>("");
 watch(
   address.addressList,
   (val) => {
@@ -148,7 +148,7 @@ watch(
   { deep: true, immediate: true },
 );
 // 5、选择代金卷
-const selectVoucherId = ref<string>('');
+const selectVoucherId = ref<string>("");
 const voucherList = ref([]);
 // 6、选择积分抵扣
 const selectPointsVal = ref<number>(0);
@@ -198,8 +198,8 @@ const payTypeList = ref<PayTypeDTO[]>([
   {
     disable: false,
     type: PayType.WEALLET,
-    icon: '<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>',
-    title: '钱包',
+    icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
+    title: "钱包",
   },
   {
     disable: true,
@@ -218,7 +218,7 @@ const payTypeList = ref<PayTypeDTO[]>([
 						p-id="1523"
 					></path>
 				</svg>`,
-    title: '微信',
+    title: "微信",
   },
   {
     disable: true,
@@ -237,7 +237,7 @@ const payTypeList = ref<PayTypeDTO[]>([
 						p-id="2519"
 					></path>
 				</svg>`,
-    title: '支付宝',
+    title: "支付宝",
   },
 ]);
 export interface PayTypeDTO {
@@ -250,7 +250,7 @@ export interface PayTypeDTO {
 // 1）提交订单 READY -1
 async function pushOrder() {
   if (!selectAddressId.value) {
-    ElMessage.error('请选择收货地址！');
+    ElMessage.error("请选择收货地址！");
     return;
   }
   isLoading.value = true;
@@ -276,20 +276,20 @@ async function pushOrder() {
       unPaidVO: data,
       status: OrdersStatus.UN_PAID,
     });
-    order.orderInfo.updateTime = useDateFormat(Date.now(), 'YYYY-MM-DD HH:mm:ss').value.toString();
+    order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
     order.orderInfo.createTime = order.orderInfo.updateTime;
     setTimeout(async () => {
       ElNotification.success({
-        title: '提交成功！',
-        message: '提交订单成功，请在24小时内完成付款',
+        title: "提交成功！",
+        message: "提交订单成功，请在24小时内完成付款",
       });
       isLoading.value = false;
     }, 300);
   }
   else {
     ElNotification.error({
-      title: '提交失败，请稍后再试！',
-      message: message || '',
+      title: "提交失败，请稍后再试！",
+      message: message || "",
     });
     isLoading.value = false;
   }
@@ -309,15 +309,15 @@ async function payOrder(payType: PayType) {
   try {
     const action = await ElMessageBox.confirm(
       `使用${str[0]}支付 ￥${getFinalPrice.value}？`,
-      '确认支付',
+      "确认支付",
       {
-        confirmButtonText: '支 付',
-        confirmButtonClass: 'el-button--info border-default shadow-sm',
-        cancelButtonText: '取 消',
+        confirmButtonText: "支 付",
+        confirmButtonClass: "el-button--info border-default shadow-sm",
+        cancelButtonText: "取 消",
         center: true,
       },
     );
-    if (action === 'confirm') {
+    if (action === "confirm") {
       isLoading.value = true;
       // 支付订单
       const { data, message, code } = await payOrders(
@@ -329,7 +329,7 @@ async function payOrder(payType: PayType) {
       );
       if (code === StatusCode.SUCCESS) {
         ElNotification.success({
-          title: '付款成功！',
+          title: "付款成功！",
           message: `支付成功，共花费${data}元`,
         });
 
@@ -338,7 +338,7 @@ async function payOrder(payType: PayType) {
       }
       else {
         ElNotification.error({
-          title: '支付失败，请稍后再试！',
+          title: "支付失败，请稍后再试！",
           message,
         });
       }
@@ -354,8 +354,8 @@ async function payOrder(payType: PayType) {
 }
 // 3）待发货（催发货）
 function toastOrder() {
-  ElMessageBox.alert('我们已收到您的订单，将尽快处理并安排发货！', '提 醒', {
-    confirmButtonText: '明 白',
+  ElMessageBox.alert("我们已收到您的订单，将尽快处理并安排发货！", "提 醒", {
+    confirmButtonText: "明 白",
     center: true,
   }).catch();
 }
@@ -364,13 +364,13 @@ async function cancelOrder(orderId: string) {
   if (order.status !== OrdersStatus.UN_PAID)
     return;
   try {
-    const action = await ElMessageBox.confirm('是否确认取消订单？', '取消提示', {
-      confirmButtonText: '确 认',
-      confirmButtonClass: 'el-button--primary is-plain border-default ',
-      cancelButtonText: '取 消',
+    const action = await ElMessageBox.confirm("是否确认取消订单？", "取消提示", {
+      confirmButtonText: "确 认",
+      confirmButtonClass: "el-button--primary is-plain border-default ",
+      cancelButtonText: "取 消",
       center: true,
     });
-    if (action === 'confirm') {
+    if (action === "confirm") {
       isLoading.value = true;
       // 发起退款
       const { message, code } = await cancelOrders(
@@ -382,19 +382,19 @@ async function cancelOrder(orderId: string) {
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          'YYYY-MM-DD HH:mm:ss',
+          "YYYY-MM-DD HH:mm:ss",
         ).value.toString();
         order.status = OrdersStatus.CANCELED;
         order.orderInfo.status = OrdersStatus.CANCELED;
         ElNotification.success({
-          title: '取消成功 🎟',
-          message: '订单取消成功，优惠卷等优惠也将原路退回！',
+          title: "取消成功 🎟",
+          message: "订单取消成功，优惠卷等优惠也将原路退回！",
         });
       }
       else {
         // 失败
         ElNotification.error({
-          title: '订单取消失败，请稍后再试！',
+          title: "订单取消失败，请稍后再试！",
         });
       }
     }
@@ -412,8 +412,8 @@ async function updateOrder(orderId: string) {
     return;
   isUpdate.value = false;
   isLoading.value = true;
-  if (selectAddressId.value === '') {
-    ElMessage.warning('请选择修改地址！');
+  if (selectAddressId.value === "") {
+    ElMessage.warning("请选择修改地址！");
     return;
   }
   const { message, code } = await updateOrders(
@@ -425,7 +425,7 @@ async function updateOrder(orderId: string) {
   isLoading.value = false;
 
   if (code === StatusCode.SUCCESS) {
-    order.orderInfo.updateTime = useDateFormat(Date.now(), 'YYYY-MM-DD HH:mm:ss').value.toString();
+    order.orderInfo.updateTime = useDateFormat(Date.now(), "YYYY-MM-DD HH:mm:ss").value.toString();
     const vo = address.addressList.find(p => p.id === selectAddressId.value);
     if (vo) {
       order.orderInfo.name = vo.name;
@@ -438,12 +438,12 @@ async function updateOrder(orderId: string) {
       order.orderInfo.remark = remark.value;
     }
     ElNotification.success({
-      title: '修改订单成功！',
+      title: "修改订单成功！",
     });
   }
   else {
     ElNotification.error({
-      title: '修改失败，请稍后再试！',
+      title: "修改失败，请稍后再试！",
       message,
     });
   }
@@ -457,13 +457,13 @@ async function pushRefundOrder(orderId: string) {
   )
     return;
   try {
-    const action = await ElMessageBox.confirm('确认发起退款？😢', '退款提示', {
+    const action = await ElMessageBox.confirm("确认发起退款？😢", "退款提示", {
       center: true,
-      confirmButtonText: '退 款',
-      confirmButtonClass: 'el-button--danger border-default shadow-sm',
-      cancelButtonText: '取 消',
+      confirmButtonText: "退 款",
+      confirmButtonClass: "el-button--danger border-default shadow-sm",
+      cancelButtonText: "取 消",
     });
-    if (action === 'confirm') {
+    if (action === "confirm") {
       isLoading.value = true;
       // 发起退款
       const { message, code } = await refundOrders(
@@ -474,14 +474,14 @@ async function pushRefundOrder(orderId: string) {
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          'YYYY-MM-DD HH:mm:ss',
+          "YYYY-MM-DD HH:mm:ss",
         ).value.toString();
         // 发起退款
         if (order.status === OrdersStatus.RECEIVED) {
           order.status = OrdersStatus.REFUND;
           order.orderInfo.status = OrdersStatus.REFUND;
           ElNotification.success({
-            title: '发起退款成功',
+            title: "发起退款成功",
             message,
           });
         }
@@ -490,14 +490,14 @@ async function pushRefundOrder(orderId: string) {
           order.status = OrdersStatus.REFUND_SUCCESS;
           order.orderInfo.status = OrdersStatus.REFUND_SUCCESS;
           ElNotification.success({
-            title: '发起退款成功',
-            message: '未发货，正在自动退款，请等待！',
+            title: "发起退款成功",
+            message: "未发货，正在自动退款，请等待！",
           });
         }
       }
       else {
         ElNotification.error({
-          title: '发起退款失败，请稍后再试！',
+          title: "发起退款失败，请稍后再试！",
         });
       }
     }
@@ -514,13 +514,13 @@ async function checkDeliveryOrder() {
   if (order.status !== OrdersStatus.DELIVERED)
     return;
   try {
-    const action = await ElMessageBox.confirm('是否确认收货？', '收货提示', {
+    const action = await ElMessageBox.confirm("是否确认收货？", "收货提示", {
       center: true,
-      confirmButtonText: '确 认',
-      confirmButtonClass: 'el-button--success border-default shadow-sm',
-      cancelButtonText: '取 消',
+      confirmButtonText: "确 认",
+      confirmButtonClass: "el-button--success border-default shadow-sm",
+      cancelButtonText: "取 消",
     });
-    if (action === 'confirm') {
+    if (action === "confirm") {
       isLoading.value = true;
       // 发起收货
       const { code } = await checkDeliveryOrders(order.orderInfo.id, user.getToken);
@@ -528,18 +528,18 @@ async function checkDeliveryOrder() {
       if (code === StatusCode.SUCCESS) {
         order.orderInfo.updateTime = useDateFormat(
           Date.now(),
-          'YYYY-MM-DD HH:mm:ss',
+          "YYYY-MM-DD HH:mm:ss",
         ).value.toString();
         order.status = OrdersStatus.RECEIVED;
         order.orderInfo.status = OrdersStatus.RECEIVED;
         ElNotification.success({
-          title: '收货成功',
-          message: '收货确认成功！如有任何问题，请随时联系我们的客服。',
+          title: "收货成功",
+          message: "收货确认成功！如有任何问题，请随时联系我们的客服。",
         });
       }
       else {
         ElNotification.error({
-          title: '确认收货失败，请稍后再试！',
+          title: "确认收货失败，请稍后再试！",
         });
       }
     }
@@ -585,16 +585,16 @@ async function deleteOrder(orderId: string) {
     return;
   try {
     const action = await ElMessageBox.confirm(
-      '删除将永久移除该订单及其相关信息，是否确定删除？',
-      '删除操作',
+      "删除将永久移除该订单及其相关信息，是否确定删除？",
+      "删除操作",
       {
         center: true,
-        confirmButtonText: '删 除',
-        confirmButtonClass: 'el-button--danger border-default shadow-sm',
-        cancelButtonText: '取 消',
+        confirmButtonText: "删 除",
+        confirmButtonClass: "el-button--danger border-default shadow-sm",
+        cancelButtonText: "取 消",
       },
     );
-    if (action === 'confirm') {
+    if (action === "confirm") {
       isLoading.value = true;
       // 发起退款
       const { code } = await deleteOrders(orderId || order.orderInfo.id, user.getToken);
@@ -605,13 +605,13 @@ async function deleteOrder(orderId: string) {
         order.status = OrdersStatus.DELETED;
         order.orderInfo.status = OrdersStatus.DELETED;
         ElNotification.success({
-          title: '删除提示',
-          message: '订单和相关信息删除成功！',
+          title: "删除提示",
+          message: "订单和相关信息删除成功！",
         });
       }
       else {
         ElNotification.error({
-          title: '删除失败，请稍后再试！',
+          title: "删除失败，请稍后再试！",
         });
       }
     }
@@ -679,12 +679,12 @@ function toEditGoods(status: OrdersStatus | number) {
     isEdit.value = false;
     return;
   }
-  ElMessageBox.alert('提交订单后便不可修改规格数量和优惠', '注意', {
-    confirmButtonText: '我已了解',
+  ElMessageBox.alert("提交订单后便不可修改规格数量和优惠", "注意", {
+    confirmButtonText: "我已了解",
     autofocus: true,
     center: true,
     callback: (action: string) => {
-      if (action === 'confirm')
+      if (action === "confirm")
         isEdit.value = true;
     },
   });
@@ -722,7 +722,7 @@ useHead({
   title,
   meta: [
     {
-      name: 'description',
+      name: "description",
       content: title,
     },
   ],
@@ -734,16 +734,16 @@ async function reload() {
   isLoading.value = true;
   await order.reloadOrderInfo(order.orderId);
   setTimeout(() => {
-    ElMessage.success('刷新成功！');
+    ElMessage.success("刷新成功！");
     isLoading.value = false;
   }, 300);
 }
 // 返回
 function toBack() {
   if (history)
-    history.length > 1 ? history.back() : navigateTo('/');
+    history.length > 1 ? history.back() : navigateTo("/");
   else
-    navigateTo('/');
+    navigateTo("/");
 }
 
 definePageMeta({
@@ -813,7 +813,7 @@ definePageMeta({
           <!--------------- 地址+状态 ---------------->
           <div
             v-loading="isLoadAddressList"
-            class="v-card group flex flex-col border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
+            class="group v-card flex flex-col border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
             border-t="0.5rem solid "
             :style="{ borderTopColor: `var(--el-color-${ordersTitle.type})` }"
           >

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
@@ -12,4 +12,5 @@ definePageMeta({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

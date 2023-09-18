@@ -2,9 +2,9 @@
 	"private": true,
 	"packageManager": "pnpm@8.5.1",
 	"scripts": {
-		"build": "nuxi build --mode prod",
-		"dev": "nuxi dev --mode dev",
-		"prod": "nuxi dev -port 4000 --mode prod",
+		"build": "nuxi build --mode production",
+		"dev": "nuxi dev --mode development",
+		"prod": "nuxi dev -port 4000 --mode production",
 		"dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
 		"start": "node .output/server/index.mjs",
 		"typecheck": "vue-tsc --noEmit",
