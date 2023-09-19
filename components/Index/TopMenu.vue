@@ -8,10 +8,12 @@ const user = useUserStore();
       src="@/assets/images/other/index_bg.png"
       class="absolute top-0 block w-3/4 -left-1/12 dark:hidden"
       alt="背景图"
+      loading="lazy"
     >
     <img
       src="https://img.js.design/assets/static/04655ded30771e94bfa72bf9dab3cbbf.png"
       class="absolute top-0 hidden w-3/4 -left-1/12 dark:block"
+      loading="lazy"
       alt="背景图"
     >
     <!-- 问候语 -->

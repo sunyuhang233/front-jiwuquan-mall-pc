@@ -46,6 +46,17 @@ export default defineNuxtConfig({
       ],
     },
   },
+
+  // https://juejin.cn/post/7027822103323754504
+  optimizeDeps: {
+    include: ["@kangc"],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/[\\/]node_modules[\\/]@kangc/, /node_modules/],
+    },
+  },
+
   // https://blog.csdn.net/weixin_42553583/article/details/131372309
   experimental: {
     payloadExtraction: false,

@@ -46,7 +46,6 @@ function toView(item: CategoryVO) {
             size="large"
             class="first"
             style="position: relative; width: 9em; height: 4.6em; line-height: 100%"
-
             flex-row-c-c
             inline-flex @click="toView(p)"
           >
@@ -54,11 +53,7 @@ function toView(item: CategoryVO) {
               loading="lazy"
               :src="`${BaseUrlImg + p.icon}?imageView2/0/w/100/h/100/format/webp/interlace/1/q/50`"
               :alt="p.name"
-
-
               style="width: 9em; height: 4.6em; object-fit: cover"
-
-
               absolute left-0 top-0 z-0 rounded-4px opacity-85
             >
             <h3
@@ -72,23 +67,16 @@ function toView(item: CategoryVO) {
           <el-button
             v-for="k in p?.children"
             :key="k.id"
-
             type="primary"
             style="position: relative; width: 9em; height: 4.6em; line-height: 100%"
             plain
-
-
             mx-0 my-2 flex-row-c-c @click="toView(k)"
           >
             <img
               loading="lazy"
               :src="BaseUrlImg + k.icon"
               :alt="k.name"
-
-
               style="width: 100%; height: 100%; object-fit: cover"
-
-
               absolute left-0 top-0 z-0 rounded-4px opacity-85
             >
             <h3

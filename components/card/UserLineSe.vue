@@ -2,7 +2,7 @@
 const user = useUserStore();
 const isShow = ref<boolean>(false);
 // 退出登录
-const exitLogin = () => {
+function exitLogin() {
   ElMessageBox.confirm("确认退出登录？", "退出登录", {
     confirmButtonText: "确认退出",
     cancelButtonText: "取消",
@@ -18,8 +18,9 @@ const exitLogin = () => {
       ElMessage.success("退出成功！");
     })
     .catch(() => {});
-};
+}
 </script>
+
 <template>
   <div>
     <div v-if="user.isLogin">
@@ -30,22 +31,22 @@ const exitLogin = () => {
         <template #reference>
           <img
             loading="lazy"
-            class="rounded-6em w-2em h-2em"
+            class="h-2em w-2em rounded-6em"
             :src="
-              user.userInfo.avatar ? BaseUrlImg + user.userInfo.avatar : BaseUrlImg + 'default.png'
+              user.userInfo.avatar ? BaseUrlImg + user.userInfo.avatar : `${BaseUrlImg}default.png`
             "
             :alt="user.userInfo.nickname"
-          />
+          >
         </template>
-        <div class="grid grid-cols-1 text-center w-full">
+        <div class="grid grid-cols-1 w-full text-center">
           <NuxtLink
             to="/"
-            class="py-2 rounded-6px cursor-pointer"
+            class="cursor-pointer rounded-6px py-2"
           >
             回到主页
           </NuxtLink>
           <span
-            class="py-2 rounded-6px cursor-pointer"
+            class="cursor-pointer rounded-6px py-2"
             @click="exitLogin"
           >
             退出登录
@@ -55,4 +56,5 @@ const exitLogin = () => {
     </div>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

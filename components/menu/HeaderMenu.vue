@@ -45,11 +45,13 @@ function onSerch(val: string) {
         class="relative"
       >
         <img
+          loading="lazy"
           alt="Design By Kiwi23333"
           src="@/assets/images/logo/logo.png"
           w-2.4rem object-contain transition-300 dark:hidden group-hover:opacity-85 group-hover:filter-blur-2px
         >
         <img
+          loading="lazy"
           alt="Design By Kiwi23333"
           src="@/assets/images/logo/logo_dark.png"
           hidden w-2.4rem object-contain transition-300 dark:block group-hover:opacity-85 group-hover:filter-blur-2px
@@ -66,6 +68,7 @@ function onSerch(val: string) {
         href="https://github.com/KiWi233333"
       >
         <img
+          loading="lazy"
           ml-4 w-5rem opacity-0 transition-300 group-hover:opacity-100 dark:filter-invert-100
           src="@/assets/images/logo/kiwi_strong.svg"
         >

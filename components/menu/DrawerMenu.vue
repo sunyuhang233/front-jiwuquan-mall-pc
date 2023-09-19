@@ -70,10 +70,10 @@ interface IndexMenuType {
             class="w-full flex-row-c-c flex-wrap transition-300 hover:bg-transparent px-4"
           >
             <img
+              loading="lazy"
               my-3
               src="@/assets/images/logo/logo_dark.png"
               class="inline-block m-0.2rem mr-a"
-              loading="lazy"
               w-1.6rem
               h-1.6rem
             />
