@@ -1,27 +1,29 @@
+<script lang="ts" setup>
+const user = useUserStore();
+</script>
+
 <template>
   <div class="relative flex-row-bt-c flex-col md:flex-row">
     <img
       src="@/assets/images/other/index_bg.png"
-      class="w-3/4 absolute top-0 -left-1/12 block dark:hidden"
+      class="absolute top-0 block w-3/4 -left-1/12 dark:hidden"
       alt="背景图"
-    />
+    >
     <img
       src="https://img.js.design/assets/static/04655ded30771e94bfa72bf9dab3cbbf.png"
-      class="w-3/4 absolute top-0 -left-1/12 hidden dark:block"
+      class="absolute top-0 hidden w-3/4 -left-1/12 dark:block"
       alt="背景图"
-    />
+    >
     <!-- 问候语 -->
-    <div class="py-10 select-none title animate__animated animate__fadeInDown">
+    <div class="title animate__animated animate__fadeInDown select-none py-10">
       <ClientOnly>
-        <p class="text-lg py-4 tracking-1 opacity-80">
+        <p class="py-4 text-lg tracking-1 opacity-80">
           {{ useNowDateText(new Date()) }}好，
           <span class="mark1 animatejs">{{ user?.userInfo?.nickname || "你还未登录" }} ！</span>
         </p>
       </ClientOnly>
       <span
-        font-600
-        text-2xl
-        tracking-1
+        text-2xl font-600 tracking-1
       >
         欢迎来到
         <span class="mark3 animate">极物圈社区</span>
@@ -30,10 +32,7 @@
     </div>
     <ClientOnly>
       <!-- 搜索 -->
-      <IndexSearch class="pb-10 min-h-6rem md:min-h-a w-full md:w-470px mt-a" />
+      <IndexSearch class="mt-a min-h-6rem w-full pb-10 md:min-h-a md:w-470px" />
     </ClientOnly>
   </div>
 </template>
-<script lang="ts" setup>
-const user = useUserStore();
-</script>

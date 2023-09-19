@@ -1,26 +1,11 @@
-<template>
-  <ElInput
-    type="text"
-    @keyup.enter="onSearch"
-    @focus="$emit('open')"
-    @blur="$emit('close')"
-    @keyup.esc="$emit('close')"
-    text-center
-    clearable
-    v-model.trim="word"
-    placeholder="开启搜索之旅✨"
-    class="v-input mx-1"
-    :required="true"
-  />
-</template>
-
 <script lang="ts" setup>
-const router = useRouter();
 // 搜索
-let props = defineProps<{
-  modelValue: string;
-  isChange?: boolean | false;
+const props = defineProps<{
+  modelValue: string
+  isChange?: boolean | false
 }>();
+
+defineEmits(["open", "close"]);
 // 实例
 const instance = getCurrentInstance();
 const word = computed({
@@ -32,15 +17,32 @@ const word = computed({
   },
 });
 
-const onSearch = () => {
+function onSearch() {
   navigateTo({
-    path: `/search`,
+    path: "/search",
     query: {
       name: word.value.trim(),
     },
   });
-};
+}
 </script>
+
+<template>
+  <ElInput
+    v-model.trim="word"
+    type="text"
+    clearable
+    text-center
+    placeholder="开启搜索之旅✨"
+
+    class="v-input mx-1" :required="true"
+    @keyup.enter="onSearch"
+    @focus="$emit('open')"
+    @blur="$emit('close')"
+    @keyup.esc="$emit('close')"
+  />
+</template>
+
 <style lang="scss" scoped>
 $input-width: min(40vw, 360px);
 $scle-input-width: min(68vw, 520px);

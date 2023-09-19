@@ -1,11 +1,12 @@
 import { pwa } from "./config/pwa";
-import { appDescription } from "./constants/index";
+import { appDescription, appName } from "./constants/index";
 
 export default defineNuxtConfig({
   ssr: import.meta.env.MODE === "production",
   build: {
     transpile: [/echarts/, "vue-echarts", "resize-detector"],
   },
+  spaLoadingTemplate: "./app/spa-loading-template.html",
   // 模块
   modules: [
     // 基础
@@ -30,6 +31,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
     head: {
+      title: appName,
       viewport: "width=device-width,initial-scale=1",
       // 网站头部信息
       link: [
@@ -44,10 +46,10 @@ export default defineNuxtConfig({
       ],
     },
   },
-
+  // https://blog.csdn.net/weixin_42553583/article/details/131372309
   experimental: {
     payloadExtraction: false,
-    inlineSSRStyles: false,
+    inlineSSRStyles: true,
     renderJsonPayloads: true, //
     viewTransition: true, // 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
     crossOriginPrefetch: true, // 使用 Speculation Rules API 启用跨源预取。

@@ -208,9 +208,7 @@ function clickTag(val: string, i: number) {
           <ClientOnly>
             <div
               v-show="!isShowResult"
-              class="tags animate__animated animate__headShake"
-
-
+              class="animate__animated tags animate__headShake"
               absolute top-0 top-40px z-0 flex flex-nowrap cursor-pointer items-center overflow-hidden py-1
             >
               <ElTag

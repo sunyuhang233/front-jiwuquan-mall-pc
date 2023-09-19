@@ -9,7 +9,7 @@
       <h4 pt-1em opacity-70>
         Design By:
         <NuxtLink
-          class="animate__animated mark2"
+          class="mark2"
           target="_blank"
           to="https://github.com/KiWi233333"
         >

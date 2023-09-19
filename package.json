@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "nuxi build --mode production",
 		"dev": "nuxi dev --mode development",
-		"prod": "nuxi dev -port 4000 --mode production",
+		"prod": "nuxi dev --mode production --port 3000",
 		"dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
 		"start": "node .output/server/index.mjs",
 		"typecheck": "vue-tsc --noEmit",
