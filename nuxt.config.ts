@@ -2,7 +2,7 @@ import { pwa } from "./config/pwa";
 import { appDescription, appName } from "./constants/index";
 
 export default defineNuxtConfig({
-  ssr: import.meta.env.MODE === "production",
+  ssr: true,
   build: {
     transpile: [/echarts/, "vue-echarts", "resize-detector"],
   },
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
     head: {
-      title: appName,
+      title: `${appName} - 开启你的购物社区之旅 ~`,
       viewport: "width=device-width,initial-scale=1",
       // 网站头部信息
       link: [
@@ -51,12 +51,6 @@ export default defineNuxtConfig({
   optimizeDeps: {
     include: ["@kangc"],
   },
-  build: {
-    commonjsOptions: {
-      include: [/[\\/]node_modules[\\/]@kangc/, /node_modules/],
-    },
-  },
-
   // https://blog.csdn.net/weixin_42553583/article/details/131372309
   experimental: {
     payloadExtraction: false,

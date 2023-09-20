@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { OrderCommentDTO } from '@/composables/api/orders';
-import { appName } from '~/constants';
+import type { OrderCommentDTO } from "@/composables/api/orders";
+import { appName } from "~/constants";
 
 const user = useUserStore();
 const route = useRoute();
@@ -19,7 +19,7 @@ useHead({
   title: `${appName} - 订单评价`,
   meta: [
     {
-      name: 'description',
+      name: "description",
       content: `${appName} - 订单评价`,
     },
   ],
@@ -46,15 +46,15 @@ const isExpire = computed(() => {
  */
 async function onSubmit() {
   if (dtoList.value.length !== order.data.value?.ordersItems.length)
-    return ElMessage.warning('评论列表个数缺失！');
+    return ElMessage.warning("评论列表个数缺失！");
 
   // 校验
   for (let i = 0; i < dtoList.value.length; i++) {
     const p = dtoList.value[i];
     if (!p.dto.rate)
-      return ElMessage.warning('评论星级不能为空！');
+      return ElMessage.warning("评论星级不能为空！");
     else if (!p.dto.orderItemId)
-      return ElMessage.warning('评论表单错误，请稍后再试！');
+      return ElMessage.warning("评论表单错误，请稍后再试！");
   }
 
   isDisable.value = true;
@@ -68,14 +68,14 @@ async function onSubmit() {
   );
   if (code === StatusCode.SUCCESS) {
     ElNotification.success({
-      title: '评价成功 🎉',
-      message: '感谢您的评价，欢迎下次继续选购~',
+      title: "评价成功 🎉",
+      message: "感谢您的评价，欢迎下次继续选购~",
     });
     isDone.value = true;
   }
   else {
     ElNotification.error({
-      title: '评价失败，请稍后再试！',
+      title: "评价失败，请稍后再试！",
     });
     isDone.value = false;
   }

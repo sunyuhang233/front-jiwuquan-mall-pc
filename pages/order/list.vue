@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { appName } from "~/constants";
 
+definePageMeta({
+  key: route => route.path,
+  layout: false,
+});
+
 useHead({
   title: `${appName} - 订单`,
   meta: [
@@ -13,6 +18,7 @@ useHead({
 const user = useUserStore();
 // 内容
 const activeMenu = ref<string>("all");
+
 // isLoading
 const isLoading = ref<boolean>(false);
 function reload() {
@@ -23,11 +29,6 @@ function reload() {
     isLoading.value = false;
   }, 300);
 }
-
-definePageMeta({
-  key: route => route.path,
-  layout: false,
-});
 </script>
 
 <template>
@@ -41,8 +42,8 @@ definePageMeta({
       <div>
         <ClientOnly>
           <div
-            v-if="user.isLogin"
-            v-loading.fullscreen="isLoading"
+            v-if="user?.isLogin"
+            v-loading.lock="isLoading"
             class="group min-h-80vh layout-default-se"
           >
             <!-- 头部 -->
