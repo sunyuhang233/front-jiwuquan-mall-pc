@@ -1,3 +1,5 @@
+import { getBaseUrl } from "./toggleDev";
+
 type FetchType = typeof $fetch
 type ReqType = Parameters<FetchType>[0]
 type FetchOptions = Parameters<FetchType>[1]
@@ -17,9 +19,7 @@ export function httpRequest<T = unknown>(
     // 请求拦截器
     onRequest: (config) => {
       // 需要登录操作
-      // @ts-expect-error
       if (config.options.headers?.Authorization !== undefined) {
-        // @ts-expect-error
         if (config.options.headers?.Authorization === "") {
           store?.$reset();
           store.showLoginForm = true;

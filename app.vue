@@ -23,7 +23,7 @@ watch(
 );
 
 // 加载
-const isLoading = ref<boolean>(true);
+const isPageLoading = ref<boolean>(true);
 useNuxtApp().hook("app:mounted", () => {
   if (document && document.body)
     document.body.style.overflow = "hidden";
@@ -33,13 +33,11 @@ useNuxtApp().hook("app:mounted", () => {
 
 // 准备完成关闭加载
 onNuxtReady(async () => {
-  isLoading.value = false;
-  if (document && document.body)
-    document.body.style.overflow = "auto";
+  isPageLoading.value = false;
 });
 
 useHead({
-  title: appName,
+  title: `${appName} - 开启你的极物之旅 ✨`,
   meta: [
     {
       name: "description",
@@ -51,7 +49,7 @@ useHead({
 
 <template>
   <Transition name="fade">
-    <OtherLoading v-show="isLoading" />
+    <OtherLoading v-show="isPageLoading" v-window-lock="isPageLoading" />
   </Transition>
   <NuxtPage />
   <FormUserDialog />

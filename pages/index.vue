@@ -1,11 +1,13 @@
 <script lang="ts" setup>
+import { appName } from "@/constants";
+
 // 定义页面元数据
 definePageMeta({
   key: route => route.path,
   layout: false,
 });
 useHead({
-  title: "极物圈",
+  title: `${appName} - 开启你的极物之旅 ✨`,
   meta: [
     {
       name: "description",

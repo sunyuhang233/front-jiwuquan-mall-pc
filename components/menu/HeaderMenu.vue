@@ -75,7 +75,7 @@ function onSerch(val: string) {
       </a>
     </div>
     <!-- 搜索框 -->
-    <transition name="fadeInOut">
+    <transition name="fade" :duration="200">
       <div
         v-show="isShowSearch"
         class="fixed left-0 top-0 z-2 h-[100vh] w-full animate-[fade-in_0.2s_ease-out] bg-[rgba(0,0,0,0.8)] dark:bg-[rgba(10,10,10,0.9)]"
