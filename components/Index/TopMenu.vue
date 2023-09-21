@@ -34,7 +34,7 @@ const user = useUserStore();
     </div>
     <ClientOnly>
       <!-- 搜索 -->
-      <IndexSearch class="mt-a min-h-6rem w-full pb-10 md:min-h-a md:w-470px" />
+      <IndexSearch class="z-99 mt-a min-h-6rem w-full pb-10 md:min-h-a md:w-470px" />
     </ClientOnly>
   </div>
 </template>

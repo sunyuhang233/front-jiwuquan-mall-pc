@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
     head: {
-      title: `${appName} - 开启你的购物社区之旅 ~`,
+      title: `${appName} - 开启你的购物社区之旅 ✨`,
       viewport: "width=device-width,initial-scale=1",
       // 网站头部信息
       link: [
