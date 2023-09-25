@@ -109,7 +109,7 @@ defineExpose({
     <transition-group
       tag="div"
       class="pb-2"
-      :name="transiton || 'fade-list'"
+      :name="transiton || 'fade-bt-list'"
       :class="props.class !== null ? props.class : 'flex flex-wrap'"
     >
       <NuxtLink
@@ -123,11 +123,12 @@ defineExpose({
           :goods="p"
         >
           <small
-            float-right
+            ml-a
             mt-2px
             text-blueGray
           >
-            销量：{{ p.sales }}
+            <i i-solar:fire-bold-duotone bg-red-5 p-0.6em />
+            {{ p.sales }}
           </small>
         </CardGoodsBox>
       </NuxtLink>

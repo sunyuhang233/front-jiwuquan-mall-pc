@@ -23,7 +23,6 @@ const getDiscount = computed<number>(() => {
       <ClientOnly>
         <ElImage
           loading="lazy"
-
           transition-300 hover:transform-scale-110
           class="h-full w-full overflow-hidden rounded-t-4px"
           :src="`${BaseUrlImg + goods.images[0]}?imageView2/0/format/webp/interlace/1/q/70`"
@@ -55,11 +54,11 @@ const getDiscount = computed<number>(() => {
       </h4>
       <p
         color-red-5
-        class="texts"
+        class="texts flex items-end truncate"
       >
         <strong pr-1>￥{{ currency(goods.price) }}</strong>
         <small
-          hidden text-0.6em color-coolgray md:inline
+          hidden text-0.8em color-coolgray md:inline
           style="text-decoration: line-through"
         >
           ￥{{ currency(goods.costPrice) }}

@@ -59,15 +59,15 @@ function onSubmitShopCart(formRef: FormInstance | undefined, event: MouseEvent) 
 // 小球动画
 const isAimate = ref<boolean>(false);
 function startDotAnimate(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  if (isAimate.value || target.getBoundingClientRect === undefined)
-    return;
-  isAimate.value = true;
-  const { bottom, right } = target.getBoundingClientRect();
-  gsap.to(target, {
-    bottom: 0,
-  });
-  isAimate.value = false;
+  // const target = event.target as HTMLElement;
+  // if (isAimate.value || target.getBoundingClientRect === undefined)
+  //   return;
+  // isAimate.value = true;
+  // const { bottom, right } = target.getBoundingClientRect();
+  // gsap.to(target, {
+  //   bottom: 0,
+  // });
+  // isAimate.value = false;
 };
 const order = useOrderStore();
 /**
@@ -137,7 +137,8 @@ interface SizeType {
   name: string
 }
 // 版本
-const comboList = ref<SizeType[]>([]);
+const comboList = ref<ComboType[]>([]);
+interface ComboType extends SizeType {}
 
 
 /**
@@ -168,17 +169,31 @@ function initSku() {
 }
 initSku();
 
+
+const submitText = ref<string>("请选择规格");
 // 表单监听
 watch(
   form,
   (dto: formDTO) => {
     const item = goodsSku?.find(p => dto.color === (p.color || "") && dto.combo === (p.combo || "") && dto.size === (p.size || ""));
-    if (item && item?.id) {
-      isAllCheckSku.value = true;
-      form.skuId = item?.id;
+    // 该规格不存在
+    if (!item) {
+      isAllCheckSku.value = false;
+      submitText.value = "暂无该选配";
+      return;
     }
+    else if (item.stock === 0) {
+      submitText.value = "暂无库存";
+      isAllCheckSku.value = false;
+      return;
+    }
+    // 可购买
+    isAllCheckSku.value = true;
+    submitText.value = "立即购买";
+    // 规格id
+    form.skuId = item?.id;
   },
-  { immediate: true, deep: true },
+  { immediate: false, deep: true },
 );
 
 // 计算全部规格总库存
@@ -324,34 +339,38 @@ function setActiveItem(image: string) {
           </el-form-item>
         </div>
         <!-- 购物车|立即购买 -->
-        <el-form-item>
-          <div class="relative mt-2 w-1/1 flex justify-between py-3">
-            <!-- 加入 -->
-            <el-button
-              :disabled="!goodsSku || !goodsSku?.length"
-              size="large" style="flex: 1;transition: 300ms;font-size: 1.2em;padding: 0.8em 1em;letter-spacing: 0.1em;margin-right: 0.6em;font-weight: 700;" plain shadow @click="onSubmitShopCart(FormRef, $event)"
-            >
-              加入购物车
-            </el-button>
-            <!-- 立即购买 -->
+        <div class="relative mt-2 w-1/1 py-3 text-2rem" grid="~ gap-2 cols-2">
+          <!-- 加入 -->
+          <el-button
+            :disabled="!goodsSku || !goodsSku?.length"
+            size="large"
+            class="w-full" style="transition: 300ms;font-size:1rem; letter-spacing: 0.2em;"
+            @click="onSubmitShopCart(FormRef, $event)"
+          >
+            加入购物车
+          </el-button>
+          <!-- 立即购买 -->
+          <div class="relative flex-row-c-c flex-1">
             <el-button
               v-loading.fullscreen.lock="fullscreenLoading"
-              :disabled="!goodsSku || !goodsSku?.length"
+              :disabled="!isAllCheckSku"
               size="large"
-              class="relative"
-              style="flex: 1;margin-right: 0.6em;transition: 300ms;font-size: 1.2em;font-weight: 600;padding: 0.8em 1em;letter-spacing: 0.1em;" shadow-md type="info" @click="onSubmitBuy(FormRef)"
+              type="info"
+              class="w-full" style="transition: 300ms;font-size:1rem; letter-spacing: 0.2em;"
+              @click="onSubmitBuy(FormRef)"
             >
-              立即购买
-              <div
-                rounded="t-6px"
-                border-border-dark-300 flex-row-c-c border-2px bg-white p-2 text-0.9rem text-red-5 shadow-md border-default-dashed dark:bg-dark-6 class="all-price -translate-1/1" :class="{ active: isAllCheckSku }"
-              >
-                <small block>￥</small>
-                <h3 v-incre-up="allPrice" />
-              </div>
+              {{ submitText || "立即购买" }}
             </el-button>
+            <!-- 价格 -->
+            <div
+              rounded="t-6px"
+              border-border-dark-300 flex-row-c-c border-2px bg-white p-2 text-0.9rem text-red-5 shadow-md border-default-dashed dark:bg-dark-6 class="all-price -translate-1/1" :class="{ active: isAllCheckSku }"
+            >
+              <small block>￥</small>
+              <h3 v-incre-up="allPrice" />
+            </div>
           </div>
-        </el-form-item>
+        </div>
       </el-form>
     </div>
   </ClientOnly>
@@ -403,8 +422,7 @@ function setActiveItem(image: string) {
 
 .all-price {
 	position: absolute;
-	right: 4%;
-	width: 9rem;
+	width: 80%;
 	height: 3em;
 	z-index: -1;
 	opacity: 0;

@@ -27,7 +27,7 @@ const { goods } = defineProps<{
       >
         ￥{{ currency(goods.price) }}
         <small
-          text-0.7em color-coolgray
+          text-0.8em color-coolgray
           style="text-decoration: line-through"
         >
           ￥{{ currency(goods.costPrice) }}

@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { GoodsCommentsVO, getGoodsCommentPage } from "~/composables/api/goods/comments";
-import { GoodsSkuVO } from "~/composables/api/goods/sku";
-import { IPage } from "~/types";
+import type { GoodsCommentsVO } from "~/composables/api/goods/comments";
+import { getGoodsCommentPage } from "~/composables/api/goods/comments";
+import type { GoodsSkuVO } from "~/composables/api/goods/sku";
+import type { IPage } from "~/types";
+
 const { goodsId, skuList } = defineProps<{
-  goodsId: string;
-  skuList?: GoodsSkuVO[];
+  goodsId: string
+  skuList?: GoodsSkuVO[]
 }>();
 const isLoading = ref<boolean>(false);
 // 商品列表
@@ -21,52 +23,57 @@ const pageInfo = ref<IPage<GoodsCommentsVO>>({
   current: -1,
 });
 const isNoMore = computed<boolean>(
-  () => pageInfo.value.current > 0 && pageInfo.value.current >= pageInfo.value.pages
+  () => pageInfo.value.current > 0 && pageInfo.value.current >= pageInfo.value.pages,
 );
 // 商品规格列表 构建map方便查询
 const skuMap = reactive(new Map<string, GoodsSkuVO>());
 skuList?.forEach((p) => {
   skuMap.set(p.id, p);
 });
-const loadCommentPage = async () => {
-  if (isLoading.value) return;
+async function loadCommentPage() {
+  if (isLoading.value || isNoMore.value)
+    return;
   isLoading.value = true;
   page.value++;
   const res = await getGoodsCommentPage(page.value, size.value, goodsId);
-  let data = res.data.value?.data;
+  const data = res.data.value?.data;
   // 没有更多
-  if (isNoMore.value || data?.total === -1) {
+  if (isNoMore.value || data?.total === -1)
     return (isLoading.value = false);
-  }
+
   // 展示结果
   pageInfo.value = data!;
-  if (!data?.records) return;
+  if (!data?.records)
+    return;
   data.records?.forEach((p) => {
     p.images = typeof p.images === "string" ? p.images?.split(",") : [];
     isLoading.value = false;
   });
   commentList.value.push(...data.records);
-};
+}
 loadCommentPage(); // 加载一次
 
-const toCommentDetailView = (commentId: string) => {
+// 商品评价视频预览
+const isShowVideo = ref<boolean>(false);
+const showVideoUrl = ref<string>("");
+
+function toCommentDetailView(commentId: string) {
   navigateTo({
     path: `/goods/comment/${commentId}`,
   });
-};
-const showVideo = (url: string) => {
+}
+function showVideo(url: string) {
   if (url) {
     showVideoUrl.value = url;
     isShowVideo.value = true;
   }
-};
-const isShowVideo = ref<boolean>(false);
-const showVideoUrl = ref<string>("");
+}
 </script>
+
 <template>
   <el-scrollbar
-    height="700px"
     v-infinite-scroll="loadCommentPage"
+    height="700px"
     :infinite-scroll-delay="400"
     :infinite-scroll-distance="80"
     :infinite-scroll-disable="isNoMore"
@@ -74,22 +81,19 @@ const showVideoUrl = ref<string>("");
     style="width: 100%"
   >
     <GoodsCommentCard
-      class="mb-4"
       v-for="p in commentList"
       :key="p.id"
+      class="mb-4"
       :comment="p"
-      @show-video="showVideo"
       :sku-item="skuMap.get(p.skuId)"
+      @show-video="showVideo"
     />
     <div
-      class="comment-list"
       v-show="isNoMore"
+      class="comment-list"
     >
       <small
-        inline-block
-        text-center
-        w-full
-        mb-10
+        mb-10 inline-block w-full text-center
       >
         暂时没有更多评论
       </small>
@@ -97,12 +101,10 @@ const showVideoUrl = ref<string>("");
     <Teleport to="body">
       <el-dialog v-model="isShowVideo">
         <video
-          :src="BaseUrlVideo + showVideoUrl"
+          v-if="isShowVideo"
+          :src="BaseUrlVideo + showVideoUrl" controls h-full
           w-full
-          h-full
-          controls
-          ref="videoRef"
-        ></video>
+        />
       </el-dialog>
     </Teleport>
   </el-scrollbar>

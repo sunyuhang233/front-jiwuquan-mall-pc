@@ -253,7 +253,7 @@
 .fade-bt-list-move,
 .fade-bt-list-enter-active,
 .fade-bt-list-leave-active {
-  transition: 0.4s ease;
+  transition: 0.3s ease-in-out;
 }
 
 .fade-bt-list-enter-from {
