@@ -1,20 +1,23 @@
 <script lang="ts" setup>
+import { appName } from "@/constants";
+
 const user = useUserStore();
 useHead({
-  title: "我的钱包 - 个人中心",
+  title: `我的钱包 - 个人中心 - ${appName}`,
   meta: [
     {
       name: "description",
-      content: "个人中心-极物钱包",
+      content: `我的钱包 - 个人中心 - ${appName}`,
     },
   ],
 });
 // 定义页面元数据
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout
@@ -26,20 +29,19 @@ definePageMeta({
       <div>
         <ClientOnly>
           <div
-            class="layout-default py-0"
             v-if="user.isLogin"
+            class="py-0 layout-default"
           >
             <!-- 标题 -->
             <div
-              class="title animate-[fadeInDown_0.6s] w-full"
-              pt-8
-              pb-6
+              class="title w-full animate-[fadeInDown_0.6s]"
+
+              pb-6 pt-8
             >
               <span
-                font-600
-                text-2xl
-                tracking-1
-                flex
+
+
+                flex text-2xl font-600 tracking-1
               >
                 你的钱包
                 <el-text
@@ -52,11 +54,10 @@ definePageMeta({
             </div>
             <!-- 下方 -->
             <div
-              class="animate-[fade-in_.3s] grid grid-cols-1 md:grid-cols-[8fr_3fr] grid-gap-8"
+              class="grid grid-cols-1 animate-[fade-in_.3s] grid-gap-8 md:grid-cols-[8fr_3fr]"
               grid-justify-items-stretch
               grid-items-stretch
             >
-              <!-------------1------------>
               <div
                 w-full
                 grid="
@@ -73,7 +74,7 @@ definePageMeta({
               >
                 <!-- 钱包 -->
                 <div
-                  class="z-0 overflow-x-hidden md:overflow-x-visible flex items-center relative w-full md:w-full md:max-w-380px"
+                  class="relative z-0 w-full flex items-center overflow-x-hidden md:max-w-380px md:w-full md:overflow-x-visible"
                 >
                   <UserWalSwiperCarts />
                 </div>
@@ -91,7 +92,6 @@ definePageMeta({
                 <!-- 统计表 -->
                 <UserWalTable class="h-360px md:h-full" />
               </div>
-              <!-------------2------------>
               <!-- 账单和日历 -->
               <UserWalBillsTab />
             </div>
@@ -101,6 +101,7 @@ definePageMeta({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss">
 .grid-content {
   grid-template-columns: 8fr 3fr;

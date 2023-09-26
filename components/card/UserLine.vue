@@ -193,7 +193,7 @@ const menuList = ref([
               class="avatar-uploader"
               style="width: 100%; height: 100%; border-radius: 50%"
               drag
-              :action="`${getBaseUrl}/user/info/avatar`"
+              :action="`${BaseUrl}/user/info/avatar`"
               :headers="{ Authorization: user.token }"
               method="PUT"
               :limit="1"

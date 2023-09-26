@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import currency from "currency.js";
-import { deleteBatchShopcartByIds, getUserShopCartPage } from "~/composables/api/shopcart";
+import { deleteBatchShopcartByIds } from "~/composables/api/shopcart";
 import type { PushOrdersItemDTO } from "~/composables/api/orders";
+import { appName } from "@/constants";
 
 useHead({
-  title: "极物 我的购物车",
+  title: `我的购物车 - 个人中心 - ${appName}`,
   meta: [
     {
       name: "description",
-      content: "极物圈-我的购物车",
+      content: `我的购物车 - 个人中心 - ${appName}`,
     },
   ],
 });
@@ -16,12 +17,6 @@ useHead({
 const shop = useShopStore();
 const user = useUserStore();
 
-// 没有更多
-const notMore = computed(() => {
-  return (
-    shop.shopcartList.length >= shop.pageInfo.total || shop.pageInfo.current === shop.pageInfo.pages
-  );
-});
 
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);

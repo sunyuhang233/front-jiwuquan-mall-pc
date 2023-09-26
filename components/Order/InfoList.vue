@@ -346,19 +346,13 @@ function changeDate() {
 <template>
   <el-scrollbar
     height="70vh"
-    :always="false"
     style="overflow: auto"
   >
-    <div
-      v-infinite-scroll="loadOrdersPage"
-      min-h-50vh
-      :infinite-scroll-delay="500"
-      :infinite-scroll-distance="30"
-    >
+    <ListAutoIncre @load="loadOrdersPage">
       <div class="mb-4 ml-a flex cursor-pointer justify-end">
         <div
-          class="w-0em flex-row-c-c overflow-hidden truncate transition-300"
-          :class="{ 'w-23em': isShow }"
+          class="flex-row-c-c transform-origin-right scale-x-0 overflow-hidden truncate transition-300 transition-transform"
+          :class="{ 'scale-x-100': isShow }"
         >
           <small class="flex-1">筛选：</small>
           <el-date-picker
@@ -393,7 +387,7 @@ function changeDate() {
       </div>
       <!-- 列表 -->
       <ul
-        v-auto-animate="{ duration: 400, easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.19)' }"
+        v-auto-animate="{ duration: 300, easing: 'cubic-bezier(0.61, 0.225, 0.195, 1.19)' }"
         class="relative"
       >
         <OrderInfoLine
@@ -421,7 +415,7 @@ function changeDate() {
       >
         暂无订单，快去下单吧 ~
       </p>
-    </div>
+    </ListAutoIncre>
   </el-scrollbar>
 </template>
 

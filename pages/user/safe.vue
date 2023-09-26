@@ -1,20 +1,24 @@
 <script lang="ts" setup>
+import { appName } from "@/constants";
+
 const user = useUserStore();
+
 useHead({
-  title: "账户与安全 - 个人中心",
+  title: `账号与安全 - 个人中心 - ${appName}`,
   meta: [
     {
       name: "description",
-      content: "极物圈-账户与安全",
+      content: `账号与安全 - 个人中心 - ${appName}`,
     },
   ],
 });
 // 页面
 definePageMeta({
-  key: (route) => route.path,
+  key: route => route.path,
   layout: false,
 });
 </script>
+
 <template>
   <div>
     <NuxtLayout
@@ -25,15 +29,17 @@ definePageMeta({
       <ClientOnly>
         <div
           v-if="user.isLogin"
-          class="layout-default flex flex-col"
+          class="flex flex-col layout-default"
         >
           <div
             class="title animate__animated animate__fadeInDown"
             mt-3
           >
-            <h2 tracking-1>账户与安全</h2>
+            <h2 tracking-1>
+              账户与安全
+            </h2>
           </div>
-          <div class="flex flex-col-reverse md:grid md:grid-cols-2 grid-gap-6">
+          <div class="flex flex-col-reverse grid-gap-6 md:grid md:grid-cols-2">
             <!-- 登录设备 -->
             <UserSafeDeviceList mt-4 />
             <!-- 修改信息 -->
@@ -44,4 +50,5 @@ definePageMeta({
     </NuxtLayout>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

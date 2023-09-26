@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { codeToText, regionData } from "element-china-area-data";
 import type { FormInstance } from "element-plus";
+import { appName } from "@/constants";
 import type {
   AddressDTO,
   AddressInfoVO,
@@ -12,14 +13,14 @@ import {
   updateAddressById,
 } from "~/composables/api/user/address";
 
-// 添加 | 修改
 
+// 添加 | 修改
 useHead({
-  title: "收货地址 - 个人中心",
+  title: `收货地址 - 个人中心 - ${appName}`,
   meta: [
     {
       name: "description",
-      content: "个人中心 收货地址",
+      content: `收货地址 - 个人中心 - ${appName}`,
     },
   ],
 });

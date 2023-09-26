@@ -25,6 +25,9 @@ export default defineNuxtConfig({
   ],
   // 全局变量
   runtimeConfig: {
+    app: {
+      baseURL: "",
+    },
   },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
@@ -47,10 +50,6 @@ export default defineNuxtConfig({
     },
   },
 
-  // https://juejin.cn/post/7027822103323754504
-  optimizeDeps: {
-    include: ["@kangc"],
-  },
   // https://blog.csdn.net/weixin_42553583/article/details/131372309
   experimental: {
     payloadExtraction: false,

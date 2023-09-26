@@ -1,10 +1,12 @@
 <script lang="ts" setup>
+import { appName } from "@/constants";
+
 useHead({
-  title: "详细 - 个人中心",
+  title: `个人信息 - 个人中心 - ${appName}`,
   meta: [
     {
       name: "description",
-      content: "极物圈-个人中心",
+      content: `个人信息 - 个人中心 - ${appName}`,
     },
   ],
 });

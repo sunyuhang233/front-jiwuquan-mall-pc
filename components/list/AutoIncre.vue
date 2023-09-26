@@ -29,9 +29,14 @@ watch(() => props.noMore, (val) => {
   if (val)
     stop && stop();
 });
+
+defineExpose({
+  stop,
+  loadMoreRef,
+});
 </script>
 
 <template>
   <slot name="default" />
-  <span v-if="!noMore" ref="loadMoreRef" h-2 w-full opacity-0 />
+  <p v-if="!noMore" ref="loadMoreRef" h-2 w-full opacity-0 />
 </template>

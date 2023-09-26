@@ -1,9 +1,8 @@
 import type { UseFetchOptions } from "nuxt/app";
-import { getBaseUrl } from "./toggleDev";
 import type { StatusCode } from "~/types/result";
 
 type Methods = "GET" | "POST" | "DELETE" | "PUT";
-export const BaseUrl = getBaseUrl;
+export const BaseUrl: string = String(useRuntimeConfig().public.apiBase) || "";
 // 图片
 export const BaseUrlImg = `${BaseUrl}/res/`;
 export const BaseUrlVideo = `${BaseUrl}/res/`;

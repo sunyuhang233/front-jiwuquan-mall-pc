@@ -4,8 +4,8 @@
 	"scripts": {
 		"build": "nuxi build --dotenv .env.production",
 		"dev": "nuxi dev --dotenv .env.development",
-		"test": "nuxi test --dotenv .env.test --mode test --port 3000",
-		"prod": "nuxi dev --dotenv .env.production --mode production --port 3000",
+		"test": "nuxi test --dotenv .env.test --port 3000",
+		"prod": "nuxi dev --dotenv .env.production --port 3000",
 		"dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
 		"start": "node .output/server/index.mjs",
 		"typecheck": "vue-tsc --noEmit",

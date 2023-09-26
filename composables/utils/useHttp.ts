@@ -1,4 +1,3 @@
-import { getBaseUrl } from "./toggleDev";
 
 type FetchType = typeof $fetch
 type ReqType = Parameters<FetchType>[0]
@@ -10,19 +9,21 @@ export function httpRequest<T = unknown>(
   bodyOrParams?: any,
   opts?: FetchOptions,
 ) {
-  const store = useUserStore();
   let msg: string = "";
+  const user = useUserStore();
   const defaultOpts = {
     method,
-    baseURL: getBaseUrl,
+    baseURL: useRuntimeConfig().app.baseURL,
     headers: {} as { Authoriztion?: string },
     // 请求拦截器
     onRequest: (config) => {
       // 需要登录操作
+      // @ts-expect-error
       if (config.options.headers?.Authorization !== undefined) {
+        // @ts-expect-error
         if (config.options.headers?.Authorization === "") {
-          store?.$reset();
-          store.showLoginForm = true;
+          user?.$reset();
+          user.showLoginForm = true;
         }
       }
     },
@@ -63,7 +64,7 @@ export function httpRequest<T = unknown>(
           break;
         case StatusCode.TOKEN_ERR:
           msg = "身份验证失败！";
-          store.showLoginForm = true;
+          user.showLoginForm = true;
           break;
         case StatusCode.PARAM_ERR:
           msg = "请求失败，参数错误！";
