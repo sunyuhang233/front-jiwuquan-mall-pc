@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getEventsLists } from "~/composables/api/event";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
+
 // 活动事件列表
 const eventList = reactive<EventVO[]>([]);
 // 请求
@@ -13,21 +13,21 @@ if (data.value && data.value.code === StatusCode.SUCCESS) {
   });
 }
 // 跳转详情页
-const toEventDetailView = (event: EventVO) => {
+function toEventDetailView(event: EventVO) {
   useRouter().push({
     path: "/event/detail",
     query: {
       eid: event.id,
     },
   });
-};
+}
 
 // 计算剩余天数
 const getEndDay = computed(() => {
   return (a: string, b: string): number => {
-    let newDate = new Date().getTime();
-    let start = Date.parse(a);
-    let end = Date.parse(b);
+    const newDate = new Date().getTime();
+    const start = Date.parse(a);
+    const end = Date.parse(b);
     if (start > newDate) {
       // 未开始
       return 0;
@@ -40,17 +40,18 @@ const getEndDay = computed(() => {
   };
 });
 </script>
+
 <template>
   <div
-    rounded-6px
-    overflow-hidden
-    cursor-pointer
+
+
+    cursor-pointer overflow-hidden rounded-6px
     class="swpier"
   >
     <swiper
-      :grabCursor="true"
-      class="w-full h-full transition-1000"
-      :effect="'creative'"
+      :grab-cursor="true"
+      class="h-full w-full transition-1000"
+      effect="creative"
       :draggable="true"
       :loop="true"
       :mousewheel="true"
@@ -58,8 +59,8 @@ const getEndDay = computed(() => {
       :pagination="{
         clickable: true,
       }"
-      :resistanceRatio="0.8"
-      :creativeEffect="{
+      :resistance-ratio="0.8"
+      :creative-effect="{
         prev: {
           shadow: true,
           translate: ['-20%', 0, -1],
@@ -84,10 +85,10 @@ const getEndDay = computed(() => {
     >
       <swiper-slide
         v-for="p in eventList"
-        @click="toEventDetailView(p)"
         :key="p.id"
         lazy
-        class="bg-white dark:bg-dark-4 swiper-item"
+        class="swiper-item bg-white dark:bg-dark-4"
+        @click="toEventDetailView(p)"
       >
         <!-- 图片 -->
         <el-image
@@ -104,40 +105,40 @@ const getEndDay = computed(() => {
               flex-row-c-c
             >
               <ElIconPicture
-                w-sm
-                p-30
-                pt-20
-                opacity-80
-                flex-row-c-c
+
+
+                w-sm flex-row-c-c p-30 pt-20 opacity-80
               />
             </div>
           </template>
         </el-image>
         <!-- 文本 -->
         <section
-          class="tip px-5 py-3 tracking-0.2em text-xs line-height-none md:text-1em md:line-height-normal flex flex-col justify-around"
+          class="tip flex flex-col justify-around px-5 py-3 text-xs line-height-none tracking-0.2em md:text-1em md:line-height-normal"
         >
-          <h3 class="title">{{ p.title }}</h3>
+          <h3 class="title">
+            {{ p.title }}
+          </h3>
           <!-- 已经结束 -->
           <p
-            opacity-80
             v-if="getEndDay(p.startTime, p.endTime) < 0"
+            opacity-80
             style="text-decoration: line-through"
           >
             活动已经结束
           </p>
           <!-- 即将开始 -->
           <p
-            opacity-80
             v-if="getEndDay(p.startTime, p.endTime) === 0"
+            opacity-80
             style="color: var(--el-color-success)"
           >
             活动即将开始
           </p>
           <!-- 正在进行 -->
           <p
-            opacity-80
             v-else-if="getEndDay(p.startTime, p.endTime) > 0"
+            opacity-80
           >
             距离结束还有：
             <strong
@@ -147,13 +148,14 @@ const getEndDay = computed(() => {
               {{ getEndDay(p.startTime, p.endTime) }}
             </strong>
             天
-            <small class="cursor-pointer float-right opacity-60 ml-a">更多</small>
+            <small class="float-right ml-a cursor-pointer opacity-60">更多</small>
           </p>
         </section>
       </swiper-slide>
     </swiper>
   </div>
 </template>
+
 <style scoped lang="scss">
 .dark .swpier {
   opacity: 0.95;

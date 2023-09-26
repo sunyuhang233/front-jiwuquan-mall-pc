@@ -1,42 +1,51 @@
+<script lang="ts" setup>
+import type { GoodsInfoVO } from "~/composables/api/goods";
+import type { GoodsSkuVO } from "~/composables/api/goods/sku";
+
+const { goodsInfo, skuList } = defineProps<{
+  goodsInfo?: GoodsInfoVO
+  skuList?: GoodsSkuVO[]
+}>();
+const activeMenu = ref<string>("detail");
+</script>
+
 <template>
   <el-tabs
+    v-model="activeMenu"
     class="goods-tabs min-h-50vh"
     type="border-card"
     tab-position="top"
-    v-model="activeMenu"
   >
     <!-- 详情 -->
     <el-tab-pane
       name="detail"
-      class="animate-[fade-in_0.4s] mt-2"
+      class="mt-2 animate-[fade-in_0.4s]"
       label="详 情"
     >
       <!-- 标题 -->
       <h3
+
+        v-show="!goodsInfo?.description" mb-4
         ml-2
-        mb-4
-        v-show="!goodsInfo?.description"
       >
         {{ goodsInfo?.name }}
       </h3>
       <!-- markdown -->
       <v-md-preview
-        class="mb-4 markdown"
+        class="markdown mb-4"
         :text="goodsInfo?.description"
       />
       <!-- des -->
       <div
         class="text"
-        leading-2em
-        px-4
-        border-default-dashed
-        rounded-6px
-        mb-4
+
+
+        mb-4 rounded-6px px-4 leading-2em border-default-dashed
       >
         <small>
           发货地：{{ (goodsInfo?.province || "") + (goodsInfo?.city || "") + goodsInfo?.district }}
         </small>
-        <br />
+        <br>
         <small>
           保障：
           <el-text v-if="goodsInfo?.refundTime">{{ goodsInfo?.refundTime }}日无理由退换货</el-text>
@@ -44,16 +53,16 @@
       </div>
       <!-- imgs -->
       <div
-        class="imgs rounded-4px overflow-hidden"
+        class="imgs overflow-hidden rounded-4px"
         flex
         flex-col
       >
         <el-image
+          v-for="(p) in goodsInfo?.images"
+          :key="p"
           loading="lazy"
           style="width: 100%; margin-bottom: 0.3em"
           :src="BaseUrlImg + p"
-          v-for="(p, i) in goodsInfo?.images"
-          :key="p"
           :alt="p"
         />
       </div>
@@ -62,8 +71,8 @@
     <el-tab-pane
       lazy
       name="comment"
-      class="animate-[fade-in_0.4s] mt-2"
-      :label="'评 价'"
+      class="mt-2 animate-[fade-in_0.4s]"
+      label="评 价"
     >
       <GoodsCommentList
         :goods-id="goodsInfo?.id || ''"
@@ -74,22 +83,14 @@
     <el-tab-pane
       name="other"
       lazy
-      class="animate-[fade-in_0.4s] mt-2 px-2"
+      class="mt-2 animate-[fade-in_0.4s] px-2"
       label="其 他"
     >
       <GoodsOtherTmp />
     </el-tab-pane>
   </el-tabs>
 </template>
-<script lang="ts" setup>
-import { GoodsInfoVO } from "~/composables/api/goods";
-import { GoodsSkuVO } from "~/composables/api/goods/sku";
-const { goodsInfo, skuList } = defineProps<{
-  goodsInfo?: GoodsInfoVO;
-  skuList?: GoodsSkuVO[];
-}>();
-const activeMenu = ref<string>("detail");
-</script>
+
 <!-- 样式scss -->
 <style scoped lang="scss">
 .goods-tabs {

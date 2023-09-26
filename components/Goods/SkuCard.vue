@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import type { FormInstance } from "element-plus";
 import currency from "currency.js";
-import { gsap } from "gsap";
 import type { GoodsInfoVO } from "~/composables/api/goods";
 import type { GoodsSkuVO } from "~/composables/api/goods/sku";
-import type { PushOrdersItemDTO } from "~/composables/api/orders";
 
 // props
 const { goodsInfo, goodsSku } = defineProps<{

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { AddressInfoVO } from '~/composables/api/user/address';
+import type { AddressInfoVO } from "~/composables/api/user/address";
 
 const { address } = defineProps<{
   address: AddressInfoVO
@@ -15,8 +15,6 @@ const { address } = defineProps<{
     relative flex flex-col cursor-pointer border-2px rounded-6px rounded-8px p-2 leading-1.2em opacity-90 shadow-sm transition-300 border-default md:p-4 dark:hover:border-gray-5
   >
     <div
-
-
       w-full flex-row-c-c justify-start border-0 border-b-2px pb-2 font-600 border-default-dashed
     >
       <p>{{ address.name }}</p>

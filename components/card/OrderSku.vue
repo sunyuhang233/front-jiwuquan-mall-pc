@@ -1,9 +1,9 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <script lang="ts" setup>
-import currency from 'currency.js';
-import { BaseUrlImg } from '~/composables/utils/useFetchUtil';
-import type { GoodsSkuMdVO, GoodsSkuVO } from '~/composables/api/goods/sku';
-import { getGoodsSkuByGid } from '~/composables/api/goods/sku';
-import type { PushOrdersItemDTO } from '~/composables/api/orders/index';
+import currency from "currency.js";
+import type { GoodsSkuMdVO, GoodsSkuVO } from "~/composables/api/goods/sku";
+import { getGoodsSkuByGid } from "~/composables/api/goods/sku";
+import type { PushOrdersItemDTO } from "~/composables/api/orders/index";
 
 const { data, disable } = defineProps<{
   data: PushOrdersItemDTO & GoodsSkuMdVO
@@ -25,22 +25,22 @@ async function loadGoodSkuList(val: boolean) {
 }
 // 计算规格全部属性
 function getSkuProps(goodsSku: GoodsSkuVO) {
-  return `${goodsSku.size || ''} ${goodsSku.color || ''} ${goodsSku.combo || ''}`;
+  return `${goodsSku.size || ""} ${goodsSku.color || ""} ${goodsSku.combo || ""}`;
 }
 // 规格属性计算
 const getProps = computed({
   get() {
-    return `${data.size || ''} ${data.color || ''} ${data.combo || ''}`;
+    return `${data.size || ""} ${data.color || ""} ${data.combo || ""}`;
   },
   set(skuId: string) {
     const p = toRaw(skuList.value.find(p => p.id === skuId));
     // 更新
-    if (p && p.id !== '') {
-      data.size = p.size || '';
+    if (p && p.id !== "") {
+      data.size = p.size || "";
       data.image = p.image;
       data.price = p.price;
       data.costPrice = p.costPrice;
-      data.color = p.color || '';
+      data.color = p.color || "";
       data.combo = p.combo;
       data.skuId = p.id;
       data.id = p.id;

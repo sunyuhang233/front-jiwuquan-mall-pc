@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import currency from "currency.js";
 import { type GoodsVO } from "~/types/goods";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 
 const { goods } = defineProps<{
   goods: GoodsVO

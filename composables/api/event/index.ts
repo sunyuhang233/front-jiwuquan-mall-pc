@@ -1,28 +1,29 @@
-import type { Result } from '@/types/result'
-import { GoodsVO } from 'types/goods'
+
+import type { Result } from "@/types/result";
+
 /**
  * 获取活动列表
  * @returns Result
  */
 export function getEventsLists() {
-  return useFetch<Result<EventVO[]>>(() => BaseUrl + "/event/list")
+  return useFetch<Result<EventVO[]>>(() => `${BaseUrl}/event/list`);
 }
 /**
  * 获取活动商品列表
  * @param eid 活动id
- * @returns 
+ * @returns
  */
 export function getEventsGoodsList(eid: string) {
-  return useFetch<Result<EventGoodsVO[]>>(() => BaseUrl + `/event/goods/${eid}`)
+  return useFetch<Result<EventGoodsVO[]>>(() => `${BaseUrl}/event/goods/${eid}`);
 }
 
 /**
  * 获取活动详情和列表
  * @param eid 活动id
- * @returns 
+ * @returns
  */
 export function getEventsInfo(eid: string) {
-  return useFetch<Result<EventInfoVO>>(() => BaseUrl + `/event/info/${eid}`)
+  return useFetch<Result<EventInfoVO>>(() => `${BaseUrl}/event/info/${eid}`);
 }
 
 
@@ -30,49 +31,49 @@ export interface EventInfoVO {
   /**
    * 创建时间
    */
-  createTime: string;
+  createTime: string
   /**
    * 活动详情
    */
-  details: string;
+  details: string
   /**
    * 活动结束时间
    */
-  endTime: string;
+  endTime: string
   /**
    * 活动ID
    */
-  id: string;
+  id: string
   /**
    * 活动图片链接
    */
-  images: string;
+  images: string
   /**
    * 活动级别
    * 权重值（正相关）
    */
-  level: number;
+  level: number
   /**
    * 活动商品列表
    */
-  list: EventGoodsVO[];
+  list: EventGoodsVO[]
   /**
    * 活动开始时间
    */
-  startTime: string;
+  startTime: string
   /**
    * 活动状态
    * 活动状态（0表示未开始，1表示正在进行，-1表示已结束）
    */
-  status: number;
+  status: number
   /**
    * 活动标题
    */
-  title: string;
+  title: string
   /**
    * 更新时间
    */
-  updateTime: string;
+  updateTime: string
 }
 
 /**
@@ -81,46 +82,46 @@ export interface EventInfoVO {
 * EventGoodsVO
 */
 export interface EventGoodsVO {
-  categoryId: string;
+  categoryId: string
   /**
    * 市
    */
-  city: string;
-  costPrice: number;
-  createTime: string;
-  description: string;
+  city: string
+  costPrice: number
+  createTime: string
+  description: string
   /**
    * 区
    */
-  district: string;
-  eventId: string;
+  district: string
+  eventId: string
   /**
    * 活动价
    */
-  eventPrice: number;
-  goodsId: string;
-  id: string;
-  images: string;
-  isNew: number;
-  name: string;
-  postage: number;
-  price: number;
+  eventPrice: number
+  goodsId: string
+  id: string
+  images: string
+  isNew: number
+  name: string
+  postage: number
+  price: number
   /**
    * 省份
    */
-  province: string;
-  refundTime: number;
+  province: string
+  refundTime: number
   /**
    * 销量
    */
-  sales: number;
-  updateTime: string;
-  video: string;
+  sales: number
+  updateTime: string
+  video: string
   /**
    * 浏览量
    */
-  views: number;
-  warrantyTime: number;
+  views: number
+  warrantyTime: number
 }
 
 

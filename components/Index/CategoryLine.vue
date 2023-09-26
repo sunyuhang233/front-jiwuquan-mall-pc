@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { type CategoryVO, getGoodsCategoryList } from "~/composables/api/goods/category";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 
 const { data } = await getGoodsCategoryList();
 const categoryList = data.value?.data || [];
@@ -22,7 +21,7 @@ function toView(item: CategoryVO) {
       热门分类
       <i i-solar:adhesive-plaster-bold-duotone ml-4 bg-yellow-4 p-3 />
     </h3>
-    <el-scrollbar z-0 overflow-x-scroll tracking-0.1em style="width: 100%">
+    <el-scrollbar style="width: 100%" noresize z-0 overflow-x-scroll tracking-0.1em>
       <div class="scroll flex flex-nowrap">
         <div v-for="p in categoryList" :key="p.id" class="relative my-4 mr-4 flex-row-c-c">
           <!-- 一级 -->

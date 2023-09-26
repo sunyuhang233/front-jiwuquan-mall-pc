@@ -1,35 +1,35 @@
 <script lang="ts" setup>
 const { goodsName, images, video } = defineProps<{
-  goodsName?: string;
-  images: string[];
-  video?: string;
+  goodsName?: string
+  images: string[]
+  video?: string
 }>();
 // 打开视频播放
 const isOpenVideo = ref<boolean>(false);
-const openVideo = async () => {
-  let video = document.querySelector(".videoRef");
+async function openVideo() {
+  const video = document.querySelector(".videoRef");
   if (video) {
     isOpenVideo.value = true;
-    // @ts-ignore
+    // @ts-expect-error
     if (video.requestFullscreen) {
       // video.requestFullscreen();
     }
   }
-};
+}
 // 预览图片
 const getImagesPreview = computed(() => {
-  return images.map((p) => (p = BaseUrlImg + p));
+  return images.map(p => (p = BaseUrlImg + p));
 });
 // 轮播图
 const swiper = ref();
 const activeSmall = ref<string>(images[0] || "");
-const setActiveItem = (name: string) => {
+function setActiveItem(name: string) {
   swiper.value?.setActiveItem(name);
   activeSmall.value = name;
-};
-const changeSwiper = (current: number) => {
+}
+function changeSwiper(current: number) {
   activeSmall.value = images[current];
-};
+}
 const nextSwiper = () => swiper.value?.next();
 const prevSwiper = () => swiper.value?.prev();
 
@@ -50,19 +50,20 @@ defineComponent({
   activeSmall,
 });
 </script>
+
 <template>
   <div class="swiper">
     <el-carousel
       ref="swiper"
       indicator-position="none"
-      @change="changeSwiper"
-      rounded-4px
-      cursor-pointer
       :interval="6000"
+
+
       arrow="hover"
       h-400px
-      height="100%"
+      cursor-pointer rounded-4px height="100%"
       trigger="click"
+      @change="changeSwiper"
     >
       <!-- 轮播图项 -->
       <el-carousel-item
@@ -89,11 +90,9 @@ defineComponent({
               flex-row-c-c
             >
               <ElIconPicture
-                w-sm
-                p-30
-                pt-20
-                opacity-80
-                flex-row-c-c
+
+
+                w-sm flex-row-c-c p-30 pt-20 opacity-80
               />
             </div>
           </template>
@@ -107,15 +106,14 @@ defineComponent({
       flex-row-c-c
     >
       <ElIconArrowLeftBold
+        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-60"
         @click="prevSwiper"
-        class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
       />
       <el-image
-        @mouseenter="setActiveItem(p)"
-        loading="lazy"
-        :class="{ active: activeSmall === p }"
         v-for="(p, i) in images"
         :key="i"
+        loading="lazy"
+        :class="{ active: activeSmall === p }"
         :src="BaseUrlImg + p"
         :alt="goodsName || 'Design by Kiwi2333'"
         class="scale-img"
@@ -123,6 +121,7 @@ defineComponent({
         fit="contain"
         transition-300
         hover:scale-110
+        @mouseenter="setActiveItem(p)"
       >
         <template #error>
           <div
@@ -134,44 +133,45 @@ defineComponent({
         </template>
       </el-image>
       <ElIconArrowRightBold
+        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-60"
         @click="nextSwiper"
-        class="w-2em h-2em opacity-60 cursor-pointer flex-row-c-c mx-1"
       />
     </div>
     <!-- 打开视频 -->
     <small
-      @click="isOpenVideo = true"
       v-if="video"
-      class="cursor-pointer mx-a leading-1.2em bg-gray-200 dark:bg-dark-200 shadow-md p-2 my-2 transition-200 hover:scale-110 flex-row-c-c w-6em rounded-2em"
+      class="mx-a my-2 w-6em flex-row-c-c cursor-pointer rounded-2em bg-gray-200 p-2 leading-1.2em shadow-md transition-200 hover:scale-110 dark:bg-dark-200"
+      @click="isOpenVideo = true"
     >
       <i
-        i-solar:clapperboard-play-bold
-        p-2.4
-        mr-1
-      ></i>
+
+
+        i-solar:clapperboard-play-bold mr-1 p-2.4
+      />
       视频
     </small>
     <Teleport to="body">
       <transition name="fade">
         <div
-          class="mock"
           v-if="isOpenVideo"
+          class="mock"
           @click.self="isOpenVideo = false"
         >
           <!-- 视频播放 -->
           <video
-            class="w-80vw md:w-40vw videoRef"
+            :key="video"
+            class="videoRef w-80vw md:w-40vw"
             :src="BaseUrlVideo + video"
             :alt="goodsName || ' By Kiwi23333'"
-            :key="video"
             :name="video"
             controls
-          ></video>
+          />
         </div>
       </transition>
     </Teleport>
   </div>
 </template>
+
 <style scoped lang="scss">
 .scale-imgs {
   display: flex;

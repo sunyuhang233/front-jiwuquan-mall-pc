@@ -13,7 +13,7 @@ export function httpRequest<T = unknown>(
   const user = useUserStore();
   const defaultOpts = {
     method,
-    baseURL: useRuntimeConfig().app.baseURL,
+    baseURL: BaseUrl,
     headers: {} as { Authoriztion?: string },
     // 请求拦截器
     onRequest: (config) => {

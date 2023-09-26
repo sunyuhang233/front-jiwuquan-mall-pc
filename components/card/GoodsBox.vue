@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import currency from "currency.js";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 import type { GoodsVO } from "~/types/goods";
 
 // 商品参数

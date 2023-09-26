@@ -24,7 +24,7 @@ watch(
 
 // 加载
 const isPageLoading = ref<boolean>(true);
-useNuxtApp().hook("app:mounted", () => {
+onMounted(() => {
   if (document && document.body)
     document.body.style.overflow = "hidden";
 });

@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 const user = useUserStore();
 const shop = useShopStore();
+
 const order = useOrderStore();
 const address = useAddressStore();
 
-const toExistLogin = async () => {
+async function toExistLogin() {
   ElMessageBox.confirm("是否确认退出登录？", "退出登录", {
     confirmButtonText: "确认退出",
     cancelButtonText: "取消",
@@ -18,12 +19,12 @@ const toExistLogin = async () => {
       navigateTo("/");
     }
   });
-};
+}
 /**
  * 重新加载用户信息
  */
 const isLoading = ref<boolean>(false);
-const reloadUserInfo = async () => {
+async function reloadUserInfo() {
   isLoading.value = true;
   (await user.loadUserWallet(user.getToken))
     ? ElMessage.success("刷新成功🎉")
@@ -31,7 +32,7 @@ const reloadUserInfo = async () => {
   setTimeout(() => {
     isLoading.value = false;
   }, 300);
-};
+}
 // 展示表单
 const form = ref({
   showUpdatePwd: false,
@@ -39,49 +40,48 @@ const form = ref({
   showUpdateEmail: false,
 });
 </script>
+
 <template>
   <div class="card flex flex-col">
     <strong
-      block
-      opacity-70
-      my-4
+
+
+      my-4 block opacity-70
     >
       <i
-        p-2.5
-        mr-2
-        i-solar:shield-check-broken
+
+
+        i-solar:shield-check-broken mr-2 p-2.5
       />
       修改信息
     </strong>
     <!-- 用户信息 -->
     <div
       v-loading="isLoading"
-      class="v-card group overflow-hidden text-1em flex flex-col p-5 shadow-sm border-default rounded-14px"
-      flex-1
-      flex
-      flex-col
+      class="v-card group flex flex-col overflow-hidden rounded-14px p-5 text-1em shadow-sm border-default"
+      flex flex-1 flex-col
     >
       <div class="flex items-center">
         <el-avatar
           size="large"
           :src="
-            user.userInfo.avatar ? BaseUrlImg + user.userInfo.avatar : BaseUrlImg + 'default.png'
+            user.userInfo.avatar ? BaseUrlImg + user.userInfo.avatar : `${BaseUrlImg}default.png`
           "
         />
-        <strong class="block ml-3">用户名：{{ user.userInfo.username }}</strong>
+        <strong class="ml-3 block">用户名：{{ user.userInfo.username }}</strong>
         <i
-          @click="reloadUserInfo"
           opacity-0
           transition-300
           group-hover:opacity-100
-          class="px-3 ml-a hover:rotate-180 i-solar:refresh-outline cursor-pointer transition-300 bg-[var(--el-color-info)]"
+          class="i-solar:refresh-outline ml-a cursor-pointer bg-[var(--el-color-info)] px-3 transition-300 hover:rotate-180"
+          @click="reloadUserInfo"
         />
       </div>
       <!-- 密码 -->
       <div
-        flex-row-bt-c
-        mt-6
-        ml-1
+
+
+        ml-1 mt-6 flex-row-bt-c
       >
         <small>
           密&emsp;码：
@@ -96,9 +96,9 @@ const form = ref({
       </div>
       <!-- 手机号 -->
       <div
-        flex-row-bt-c
-        mt-6
-        ml-1
+
+
+        ml-1 mt-6 flex-row-bt-c
       >
         <small>
           手机号：
@@ -110,17 +110,17 @@ const form = ref({
           </small>
         </small>
         <small
-          @click="form.showUpdatePhone = true"
           class="cursor-pointer transition-300 hover:text-[var(--el-color-primary)]"
+          @click="form.showUpdatePhone = true"
         >
           {{ user.userInfo.isPhoneVerified ? "修改手机号" : "绑定" }}
         </small>
       </div>
       <!-- 邮箱 -->
       <div
-        flex-row-bt-c
-        mt-6
-        ml-1
+
+
+        ml-1 mt-6 flex-row-bt-c
       >
         <small>
           邮&emsp;箱：
@@ -132,8 +132,8 @@ const form = ref({
           </small>
         </small>
         <small
-          @click="form.showUpdateEmail = true"
           class="cursor-pointer transition-300 hover:text-[var(--el-color-primary)]"
+          @click="form.showUpdateEmail = true"
         >
           {{ user.userInfo.isEmailVerified ? "修改邮箱" : "绑定" }}
         </small>
@@ -145,9 +145,9 @@ const form = ref({
         <!-- 退出 -->
         <ElDivider class="dark:opacity-20" />
         <div
-          flex-row-bt-c
-          justify-end
-          mb-1
+
+
+          mb-1 flex-row-bt-c justify-end
         >
           <el-text
             style="margin-left: 1rem"
@@ -170,4 +170,5 @@ const form = ref({
     <UserSafeDialog v-model="form" />
   </div>
 </template>
+
 <style scoped lang="scss"></style>

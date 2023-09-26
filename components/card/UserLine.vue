@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { UploadProps } from "element-plus";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 
 defineProps({
   userInfo: {

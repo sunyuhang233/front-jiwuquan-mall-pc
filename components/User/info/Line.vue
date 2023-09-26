@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { UploadProps } from "element-plus";
-import { BaseUrlImg } from "~/composables/utils/useFetchUtil";
 import { type UpdateInfo, updateInfoByDTO } from "@/composables/api/user/info";
 import { Gender } from "~/types";
 

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import currency from "currency.js";
-import { defineProps } from "vue";
 import { type OrderInfoVO } from "~/composables/api/orders";
 
 const props = defineProps<{

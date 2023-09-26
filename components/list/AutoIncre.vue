@@ -2,26 +2,42 @@
 const props = withDefaults(defineProps<{
   noMore?: boolean
   immediate?: boolean
+  delay?: number
 }>(), {
   noMore: false,
   immediate: true,
+  delay: 400,
 });
 const emit = defineEmits(["load"]);
 // 停止加载
 const loadMoreRef = ref();
-
+let timer: any = 0;
 // 刷新
 const { stop } = useIntersectionObserver(
   loadMoreRef,
   ([obj]) => {
-    if (obj.isIntersecting)
-      emit("load");
+    if (obj.isIntersecting) {
+      timer = setInterval(() => {
+        console.log(1);
+
+        if (props.noMore)
+          timer && clearInterval(timer);
+        emit("load");
+      }, props.delay);
+    }
+    else {
+      timer && clearInterval(timer);
+    }
   },
 );
+
 
 onMounted(() => {
   if (props.immediate)
     emit("load");
+});
+onMounted(() => {
+  clearInterval(timer);
 });
 
 
@@ -38,5 +54,9 @@ defineExpose({
 
 <template>
   <slot name="default" />
-  <p v-if="!noMore" ref="loadMoreRef" h-2 w-full opacity-0 />
+  <div ref="loadMoreRef">
+    <slot name="load">
+      <p v-if="!noMore" h-2 w-full opacity-0 />
+    </slot>
+  </div>
 </template>

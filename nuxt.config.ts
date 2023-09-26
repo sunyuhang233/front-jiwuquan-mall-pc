@@ -23,12 +23,6 @@ export default defineNuxtConfig({
     // pwa
     "@vite-pwa/nuxt",
   ],
-  // 全局变量
-  runtimeConfig: {
-    app: {
-      baseURL: "",
-    },
-  },
   app: {
     // https://nuxt.com.cn/docs/getting-started/transitions
     pageTransition: { name: "page", mode: "out-in" },

@@ -26,7 +26,10 @@ const hotGoodsList = ref<GoodsVO[]>([]);
 async function loadGoodsList() {
   isLoading.value = true;
   page.value++;
-  await res.refresh();
+  const res = await getGoodsListByPageLazy(page.value, size.value, {
+    viewsSort: isTrue.TRUE,
+    saleSort: isTrue.TRUE,
+  });
   res.data.value?.data?.records.forEach((p: GoodsVO) => {
     p.images = p.images.toString().split(",");
     hotGoodsList.value.push(p);
@@ -37,7 +40,7 @@ async function loadGoodsList() {
 
 <template>
   <div
-    class="v-card hot-list h-420px min-h-420px overflow-visible rounded-4px p-4 shadow-sm backdrop-blur-20px md:w-470px border-default dark:bg-dark-5"
+    class="v-card hot-list h-420px min-h-420px flex flex-col overflow-visible rounded-4px p-4 shadow-sm backdrop-blur-20px md:w-470px border-default dark:bg-dark-5"
   >
     <h3
       px-1
@@ -51,54 +54,56 @@ async function loadGoodsList() {
     <ClientOnly>
       <!-- 商品列表 -->
       <el-scrollbar
-        v-loading="isLoading"
-        height="88%"
-        style="width: 100%"
+        class="flex-1"
+        style="width: 100%;"
       >
         <ListAutoIncre :no-more="searchPage.pages !== 0 && searchPage.current >= searchPage.pages" @load="loadGoodsList">
-          <NuxtLink
-            v-for="p in hotGoodsList"
-            :key="p.id"
-            :to="`/goods/detail/${p.id}`"
-            class="mt-2 w-1/1 animate-[fade-in_0.3s]"
-          >
-            <!-- 商品卡片 -->
-            <CardGoodsLine
+          <div v-auto-animate>
+            <NuxtLink
+              v-for="p in hotGoodsList"
               :key="p.id"
-              :goods="p"
-              class="card my-2 border-0 border-b-1px pb-3 border-default"
+              :to="`/goods/detail/${p.id}`"
+              class="mt-2 w-1/1 animate-[fade-in_0.3s]"
             >
-              <template #btn>
-                <!-- 立即购买 -->
-                <div
-                  class="item"
-                  float-right opacity-0
-                >
-                  <el-button
-                    group:hover:block
-                    type="danger"
-                    size="small"
-                    style="padding: 0 1em; margin-left: 2em"
+              <!-- 商品卡片 -->
+              <CardGoodsLine
+                :key="p.id"
+                :goods="p"
+                class="card my-2 border-0 border-b-1px pb-3 border-default"
+              >
+                <template #btn>
+                  <!-- 立即购买 -->
+                  <div
+                    class="item"
+                    float-right opacity-0
                   >
-                    <nuxt-link
-                      to=""
-                      style="font-size: 10px"
+                    <el-button
+                      group:hover:block
+                      type="danger"
+                      size="small"
+                      style="padding: 0 1em; margin-left: 2em"
                     >
-                      前往购买
-                    </nuxt-link>
-                  </el-button>
-                </div>
-              </template>
-            </CardGoodsLine>
-          </NuxtLink>
+                      <nuxt-link
+                        to=""
+                        style="font-size: 10px"
+                      >
+                        前往购买
+                      </nuxt-link>
+                    </el-button>
+                  </div>
+                </template>
+              </CardGoodsLine>
+            </NuxtLink>
+          </div>
+          <template #load>
+            <p
+              v-show="searchPage.pages !== 0 && searchPage.total >= hotGoodsList.length" my-4
+              text-center
+            >
+              暂无更多商品
+            </p>
+          </template>
         </ListAutoIncre>
-        <p
-
-          v-show="searchPage.pages !== 0 && searchPage.pages === page" my-4
-          text-center
-        >
-          暂无更多商品
-        </p>
       </el-scrollbar>
     </ClientOnly>
   </div>
