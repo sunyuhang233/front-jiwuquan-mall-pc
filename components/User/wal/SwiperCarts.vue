@@ -44,6 +44,6 @@ const { width } = defineProps({
   }
 }
 .wall-card {
-  --at-apply: h-180px w-full border-bluegray transition-300 hover:translate-x-2 border-default
+  --at-apply: h-180px w-full transition-300 hover:translate-x-2
 }
 </style>

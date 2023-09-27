@@ -30,7 +30,6 @@ onMounted(() => {
 });
 // 不能有根节点
 // https://nuxt.com.cn/docs/guide/directory-structure/app
-
 // 准备完成关闭加载
 onNuxtReady(async () => {
   isPageLoading.value = false;

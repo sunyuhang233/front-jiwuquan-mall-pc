@@ -11,6 +11,7 @@ import {
 
 export default defineConfig({
   shortcuts: [
+    ["card-default", "bg-[#ffffff93] shadow-sm dark:bg-dark-5 rounded-1.5 backdrop-blur-12px backdrop-saturate-180"],
     ["v-btn", "border-0 rounded-4px"],
     ["v-btn-primary", "border-0 rounded-4px bg-[var(--el-color-primary)] text-white"],
     // 颜色

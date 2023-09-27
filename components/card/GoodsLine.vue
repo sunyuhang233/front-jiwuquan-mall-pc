@@ -9,15 +9,17 @@ const { goods } = defineProps<{
 
 <template>
   <div class="flex-row-bt-c cursor-pointer p-1">
-    <ElImage
-      loading="lazy"
-      class="h-6em w-6em overflow-hidden transition-300 hover:transform-scale-110"
-      :src="`${BaseUrlImg + goods.images[0]}?imageView2/1/w/100/h/100/format/webp/interlace/1/q/50`"
-      style="width: 6em; height: 6em; border: 1px solid #eee; border-radius: 4px"
-      fit="cover"
-    />
+    <div card-default h-6em w-6em overflow-hidden border-default>
+      <el-image
+        loading="lazy"
+        class="transition-300 hover:transform-scale-110"
+        :src="`${BaseUrlImg + goods.images[0]}?imageView2/1/w/100/h/100/format/webp/interlace/1/q/50`"
+        style="width: 6em; height: 6em; "
+        fit="cover"
+      />
+    </div>
     <div class="group flex flex-1 flex-col justify-between px-2 md:px-4">
-      <h3 class="max-w-12em overflow-hidden truncate tracking-1px md:max-w-16em">
+      <h3 class="max-w-12em truncate tracking-1px md:max-w-16em">
         {{ goods.name }}
       </h3>
       <!-- 中下 -->

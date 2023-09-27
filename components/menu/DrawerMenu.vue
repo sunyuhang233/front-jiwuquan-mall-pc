@@ -156,6 +156,7 @@ interface IndexMenuType {
         transition: 100ms;
       }
 
+
       &:hover,
       &.is-active:hover,
       &.is-active {
@@ -197,6 +198,9 @@ interface IndexMenuType {
       .el-menu-item-group__title ml-2 {
         display: none;
       }
+
+
+
     }
 
     // 图标

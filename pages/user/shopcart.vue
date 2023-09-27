@@ -116,7 +116,7 @@ definePageMeta({
     >
       <div>
         <ClientOnly>
-          <div class="mx-a pb-0 layout-default md:w-700px">
+          <div class="mx-a overflow-y-hidden pb-0 layout-default md:w-700px">
             <div
               v-if="user.isLogin"
               class="shopcart-list"

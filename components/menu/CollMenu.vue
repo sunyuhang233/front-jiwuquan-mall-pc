@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
 
+defineEmits(["close"]);
 // 是否折叠  本地状态
 const isFold = useStorage<boolean>("jiwu_userisFold", true);
 // 路由
@@ -8,7 +9,7 @@ const route = useRoute();
 
 const menuList = [
   {
-    title: "个人信息",
+    title: "个人",
     path: "/user/info",
     icon: "i-solar:user-broken",
     activeIcon: "i-solar:user-bold-duotone",
@@ -18,6 +19,12 @@ const menuList = [
     path: "/user/shopcart",
     icon: "i-solar:cart-large-2-linear",
     activeIcon: "i-solar:cart-large-2-bold",
+  },
+  {
+    title: "我的收藏",
+    path: "/user/collect",
+    icon: "i-solar:star-broken",
+    activeIcon: "i-solar:star-bold-duotone ",
   },
   {
     title: "钱包账单",
@@ -92,7 +99,7 @@ const menuList = [
             v-show="route.path === p.path"
             :class="p.activeIcon"
           />
-          <span class="title ml-3 min-w-10em">{{ p.title }}</span>
+          <span class="title ml-3 min-w-7rem tracking-0.2em">{{ p.title }}</span>
         </el-menu-item>
       </el-menu>
     </ClientOnly>
@@ -205,4 +212,13 @@ const menuList = [
     transition: $transition-delay;
   }
 }
+// :deep(.el-menu){
+//   .el-menu-item.is-active.is-active{
+//     &,
+//     &:hover{
+//       color: #fff;
+//       background-color: var(--el-color-primary);
+//     }
+//   }
+// }
 </style>
