@@ -15,6 +15,8 @@ useHead({
 definePageMeta({
   key: route => route.path,
   layout: false,
+  pageTransition: false,
+  layoutTransition: false,
 });
 </script>
 
@@ -35,12 +37,9 @@ definePageMeta({
             <!-- 标题 -->
             <div
               class="title w-full animate-[fadeInDown_0.6s]"
-
               pb-6 pt-8
             >
               <span
-
-
                 flex text-2xl font-600 tracking-1
               >
                 你的钱包

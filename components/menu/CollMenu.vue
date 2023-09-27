@@ -47,7 +47,7 @@ const menuList = [
   {
     title: "回到首页",
     path: "/",
-    icon: "i-solar:square-alt-arrow-left-broken",
+    icon: "i-solar:logout-3-broken",
   },
 ];
 </script>
@@ -64,8 +64,8 @@ const menuList = [
         :collapse="isFold"
       >
         <!-- 顶部 -->
-        <div class="w-full flex-row-c-c flex-wrap px-5 transition-300 hover:bg-transparent">
-          <div class="home mt-6 transition-300">
+        <div class="w-full flex-row-c-c flex-wrap px-5 transition-300 transition-300 hover:bg-transparent">
+          <div class="home mt-6 self-center transition-300">
             <NuxtLink
               to="/"
               flex-row-c-c
@@ -75,13 +75,14 @@ const menuList = [
             </NuxtLink>
           </div>
           <div class="float-left ml-a ml-a mt-6">
-            <BtnBell />
+            <BtnBell class="animate-[0.2s_zoom-in]" />
           </div>
           <span
             class="mt-6 p-1 transition-300"
+            :class="isFold ? 'hover:rotate-15' : 'hover:-rotate-15'"
             @click="isFold = !isFold"
           >
-            <i class="i-solar:hamburger-menu-line-duotone" />
+            <i class="i-solar:signpost-2-line-duotone" cursor-pointer p-0.6em />
           </span>
         </div>
         <div class="mx-a my-4 w-5/6 border-0 border-b-1px border-default" />
@@ -93,13 +94,15 @@ const menuList = [
         >
           <i
             v-show="route.path !== p.path"
+            class="icon"
             :class="p.icon"
           />
           <i
             v-show="route.path === p.path"
+            class="icon"
             :class="p.activeIcon"
           />
-          <span class="title ml-3 min-w-7rem tracking-0.2em">{{ p.title }}</span>
+          <span class="title overflow-hidden px-6 tracking-0.2em">{{ p.title }}</span>
         </el-menu-item>
       </el-menu>
     </ClientOnly>
@@ -120,6 +123,7 @@ const menuList = [
     height: 100%;
 
     .el-menu-item {
+      position: relative;
       padding: 0.8em;
       padding-top: 0px;
       padding-bottom: 0px;
@@ -180,21 +184,15 @@ const menuList = [
     }
 
     // 图标
-    i {
-      padding: 0.6rem;
-
+    .icon {
+      padding: 0.7em;
       &:hover {
         transition: $transition-delay;
         color: var(--el-color-primary);
       }
     }
 
-    .title {
-      margin-left: 0.8em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+
   }
 }
 
@@ -212,13 +210,18 @@ const menuList = [
     transition: $transition-delay;
   }
 }
-// :deep(.el-menu){
-//   .el-menu-item.is-active.is-active{
-//     &,
-//     &:hover{
-//       color: #fff;
-//       background-color: var(--el-color-primary);
-//     }
-//   }
-// }
+:deep(.el-menu){
+  .el-menu-item.is-active.is-active{
+    &,
+    &:hover{
+      .icon ,
+      .title {
+        color: #fff;
+      }
+      border-color: var(--el-color-primary-light-7);
+      background-color: var(--el-color-primary);
+    }
+    border-color: var(--el-color-primary-light-7);
+  }
+}
 </style>

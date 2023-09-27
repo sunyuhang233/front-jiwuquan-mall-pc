@@ -28,23 +28,22 @@ useHead({
           <!-- 顶部菜单 -->
           <IndexTopMenu w-full />
           <div
-            w-full flex flex-col md:flex-row
+            w-full flex flex-col transition-300 md:flex-row
           >
             <!-- 轮播图 -->
             <IndexSwiperList
-              class="my-6 aspect-ratio-1.48 h-260px w-full md:mr-a md:h-420px md:w-620px"
+              class="my-6 aspect-ratio-1.48 w-full flex-shrink-0 md:mr-a md:h-420px md:w-620px"
             />
             <!-- 热门商品 -->
             <IndexHotGoodsList
-              mx-0 my-6
+              mx-0 my-6 flex-shrink-0
             />
           </div>
           <!-- 热门商品分类 -->
           <IndexCategoryLine class="mt-6 md:my-8" />
           <!-- 商品列表tabs -->
           <IndexGoodsTabs
-            mt-4
-            min-h-50vh
+            mb-10vh mt-4 min-h-50vh
           />
         </div>
       </div>

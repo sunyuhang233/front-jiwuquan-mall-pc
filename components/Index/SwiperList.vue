@@ -43,14 +43,12 @@ const getEndDay = computed(() => {
 
 <template>
   <div
-
-
     cursor-pointer overflow-hidden rounded-6px
     class="swpier"
   >
     <swiper
       :grab-cursor="true"
-      class="h-full w-full transition-1000"
+      class="h-full w-full"
       effect="creative"
       :draggable="true"
       :loop="true"
@@ -105,8 +103,6 @@ const getEndDay = computed(() => {
               flex-row-c-c
             >
               <ElIconPicture
-
-
                 w-sm flex-row-c-c p-30 pt-20 opacity-80
               />
             </div>
@@ -114,7 +110,7 @@ const getEndDay = computed(() => {
         </el-image>
         <!-- 文本 -->
         <section
-          class="tip flex flex-col justify-around px-5 py-3 text-xs line-height-none tracking-0.2em md:text-1em md:line-height-normal"
+          class="tip flex flex-col justify-around px-5 py-3 text-xs leading-1.4em line-height-none tracking-0.2em md:text-1em md:line-height-normal"
         >
           <h3 class="title">
             {{ p.title }}
@@ -148,7 +144,7 @@ const getEndDay = computed(() => {
               {{ getEndDay(p.startTime, p.endTime) }}
             </strong>
             天
-            <small class="float-right ml-a cursor-pointer opacity-60">更多</small>
+            <!-- <small class="float-right ml-a cursor-pointer opacity-60">更多</small> -->
           </p>
         </section>
       </swiper-slide>

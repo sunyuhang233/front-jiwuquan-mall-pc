@@ -83,12 +83,7 @@ async function loadGoodsList() {
                       size="small"
                       style="padding: 0 1em; margin-left: 2em"
                     >
-                      <nuxt-link
-                        to=""
-                        style="font-size: 10px"
-                      >
-                        前往购买
-                      </nuxt-link>
+                      前往购买
                     </el-button>
                   </div>
                 </template>

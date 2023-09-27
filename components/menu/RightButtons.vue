@@ -94,7 +94,7 @@ function toBack() {
 
 <style scoped lang="scss">
 .btns {
-  z-index: 999;
+  z-index: 990;
   position: fixed;
   display: flex;
   justify-content: flex-end;
