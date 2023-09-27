@@ -18,8 +18,6 @@ const { stop } = useIntersectionObserver(
   ([obj]) => {
     if (obj.isIntersecting) {
       timer = setInterval(() => {
-        console.log(1);
-
         if (props.noMore)
           timer && clearInterval(timer);
         emit("load");

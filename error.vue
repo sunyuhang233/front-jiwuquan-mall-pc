@@ -1,4 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+// 定义页面元数据
+definePageMeta({
+  key: route => route.path,
+  layout: false,
+});
+</script>
 
 <template>
   <div>

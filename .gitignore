@@ -8,3 +8,6 @@ dist
 .nuxt
 .env
 .idea/
+
+# url
+.env.*

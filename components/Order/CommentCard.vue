@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { OrderCommentDTO, OrdersItemVO } from "@/composables/api/orders";
 import { useStorage } from "@vueuse/core";
+import type { OrderCommentDTO, OrdersItemVO } from "@/composables/api/orders";
+
 // props
 const { orderItem, index, isDisable } = defineProps<{
-  orderItem: OrdersItemVO;
-  isDisable: boolean;
-  index: number;
+  orderItem: OrdersItemVO
+  isDisable: boolean
+  index: number
 }>();
 const uploadFilesRef = ref({
   images: [],
@@ -13,7 +14,7 @@ const uploadFilesRef = ref({
 });
 // 评论对象
 const dto = useStorage(
-  "jiwu_order_comment_" + orderItem.id,
+  `jiwu_order_comment_${orderItem.id}`,
   reactive<OrderCommentDTO>({
     orderItemId: orderItem.id,
     skuId: orderItem.skuId,
@@ -24,7 +25,7 @@ const dto = useStorage(
     isRecommend: 0,
     isAnonymous: 0,
   }),
-  sessionStorage
+  sessionStorage,
 );
 // 上传内容 控制
 watch(
@@ -39,9 +40,9 @@ watch(
       dto.value.video = val[1];
     }
   },
-  { deep: true }
+  { deep: true },
 );
-const clearData = async () => {
+async function clearData() {
   uploadFilesRef.value.images = [];
   uploadFilesRef.value.video = "";
   dto.value = {
@@ -54,32 +55,33 @@ const clearData = async () => {
     isRecommend: 0,
     isAnonymous: 0,
   };
-};
+}
 defineExpose({ dto, clearData });
 </script>
+
 <template>
   <div class="card">
     <!-- 评价内容 -->
     <el-input
-      class="mb-4 shadow rounded-10px"
-      :disabled="isDisable"
       v-model.lazy="dto.content"
+      class="mb-4 rounded-10px shadow"
+      :disabled="isDisable"
       type="textarea"
       :rows="6"
       :show-word-limit="true"
-      :maxLength="250"
+      :max-length="250"
       size="large"
       placeholder="写下你对商品的真实评价！"
     />
     <div class="flex">
       <OrderCommUpload
         ref="uploadFilesRef"
-        :isDisable="isDisable"
+        :is-disable="isDisable"
       />
     </div>
     <!-- 商品 -->
     <OrderCommGoods
-      :orderItem="orderItem"
+      :order-item="orderItem"
       class="mt-4"
     />
     <!-- 评分 -->
@@ -90,8 +92,8 @@ defineExpose({ dto, clearData });
       <div class="flex items-center">
         <small opacity-80>评分：</small>
         <el-rate
-          :disabled="isDisable"
           v-model.lazy="dto.rate"
+          :disabled="isDisable"
           allow-half
           show-text
           :colors="[
@@ -105,14 +107,14 @@ defineExpose({ dto, clearData });
       </div>
       <div class="flex opacity-70">
         <el-checkbox
-          :disabled="isDisable"
           v-model="dto.isRecommend"
+          :disabled="isDisable"
         >
           <small>推 荐</small>
         </el-checkbox>
         <el-checkbox
-          :disabled="isDisable"
           v-model="dto.isAnonymous"
+          :disabled="isDisable"
         >
           <small>匿 名</small>
         </el-checkbox>
@@ -120,6 +122,7 @@ defineExpose({ dto, clearData });
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 :deep(.v-md-editor) {
   box-shadow: none;

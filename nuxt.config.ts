@@ -5,6 +5,14 @@ export default defineNuxtConfig({
   ssr: true,
   build: {
     transpile: [/echarts/, "vue-echarts", "resize-detector"],
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks(id) {
+    //       if (id.includes("node_modules"))
+    //         return id.toString().split("node_modules/")[1].split("/")[0].toString();
+    //     },
+    //   },
+    // },
   },
   spaLoadingTemplate: "./app/spa-loading-template.html",
   // 模块
@@ -47,7 +55,7 @@ export default defineNuxtConfig({
   // https://blog.csdn.net/weixin_42553583/article/details/131372309
   experimental: {
     payloadExtraction: false,
-    inlineSSRStyles: true,
+    inlineSSRStyles: false,
     renderJsonPayloads: true, //
     viewTransition: true, // 支持View Transition API Chorme111 https://blog.csdn.net/weixin_42553583/article/details/130474259
     crossOriginPrefetch: true, // 使用 Speculation Rules API 启用跨源预取。
@@ -129,7 +137,7 @@ export default defineNuxtConfig({
     themes: ["dark"],
   },
   // pwa
-  pwa,
+  // pwa,
   // nuxt开发者工具
   devtools: {
     enabled: false,

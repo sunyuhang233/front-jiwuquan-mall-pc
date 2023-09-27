@@ -48,11 +48,13 @@ useHead({
 </script>
 
 <template>
-  <Transition name="fade">
-    <OtherLoading v-show="isPageLoading" v-window-lock="isPageLoading" />
-  </Transition>
-  <NuxtPage />
-  <FormUserDialog />
+  <NuxtLayout name="default">
+    <Transition name="fade">
+      <OtherLoading v-show="isPageLoading" v-window-lock="isPageLoading" />
+    </Transition>
+    <NuxtPage />
+    <FormUserDialog />
+  </NuxtLayout>
 </template>
 
 <style>

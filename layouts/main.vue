@@ -33,7 +33,7 @@ const { footer, menu, leftMenu } = defineProps({
         <MenuDrawerMenu v-if="leftMenu" />
       </ClientOnly>
       <div class="flex-1">
-        <slot name="default" />
+        <slot />
       </div>
     </div>
     <ClientOnly>

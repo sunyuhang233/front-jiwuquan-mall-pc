@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from "element-plus";
 import currency from "currency.js";
+import type { PushOrdersItemDTO } from "composables/api/orders";
 import type { GoodsInfoVO } from "~/composables/api/goods";
 import type { GoodsSkuVO } from "~/composables/api/goods/sku";
 
