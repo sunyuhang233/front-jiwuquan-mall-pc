@@ -24,17 +24,19 @@ const activeMenu = ref<string>("detail");
     >
       <!-- 标题 -->
       <h3
-
         v-show="!goodsInfo?.description" mb-4
         ml-2
       >
         {{ goodsInfo?.name }}
       </h3>
       <!-- markdown -->
-      <v-md-preview
-        class="markdown mb-4"
-        :text="goodsInfo?.description"
-      />
+      <ClientOnly>
+        <v-md-preview
+          v-if="goodsInfo?.description"
+          class="markdown mb-4"
+          :text="goodsInfo?.description"
+        />
+      </ClientOnly>
       <!-- des -->
       <div
         class="text"

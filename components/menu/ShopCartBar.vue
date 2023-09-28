@@ -9,7 +9,6 @@ const isShow = ref<boolean>(false);
 if (user.isLogin)
   shop.loadShopcartList();
 
-
 // 1、选中的购物车商品
 const isEdit = ref<boolean>(false);
 const selectIds = ref<string[]>([]);
@@ -110,7 +109,7 @@ function toOrderPage(ids: string[]) {
       :visible="isShow"
       :teleported="false"
       popper-class="popover "
-      transition="fade"
+      transition="popup"
       :hide-after="0"
       popper-style="width:fit-content; box-shadow:rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;border-radius:6px;
     min-height:380px; padding: 1.2em 1em; right: 0;"
@@ -163,33 +162,31 @@ function toOrderPage(ids: string[]) {
           <el-scrollbar
             v-if="user.isLogin"
             height="50vh"
-            mb-2
+            mb-2 px-3
           >
             <!-- 购物车项 -->
             <el-checkbox-group
               v-model="selectIds"
             >
-              <div
-                v-auto-animate
-                v-infinite-scroll="shop.loadShopcartList"
-                style="overflow-y: auto"
-                :infinite-scroll-delay="400"
-                :infinite-scroll-distance="40"
-                :infinite-scroll-disabled="shop.notMore"
-                class="w-90vw md:w-460px"
-              >
-                <CardShopLine
-                  v-for="p in shop.shopcartList"
-                  :key="p.id"
-                  :shop-cart="p"
+              <div v-auto-animate class="w-90vw md:w-460px">
+                <ListAutoIncre
+                  :immediate="true"
+
+                  @load="shop.loadShopcartList"
                 >
-                  <template #btn>
-                    <el-checkbox
-                      :label="p.id"
-                      :disabled="!p.stock"
-                    />
-                  </template>
-                </CardShopLine>
+                  <CardShopLine
+                    v-for="p in shop.shopcartList"
+                    :key="p.id"
+                    :shop-cart="p"
+                  >
+                    <template #btn>
+                      <el-checkbox
+                        :label="p.id"
+                        :disabled="!p.stock"
+                      />
+                    </template>
+                  </CardShopLine>
+                </ListAutoIncre>
               </div>
             </el-checkbox-group>
           </el-scrollbar>
@@ -267,10 +264,7 @@ function toOrderPage(ids: string[]) {
     <!-- 蒙版 -->
     <div
       v-show="isShow"
-
-
-      class="shop-cart-mock" h-100vh w-100vw bg-dark-300 opacity-40 transition-200
-      dark:bg-dark-200
+      class="shop-cart-mock" h-100vh w-100vw bg-dark-300 opacity-40 transition-200 dark:bg-dark-400
       style="position: fixed; top: 0; left: 0; z-index: -1"
       @click="isShow = false"
       @keyup.esc="isShow = false"

@@ -57,8 +57,6 @@ defineComponent({
       ref="swiper"
       indicator-position="none"
       :interval="6000"
-
-
       arrow="hover"
       h-400px
       cursor-pointer rounded-4px height="100%"
@@ -67,7 +65,7 @@ defineComponent({
     >
       <!-- 轮播图项 -->
       <el-carousel-item
-        v-for="(p, i) in images"
+        v-for="(p, i) in getImagesPreview"
         :key="p"
         :name="p"
         class="swiper-item"
@@ -77,11 +75,10 @@ defineComponent({
           :preview-teleported="true"
           loading="lazy"
           :preview-src-list="getImagesPreview"
-          :initial-index="+i"
-          :src="BaseUrlImg + p"
+          :initial-index="i"
+          :src="p"
           :alt="goodsName || 'Design By Kiwi23333'"
-          class="e-img"
-          style="width: 100%; height: 100%"
+          style="width: 100%; height: 100%;"
           fit="scale-down"
         >
           <template #error>
@@ -90,8 +87,6 @@ defineComponent({
               flex-row-c-c
             >
               <ElIconPicture
-
-
                 w-sm flex-row-c-c p-30 pt-20 opacity-80
               />
             </div>
@@ -112,6 +107,8 @@ defineComponent({
       <el-image
         v-for="(p, i) in images"
         :key="i"
+        preview-teleported
+        :preview-src-list="images"
         loading="lazy"
         :class="{ active: activeSmall === p }"
         :src="BaseUrlImg + p"

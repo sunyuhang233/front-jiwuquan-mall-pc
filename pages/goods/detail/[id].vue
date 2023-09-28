@@ -89,7 +89,7 @@ definePageMeta({
           <!-- 商品轮播图 -->
           <GoodsPreSwiper
             ref="goodsSwiper"
-            class="flex-2 m-0 mr-a"
+            class="flex-2 mx-a mt-4"
             w-500px
             :images="goodsImages"
             :video="goodsInfo.data.value?.data?.video"
@@ -131,7 +131,6 @@ definePageMeta({
           <!-- 猜你喜欢 -->
           <div class="w-full pt-3rem md:w-1/3">
             <h2
-
               mb-0.8em tracking-0.1em
             >
               <i

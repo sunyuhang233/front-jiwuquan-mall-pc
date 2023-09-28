@@ -52,9 +52,9 @@ defineExpose({
 
 <template>
   <slot name="default" />
-  <div ref="loadMoreRef">
+  <div v-if="!noMore" ref="loadMoreRef" key="loadMoreRef">
     <slot name="load">
-      <p v-if="!noMore" h-2 w-full opacity-0 />
+      <p h-2 w-full opacity-0 />
     </slot>
   </div>
 </template>

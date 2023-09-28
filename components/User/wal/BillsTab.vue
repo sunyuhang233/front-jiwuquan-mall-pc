@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { BillsInfoVO, getBillsPage } from "@/composables/api/user/bills";
 import type { CalendarDateType, CalendarInstance } from "element-plus";
-import { IPage } from "types";
+import type { IPage } from "types";
+import type { BillsInfoVO } from "@/composables/api/user/bills";
+import { getBillsPage } from "@/composables/api/user/bills";
+
 // 数据
 const user = useUserStore();
 const selectDay = ref<Date>(new Date());
@@ -11,7 +13,7 @@ const selectDayFormat = computed(() => {
 // 选中的月份开始和结束时间
 const monthStartEndStr = computed((): string[] => {
   return getMonthStartEnd(selectDay.value).map(
-    (p) => useDateFormat(p, "YYYY-MM-DD HH:mm:ss").value
+    p => useDateFormat(p, "YYYY-MM-DD HH:mm:ss").value,
   );
 });
 const dayStartEndStr = computed((): string[] => {
@@ -25,10 +27,11 @@ const dayStartEndStr = computed((): string[] => {
 
 // 实例
 const calendar = ref<CalendarInstance>();
-const selectDate = (val: CalendarDateType) => {
-  if (!calendar.value) return;
+function selectDate(val: CalendarDateType) {
+  if (!calendar.value)
+    return;
   calendar.value.selectDate(val);
-};
+}
 // 筛选
 const opt = reactive({
   isNowDay: false,
@@ -58,17 +61,18 @@ const dto = computed(() => {
 });
 
 const loadBills = useThrottleFn((scroll: { scrollTop: number; scrollLeft: number }) => {
-  if (scroll?.scrollTop && scroll.scrollTop < 200 * page.value) return;
+  if (scroll?.scrollTop && scroll.scrollTop < 200 * page.value)
+    return;
   getBillsPageApi();
 }, 250);
 
 /**
  * 请求api
  */
-const getBillsPageApi = async () => {
-  if (isLoading.value || noMore.value) {
+async function getBillsPageApi() {
+  if (isLoading.value || noMore.value)
     return;
-  }
+
   isLoading.value = true;
   // 1、页数+1
   page.value++;
@@ -77,7 +81,7 @@ const getBillsPageApi = async () => {
     page.value,
     size.value,
     { ...dto.value },
-    user.getToken
+    user.getToken,
   );
   isLoading.value = false;
   // 3、结果
@@ -85,9 +89,9 @@ const getBillsPageApi = async () => {
     billsPage.value = { ...data };
     billsList.value.push(...data.records);
   }
-};
+}
 // 重新加载
-const reloadBills = async () => {
+async function reloadBills() {
   isRefresh.value = true;
   billsList.value.splice(0);
   billsPage.value = {
@@ -103,56 +107,57 @@ const reloadBills = async () => {
   setTimeout(() => {
     isRefresh.value = false;
   }, 400);
-};
+}
 watch(selectDay, (val) => {
-  if (isLoading.value) {
+  if (isLoading.value)
     return;
-  }
+
   page.value = -1;
   reloadBills();
 });
 watch(
   opt,
   () => {
-    if (isLoading.value) {
+    if (isLoading.value)
       return;
-    }
+
     page.value = -1;
     reloadBills();
   },
-  { deep: true }
+  { deep: true },
 );
 
 getBillsPageApi();
 </script>
+
 <template>
-  <div class="bills-tabs shadow p-5 border-none grid grid-cols-1 rounded-14px v-card">
+  <div class="bills-tabs v-card grid grid-cols-1 rounded-14px border-none p-5 shadow">
     <div class="top">
       <!-- 头部 -->
       <h3
-        text-center
-        mb-2
+
+        mb-2 text-center
       >
         账 单
       </h3>
       <!-- 日历 -->
       <div
-        class="select-none caledar shadow-sm dark:shadow dark:bg-dark-5 dark:opacity-90 rounded-12px"
+        class="caledar select-none rounded-12px shadow-sm dark:bg-dark-5 dark:opacity-90 dark:shadow"
       >
         <el-calendar
-          v-model="selectDay"
           ref="calendar"
+          v-model="selectDay"
         >
-          <template #header="{ date }">
-            <div class="flex-row-bt-c w-full cursor-pointer">
+          <template #header>
+            <div class="w-full flex-row-bt-c cursor-pointer">
               <i
                 class="i-solar:alt-arrow-left-line-duotone p-3 hover:scale-110"
                 @click="selectDate('prev-month')"
               />
               <h3
-                text-center
-                w-full
-                mt-1
+
+
+                mt-1 w-full text-center
               >
                 {{ selectDayFormat }}
               </h3>
@@ -167,18 +172,18 @@ getBillsPageApi();
     </div>
     <!-- 账单列表 -->
     <div
-      clas="bottom overflow-hidden rounded-12px"
       v-loading="isRefresh"
+      clas="bottom overflow-hidden rounded-12px"
     >
       <div
-        class="my-2 text-center opacity-90"
         v-show="!opt.isNowDay"
+        class="my-2 text-center opacity-90"
       >
         {{ selectDay.getFullYear() }}年{{ selectDay.getMonth() + 1 }}月的账单
       </div>
       <div
-        class="my-2 text-center opacity-90"
         v-show="opt.isNowDay"
+        class="my-2 text-center opacity-90"
       >
         {{ selectDayFormat }}的账单
       </div>
@@ -186,24 +191,24 @@ getBillsPageApi();
         <!-- 按钮 -->
         <div class="btns p-2">
           <small
-            inline
-            float-right
+
+
+            v-show="billsPage.total > 0" float-right inline
             pr-2
-            v-show="billsPage.total > 0"
           >
             共{{ billsPage.total }}条
           </small>
           <small
-            @click="opt.isNowDay = true"
-            class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
+            class="mr-2 cursor-pointer select-none rounded-6px px-2 py-1 border-default"
             :class="{ 'text-[var(--el-color-primary)]': opt.isNowDay }"
+            @click="opt.isNowDay = true"
           >
             按日
           </small>
           <small
-            @click="opt.isNowDay = false"
-            class="cursor-pointer select-none border-default rounded-6px py-1 mr-2 px-2"
+            class="mr-2 cursor-pointer select-none rounded-6px px-2 py-1 border-default"
             :class="{ 'text-[var(--el-color-primary)]': !opt.isNowDay }"
+            @click="opt.isNowDay = false"
           >
             按月
           </small>
@@ -220,16 +225,16 @@ getBillsPageApi();
             :data="p"
           />
           <small
-            class="block opacity-80 text-center my-4 w-full select-none"
             v-show="isLoading"
+            class="my-4 block w-full select-none text-center opacity-80"
             animate-pulse
           >
             加载中...
           </small>
 
           <small
-            class="block opacity-80 text-center my-4 w-full select-none"
             v-show="noMore"
+            class="my-4 block w-full select-none text-center opacity-80"
           >
             暂无更多
           </small>
@@ -238,6 +243,7 @@ getBillsPageApi();
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 .caledar {
   $item-height: 2em;

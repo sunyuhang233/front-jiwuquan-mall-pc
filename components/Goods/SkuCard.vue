@@ -169,7 +169,7 @@ function initSku() {
 initSku();
 
 
-const submitText = ref<string>("请选择规格");
+const submitText = ref<string>("立即购买");
 // 表单监听
 watch(
   form,
@@ -260,7 +260,7 @@ function setActiveItem(image: string) {
         <!-- 规格选择 -->
         <div class="sku-list" flex flex-col pt-6 leading-1.4em tracking-0.1em>
           <!-- 顶部 -->
-          <h3 mb-4 leading-1.2em>
+          <h3 mb-6 border-0 leading-1.4em border-default-dashed>
             {{ goodsInfo?.name }}
           </h3>
           <div mb-4 flex-row-bt-c>
@@ -338,10 +338,10 @@ function setActiveItem(image: string) {
           </el-form-item>
         </div>
         <!-- 购物车|立即购买 -->
-        <div class="relative mt-2 w-1/1 py-3 text-2rem" grid="~ gap-2 cols-2">
+        <div class="relative mb-4 mt-2 w-1/1 py-3 text-2rem" grid="~ gap-6 cols-2">
           <!-- 加入 -->
           <el-button
-            :disabled="!goodsSku || !goodsSku?.length"
+            :disabled="!goodsSku || !goodsSku?.length || !isAllCheckSku"
             size="large"
             class="w-full" style="transition: 300ms;font-size:1rem; letter-spacing: 0.2em;"
             @click="onSubmitShopCart(FormRef, $event)"
