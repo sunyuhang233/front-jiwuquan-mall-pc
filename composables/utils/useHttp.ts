@@ -106,7 +106,7 @@ export function httpRequest<T = unknown>(
           break;
       }
       // 客户端报错
-      if (msg)
+      if (msg && document)
         ElMessage.error(msg);
     },
   } as FetchOptions;

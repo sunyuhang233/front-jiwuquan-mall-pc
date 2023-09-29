@@ -15,6 +15,7 @@ const emit = defineEmits(["setActiveItem"]);
 const user = useUserStore();
 const shop = useShopStore();
 
+
 // 表单
 const form = reactive<formDTO>({
   skuId: "",
@@ -30,6 +31,8 @@ const fullscreenLoading = ref<boolean>(false);
 const isAllCheckSku = ref<boolean>(false);
 // 表单实例
 const FormRef = ref<FormInstance>();
+
+
 /**
  * 添加到购物车
  * @param formRef
@@ -168,6 +171,20 @@ function initSku() {
 }
 initSku();
 
+const validList = computed(() => {
+  const res = goodsSku?.filter((p) => {
+    let flag = false;
+    if (p.color && form.color)
+      flag = p.color === form.color;
+    if (p.size)
+      flag = p.size === form.size;
+    if (p.combo)
+      flag = p.combo === form.combo;
+    return flag;
+  });
+  return res?.map(p => Object.values({ color: p.color, size: p.size, combo: p.combo }));
+});
+
 
 const submitText = ref<string>("立即购买");
 // 表单监听
@@ -269,7 +286,7 @@ function setActiveItem(image: string) {
               <span text-1.4em font-700 text-red-5>￥
                 <span v-incre-up="goodsInfo?.price" />
               </span>
-              <small style="text-decoration: line-through; opacity: 0.9" text-0.6em text-bluegray-3>￥
+              <small style="text-decoration: line-through; opacity: 0.9" text-0.8em text-bluegray-3>￥
                 <span v-incre-up="goodsInfo?.costPrice" />
               </small>
             </div>

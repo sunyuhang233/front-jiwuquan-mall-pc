@@ -829,6 +829,7 @@ function toBack() {
           <!--------------- 地址+状态 ---------------->
           <div
             v-loading="isLoadAddressList"
+            v-auto-animate
             class="group v-card flex flex-col border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
             border-t="0.5rem solid "
             :style="{ borderTopColor: `var(--el-color-${ordersTitle.type})` }"
@@ -838,6 +839,7 @@ function toBack() {
               v-if="order.status > OrdersStatus.READY"
               v-auto-animate
               class="mt-2"
+
               :active="order.status"
               :date="order.orderInfo.createTime"
               :color="ordersTitle.type"
