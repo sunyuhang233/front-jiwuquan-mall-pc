@@ -76,52 +76,36 @@ export interface EventInfoVO {
   updateTime: string
 }
 
+
 /**
-* 活动商品列表视图类
-*
-* EventGoodsVO
-*/
+ * 活动商品列表视图类
+ *
+ * EventGoodsVO
+ */
 export interface EventGoodsVO {
-  categoryId: string
-  /**
-   * 市
-   */
-  city: string
-  costPrice: number
-  createTime: string
-  description: string
-  /**
-   * 区
-   */
-  district: string
-  eventId: string
-  /**
-   * 活动价
-   */
-  eventPrice: number
-  goodsId: string
   id: string
-  images: string
-  isNew: number
+  eventId: string
+  eventPrice: number
+  isShow?: number
+  goodsId: string
+  skuId: string
   name: string
-  postage: number
-  price: number
-  /**
-   * 省份
-   */
-  province: string
-  refundTime: number
-  /**
-   * 销量
-   */
+  postage?: number
+  costPrice: number
+  images?: string
+  video?: string
+  province?: string
+  city?: string
+  district?: string
+  warrantyTime?: number
+  refundTime?: number
+  isNew: number
   sales: number
-  updateTime: string
-  video: string
-  /**
-   * 浏览量
-   */
-  views: number
-  warrantyTime: number
+  views?: number
+  // 库存
+  price: number
+  stock: number
+  image?: string
+  createTime?: string
+  updateTime?: string
 }
-
-

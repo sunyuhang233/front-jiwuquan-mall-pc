@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { appName } from "@/constants";
 
+const user = useUserStore();
+
 useHead({
   title: `个人信息 - 个人中心 - ${appName}`,
   meta: [
@@ -15,8 +17,6 @@ definePageMeta({
   key: route => route.path,
   layout: false,
 });
-
-const user = useUserStore();
 </script>
 
 <template>
@@ -25,8 +25,8 @@ const user = useUserStore();
       name="user"
       :menu="['back']"
     >
-      <div v-if="user.getToken">
-        <ClientOnly>
+      <ClientOnly>
+        <div v-if="user.getToken">
           <!-- 壁纸 -->
           <UserInfoBgToggle />
           <div class="flex animate-[fade-in_.3s_ease] layout-default">
@@ -39,14 +39,14 @@ const user = useUserStore();
                 </div>
               </div>
               <!-- 右侧 -->
-              <div class="v-card shadow-sm">
+              <div class="shadow-sm">
                 <!-- 签到 -->
-                <UserInfoSigninCard />
+                <UserInfoSigninCard class="sm:w-360px" />
               </div>
             </div>
           </div>
-        </ClientOnly>
-      </div>
+        </div>
+      </ClientOnly>
     </NuxtLayout>
   </div>
 </template>

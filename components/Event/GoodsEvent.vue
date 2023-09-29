@@ -20,22 +20,25 @@ const getInsurance = computed(() => {
     class="group goods-card aspect-ratio-1 w-full flex flex-col cursor-pointer border-gray-200 rounded-4px shadow-sm border-default dark:border-dark-200 dark:bg-dark-8"
   >
     <!-- 商品图片  -->
-    <div class="img relative h-120px w-full overflow-hidden rounded-t-inherit md:h-160px">
-      <ElImage
+    <div
+      class="img relative h-120px w-full overflow-hidden rounded-t-inherit md:h-160px"
+    >
+      <el-image
         loading="lazy"
         class="h-full w-full"
-        :src="BaseUrlImg + data.images.split(',')[0]"
+        :src="BaseUrlImg + (data?.image ? data?.image : data?.images?.split(',')[0])"
         :alt="data.name"
         fit="cover"
       />
       <div class="absolute right-2 top-2">
         <el-tag
+          v-if="data?.price && data?.eventPrice"
           type="danger"
           effect="dark"
           rounded-3px
           style="letter-spacing: 0.1em"
         >
-          -￥{{ currency(data.price).subtract(data.eventPrice) }}
+          -￥{{ currency(data?.price).subtract(data?.eventPrice) }}
         </el-tag>
       </div>
       <!-- 浏览量 -->
@@ -68,12 +71,12 @@ const getInsurance = computed(() => {
       </p>
       <!-- 价格 -->
       <p class="flex items-end color-[var(--el-color-danger)]">
-        <strong pr-1>￥{{ currency(data.eventPrice) }}</strong>
+        <strong pr-1>￥{{ currency(data.eventPrice!) }}</strong>
         <small
           hidden text-0.8em color-coolgray md:inline
           style="text-decoration: line-through"
         >
-          ￥{{ currency(data.price) }}
+          ￥{{ currency(data.price!) }}
         </small>
       </p>
     </div>

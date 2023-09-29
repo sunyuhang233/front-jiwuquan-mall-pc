@@ -272,7 +272,7 @@ definePageMeta({
         <ClientOnly>
           <div
             v-if="user.isLogin"
-            class="v-card animate-[fade-in_.6s_ease] rounded-12px p-6 border-default"
+            class="v-card animate-[fade-in_.6s_ease] rounded-3 p-6 border-default"
             @keyup.esc="isEdit = false"
           >
             <!-- 表单弹窗 -->

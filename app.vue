@@ -64,11 +64,11 @@ useHead({
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  filter: blur(16px) contrast(4);
+  filter: blur(16px) contrast(6);
 }
 .dark .page-enter-from,
 .dark .page-leave-to {
-    filter: blur(10px) contrast(0);
+  filter: blur(0) grayscale(0.5) contrast(0);
 }
 
 
@@ -79,10 +79,10 @@ useHead({
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
-  filter: blur(16px) contrast(4);
+  filter: blur(16px) contrast(6);
 }
 .dark .layout-enter-from,
 .dark .layout-leave-to {
-  filter: blur(10px) contrast(0);
+  filter: blur(0) grayscale(0.5) contrast(0);
 }
 </style>

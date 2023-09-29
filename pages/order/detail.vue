@@ -40,6 +40,7 @@ const payTypeList = ref<PayTypeDTO[]>([
     type: PayType.WEALLET,
     icon: "<i block w-full h-full   i-solar:wallet-bold-duotone bg-red-5>",
     title: "钱包",
+    amount: computed(() => user.userWallet.balance),
   },
   {
     disable: true,
@@ -85,6 +86,7 @@ export interface PayTypeDTO {
   icon: string
   title: string
   type: PayType
+  amount?: number | ComputedRef<number>
 }
 
 
@@ -834,6 +836,7 @@ function toBack() {
             <!-- 订单-状态 -->
             <OrderStatusSteps
               v-if="order.status > OrdersStatus.READY"
+              v-auto-animate
               class="mt-2"
               :active="order.status"
               :date="order.orderInfo.createTime"
@@ -842,6 +845,7 @@ function toBack() {
             <!-- 选择-收货地址 -->
             <div
               v-if="isUpdate"
+              key="address-list"
               class="address-list w-full flex flex-col"
             >
               <h4
@@ -1042,14 +1046,18 @@ function toBack() {
                     />
                     <small text-0.8rem>{{ p.title }}</small>
                   </div>
-                  <el-radio
-                    v-if="!p.disable"
-                    :label="p.type"
-                    :disable="p.disable"
-                  />
+                  <div
+                    v-if="!p.disable" flex items-center
+                  >
+                    <span>{{ currency(p?.amount || '0') }}</span>
+                    <el-radio
+                      :label="p.type"
+                      :disable="p.disable"
+                    >
+                      {{ "" }}
+                    </el-radio>
+                  </div>
                   <small
-
-
                     v-else text-0.6rem font-500
                     opacity-60
                   >
@@ -1425,11 +1433,6 @@ function toBack() {
 .pay-type-list {
   :deep(.el-radio-group) {
     font-size: inherit;
-  }
-  :deep(.el-radio) {
-    .el-radio__label {
-      display: none;
-    }
   }
 }
 

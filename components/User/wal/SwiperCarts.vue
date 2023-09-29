@@ -17,7 +17,9 @@ const { width } = defineProps({
     }"
     :width="width"
     :slides-per-view="1"
-    :autoplay="{ delay: 5000 }"
+    :autoplay="{
+      delay: 5000,
+    }"
     :grab-cursor="true"
     :mousewheel="true"
     :loop="true"
@@ -38,12 +40,7 @@ const { width } = defineProps({
 </template>
 
 <style lang="scss" scoped>
-:deep(.swiper-cards) {
-  .swiper-slide {
-    overflow: auto;
-  }
-}
 .wall-card {
-  --at-apply: h-180px w-full transition-300 hover:translate-x-2
+  --at-apply: "h-180px w-9/10 transition-300 hover:translate-x-2"
 }
 </style>

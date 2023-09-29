@@ -140,7 +140,7 @@ async function toUserRechange(dto: AddWalletDTO): Promise<boolean> {
             </small>
           </div>
           <div
-            class="flex-row-c-c flex-shrink-0 cursor-pointer border-2px rounded-12px p-4 leading-2.4em text-bluegray-700 transition-300 active:scale-95 border-default-dashed dark:text-bluegray-200 dark-hover:bg-dark"
+            class="flex-row-c-c flex-shrink-0 cursor-pointer border-2px rounded-3 p-4 leading-2.4em text-bluegray-700 transition-300 active:scale-95 border-default-dashed dark:text-bluegray-200 dark-hover:bg-dark"
           >
             期待更多
           </div>

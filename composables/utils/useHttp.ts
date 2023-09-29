@@ -22,7 +22,7 @@ export function httpRequest<T = unknown>(
       if (config.options.headers?.Authorization !== undefined) {
         // @ts-expect-error
         if (config.options.headers?.Authorization === "") {
-          user?.$reset();
+          // user?.$reset();
           user.showLoginForm = true;
         }
       }

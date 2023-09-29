@@ -108,10 +108,10 @@ async function reloadBills() {
     isRefresh.value = false;
   }, 400);
 }
-watch(selectDay, (val) => {
+watch(selectDay, () => {
   if (isLoading.value)
     return;
-
+  opt.isNowDay = true;
   page.value = -1;
   reloadBills();
 });
@@ -131,18 +131,20 @@ getBillsPageApi();
 </script>
 
 <template>
-  <div class="bills-tabs v-card grid grid-cols-1 rounded-14px border-none p-5 shadow">
+  <div
+    v-loading="isRefresh"
+    class="v-card bills-tabs grid grid-cols-1 overflow-hidden rounded-3 border-none p-5 shadow"
+  >
     <div class="top">
       <!-- 头部 -->
       <h3
-
         mb-2 text-center
       >
         账 单
       </h3>
       <!-- 日历 -->
       <div
-        class="caledar select-none rounded-12px shadow-sm dark:bg-dark-5 dark:opacity-90 dark:shadow"
+        class="caledar select-none rounded-3 shadow-sm dark:bg-dark-5 dark:opacity-90 dark:shadow"
       >
         <el-calendar
           ref="calendar"
@@ -155,8 +157,6 @@ getBillsPageApi();
                 @click="selectDate('prev-month')"
               />
               <h3
-
-
                 mt-1 w-full text-center
               >
                 {{ selectDayFormat }}
@@ -172,8 +172,7 @@ getBillsPageApi();
     </div>
     <!-- 账单列表 -->
     <div
-      v-loading="isRefresh"
-      clas="bottom overflow-hidden rounded-12px"
+      class="overflow-hidden rounded-3"
     >
       <div
         v-show="!opt.isNowDay"
@@ -187,12 +186,10 @@ getBillsPageApi();
       >
         {{ selectDayFormat }}的账单
       </div>
-      <div class="bills-list relative pt-2 leading-1.2em tracking-0.08em">
+      <div class="relative pt-2 leading-1.2em tracking-0.08em">
         <!-- 按钮 -->
         <div class="btns p-2">
           <small
-
-
             v-show="billsPage.total > 0" float-right inline
             pr-2
           >

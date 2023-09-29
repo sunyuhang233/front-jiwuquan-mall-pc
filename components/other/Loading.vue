@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { appName } from "@/constants/index";
 </script>
+
 <template>
   <div
-    class="flex-row-c-c w-100vw h-100vh bg-light dark:bg-dark z-1001 fixed top-0 left-0 overflow-hidden"
+    class="fixed left-0 top-0 z-1001 h-100vh w-100vw flex-row-c-c overflow-hidden bg-light dark:bg-dark"
   >
     <h2
       flex-row-c-c
@@ -12,10 +12,11 @@ import { appName } from "@/constants/index";
     >
       <img
         src="@/assets/images/logo/logo.png"
-        class="w-2rem h-2rem mr-3"
-      />
+        class="mr-3 h-2rem w-2rem"
+      >
       极物圈
     </h2>
   </div>
 </template>
+
 <style scoped lang="scss"></style>

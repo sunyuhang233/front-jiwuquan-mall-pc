@@ -1,15 +1,18 @@
 <script lang="ts" setup>
+import { graphic } from "echarts";
+import VChart, { THEME_KEY } from "vue-echarts";
+import type {
+  BillsTimeTotalDTO,
+  BillsTimeTotalVO,
+} from "@/composables/api/user/bills";
 import {
+  BillsType,
+  CurrencyType,
   TimeType,
   getBillsTotalTable,
-  BillsType,
-  BillsTimeTotalVO,
-  BillsTimeTotalDTO,
-  CurrencyType,
 } from "@/composables/api/user/bills";
-import { graphic } from "echarts";
-// @ts-ignore 引入 vue-echarts 组件
-import VChart, { THEME_KEY } from "vue-echarts";
+
+
 provide(THEME_KEY, useColorMode());
 const user = useUserStore();
 // 参数
@@ -20,8 +23,8 @@ const dto = reactive<BillsTimeTotalDTO>({
 });
 // 获取统计信息
 const tableData = ref<BillsTimeTotalVO[]>([]);
-const inData = computed(() => tableData.value.filter((p) => p.type === BillsType.IN));
-const outData = computed(() => tableData.value.filter((p) => p.type === BillsType.OUT));
+const inData = computed(() => tableData.value.filter(p => p.type === BillsType.IN));
+const outData = computed(() => tableData.value.filter(p => p.type === BillsType.OUT));
 // 筛选
 const timeTypeList = ref([
   { label: "按日", value: TimeType.Day },
@@ -46,7 +49,7 @@ const option = ref({
   xAxis: {
     boundaryGap: false,
     type: "category",
-    data: computed(() => [...new Set(tableData.value.map((p) => p.time))]),
+    data: computed(() => [...new Set(tableData.value.map(p => p.time))]),
   },
   yAxis: {
     name: "金额（￥）",
@@ -67,7 +70,7 @@ const option = ref({
   series: [
     {
       name: "收入",
-      data: computed(() => inData.value.map((p) => p.total)),
+      data: computed(() => inData.value.map(p => p.total)),
       type: "line",
       smooth: true,
       areaStyle: {
@@ -87,7 +90,7 @@ const option = ref({
     },
     {
       name: "支出",
-      data: computed(() => outData.value.map((p) => p.total)),
+      data: computed(() => outData.value.map(p => p.total)),
       type: "line",
       areaStyle: {
         opacity: 0.8,
@@ -114,38 +117,39 @@ const isLoading = ref<boolean>(false);
 /**
  * 重新加载
  */
-const onReload = async () => {
+async function onReload() {
   isLoading.value = true;
   tableData.value.splice(0);
   const { data, code } = await getBillsTotalTable({ ...dto }, user.getToken);
   // 懒加载
-  let timer = setTimeout(() => {
+  const timer = setTimeout(() => {
     isLoading.value = false;
-    if (code === StatusCode.SUCCESS) {
+    if (code === StatusCode.SUCCESS)
       tableData.value.push(...data);
-    }
+
     clearTimeout(timer);
   }, 300);
-};
+}
 onReload();
 </script>
+
 <template>
-  <div class="h-full w-full rounded-14px transition-300 v-card shadow flex flex-col p-5">
+  <div class="v-card h-full w-full flex flex-col rounded-14px p-5 shadow transition-300">
     <h3
-      flex
-      mb-2
-      md:mb-0
+
+
+      mb-2 flex md:mb-0
     >
-      <i class="i-solar:align-bottom-bold-duotone p-3 mr-2" />
+      <i class="i-solar:align-bottom-bold-duotone mr-2 p-3" />
       账单统计
       <!-- 排序 -->
-      <div class="ml-a z-1">
+      <div class="z-1 ml-a">
         <el-select
-          @change="onReload"
           v-model="dto.timeType"
           :placeholder="dto.timeType || '按日'"
           size="small"
-          class="w-6em opacity-90 select"
+          class="select w-6em opacity-90"
+          @change="onReload"
         >
           <el-option
             v-for="p in timeTypeList"
@@ -157,23 +161,23 @@ onReload();
       </div>
     </h3>
     <div
-      w-full
+
       v-if="!isLoading"
-      h-380px
-      flex-row-c-c
-      rounded-12px
-      overflow-hidden
+
+
+      h-380px w-full flex-row-c-c overflow-hidden rounded-12px
     >
       <!-- 表格 -->
       <VChart
-        class="w-full h-380px flex-row-c-c rounded-12px"
         v-loading="isLoading"
+        class="h-380px w-full flex-row-c-c rounded-3"
         :loading="isLoading"
         :option="option"
       />
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 .select {
   :deep(.el-input__wrapper) {

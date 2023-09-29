@@ -15,8 +15,8 @@ useHead({
 definePageMeta({
   key: route => route.path,
   layout: false,
-  pageTransition: false,
-  layoutTransition: false,
+  // pageTransition: false,
+  // layoutTransition: false,
 });
 </script>
 
@@ -73,7 +73,7 @@ definePageMeta({
               >
                 <!-- 钱包 -->
                 <div
-                  class="relative z-0 w-full flex items-center overflow-x-hidden md:max-w-380px md:w-full md:overflow-x-visible"
+                  class="relative z-0 w-full flex items-center md:max-w-380px md:w-full"
                 >
                   <UserWalSwiperCarts />
                 </div>

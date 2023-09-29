@@ -4,7 +4,6 @@ import { type UpdateInfo, updateInfoByDTO } from "@/composables/api/user/info";
 import { Gender } from "~/types";
 
 const user = useUserStore();
-const route = useRoute();
 const formData = new FormData();
 // 表单
 const avatatRef = ref();
