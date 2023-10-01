@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+import type { EventGoodsSeVO } from "~/composables/api/event";
 import { addGoodsViewsById, getGoodsInfoById } from "~/composables/api/goods";
 import { getGoodsSkuByGid } from "~/composables/api/goods/sku";
 
 const route = useRoute();
 const user = useUserStore();
 // 商品id
-const goodsId = route.params.id;
+const goodsId = route.params.id as string;
 // 商品详细信息
 const goodsInfo = await getGoodsInfoById(goodsId.toString());
 
@@ -49,6 +50,7 @@ useSeoMeta({
   description: () =>
     `${goodsInfo.data.value?.data?.name}+${goodsInfo.data.value?.data?.description}`,
 });
+
 
 // 定义页面元数据
 definePageMeta({

@@ -109,3 +109,29 @@ export interface EventGoodsVO {
   createTime?: string
   updateTime?: string
 }
+
+
+/**
+ * 获取商品的活动信息
+ * @param gid 商品id
+ * @returns
+ */
+export function getEventsGoodsSkuList(gid: string) {
+  return useFetch<Result<EventGoodsSeVO[]>>(() => `${BaseUrl}/event/goods/sku/${gid}`);
+}
+
+/**
+ * 活动商品列表视图类
+ *
+ * EventGoodsSeVO
+ */
+export interface EventGoodsSeVO {
+  eventId?: string
+  eventPrice?: number
+  goodsId?: string
+  /**
+   * 关联数据
+   */
+  id?: string
+  skuId?: string
+}

@@ -65,7 +65,7 @@ defineComponent({
     >
       <!-- 轮播图项 -->
       <el-carousel-item
-        v-for="(p, i) in getImagesPreview"
+        v-for="(p, i) in images"
         :key="p"
         :name="p"
         class="swiper-item"
@@ -76,7 +76,7 @@ defineComponent({
           loading="lazy"
           :preview-src-list="getImagesPreview"
           :initial-index="i"
-          :src="p"
+          :src="BaseUrlImg + p"
           :alt="goodsName || 'Design By Kiwi23333'"
           style="width: 100%; height: 100%;"
           fit="scale-down"
@@ -101,36 +101,40 @@ defineComponent({
       flex-row-c-c
     >
       <ElIconArrowLeftBold
-        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-60"
+        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-20 transition-200 hover:opacity-100"
         @click="prevSwiper"
       />
-      <el-image
-        v-for="(p, i) in images"
-        :key="i"
-        preview-teleported
-        :preview-src-list="images"
-        loading="lazy"
-        :class="{ active: activeSmall === p }"
-        :src="BaseUrlImg + p"
-        :alt="goodsName || 'Design by Kiwi2333'"
-        class="scale-img"
-        style="max-width: 6em; max-height: 4em; margin: 0 0.4em; padding: 0; border-radius: 4px"
-        fit="contain"
-        transition-300
-        hover:scale-110
-        @mouseenter="setActiveItem(p)"
-      >
-        <template #error>
-          <div
-            class="image-slot"
-            flex-row-c-c
+      <el-scrollbar>
+        <div class="flex py-2">
+          <el-image
+            v-for="(p, i) in images"
+            :key="i"
+            preview-teleported
+            :preview-src-list="getImagesPreview"
+            loading="lazy"
+            :class="{ active: activeSmall === p }"
+            :src="BaseUrlImg + p"
+            :alt="goodsName || 'Design by Kiwi2333'"
+            class="scale-img flex-shrink-0 rounded"
+            style="max-width: 6em; max-height: 4em; margin: 0 0.4rem; padding: 0; "
+            fit="cover"
+            transition-300
+            hover:scale-110
+            @mouseenter="setActiveItem(p)"
           >
-            <ElIconPicture style="opacity: 0.8" />
-          </div>
-        </template>
-      </el-image>
+            <template #error>
+              <div
+                class="image-slot"
+                flex-row-c-c
+              >
+                <ElIconPicture style="opacity: 0.8" />
+              </div>
+            </template>
+          </el-image>
+        </div>
+      </el-scrollbar>
       <ElIconArrowRightBold
-        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-60"
+        class="mx-1 h-2em w-2em flex-row-c-c cursor-pointer opacity-20 transition-200 hover:opacity-100"
         @click="nextSwiper"
       />
     </div>
@@ -171,10 +175,9 @@ defineComponent({
 .scale-imgs {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
 
   .scale-img {
-    opacity: 0.8;
+    opacity: 0.6;
     border: 2px solid transparent;
     transition: $transition-delay;
   }

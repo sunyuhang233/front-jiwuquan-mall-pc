@@ -60,18 +60,17 @@ const getTotalPrice = computed(() => {
 <template>
   <div
     v-loading="isUpdateLoading"
-    class="card group"
-
-
+    class="group overflow-hidden"
     flex flex-wrap cursor-pointer justify-between border-2px rounded-8px p-0 text-0.6rem border-default-hover md:p-3 md:text-1em
   >
     <!-- 图片 -->
     <ClientOnly>
-      <div class="w-2/7 md:w-8em">
+      <div
+        class="relative w-2/7 md:w-8em"
+        :class="{ 'is-event ': data.activityId !== undefined }"
+      >
         <ElImage
           loading="lazy"
-
-          transition-300 hover:transform-scale-110
           :src="BaseUrlImg + data.image"
           style="width: 100%; height: 100%; aspect-ratio: 1/1; border-radius: 4px"
           fit="cover"
@@ -85,20 +84,17 @@ const getTotalPrice = computed(() => {
           {{ data.name }}
         </h4>
         <!-- 中下 -->
-        <p
-
-
-          mb-a mt-1 font-700 color-red-6
+        <div
+          my-a font-700 color-red-6
         >
           ￥{{ currency(data.price) }}
           <span
-
-            text-0.6em color-coolgray
+            text-0.8em color-coolgray
             style="text-decoration: line-through"
           >
             ￥{{ currency(data.costPrice) }}
           </span>
-        </p>
+        </div>
         <!-- 下 -->
         <div
           flex-row-bt-c
@@ -174,4 +170,26 @@ const getTotalPrice = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.is-event {
+
+  &::before {
+    content: "活动";
+    position: absolute;
+    left:-2rem;
+    width: 6rem;
+    height: 2rem;
+    line-height: 2rem;
+    box-shadow:4px 3px 8px rgba(194, 52, 52, 0.24) ;
+    transform: rotate(-45deg) translate(0.1rem, -0.8rem);
+    background-color: var(--el-color-error);
+    color: #fff;
+    display: block;
+    z-index: 1;
+    text-align: center;
+    border: 1px solid #fff;
+    border-left: 0;
+    border-right: 0;
+  }
+}
+</style>

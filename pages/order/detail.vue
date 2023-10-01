@@ -221,8 +221,11 @@ const selectVoucherId = ref<string>("");
 const voucherList = ref([]);
 // 6、选择积分抵扣
 const selectPointsVal = ref<number>(0);
+const selectEventReduceVal = ref<number>(0);
+
 // 7、备注
 const remark = ref<string>(order.orderInfo.remark);
+
 
 watch(isEdit, (val) => {
   if (val)
@@ -299,7 +302,6 @@ const getFinalPrice = computed(() => {
 const getReduce = computed(() => {
   if (order.orderInfo.spendPrice)
     return currency(order.orderInfo.totalPrice).subtract(order.orderInfo.spendPrice);
-
   else
     return 0;
 });
@@ -988,7 +990,6 @@ function toBack() {
                 :get-final-price="getFinalPrice"
               />
               <small
-
                 v-else font-600
                 opacity-40
               >
@@ -1183,6 +1184,16 @@ function toBack() {
                 -{{ `￥${currency(selectPointsVal / 100)}` }}
               </span>
             </small>
+            <!-- 活动优惠 -->
+            <small
+              v-show="selectEventReduceVal > 0 && order.status <= OrdersStatus.UN_PAID"
+              class="w-full flex-row-bt-c opacity-80"
+            >
+              活动优惠
+              <span class="text-[var(--el-color-error)]">
+                -{{ `￥${currency(selectEventReduceVal / 100)}` }}
+              </span>
+            </small>
             <!-- 减少 v-if=">OrdersStatus.PAID" -->
             <small
               v-if="getReduce"
@@ -1287,7 +1298,6 @@ function toBack() {
               <el-button
                 v-if="ordersTitle.submitText"
                 size="default"
-
                 min-w-8em shadow-md
                 style="font-weight: 600"
                 :type="ordersTitle.btnType || 'primary'"

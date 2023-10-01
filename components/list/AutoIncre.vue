@@ -34,7 +34,7 @@ onMounted(() => {
   if (props.immediate)
     emit("load");
 });
-onMounted(() => {
+onUnmounted(() => {
   clearInterval(timer);
 });
 

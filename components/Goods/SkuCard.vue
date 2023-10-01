@@ -4,6 +4,7 @@ import currency from "currency.js";
 import type { PushOrdersItemDTO } from "composables/api/orders";
 import type { GoodsInfoVO } from "~/composables/api/goods";
 import type { GoodsSkuVO } from "~/composables/api/goods/sku";
+import type { EventGoodsSeVO } from "~/composables/api/event";
 
 // props
 const { goodsInfo, goodsSku } = defineProps<{
@@ -21,6 +22,7 @@ const form = reactive<formDTO>({
   skuId: "",
   quantity: 1,
   size: "",
+  activityId: "",
   color: "",
   combo: "",
 });
@@ -82,6 +84,7 @@ function onSubmitBuy(formRef: FormInstance | undefined) {
         const dto: PushOrdersItemDTO[] = [
           {
             skuId: form.skuId,
+            activityId: form.activityId,
             quantity: form.quantity,
           },
         ];
@@ -109,12 +112,29 @@ function onSubmitBuy(formRef: FormInstance | undefined) {
     });
 }
 
+// **************优惠、折扣****************
+const eventSkuList = ref<EventGoodsSeVO[]>([]);
+const route = useRoute();
+const eventId = route?.query?.eventId || route?.query?.eid;
+if (eventId && goodsInfo?.id) {
+  const res = await getEventsGoodsSkuList(goodsInfo?.id);
+  if (res.data.value?.code === StatusCode.SUCCESS)
+    eventSkuList.value = res.data.value?.data;
+}
+
+// 1、活动商品
+function getEventPrice(skuId: string) {
+  console.log(eventSkuList.value);
+  return eventSkuList.value.find(p => skuId === p.skuId)?.eventPrice || 0;
+};
+
 
 interface formDTO {
   skuId: string
   quantity: number
   size?: string
   color?: string
+  activityId?: string
   combo?: string
 }
 // 尺寸
@@ -221,6 +241,21 @@ const getMaxStock = computed(() => {
   return count;
 });
 const allPostate = ref<number>(0);
+
+// 计算减少的价格
+const allReduce = reactive<{
+  activity: {
+    add: number
+    reduce: number
+  }
+  all: number
+}>({
+  activity: {
+    add: 0,
+    reduce: 0,
+  },
+  all: 0,
+});
 // 计算当前的最终价格
 const allPrice = computed((): number => {
   if (goodsSku) {
@@ -229,12 +264,38 @@ const allPrice = computed((): number => {
         if (goodsInfo?.postage)
           allPostate.value = goodsInfo?.postage;
 
-        return currency(p.price).multiply(form.quantity).add(allPostate.value).value;
+        // 单价
+        let onePrice = currency(0);
+        let oneReduce = currency(0);
+        // 1、活动商品
+        if (getEventPrice(form.skuId) && eventId) {
+          onePrice = currency(getEventPrice(form.skuId));
+
+          oneReduce = oneReduce.add(p.price).subtract(getEventPrice(form.skuId));
+          form.activityId = eventId?.toString();
+          allReduce.activity.reduce = oneReduce.multiply(form.quantity).value;
+        }
+        else {
+          onePrice = onePrice.add(p.price);
+        }
+
+        // 减少
+        allReduce.all = oneReduce.multiply(form.quantity).value;
+        // 0、默认
+        return onePrice.multiply(form.quantity).add(allPostate.value).value;
+      }
+      else {
+        allReduce.activity = {
+          add: 0,
+          reduce: 0,
+        };
+        allReduce.all = 0;
       }
     }
   }
   return 0;
 });
+
 
 // 计算当前规格的库存
 const getStock = computed(() => {
@@ -380,10 +441,17 @@ function setActiveItem(image: string) {
             <!-- 价格 -->
             <div
               rounded="t-6px"
-              border-border-dark-300 flex-row-c-c border-2px bg-white p-2 text-0.9rem text-red-5 shadow-md border-default-dashed dark:bg-dark-6 class="all-price -translate-1/1" :class="{ active: isAllCheckSku }"
+              border-border-dark-300 relative flex-row-c-c border-2px bg-white p-2 text-0.9rem text-red-5 shadow-md border-default-dashed dark:bg-dark-6 class="all-price -translate-1/1" :class="{ active: isAllCheckSku }"
             >
               <small block>￥</small>
               <h3 v-incre-up="allPrice" />
+              <!-- 减少价格 -->
+              <div v-show="allReduce.all" class="absolute w-full flex flex-col items-center font-600 -top-1.6rem">
+                <!-- 活动减少 -->
+                <small v-show="allReduce.activity.reduce" flex>
+                  -￥{{ allReduce.activity.reduce.toFixed(2) }}
+                </small>
+              </div>
             </div>
           </div>
         </div>
