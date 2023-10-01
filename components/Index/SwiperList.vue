@@ -7,20 +7,30 @@ const eventList = reactive<EventVO[]>([]);
 const { data, refresh } = await getEventsLists();
 if (data.value && data.value.code === StatusCode.SUCCESS) {
   // 结束时间排序
-  const res = data.value.data.sort((a, b) => b.status - a.status);
-  res.forEach((p) => {
-    eventList.push(p);
-  });
+  eventList.push(...data.value.data.sort((a, b) => b.level - a.level));
 }
+
+
+enum EventStatus {
+  NOT_STARTED = 0,
+  STARTED = 1,
+  ENDED = 2,
+}
+
 // 跳转详情页
 function toEventDetailView(event: EventVO) {
-  useRouter().push({
-    path: "/event/detail",
-    query: {
-      eid: event.id,
-    },
-  });
+  if (new Date(event.endTime).getTime() - Date.now() >= 0 && event.status === EventStatus.ENDED) {
+    ElMessage.warning("活动已结束了~");
+    return;
+  }
+  else
+    if (new Date(event.startTime).getTime() - Date.now() >= 0 && event.status === EventStatus.NOT_STARTED) {
+      ElMessage.warning("活动还未开始~");
+      return;
+    }
+  navigateTo(`/event/detail/${event.id}`);
 }
+
 
 // 计算剩余天数
 const getEndDay = computed(() => {

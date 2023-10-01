@@ -119,12 +119,11 @@ const eventId = route?.query?.eventId || route?.query?.eid;
 if (eventId && goodsInfo?.id) {
   const res = await getEventsGoodsSkuList(goodsInfo?.id);
   if (res.data.value?.code === StatusCode.SUCCESS)
-    eventSkuList.value = res.data.value?.data;
+    eventSkuList.value = res.data.value?.data.filter(p => p.eventId === eventId);
 }
 
 // 1、活动商品
 function getEventPrice(skuId: string) {
-  console.log(eventSkuList.value);
   return eventSkuList.value.find(p => skuId === p.skuId)?.eventPrice || 0;
 };
 
@@ -270,7 +269,6 @@ const allPrice = computed((): number => {
         // 1、活动商品
         if (getEventPrice(form.skuId) && eventId) {
           onePrice = currency(getEventPrice(form.skuId));
-
           oneReduce = oneReduce.add(p.price).subtract(getEventPrice(form.skuId));
           form.activityId = eventId?.toString();
           allReduce.activity.reduce = oneReduce.multiply(form.quantity).value;
@@ -281,7 +279,7 @@ const allPrice = computed((): number => {
 
         // 减少
         allReduce.all = oneReduce.multiply(form.quantity).value;
-        // 0、默认
+        // 返回价格
         return onePrice.multiply(form.quantity).add(allPostate.value).value;
       }
       else {

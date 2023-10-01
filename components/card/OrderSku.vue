@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script lang="ts" setup>
+import type { EventGoodsVO } from "composables/api/event";
 import currency from "currency.js";
 import type { GoodsSkuMdVO, GoodsSkuVO } from "~/composables/api/goods/sku";
 import { getGoodsSkuByGid } from "~/composables/api/goods/sku";
@@ -23,6 +24,36 @@ async function loadGoodSkuList(val: boolean) {
     }, 300);
   }
 }
+
+// 加载活动商品
+const eventSkuList = ref<Map<string, EventGoodsVO>>(new Map());
+async function loadEventSkuList() {
+  if (!data.activityId)
+    return;
+
+  // req
+  const res = await getEventsInfo(data.activityId);
+ if (res.data.value?.code) {
+  res.data.value?.data.list.forEach((p) => {
+    if (data.skuId === p.skuId)
+      eventSkuList.value.set(p.skuId, p);
+  });
+ }
+}
+await loadEventSkuList();
+
+watch(() => data.skuId, (val) => {
+if (val) {
+  if (val) {
+      const event = eventSkuList.value.get(val);
+      if (event)
+        data.price = event?.eventPrice; // 活动价格
+    };
+}
+}, {
+  immediate: true,
+});
+
 // 计算规格全部属性
 function getSkuProps(goodsSku: GoodsSkuVO) {
   return `${goodsSku.size || ""} ${goodsSku.color || ""} ${goodsSku.combo || ""}`;
@@ -35,10 +66,17 @@ const getProps = computed({
   set(skuId: string) {
     const p = toRaw(skuList.value.find(p => p.id === skuId));
     // 更新
+    let onePrice = p?.price;
+    if (p && p.id && data.activityId) {
+      const event = eventSkuList.value.get(p.id);
+      if (event)
+        onePrice = event?.eventPrice; // 活动价格
+    };
+
     if (p && p.id !== "") {
       data.size = p.size || "";
       data.image = p.image;
-      data.price = p.price;
+      data.price = onePrice || 0;
       data.costPrice = p.costPrice;
       data.color = p.color || "";
       data.combo = p.combo;
@@ -47,6 +85,7 @@ const getProps = computed({
     }
   },
 });
+
 // 计算商品总价
 const getGoodsPrices = computed(() => {
   return currency(data.price).multiply(data.quantity);
@@ -67,7 +106,7 @@ const getTotalPrice = computed(() => {
     <ClientOnly>
       <div
         class="relative w-2/7 md:w-8em"
-        :class="{ 'is-event ': data.activityId !== undefined }"
+        :class="{ 'is-event ': data.activityId }"
       >
         <ElImage
           loading="lazy"
@@ -135,9 +174,8 @@ const getTotalPrice = computed(() => {
         <!-- 金额+运费 -->
         <div class="mt-a hidden flex-col items-end leading-1.2em md:flex">
           <small>{{ data.postage ? `运费：￥${data.postage}` : "免运费" }}</small>
-          <small v-if="data">价格：￥{{ getGoodsPrices }}</small>
+          <small v-if="data" :class="{ 'text-[var(--el-color-error)]': eventSkuList.get(data.skuId)?.eventPrice }">{{ eventSkuList.get(data.skuId)?.eventPrice ? '活动' : '' }}价格：￥{{ getGoodsPrices }}</small>
           <small
-
             v-if="data.quantity" mt-1
             font-600
           >

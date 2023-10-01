@@ -19,6 +19,9 @@
   "rules": {     
     // vue
     "vue/multi-word-component-names": ["off", {}],
+    "vue/no-mutating-props": ["warn", {
+      "shallowOnly": false
+    }],
     // base
     "no-console":"off",
     "no-multiple-empty-lines": ["warn", { "max": 2, "maxBOF": 1 }],// 空行
@@ -26,6 +29,7 @@
     "quotes":["error", "double"], // 双引号
     "no-trailing-spaces": "error",
     // ts
+    "@typescript-eslint/indent":"off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/ban-ts-comment": "off", 
     "@typescript-eslint/quotes":["error", "double"], // 双引号

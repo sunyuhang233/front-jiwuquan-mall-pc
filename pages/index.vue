@@ -42,9 +42,9 @@ useHead({
           <!-- 热门商品分类 -->
           <IndexCategoryLine class="mt-6 md:my-8" />
           <!-- 商品列表tabs -->
-          <IndexGoodsTabs
-            mb-10vh mt-4 min-h-50vh
-          />
+          <div mb-10vh mt-4 min-h-100vh>
+            <IndexGoodsTabs />
+          </div>
         </div>
       </div>
     </NuxtLayout>

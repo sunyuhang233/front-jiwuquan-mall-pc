@@ -91,10 +91,9 @@ export interface PayTypeDTO {
 
 
 // 2、reloadOrderInfo
-useAsyncData(async () => {
-  if (route.query.id)
-    order.reloadOrderInfo();
-});
+if (route.query.id)
+  order.reloadOrderInfo();
+
 
 // 订单状态
 const ordersTitle = computed(() => {
@@ -190,6 +189,7 @@ async function loadSkuItems() {
   if (skuIdList.length === 0)
     return;
   const { data, code } = await getGoodsSkuByIds(skuIdList);
+
   if (code === StatusCode.SUCCESS) {
     data.forEach((sku) => {
       const item = order.pushOrderItems.find(p => p.skuId === sku.id) || {
@@ -200,9 +200,9 @@ async function loadSkuItems() {
     });
   }
 }
-useAsyncData(async () => {
-  await loadSkuItems();
-});
+
+
+ loadSkuItems();
 
 // 4、选中地址id
 const selectAddressId = ref<string>("");
@@ -311,6 +311,7 @@ const getReduce = computed(() => {
 async function pushOrder() {
   if (!selectAddressId.value) {
     ElMessage.error("请选择收货地址！");
+    address.resetRequestList(user.getToken);
     return;
   }
   if (isLoading.value)
@@ -366,7 +367,7 @@ async function payOrder(payType: PayType) {
   // 确认支付
   try {
     const action = await ElMessageBox.confirm(
-      `使用${str[0]}支付 ￥${getFinalPrice.value}？`,
+      `使用${str}支付 ￥${getFinalPrice.value}？`,
       "确认支付",
       {
         confirmButtonText: "支 付",
@@ -525,7 +526,7 @@ async function pushRefundOrder(orderId: string) {
       isLoading.value = true;
       // 发起退款
       const { message, code } = await refundOrders(
-        order.orderId || order.orderInfo.id,
+        orderId || order.orderInfo.id,
         user.getToken,
       );
       isLoading.value = false;
@@ -832,14 +833,14 @@ function toBack() {
           <div
             v-loading="isLoadAddressList"
             v-auto-animate
-            class="group v-card flex flex-col border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
+            class="group v-card flex flex-col overflow-hidden border-t-[var(--el-color-primary)] opacity-90 border-default dark:border-t-[var(--el-color-primary)]"
             border-t="0.5rem solid "
             :style="{ borderTopColor: `var(--el-color-${ordersTitle.type})` }"
           >
             <!-- 订单-状态 -->
             <OrderStatusSteps
               v-if="order.status > OrdersStatus.READY"
-              v-auto-animate
+              key="OrderStatusSteps-list"
               class="mt-2"
 
               :active="order.status"

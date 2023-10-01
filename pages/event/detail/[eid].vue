@@ -2,7 +2,7 @@
 // route
 const route = useRoute();
 // 活动id
-const eventId = route.query.eid?.toString();
+const eventId = route.params?.eid ? route.params?.eid.toString() : "";
 const list = await getEventsInfo(eventId || "");
 if (!eventId || !list.data.value?.data?.id) {
   await navigateTo({
@@ -13,8 +13,6 @@ if (!eventId || !list.data.value?.data?.id) {
     },
   });
 }
-
-// showError({ statusCode: 404, statusMessage: "活动未开始或结束 ❌" });
 
 // 无数据
 const isNot = computed(() => list.data.value?.data.list.length === 0);
